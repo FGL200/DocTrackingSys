@@ -1,3 +1,9 @@
+#########################
+!!! RUN THE start.sql !!!
+#########################
+
+Run mo muna yung start.sql sa para mag create ng data base pati mga tables
+
 ###################
 What is CodeIgniter
 ###################
