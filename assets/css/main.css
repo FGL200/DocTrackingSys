@@ -1,8 +1,8 @@
 *,
 *::after,
 *::before{
-    /* padding: 0px !important;
-    margin: 0px !important; */
+    padding: 0;
+    margin: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -39,6 +39,8 @@ main {
 
 .flex-r{display: flex;}
 .flex-c{display: flex; flex-direction: column;}
+.flex-grow{flex-grow: 1;}
+.flex-shirk{flex-shrink: 1;}
 .justify-c-center{justify-content: center;}
 .justify-c-space-between{justify-content: space-between;}
 .justify-c-space-around{justify-content: space-around;}
@@ -61,7 +63,6 @@ main {
 .align-s-start{align-items: flex-start;}
 .align-s-end{align-items: flex-end;}
 .align-s-stretch{align-items: stretch;}
-.font-b{font-weight: bold;}
 .font-sm{font-size: smaller;}
 .font-s{font-size: small;}
 .font-m{font-size: medium;}
@@ -69,6 +70,11 @@ main {
 .font-lg{font-size: larger;}
 .font-xl{font-size: x-large;}
 .font-xxl{font-size: xx-large;}
+.text-c{text-align: center;}
+.text-b{font-weight: bold;}
+.text-i{font-style: italic;}
+.text-u{text-decoration: underline;}
+.text-n{text-decoration: none;}
 
 .g-1{gap: .25rem}
 .g-2{gap: .5rem}

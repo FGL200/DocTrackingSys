@@ -1,5 +1,5 @@
 <footer class="flex-c align-i-center g-1 b-color-b color-w p-1">
-    <span class="font-s">
+    <span class="font-s text-c">
         Student Records and Admission Center 
         Document Tracking System for 
         Rizal Technological University

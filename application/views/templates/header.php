@@ -49,7 +49,7 @@
         <a id="id-btn-about" class="flex-r p-2 g-1 align-i-center color-w" href="#"><i class="fa-solid fa-circle-info"></i><span>About</span></a>
         <a id="id-btn-settings" class="flex-r p-2 g-1 align-i-center color-w" href="#"><i class="fa-solid fa-gears"></i><span>Setings</span></a>
     </nav>
-    <nav class="phone flex-r">
+    <nav class="phone flex-r hide">
         <a id="id-btn-bar" class="flex-r p-2 g-p5 align-i-center color-w" href="#"><i class="fa-solid fa-bars"></i></a>
     </nav>
 </header>

@@ -7,7 +7,7 @@ class Login extends CI_Controller {
         // HEADER VARIABLES
         $header['css'] = ['login'];
         $header['js'] = ['main', 'login'];
-        $header['title'] = 'Home';
+        $header['title'] = 'Login';
 
         // MAIN PAGE VARIABLES
 

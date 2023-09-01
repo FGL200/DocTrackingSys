@@ -20,7 +20,7 @@ function addNotif(title, message, flag = "b"){
     notif.style.backgroundColor = bColor;
     
     const notif_title = document.createElement("section");
-    notif_title.setAttribute("class", "notif-title font-b");
+    notif_title.setAttribute("class", "notif-title text-b");
     notif_title.innerHTML = title;
     notif_title.style.color = tColor;
 
@@ -31,5 +31,7 @@ function addNotif(title, message, flag = "b"){
     notif.appendChild(notif_title);
     notif.appendChild(notif_body);
 
-    document.getElementById("notif-holder").appendChild(notif);
+    const holder = document.getElementById("notif-holder");
+    if(holder.children.length < 6)
+        holder.appendChild(notif);
 }

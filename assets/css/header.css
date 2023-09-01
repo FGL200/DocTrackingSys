@@ -18,9 +18,9 @@ header a {
     font-weight: bold;
 }
 
-.phone {
+/* .phone {
     display: none;
-}
+} */
 
 .pc > a:hover,
 .pc > a:focus,
@@ -36,9 +36,9 @@ header a {
     .pc{
         display: none !important;
     }
-    .phone{
+    /* .phone{
         display: flex;
-    }
+    } */
 }
 
 
