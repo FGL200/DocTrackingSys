@@ -1,0 +1,77 @@
+*,
+*::after,
+*::before{
+    /* padding: 0px !important;
+    margin: 0px !important; */
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.hide{
+    display: none !important;
+}
+
+:root{
+    --color_blue : #265898;
+    --color_yellow : #FFC100;
+    --color_white : #F8F9F9;
+    --color_black : #17202A;
+} 
+
+body {
+    height: 100vh;
+}
+
+main {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+.color-b{color: var(--color_blue);}
+.color-y{color: var(--color_yellow);}
+.color-w{color: var(--color_white);}
+.color-B{color: var(--color_black);}
+
+.b-color-b{background-color: var(--color_blue);}
+.b-color-y{background-color: var(--color_yellow);}
+.b-color-w{background-color: var(--color_white);}
+.b-color-B{background-color: var(--color_black);}
+
+.flex-r{display: flex;}
+.flex-c{display: flex; flex-direction: column;}
+.justify-c-center{justify-content: center;}
+.justify-c-space-between{justify-content: space-between;}
+.justify-c-space-around{justify-content: space-around;}
+.justify-c-space-evenly{justify-content: space-evenly;}
+.justify-c-stretch{justify-content: stretch;}
+.justify-c-start{justify-content: flex-start;}
+.justify-c-end{justify-content: flex-end;}
+.justify-s-center{justify-self: center;}
+.justify-s-space-between{justify-self: space-between;}
+.justify-s-space-around{justify-self: space-around;}
+.justify-s-space-evenly{justify-self: space-evenly;}
+.justify-s-stretch{justify-self: stretch;}
+.justify-s-start{justify-self: flex-start;}
+.justify-s-end{justify-self: flex-end;}
+.align-i-center{align-items: center;}
+.align-i-start{align-items: flex-start;}
+.align-i-end{align-items: flex-end;}
+.align-i-stretch{align-items: stretch;}
+.align-s-center{align-items: center;}
+.align-s-start{align-items: flex-start;}
+.align-s-end{align-items: flex-end;}
+.align-s-stretch{align-items: stretch;}
+.font-b{font-weight: bold;}
+.font-sm{font-size: smaller;}
+.font-s{font-size: small;}
+.font-m{font-size: medium;}
+.font-l{font-size: large;}
+.font-lg{font-size: larger;}
+.font-xl{font-size: x-large;}
+.font-xxl{font-size: xx-large;}
+
+.g-1{gap: .25rem}
+.g-2{gap: .5rem}
+.g-3{gap: .75rem}
+.g-4{gap: 1rem;}
+.g-5{gap: 1.5rem;}

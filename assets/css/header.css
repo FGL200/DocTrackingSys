@@ -1,0 +1,80 @@
+
+header {
+    background-color: var(--color_blue);
+    border-bottom: 2px solid var(--color_yellow);
+}
+
+header > * {
+    margin: 0 1rem;
+}
+
+header a {
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sys-title{
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.phone {
+    display: none;
+}
+
+.pc > a:hover,
+.pc > a:focus,
+.phone > a:hover,
+.phone > a:focus{
+    background-color: rgba(255, 255, 255, 0.3);
+    color: var(--color_white);
+}
+
+
+
+@media (max-width: 650px) {
+    .pc{
+        display: none !important;
+    }
+    .phone{
+        display: flex;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#notif-holder{
+    position: fixed;
+    min-width: 15%;
+    height: 100vh;
+    top: 60px;
+    right: 0;
+    z-index: 100;
+}
+
+.notif{
+    margin: .5rem;
+    padding: .75rem;
+    background-color: white;;
+}
+
+.fade-out{
+    animation: fade-out 3s ease-in-out forwards;
+}
+
+@keyframes fade-out {
+    0%{ opacity: 1; transform: translateX(100%); }
+    10%{ transform: translateX(0); }
+    80%{ opacity: .9; }
+    100%{ opacity: 0; }
+}
