@@ -21,14 +21,24 @@ CREATE TABLE `info` (
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
 );
 
+CREATE TABLE `x_file`(
+	`id` INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    `dt` DATE,
+    `user_id` INT(10) NOT NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+);
+
 CREATE TABLE `stud_rec` (
 	`id` INT(10)PRIMARY KEY AUTO_INCREMENT NOT NULL,
     `user_id` INT(10) NOT NULL UNIQUE,
+    `x_file_id` INT(10),
     `fname` VARCHAR(50) NOT NULL,
     `mname` VARCHAR(50),
     `lname` VARCHAR(50),
 	`sfx` VARCHAR(20),
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
+    FOREIGN KEY (`x_file_id`) REFERENCES `x_file`(`id`)
 );
 
 CREATE TABLE `doc` (
@@ -47,16 +57,6 @@ CREATE TABLE `doc` (
     `complete` INT(1) NOT NULL DEFAULT 0,
     `good_m` INT(1) NOT NULL DEFAULT 0,
     `shelf` VARCHAR(50),
-    FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec`(`id`)
-);
-
-CREATE TABLE `x_file`(
-	`id` INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    `name` VARCHAR(50) NOT NULL,
-    `dt` DATE,
-    `user_id` INT(10) NOT NULL,
-    `stud_rec_id` INT(10) NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
     FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec`(`id`)
 );
 
