@@ -13,6 +13,7 @@ To do (Not final / pede dagdagan)
 3. home
 4. insert student and their documents
 5. inesert user profile
+6. 
 
 #########################
 Ideas / Features
@@ -21,3 +22,4 @@ Ideas / Features
 1. Sa mga encoders, nakalagay ung 1 latest na previous added nila 
 sa database na student record(editable).
 2. si encoders and viewers pede mag send ng remarks sa e-document kada student record
+3. 

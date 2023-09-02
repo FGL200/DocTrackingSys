@@ -22,7 +22,6 @@
     <?php if(isset($css)) foreach($css as $c) {?>
     <link rel="stylesheet" href="<?=base_url("assets/css/$c")?>.css">
     <?php }?>
-
     
     <!-- JQUERY -->
     <script src="<?=base_url('assets/third_party/jquery/jquery.min')?>.js"></script>
@@ -44,13 +43,66 @@
             Tracker
         </section>
     </a>
-    <nav class="pc flex-r">
-        <a id="id-btn-home" class="flex-r p-2 g-1 align-i-center color-w" href="#"><i class="fa-solid fa-house"></i><span>Home</span></a>
-        <a id="id-btn-about" class="flex-r p-2 g-1 align-i-center color-w" href="#"><i class="fa-solid fa-circle-info"></i><span>About</span></a>
-        <a id="id-btn-settings" class="flex-r p-2 g-1 align-i-center color-w" href="#"><i class="fa-solid fa-gears"></i><span>Setings</span></a>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid" style="outline: none;">
+            <button class="navbar-toggler color-w" style="border: none;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav g-1">
+                <li class="nav-item">
+                    <a class="nav-link active color-w" aria-current="page" href="#">
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link color-w" href="#">
+                        <i class="fa-solid fa-circle-info"></i>
+                        About
+                    </a>
+                </li>
+                <li class="nav-item dropdown <?=isset($hide_acc) && $hide_acc === false ? "" : "hide";?>">
+                    <a class="nav-link dropdown-toggle color-w" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-user"></i>
+                        Account
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li style="margin-bottom: .4rem;">
+                            <a class="dropdown-item" href="#" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <i class="fa-solid fa-address-card"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fa-solid fa-gears"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            </div>
+        </div>
     </nav>
-    <nav class="phone flex-r hide">
-        <a id="id-btn-bar" class="flex-r p-2 g-p5 align-i-center color-w" href="#"><i class="fa-solid fa-bars"></i></a>
+    <!-- <nav class="pc">
+        <section class="phone color-w font-l text-b" style="border-bottom: 1px solid white;">Navigator</section>
+        <button id="id-btn-home" class="flex-r p-2 g-1 align-i-center color-w" onclick="closeNav()"><i class="fa-solid fa-house"></i><span>Home</span></button>
+        <button id="id-btn-about" class="flex-r p-2 g-1 align-i-center color-w" onclick="closeNav()"><i class="fa-solid fa-circle-info"></i><span>About</span></button>
+        <button id="id-btn-settings" class="flex-r p-2 g-1 align-i-center color-w" onclick="closeNav()"><i class="fa-solid fa-gears"></i><span>Setings</span></button>
     </nav>
+    <nav class="phone flex-r">
+        <button id="id-btn-bar" class="flex-r p-2 g-p5 align-i-center color-w" onclick="openNav()"><i class="fa-solid fa-bars"></i></button>
+    </nav> -->
 </header>
 <div id="notif-holder"></div>
+
+
+<div id="root" class="flex-grow"> <!-- start of root -->

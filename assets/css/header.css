@@ -10,6 +10,11 @@ header > * {
 
 header a {
     text-decoration: none;
+}
+
+header button {
+    border: none;
+    background: transparent;
     transition: 0.3s;
 }
 
@@ -18,26 +23,43 @@ header a {
     font-weight: bold;
 }
 
-/* .phone {
+.phone {
     display: none;
+}
+
+/* header nav.pc{
+    display: flex;
 } */
 
-.pc > a:hover,
-.pc > a:focus,
-.phone > a:hover,
-.phone > a:focus{
+header nav a:hover,
+header nav a:focus{
     background-color: rgba(255, 255, 255, 0.3);
-    color: var(--color_white);
 }
 
 
 
 @media (max-width: 650px) {
     .pc{
-        display: none !important;
+        display: none;
     }
-    /* .phone{
+    .phone{
         display: flex;
+    }
+
+    /* header nav.pc {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, .8);
+        z-index: 1;
+        margin: 0;
+        gap: 1rem;
     } */
 }
 
@@ -56,10 +78,9 @@ header a {
 #notif-holder{
     position: fixed;
     min-width: 15%;
-    height: 100vh;
     top: 60px;
     right: 0;
-    z-index: 100;
+    z-index: 1;
 }
 
 .notif{

@@ -1,3 +1,5 @@
+</div> <!-- end of root -->
+
 <footer class="flex-c align-i-center g-1 b-color-b color-w p-1">
     <span class="font-s text-c">
         Student Records and Admission Center 
@@ -12,7 +14,7 @@
 </footer>
 
 <!-- BOOTSTRAP -->
-<script src="<?=base_url('assets/third_party/bootstrap/js/bootstrap')?>.js"></script>
+<script src="<?=base_url('assets/third_party/bootstrap/js/bootstrap.min')?>.js"></script>
 
 <!-- DATATABLES -->
 <script src="<?=base_url('assets/third_party/datatables/datatables.min')?>.js"></script>
