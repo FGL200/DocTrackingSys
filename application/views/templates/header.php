@@ -62,7 +62,7 @@
                         About
                     </a>
                 </li>
-                <li class="nav-item dropdown <?=isset($hide_acc) && $hide_acc === false ? "" : "hide";?>">
+                <li class="nav-item dropdown <?=(isset($hide_acc)) ? (($hide_acc === true) ? "hide" : "" ) : "";?>">
                     <a class="nav-link dropdown-toggle color-w" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-user"></i>
                         Account

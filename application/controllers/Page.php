@@ -6,25 +6,28 @@ class Page extends CI_Controller {
     // load page with header and footer
     private function loadPage($page, $data = []){
         extract($data);
-        $this->load->view("templates/header", $header);
-        $this->load->view("pages/$page", $main);
-        $this->load->view("templates/footer", $footer);
+        $this->load->view("templates/header", isset($header) ? $header : []);
+        $this->load->view("pages/$page", isset($main) ? $main : []);
+        $this->load->view("templates/footer", isset($footer) ? $footer : []);
     }
 
 
     public function index(){ 
+
         // HEADER VARIABLES
-        $header['title'] = 'Login';
-        $header['css'] = ['login'];
-
-        // MAIN PAGE VARIABLES
-
+        $data['header'] = [
+            'title'=> 'Login',
+            'css' => ['login'],
+            'hide_acc' => true
+        ];
 
         // FOOTER VAIRABLES
-        $footer['js'] = ['main', 'header', 'login'];
+        $data['footer'] = [
+            'js' => ['main', 'header', 'login']
+        ];
 
         // load page
-        $this->loadPage("login", $header, [], $footer);
+        $this->loadPage("login", $data);
     }
 
 
@@ -32,8 +35,7 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'home',
-            'css' => [],
-            'hide_acc' => false
+            'css' => []
         ];
 
         // FOOTER VAIRABLES
@@ -47,18 +49,18 @@ class Page extends CI_Controller {
 
 
     public function about() {
-        // HEADER VARIABLES
-        $header['title'] = 'About';
-        $header['css'] = [];
-        $header['hide_acc'] = false;
-
-        // MAIN PAGE VARIABLES
-
+         // HEADER VARIABLES
+         $data['header'] = [
+            'title'=> 'About',
+            'css' => []
+        ];
 
         // FOOTER VAIRABLES
-        $footer['js'] = ['main'];
+        $data['footer'] = [
+            'js' => ['main']
+        ];
 
         // load page
-        $this->loadPage("about", $header, [], $footer);
+        $this->loadPage("about", $data);
     }
 }
