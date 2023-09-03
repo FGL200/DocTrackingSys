@@ -3,7 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Page extends CI_Controller {
 
-    // load page with header and footer
+    /**
+     * Load Page
+     * @param String $page
+     * @param Array $data
+     */
     private function loadPage($page, $data = []){
         extract($data);
         $this->load->view("templates/header", isset($header) ? $header : []);
@@ -11,19 +15,18 @@ class Page extends CI_Controller {
         $this->load->view("templates/footer", isset($footer) ? $footer : []);
     }
 
-
     public function index(){ 
 
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'Login',
-            'css' => ['login'],
-            'hide_acc' => true
+            'css' => [],
+            'hide_nav' => true
         ];
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['main', 'header', 'login']
+            'js' => ['login']
         ];
 
         // load page
@@ -40,27 +43,10 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['main']
+            'js' => ['home']
         ];
 
         // load page
         $this->loadPage("home", $data);
-    }
-
-
-    public function about() {
-         // HEADER VARIABLES
-         $data['header'] = [
-            'title'=> 'About',
-            'css' => []
-        ];
-
-        // FOOTER VAIRABLES
-        $data['footer'] = [
-            'js' => ['main']
-        ];
-
-        // load page
-        $this->loadPage("about", $data);
     }
 }

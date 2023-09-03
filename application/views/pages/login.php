@@ -8,8 +8,8 @@
             <input class="form-control" type="password" placeholder="Password">
         </section>
         <section class="flex-rr justify-c-space-between">
-            <button onclick="addNotif('Login failed!', 'User not found.', 'r')" class="btn btn-primary">Login</button>
-            <button onclick="addNotif('Account Requested!', 'New Account requested!', 'g')" class="btn btn-success">Register</button>
+            <button onclick="MAIN.goto('<?=base_url('home')?>')" class="btn btn-primary">Login</button>
+            <button onclick="MAIN.addNotif('Account Requested!', 'New Account requested!', 'g')" class="btn btn-success">Register</button>
         </section>
     </div>
 </main>

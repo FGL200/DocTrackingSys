@@ -1,3 +1,5 @@
+<?php $hidden = (isset($hide_nav)) ? (($hide_nav) ? true : false ) : false;?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,7 @@
     <title><?=isset($title) ? $title : "DOCUMENT"; ?></title>
 
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="<?=base_url('assets/third_party/bootstrap/css/bootstrap')?>.css">
+    <link rel="stylesheet" href="<?=base_url('assets/third_party/bootstrap/css/bootstrap.min')?>.css">
 
     <!-- DATATABLES -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/datatables/datatables.min')?>.css">
@@ -32,7 +34,8 @@
     <?php }?>
 
 </head>
-<body class="flex-c justify-c-space-between b-color-w">
+<body class="flex-c justify-c-space-between">
+<!-- START OF HTML -->
 <header class="flex-r justify-c-space-around align-i-center p-1 g-2">
     <a href="<?=base_url()?>" class="flex-r g-1 align-i-center p-1">
         <img src="<?=base_url('assets/images/rtu-logo')?>.png" alt="logo" width="45" height="45">
@@ -43,57 +46,51 @@
             Tracker
         </section>
     </a>
+    <?php if(!$hidden){?>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid" style="outline: none;">
             <button class="navbar-toggler color-w" style="border: none;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav g-1">
-                <li class="nav-item">
-                    <a class="nav-link active color-w" aria-current="page" href="./home">
-                        <i class="fa-solid fa-house"></i>
-                        Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link color-w" href="./about">
-                        <i class="fa-solid fa-circle-info"></i>
-                        About
-                    </a>
-                </li>
-                <li class="nav-item dropdown <?=(isset($hide_acc)) ? (($hide_acc === true) ? "hide" : "" ) : "";?>">
-                    <a class="nav-link dropdown-toggle color-w" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user"></i>
-                        Account
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li style="margin-bottom: .4rem;">
-                            <a class="dropdown-item" href="#" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
-                                <i class="fa-solid fa-address-card"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa-solid fa-gears"></i>
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="./login">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                <ul class="navbar-nav g-1">
+                    <li class="nav-item">
+                        <a class="nav-link active color-w" aria-current="page" href="./home">
+                            <i class="fa-solid fa-house"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-w" href="#">
+                            <i class="fa-solid fa-circle-info"></i>
+                            About
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle color-w" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            Account
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li style="margin-bottom: .4rem;">
+                                <a class="dropdown-item" href="#" onclick="MAIN.openProfile(new Profile())" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                    <i class="fa-solid fa-address-card"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="<?=base_url()?>">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
+    <?php }?>
 </header>
 <div id="notif-holder"></div>
 
-
-<div id="root" class="flex-grow"> <!-- start of root -->
+<!-- START OF ROOT -->
+<div id="root" class="flex-grow"> 

@@ -5,7 +5,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'Page/index';
 $route['login'] = 'Page/index';
 $route['home'] = 'Page/home';
-$route['about'] = 'Page/about';
 
 // CUSTOM
 
