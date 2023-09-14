@@ -1,21 +1,3 @@
-class Profile{
-    /**
-     * New Instance of Profile
-     * @param {string} uname Username
-     * @param {string} fname Firstname
-     * @param {string} lname Lastname
-     * @param {string} bday Birthdate
-     * @param {string} g Gender
-     */
-    constructor(uname = "", fname = "", lname = "", bday = "2000-01-01", g = "N"){
-        this.uname = uname;
-        this.fname = fname;
-        this.lname = lname;
-        this.bday = bday;
-        this.g = g;
-    };
-}
-
 const MAIN = {
     /**
      * Add new notification to side
@@ -79,121 +61,101 @@ const MAIN = {
      */
     goto : function(url){
         window.location.href = url;
-    },
+    }
+}
+
+class Profile{
+    /**
+     * New Instance of Profile
+     * @param {string} uname Username
+     * @param {string} fname Firstname
+     * @param {string} lname Lastname
+     * @param {string} bday Birthdate
+     * @param {string} g Gender
+     */
+    constructor(uname = "", fname = "", lname = "", bday = "2000-01-01", g = "N"){
+        this.uname = uname;
+        this.fname = fname;
+        this.lname = lname;
+        this.bday = bday;
+        this.g = g;
+    };
+}
+
+const PROFILE = {
     /**
      * 
      * @param {Profile} profile 
      */
-    openProfile : function(profile){
+    open : function(profile){
         MODAL.setTitle("Profile");
         MODAL.setBody(`
-        <div class="flex-c g-2">
-            <span class="flex-r justify-c-space-between align-i-center g-2">
+        <div class="d-flex flex-column gap-2">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-uname">Username</label>
-                <input class="form-control" type="text" placeholder="Username" value="`+ profile.uname +`" id="profile-uname" readonly>
+                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ profile.uname +`" name="profile-uname" id="profile-uname">
             </span>
-            <span class="flex-r justify-c-space-between align-i-center g-2">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-fname">Firstname</label>
-                <input class="form-control" type="text" placeholder="Firstname" value="`+ profile.fname +`" id="profile-fname" readonly>
+                <input class="rounded border p-2" type="text" placeholder="Firstname" value="`+ profile.fname +`" name="profile-fname" id="profile-fname">
             </span>
-            <span class="flex-r justify-c-space-between align-i-center g-2">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-lname">Lastname</label>
-                <input class="form-control" type="text" placeholder="Lastname" value="`+ profile.lname +`" id="profile-lname" readonly>
+                <input class="rounded border p-2" type="text" placeholder="Lastname" value="`+ profile.lname +`" name="profile-lname" id="profile-lname">
             </span>
-            <span class="flex-r justify-c-space-between align-i-center g-2">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
+                <label for="profile-bday">Birthday</label>
+                <input class="rounded border p-2" type="date" value="` + profile.bday + `" name="profile-bday" id="profile-bday">
+            </span>
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-g">Gender</label>
-                <select class="form-control" name="" id="profile-g">
+                <select class="rounded border p-2" name="profile-g" id="profile-g">
                     <option value="N" disabled>Select Gender</option>
                     <option ` + (profile.g === "N" ? "Selected" : "") + ` value="N">Prefer not to say</option>
                     <option ` + (profile.g === "M" ? "Selected" : "") + ` value="M">Male</option>
                     <option ` + (profile.g === "F" ? "Selected" : "") + ` value="F">Female</option>
                 </select>
             </span>
-            <span class="flex-r justify-c-space-between align-i-center g-2">
-                <label for="profile-bday">Birthday</label>
-                <input class="form-control" type="date" value="` + profile.bday + `" id="profile-bday" readonly>
-            </span>
             <hr>
-            <span class="flex-r justify-c-space-between align-i-center g-2 text-nw">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
                 <label for="profile-old-pass">Old password</label>
-                <input class="form-control" type="password" id="profile-old-pass">
+                <input class="rounded border p-2" type="password" name="profile-old-pass" id="profile-old-pass">
             </span>
-            <span class="flex-r justify-c-space-between align-i-center g-2 text-nw">
+            <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
                 <label for="profile-new-pass">New password</label>
-                <input class="form-control" type="password" id="profile-new-pass">
+                <input class="rounded border p-2" type="password" name="profile-new-pass" id="profile-new-pass">
             </span>
         </div>
         `);
-        MODAL.setFooter(`<button class="btn btn-success" onclick="MAIN.saveProfile()">Save</button>`);
+        MODAL.setFooter(`<button type="submit" class="btn btn-success">Save</button>`);
+        MODAL.setScript(`<script>PROFILE.onSubmit()</script>`);
         MODAL.open();
     },
     /**
      * Save the profile
      */
-    saveProfile : function(){
-        const profile = new FormData();
-        profile.append("uname", $("#profile-uname").val());
-        profile.append("fname", $("#profile-fname").val());
-        profile.append("lname", $("#profile-lname").val());
-        profile.append("g", $("#profile-g").val());
-        profile.append("bday", $("#profile-bday").val());
+    onSubmit : function(){
+        MODAL.onSubmit((e)=>{
+            e.preventDefault();
+            const profile = new FormData(document.getElementById("modal-container"));
 
-        this.addNotif("Profile Updated!", "Information saved!", "g");
-        console.log("save profile function on main.js datas: ", profile);
-        MODAL.close();
+            // UPDATE PROFILE 
+            console.log("save profile function is on main.js datas: ", profile);
+            
+            
+            MAIN.addNotif("Profile Updated!", "Information saved!", "g");
+            MODAL.close();
+        })
     }
 }
 
-const MODAL = {
-    /**
-     * For opening / closing modal
-     */
-    fade_out : false,
-    /**
-     * Hide the modal
-     */
-    close : function(){
-        this.fade_out = true;
-        $("#modal-holder").addClass("fade-out");
-    },
-    /**
-     * Show the modal
-     */
+const ABOUT = {
     open : function(){
-        this.fade_out = false;
-        $("#modal-holder").removeClass("hide");
-        $("#modal-holder").addClass("fade-in");
-    },
-    /**
-     * Set title of modal
-     */
-    setTitle: function(content){
-        $("#modal-title").html(content);
-    },
-    /**
-     * Set body of modal
-     */
-    setBody: function(content){
-        $("#modal-body").html(content);
-    },
-    /**
-     * Set footer of modal
-     */
-    setFooter: function(content){
-        $("#modal-footer").html(content);
+        MODAL.setTitle("About the System");
+        MODAL.setBody(`
+            The system is all about being a crazy version of you!
+        `);
+        MODAL.open();
     }
 }
-
-$("#modal-holder").on("animationend", function(e){
-    e.preventDefault();
-    if(MODAL.fade_out){
-        $("#modal-holder").addClass("hide");
-        $("#modal-holder").removeClass("fade-out");
-        $("#modal-title").html("");
-        $("#modal-body").html("");
-        $("#modal-footer").html("");
-    }else{
-        $("#modal-holder").removeClass("fade-in");
-    }
-});
 

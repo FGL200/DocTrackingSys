@@ -10,11 +10,20 @@ footer{
     height: 100vh;
     background: rgba(0, 0, 0, 0.9);
     z-index: 1;
+    
 }
 
 #modal-container{
     position: relative; 
     min-width: 300px;
+    max-height: 80%;
+   
+}
+
+#modal-body{
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #modal-container > button {
@@ -26,3 +35,4 @@ footer{
 #modal-title {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
+

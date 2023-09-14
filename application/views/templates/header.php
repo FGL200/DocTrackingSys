@@ -34,10 +34,10 @@
     <?php }?>
 
 </head>
-<body class="flex-c justify-c-space-between">
+<body class="d-flex flex-column justify-content-between">
 <!-- START OF HTML -->
-<header class="flex-r justify-c-space-around align-i-center p-1 g-2">
-    <a href="<?=base_url()?>" class="flex-r g-1 align-i-center p-1">
+<header class="d-flex flex-row justify-content-around align-items-center p-1 gap-2">
+    <a href="<?=base_url()?>" class="d-flex flex-row gap-1 align-items-center p-1">
         <img src="<?=base_url('assets/images/rtu-logo')?>.png" alt="logo" width="45" height="45">
         <section class="pc sys-title color-w">
             SRAC Document Tracker
@@ -53,7 +53,7 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav g-1">
+                <ul class="navbar-nav gap-1">
                     <li class="nav-item">
                         <a class="nav-link active color-w" aria-current="page" href="./home">
                             <i class="fa-solid fa-house"></i>
@@ -61,7 +61,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link color-w" href="#">
+                        <a class="nav-link color-w" href="#" onclick="ABOUT.open()">
                             <i class="fa-solid fa-circle-info"></i>
                             About
                         </a>
@@ -73,7 +73,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li style="margin-bottom: .4rem;">
-                                <a class="dropdown-item" href="#" onclick="MAIN.openProfile(new Profile())" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile())" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
                                     <i class="fa-solid fa-address-card"></i> Profile
                                 </a>
                             </li>
@@ -93,4 +93,4 @@
 <div id="notif-holder"></div>
 
 <!-- START OF ROOT -->
-<div id="root" class="flex-grow"> 
+<div id="root" class="d-flex flex-grow-1"> 

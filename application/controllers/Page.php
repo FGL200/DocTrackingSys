@@ -38,7 +38,7 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'home',
-            'css' => []
+            'css' => ['home']
         ];
 
         // FOOTER VAIRABLES

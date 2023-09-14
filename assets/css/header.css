@@ -1,7 +1,7 @@
 
 header {
     background-color: var(--color_blue);
-    border-bottom: 2px solid var(--color_yellow);
+    /* border-bottom: 2px solid var(--color_yellow); */
 }
 
 header > * {
