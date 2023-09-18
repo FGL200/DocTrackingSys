@@ -55,7 +55,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav gap-1">
                     <li class="nav-item">
-                        <a class="nav-link active color-w" aria-current="page" href="./home">
+                        <a class="nav-link active color-w" aria-current="page" href="<?=base_url('home')?>">
                             <i class="fa-solid fa-house"></i>
                             Home
                         </a>

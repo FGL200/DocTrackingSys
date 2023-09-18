@@ -49,4 +49,21 @@ class Page extends CI_Controller {
         // load page
         $this->loadPage("home", $data);
     }
+
+    public function record($record_id){
+
+        // HEADER VARIABLES
+        $data['header'] = [
+            'title'=> $record_id,
+            'css' => []
+        ];
+
+        // FOOTER VAIRABLES
+        $data['footer'] = [
+            'js' => []
+        ];
+
+        // load page
+        $this->loadPage("viewRecord", $data);
+    }
 }

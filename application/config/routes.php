@@ -8,6 +8,7 @@ $route['home'] = 'Page/home';
 
 // CUSTOM
 $route['student/insert-record'] = "Student/addRecord";
+$route['record/(:any)'] = 'Page/record/$1';
 
 // DEFAULT
 $route['404_override'] = '';

@@ -17,6 +17,8 @@ class Student extends CI_Controller{
         foreach($this->input->post() as $key => $val) {
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
+                $key = explode("stud_", $key)[1];
+
                 if(!empty($data)) $data .= ",";
                 $data .= "`{$key}` = '".$val."'";
             }

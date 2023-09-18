@@ -141,15 +141,15 @@ const HOME = {
             MODAL.setTitle("New Record");
             MODAL.setBody(`
             <div class="d-flex flex-row flex-wrap gap-2">
-                <section class="d-flex flex-column flex-grow-1 gap-1 card p-2 m-2 flex-end align-self-start">
-                    <span>
+                <section class="sticky-top d-flex flex-column flex-wrap flex-grow-1 gap-1 card p-2 m-2 flex-end align-self-start">
+                    <span class="flex-grow-1">
                         <b>Information</b>
                     </span>
                     <span class="d-flex justify-content-between align-items-center gap-1">
                         <input id="stud_id" name="stud_id" type="text" class="p-2 card" placeholder="Student ID">
                     </span>
                     <span class="d-flex justify-content-between align-items-center gap-1">
-                        <input id="stud_fname" name="stud_fname" type="text" class="p-2 card" placeholder="First Name">
+                        <input id="stud_fname" name="stud_fname" type="text" class="p-2 card" placeholder="First Name" required>
                     </span>
                     <span class="d-flex justify-content-between align-items-center gap-1">
                         <input id="stud_mname" name="stud_mname" type="text" class="p-2 card" placeholder="Middle Name">
@@ -165,66 +165,74 @@ const HOME = {
                     <span>
                         <b>Documents</b>
                     </span>
+
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_regi">Registration Form</label>
+                        <label for="doc_val_regi_form">Registration Form</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_regi" name="doc_val_regi" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_regi" name="doc_scan_regi" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_regi').trigger('click');}" >
+                            <input id="doc_val_regi_form" name="doc_val_regi_form" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_regi_form" name="doc_scan_regi_form" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_regi_form').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_gm">Good Moral</label>
+                        <label for="doc_val_good_moral">Good Moral</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_gm" name="doc_val_gm" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_gm" name="doc_scan_gm" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_gm').trigger('click');}" >
+                            <input id="doc_val_good_moral" name="doc_val_good_moral" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_good_moral" name="doc_scan_good_moral" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_good_moral').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_form137">Form 137</label>
+                        <label for="doc_val_f137">Form 137</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_form137" name="doc_val_form137" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_form137" name="doc_scan_form137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_form137').trigger('click');}" >
+                            <input id="doc_val_f137" name="doc_val_f137" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_f137" name="doc_scan_f137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_f137').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_form138">Form 138</label>
+                        <label for="doc_val_f138">Form 138</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_form138" name="doc_val_form138" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_form138" name="doc_scan_form138" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_form138').trigger('click');}" >
+                            <input id="doc_val_f138" name="doc_val_f138" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_f138" name="doc_scan_f138" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_f138').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_bcert">Birth Certificate</label>
+                        <label for="doc_val_birth_cert">Birth Certificate</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_bcert" name="doc_val_bcert" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_bcert" name="doc_scan_bcert" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_bcert').trigger('click');}" >
+                            <input id="doc_val_birth_cert" name="doc_val_birth_cert" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_birth_cert" name="doc_scan_birth_cert" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_birth_cert').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_tor_hd">TOR/HD</label>
+                        <label for="doc_val_tor">Transcript of Records</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_tor_hd" name="doc_val_tor_hd" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_tor_hd" name="doc_scan_tor_hd" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_tor_hd').trigger('click');}" >
+                            <input id="doc_val_tor" name="doc_val_tor" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_tor" name="doc_scan_tor" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_tor').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
                         <label for="doc_val_app_grad">App for Graduation</label>
                         <span class="d-flex flex-nowrap gap-1">
@@ -235,46 +243,51 @@ const HOME = {
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_complete">Completion</label>
+                        <label for="doc_val_cert_of_complete">Certificate of Completion</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_complete" name="doc_val_complete" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_complete" name="doc_scan_complete" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_complete').trigger('click');}" >
+                            <input id="doc_val_cert_of_complete" name="doc_val_cert_of_complete" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_cert_of_complete" name="doc_scan_cert_of_complete" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_cert_of_complete').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_c_trans">Certificate of Transferee</label>
+                        <label for="doc_val_req_clearance_form">Request for Clearance</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_c_trans" name="doc_val_c_trans" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_c_trans" name="doc_scan_c_trans" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_c_trans').trigger('click');}" >
+                            <input id="doc_val_req_clearance_form" name="doc_val_req_clearance_form" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_req_clearance_form" name="doc_scan_req_clearance_form" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_req_clearance_form').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_cred">Transfer/Request Credentials</label>
+                        <label for="doc_val_req_credentials">Request for Credentials Form</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_cred" name="doc_val_cred" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_cred" name="doc_scan_cred" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_cred').trigger('click');}" >
+                            <input id="doc_val_req_credentials" name="doc_val_req_credentials" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_req_credentials" name="doc_scan_req_credentials" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_req_credentials').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label for="doc_val_clearance_f">Request for Clearance Form</label>
+                        <label for="doc_val_hd_or_cert_of_trans">Honorable Dismisal / Certificate of Transferee</label>
                         <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_clearance_f" name="doc_val_clearance_f" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_clearance_f" name="doc_scan_clearance_f" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_clearance_f').trigger('click');}" >
+                            <input id="doc_val_hd_or_cert_of_trans" name="doc_val_hd_or_cert_of_trans" type="checkbox" class="cb-doc">
+                            <input id="doc_scan_hd_or_cert_of_trans" name="doc_scan_hd_or_cert_of_trans" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_hd_or_cert_of_trans').trigger('click');}" >
                             + <i class="fa-solid fa-image"></i>
                             </button>
                         </span>
                     </span>
+                    
                 </section>
             </div>
             `);
