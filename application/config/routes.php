@@ -7,7 +7,7 @@ $route['login'] = 'Page/index';
 $route['home'] = 'Page/home';
 
 // CUSTOM
-
+$route['student/insert-record'] = "Student/addRecord";
 
 // DEFAULT
 $route['404_override'] = '';

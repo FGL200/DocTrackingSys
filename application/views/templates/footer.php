@@ -14,7 +14,7 @@
 </footer>
 
 <div id="modal-holder" class="d-flex flex-row justify-content-center align-items-center hide">
-    <form id="modal-container" class="card m-3 p-2 d-flex flex-column gap-2" method="post">
+    <form id="modal-container" class="card m-3 p-2 d-flex flex-column gap-2" method="post" enctype="multipart/form-data">
         <button type="button" class="btn btn-primary" onclick="MODAL.close();"><i class="fa-solid fa-xmark"></i></button>
         <div id="modal-title" class="fw-bold fs-6 p-1 text-center"></div>
         <div id="modal-body" class="p-1">
@@ -35,6 +35,9 @@
 <script src="<?=base_url('assets/third_party/fontawesome/js/all.min')?>.js"></script>
 
 <!-- CUSTOM JS -->
+<script>
+    let base_url = "<?= base_url(); ?>";
+</script>
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>
 <?php if(isset($js)) foreach($js as $j) {?>

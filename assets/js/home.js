@@ -18,7 +18,7 @@ const HOME = {
                     MAIN.addNotif("Search Failed!", "Filter is empty!", "r");
                 } else {
                     // ADD SEARCH METHOD HERE!
-
+                    
 
 
                     // close modal
@@ -291,24 +291,38 @@ const HOME = {
                 // get values
                 const form = new FormData(document.getElementById("modal-container"));
 
-                // fot debugging
+                // for debugging
                 form.forEach((val, key) => {
                     console.log({ key, val })
                 })
 
                 // insert data (invoke fetch)
-
-
-
-                // reset fields and add success notify
-                document.getElementById("modal-container").reset();
-                MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");;
-                document.querySelectorAll(".btnFile").forEach(button=>{
-                    button.classList.add("btn-success");
-                    button.classList.remove("btn-warning");
-                    button.disabled = true;
+                fetch(base_url + "student/insert-record", {
+                    method : "post",
+                    body : form
                 })
-                $("#stud_id").focus();
+                .then(resp=>resp.json())
+                .then(data => {
+                    console.log(data);
+
+                    // reset fields and add success notify
+                    document.getElementById("modal-container").reset();
+                    MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");;
+                    document.querySelectorAll(".btnFile").forEach(button=>{
+                        button.classList.add("btn-success");
+                        button.classList.remove("btn-warning");
+                        button.disabled = true;
+                    })
+                    $("#stud_id").focus();
+                })
+                .catch(err=>{
+                    console.log(err);
+                });
+                
+
+            
+
+                
             })
         },
 
