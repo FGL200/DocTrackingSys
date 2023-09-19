@@ -18,6 +18,11 @@ class Student_model extends CI_Model{
         $query = "INSERT INTO `doc` SET {$data}";
         $this->db->query($query);
     }
+
+    public function addStudentScanDoc($data) {
+        $query = "INSERT INTO `scan` SET {$data}";
+        $this->db->query($query);
+    }
 }
 
 ?>

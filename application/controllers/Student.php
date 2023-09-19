@@ -12,28 +12,47 @@ class Student extends CI_Controller{
     }
 
     public function  addRecord() {
+
+        /** Student Information checking */
+        $required_fields = "";
+        $input_columns = array('stud_fname', 'stud_mname', 'stud_lname');
+        foreach($this->input->post() as $key=>$val) {
+            if(in_array($key, $input_columns) && trim(empty($val))) {
+                if(!empty(trim($required_fields))) $required_fields .= ",";
+                $required_fields .= $key;
+            }
+        }
+        if(!empty(trim($required_fields))) {
+            echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
+            exit;
+        }
+        /** END Student Information checking */
+
         $data = "";
 
+        /** Inserting data in `stud_rec` table */
         foreach($this->input->post() as $key => $val) {
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
-                $key = explode("stud_", $key)[1];
-
+                // $key = explode("stud_", $key)[1];
                 if(!empty($data)) $data .= ",";
                 $data .= "`{$key}` = '".$val."'";
             }
         }
+        
 
         $user_id = "2"; // temporary user for encoding
 
-        $data .= ", `user_id` = '{$user_id}'";
+        $data .= (!empty(trim($data)) ? ", " : null) . " `user_id` = '{$user_id}'";
 
-        $this->db->trans_start();
+        $this->db->trans_begin();
 
         $student_id = $this->std->addStudentInfo($data); 
+        /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
 
+        /** Inserting data in `doc` table  */
         foreach($this->input->post() as $key => $val) {
             $val = trim($val);
             if(strstr($key, "doc_val_") && !empty($val)){
@@ -45,18 +64,50 @@ class Student extends CI_Controller{
             }
         }
 
-        $data .= ", `stud_rec_id` = '{$student_id}'";
+        if(!empty(trim($data))) {
+            $data .= ", `stud_rec_id` = '{$student_id}'";
+            $this->std->addStudentDoc($data);
+        }
 
-        $this->std->addStudentDoc($data);
+        /** -- End of inserting data in `doc` table --  */
 
-        $this->db->trans_complete(); // commmit or rollback the transaction
+        
+        /** Uploading file  */
+        $data = "";
+        foreach($_FILES as $key => $val) {
+            if(!empty($val['name']) && !empty($val['tmp_name'])) {
+                if(!empty($data)) $data .= ",";
+
+                $files_to_insert = $this->upload_file($key, $val, $student_id);
+
+                if(!$files_to_insert)  {
+                    $this->db->trans_rollback();
+                    echo json_encode(['status'=>'error', 'message' => 'File upload error!']);
+                    exit;
+                };
+                $data .= $files_to_insert;
+            }
+            
+        }
+        if(!empty($data)) {
+            $data .= ', `stud_rec_id` = "'.$student_id.'"'; 
+            $this->std->addStudentScanDoc($data);
+        }
+
+        /** End of Uploading file  */
+        
+
+
+        // $this->db->trans_complete(); // commmit or rollback the transaction
        
 
         if($this->db->trans_status() === TRUE) {
+            $this->db->trans_commit();
             echo json_encode(array(
                 "status" => "success"
             ));
         } else {
+            $this->db->trans_rollback()();
             echo json_encode(array(
                 "status" => "error"
             ));
@@ -67,6 +118,26 @@ class Student extends CI_Controller{
 
     }
 
+    public function upload_file($key, $val, $stud_rec_id) {
+        if(!is_dir('uploads/')) mkdir('uploads/',0777, true);
+
+        
+        $path = "uploads/";
+
+        $new_file_name = md5(time().$stud_rec_id);
+        $file_ext = explode('.',$val['name']);
+        $val['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+
+        $new_file_path = $path . $val['name'];
+
+        $key = join('', explode('doc_scan_', $key));
+        $data = $new_file_path;
+        return move_uploaded_file($val['tmp_name'], $new_file_path) ? "`{$key}`='{$data}'" : false;
+            
+        
+       
+
+    }
 
     
 }
