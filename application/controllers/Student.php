@@ -34,7 +34,7 @@ class Student extends CI_Controller{
         foreach($this->input->post() as $key => $val) {
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
-                // $key = explode("stud_", $key)[1];
+                $key = explode("stud_", $key)[1];
                 if(!empty($data)) $data .= ",";
                 $data .= "`{$key}` = '".$val."'";
             }
@@ -133,11 +133,11 @@ class Student extends CI_Controller{
         $key = join('', explode('doc_scan_', $key));
         $data = $new_file_path;
         return move_uploaded_file($val['tmp_name'], $new_file_path) ? "`{$key}`='{$data}'" : false;
-            
-        
-       
 
     }
+
+
+    
 
     
 }
