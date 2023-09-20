@@ -146,6 +146,10 @@ class Student extends CI_Controller{
         echo json_encode(['result' => $this->std->get_StudRecs_Remarks()]);
     }
 
+    public function get_Student_Records($id) {
+        echo json_encode(['result' => $this->std->get_Student_all_Record($id)]);
+    }
+
     
 
 
