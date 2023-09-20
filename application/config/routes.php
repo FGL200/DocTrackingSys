@@ -8,6 +8,7 @@ $route['home'] = 'Page/home';
 
 // CUSTOM
 $route['student/insert-record']['post'] = "Student/addRecord";
+$route['students'] = "Student/get_Student_List";
 $route['record/(:any)'] = 'Page/record/$1';
 
 // DEFAULT

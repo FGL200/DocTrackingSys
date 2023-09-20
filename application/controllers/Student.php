@@ -94,7 +94,14 @@ class Student extends CI_Controller{
         }
 
         /** End of Uploading file  */
+
         
+        /** Inserting remarks */
+
+        $data = "`stud_rec_id` = '{$student_id}'";
+        $this->std->insertRemarks($data);
+
+        /** End of inserting remarks */
 
 
         // $this->db->trans_complete(); // commmit or rollback the transaction
@@ -134,6 +141,12 @@ class Student extends CI_Controller{
         return move_uploaded_file($val['tmp_name'], $new_file_path) ? "`{$key}`='{$data}'" : false;
 
     }
+
+    public function get_Student_List() {
+        echo json_encode(['result' => $this->std->get_StudRecs_Remarks()]);
+    }
+
+    
 
 
     

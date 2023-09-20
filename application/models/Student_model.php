@@ -23,6 +23,27 @@ class Student_model extends CI_Model{
         $query = "INSERT INTO `scan` SET {$data}";
         $this->db->query($query);
     }
+
+    public function insertRemarks($data) {
+        $query = "INSERT INTO `remarks` SET {$data}";
+        $this->db->query($query);
+    }
+
+    public function get_StudRecs_Remarks() {
+        $query = 'SELECT 
+                        sr.fname,
+                        sr.mname,
+                        sr.lname,
+                        rm.value,
+                        rm.category
+                    FROM remarks rm
+                    JOIN stud_rec sr
+                        ON sr.id = rm.stud_rec_id';
+        
+        $fetch = $this->db->query($query);
+
+        return $fetch->num_rows() ? $fetch->result() : null;
+    }
 }
 
 ?>
