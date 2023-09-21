@@ -11,6 +11,9 @@ class Student extends CI_Controller{
         $this->load->model("remarks_model", "rm");
     }
 
+    /**
+     * Add student record
+     */
     public function  addRecord() {
 
         /** Student Information checking */
@@ -35,14 +38,14 @@ class Student extends CI_Controller{
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
                 if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = '".$val."'";
+                $data .= "`{$key}` = '{$val}'";
             }
         }
         
 
-        $created_by_uid = "2"; // temporary user for encoding
+        $created_by_uid = $this->session->userdata('id') ? $this->session->userdata('id') : '2' ; //  user id for encoding
 
-        $data .= (!empty(trim($data)) ? ", " : null) . " `created_by_uid` = '{$created_by_uid}'";
+        $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 
         $this->db->trans_begin();
 
@@ -74,8 +77,8 @@ class Student extends CI_Controller{
         
         /** Inserting remarks */
         $data = "";
-        $remark_value = "`value` = '". ($this->input->post('remarks_value') || '')."', ";
-        $remark_category = $this->input->post('remarks-category') ? " `category` = '" . ( $this->input->post('remarks-category')). "', " : null;
+        $remark_value = "`value` = '". (trim($this->input->post('remarks_value')))."', ";
+        $remark_category = $this->input->post('remarks-category') ? " `category` = '" . (trim($this->input->post('remarks-category'))). "', " : null;
 
         $data .= ($remark_value . $remark_category . "`stud_rec_id` = '{$student_id}'");
         $this->rm->insertRemarks($data);
@@ -104,6 +107,11 @@ class Student extends CI_Controller{
 
     }
 
+    /**
+     * Upload student documents
+     * @param Array $file
+     * @param Integer $stud_rec_id
+     */
     public function upload_file($file, $stud_rec_id) {
         if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
 

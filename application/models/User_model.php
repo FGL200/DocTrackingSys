@@ -23,4 +23,22 @@ class User_model extends CI_Model {
         //update info
 
     }
+
+    public function login_user($username, $password) {
+         $query = "SELECT 
+                        `i`.fname,
+                        `i`.lname,
+                        `i`.mname,
+                        `u`.id,
+                        `u`.role 
+                FROM `info` as `i` 
+                JOIN `user` as `u` 
+                    ON `u`.id = `i`.user_id
+                WHERE `u`.uname = '{$username}' AND `u`.pword = PASSWORD('{$password}') AND `u`.active = '1'
+                LIMIT 1
+                ";
+        $fetch = $this->db->query($query);
+        
+        return $fetch->num_rows() ? $fetch->result_array()[0]  : null;
+    }
 }

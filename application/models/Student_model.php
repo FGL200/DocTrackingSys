@@ -7,13 +7,19 @@ class Student_model extends CI_Model{
         parent::__construct();
     }
 
-
+    /**
+     * Insert into `stud_rec`
+     * @param String $data
+     */
     public function addStudentInfo($data) {
         $query = "INSERT INTO `stud_rec` SET {$data}";
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
     }
-
+    /**
+     * Insert into `doc`
+     * @param String $data
+     */
     public function addStudentDoc($data) {
         $query = "INSERT INTO `doc` SET {$data}";
         $this->db->query($query);
@@ -37,6 +43,10 @@ class Student_model extends CI_Model{
         return $fetch->num_rows() ? $fetch->result() : null;
     }
 
+    /**
+     * Get all data for specific student by `id`
+     * @param Integer $id
+     */
     public function get_Student_all_Record($id) {
         $query = ' SELECT 
                     sr.stud_fname `First Name`,
