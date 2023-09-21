@@ -12,7 +12,7 @@ CREATE TABLE `user` (
     `role` ENUM('A','E','V') DEFAULT 'V'
 );
 
-CREATE TABLE `info` (
+CREATE TABLE `user_info` (
     `id` INT(10) PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT(10) UNIQUE NOT NULL,
     `fname` VARCHAR(50),
@@ -94,3 +94,11 @@ VALUES
 ('encoder', PASSWORD('123'), '1', 'E'),
 ('viewer1', PASSWORD('123'), '1', 'V'),
 ('viewer2', PASSWORD('123'), '0', 'V');
+
+INSERT INTO `user_info`
+(`user_id`)
+VALUES
+('1'),
+('2'),
+('3'),
+('4');

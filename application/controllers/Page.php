@@ -17,6 +17,9 @@ class Page extends CI_Controller {
 
     public function index(){ 
 
+        // check user session if defined, if not redirect to login page
+        
+
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'Login',
@@ -38,8 +41,16 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'home',
-            'css' => ['home']
+            'css' => ['home'],
+            'profile' => [
+                'uname' => '',
+                'fname' => '',
+                'lname' => '',
+                'bday' => date('mm/dd/yyyy'),
+                'g' => 'N',
+            ]
         ];
+
 
         // FOOTER VAIRABLES
         $data['footer'] = [
@@ -51,6 +62,7 @@ class Page extends CI_Controller {
     }
 
     public function record($record_id){
+        $record_id = intval($record_id);
 
         // HEADER VARIABLES
         $data['header'] = [

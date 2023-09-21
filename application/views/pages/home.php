@@ -50,11 +50,12 @@
             </div>
         </div>
     </nav>
-    <div class="d-flex flex-column flex-grow-1 justify-content-center loading" id="table-container">
-        <table id="dataTable" class="table table-hover"></table>
+    <div class="d-flex flex-column flex-grow-1 justify-content-center">
+        <div class=" card p-4 shadow loading" id="table-container">
+            <table id="dataTable" class="table table-hover" style="margin-bottom: 0;"></table>
+        </div>
     </div>
 </main>
-
 
 <!-- <div class="dropdown">
     <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

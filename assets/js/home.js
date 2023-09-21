@@ -407,7 +407,7 @@ const HOME = {
                 </div>
             `);
             MODAL.setFooter(``);
-            MODAL.setScript(`<script>HOME.IMPORT_EXCEL.onSubmit</script>`);
+            MODAL.setScript(`<script>HOME.IMPORT_EXCEL.onSubmit()</script>`);
             MODAL.open();
         },
 
@@ -433,7 +433,7 @@ const HOME = {
             
             `);
             MODAL.setFooter(``);
-            MODAL.setScript(`<script>HOME.GENERATE_QR.onSubmit</script>`);
+            MODAL.setScript(`<script>HOME.GENERATE_QR.onSubmit()</script>`);
             MODAL.open();
         },
 
@@ -456,21 +456,51 @@ const HOME = {
         open: function () {
             MODAL.setTitle("New User");
             MODAL.setBody(`
-            
+                <div class="d-flex flex-column gap-1 card p-3">
+                    <span>
+                        <b>User Information</b>
+                    </span>
+                    <span>
+                        <input type="text" name="uname" class="card p-2" placeholder="Username" style="width: 100%;">
+                    </span>
+                    <span>
+                        <select name="role" class="card p-2" style="width: 100%;">
+                            <option value="V">Viewer</option>
+                            <option value="E">Encoder</option>
+                            <option value="A">Admin</option>
+                        </select>
+                    </span>
+                    <span>
+                        <p class="card p-2" style="width: 100%; color: grey;">Password is set to 'default'</p>
+                    </span>
+                </div>
             `);
-            MODAL.setFooter(``);
-            MODAL.setScript(`<script>HOME.NEW_USER.onSubmit</script>`);
+            MODAL.setFooter(`<button class="btn btn-success">Add User</button>`);
+            MODAL.setScript(`<script>HOME.NEW_USER.onSubmit()</script>`);
             MODAL.open();
         },
 
-        onSubmit: function () {
+        onSubmit: async function () {
             MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 // NEW_USER
-
-
-                MODAL.close();
+                const form = new FormData(document.getElementById("modal-container"));
+                await fetch(base_url + 'new_user', {
+                    method: 'post',
+                    body : form
+                })
+                .then(response=> response.text())
+                .then(result=>{ 
+                    if(result){
+                        MAIN.addNotif("Added new User!", "Successfully added new user", "g");
+                        MODAL.close();
+                    }
+                })
+                .catch(err=>{
+                    MAIN.addNotif("Error Occured!", "Something went wrong", "r");
+                    console.log(err);
+                })
             })
         }
     },
@@ -483,47 +513,56 @@ const HOME = {
             await fetch(base_url + 'student/all')
                 .then(response => response.json())
                 .then((apiResponse) => {
-                    if(apiResponse) $('#table-container').removeClass('loading');
-                    // if($.fn.DataTable.isDataTable( '#dataTable' )){
-                    //     $('#dataTable').DataTable().destroy();
-                    //     $('#dataTable').html("");
-                    // }
 
-                    // let cols = []
+                    $('#table-container').removeClass('loading');
 
-                    // Object.keys(apiResponse.result[0]).forEach(key => {
-                    //     cols.push({ 'data' : key });
-                    // })
+                    if($.fn.DataTable.isDataTable( '#dataTable' )){
+                        $('#dataTable').DataTable().destroy();
+                        $('#dataTable').html("");
+                    }
+                    
+                    const N_TABLE = apiResponse.result; 
+                    if(N_TABLE) {
+                        if(N_TABLE.length > 0){
+                            let table = `
+                            <thead>
+                                <tr>
+                                    <th style="white-space: nowrap;">Record ID</th>
+                                    <th style="white-space: nowrap;">First Name</th>
+                                    <th style="white-space: nowrap;">Middle Name</th>
+                                    <th style="white-space: nowrap;">Last Name</th>
+                                    <th style="white-space: nowrap;">Suffix</th>
+                                    <th style="white-space: nowrap;">Remarks</th>
+                                    <th style="white-space: nowrap;">Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                            for(let i=0; i<N_TABLE.length; i++) {
+                                table += '<tr>';
+                                table += '<td><a href="' + base_url + 'record/' + N_TABLE[i]['Record ID'] + '" target="_blank">' + N_TABLE[i]['Record ID'] + '</a></td>';
+                                table += '<td>' + (N_TABLE[i]['First Name'] ? N_TABLE[i]['First Name'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Middle Name'] ? N_TABLE[i]['Middle Name'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Last Name'] ? N_TABLE[i]['Last Name'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Suffix'] ? N_TABLE[i]['Suffix'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Remarks'] ? N_TABLE[i]['Remarks'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Category'] ? N_TABLE[i]['Category'] : '') + '</td>';
+                                // Object.values(row).forEach(val => { table += '<td>' + val + '</td>'; });
+                                table += '</tr>';
+                            };
+                            table += '<tbody>';
+                            $("#table-container").css({"max-width":"1000px", "max-height":"500px"});
+                            $("#dataTable").html(table);
+                            $('#dataTable').DataTable();
+                        }
+                    }else{
+                        $("#dataTable").html('<p style="white-space: nowrap; margin: 0;">No data found <i class="fa-regular fa-face-frown-open"></i></p>')
+                        $("#table-container").css({"max-width":"1000px", "max-height":"500px"});
+                    }
 
-                    // console.log(cols);
-
-                    // // MAY ERROR D2 sa COLS
-                    // $('#dataTable').DataTable({
-                    //     'data' : apiResponse.result,
-                    //     'columns' : cols
-                    // })
-
-
-                    let table = '<thead>';
-                    columns.forEach(col => { table += '<th>' + col + '</th>' });
-                    table += '</thead><tbody>';
-                    data.result.forEach(row => {
-                        table += '<tr>';
-                        table += '<td><a href="' + base_url + 'record/' + row['Record ID'] + '">' + row['Record ID'] + '</a></td>';
-                        table += '<td>' + row['First Name'] + '</td>';
-                        table += '<td>' + row['Middle Name'] + '</td>';
-                        table += '<td>' + row['Last Name'] + '</td>';
-                        table += '<td>' + row['Remarks'] + '</td>';
-                        table += '<td>' + row['Category'] + '</td>';
-                        // Object.values(row).forEach(val => { table += '<td>' + val + '</td>'; });
-                        table += '</tr>';
-                    });
-                    table += '<tbody>';
-
-                    $("#dataTable").html(table);
                 })
                 .catch(err => {
-                    MAIN.addNotif('Error occured!', err, 'r')
+                    MAIN.addNotif('Error occured!', err, 'r');
+                    console.error(err);
                 })
         }
     }

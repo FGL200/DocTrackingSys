@@ -20,8 +20,8 @@ class Student_model extends CI_Model{
     }
 
     public function get_StudRecs_Remarks() {
-        $query = 'SELECT 
-                        sr.id `Record ID`,
+        $query = "SELECT 
+                        LPAD(sr.id, 6, '0') `Record ID`,
                         sr.stud_fname `First Name`,
                         sr.stud_mname `Middle Name`,
                         sr.stud_lname `Last Name`,
@@ -30,7 +30,7 @@ class Student_model extends CI_Model{
                         rm.category `Category`
                     FROM stud_rec sr
                     LEFT JOIN remarks rm 
-                        ON rm.stud_rec_id = sr.id';
+                        ON rm.stud_rec_id = sr.id";
         
         $fetch = $this->db->query($query);
 

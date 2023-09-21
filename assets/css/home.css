@@ -6,6 +6,16 @@ input[type="checkbox"]:checked{
     background-color: #EAFAF1;
 }
 
+#table-container{
+    overflow: hidden;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
+    max-width: 90px ;
+    max-height: 90px ;
+    transition: 1s ease-in-out ;
+}
+
+
 .loading{
     position: relative;
 }
