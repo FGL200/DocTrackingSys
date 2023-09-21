@@ -29,6 +29,7 @@
     <script src="<?=base_url('assets/third_party/jquery/jquery.min')?>.js"></script>
 
     <!-- CUSTOM JS -->
+    <script>const base_url = '<?=base_url()?>';</script>
     <?php if(isset($js)) foreach($js as $j) {?>
     <script src="<?=base_url("assets/js/$j")?>.js" defer></script>
     <?php }?>

@@ -33,13 +33,19 @@ CREATE TABLE `x_file`(
 
 CREATE TABLE `stud_rec` (
 	`id` INT(10) PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT(10) NOT NULL,
-    `x_file_id` INT(10),
-    `fname` VARCHAR(50) NOT NULL,
-    `mname` VARCHAR(50),
-    `lname` VARCHAR(50),
-	`sfx` VARCHAR(20),
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
+    `user_id` int(10) NOT NULL,
+    `x_file_id` int(10) DEFAULT NULL,
+    `stud_fname` varchar(50) NOT NULL,
+    `stud_mname` varchar(50) DEFAULT NULL,
+    `stud_lname` varchar(50) DEFAULT NULL,
+    `stud_sfx` varchar(20) DEFAULT NULL,
+    `stud_id` varchar(20) DEFAULT NULL,
+    `created_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `created_by_uid` INT(10) DEFAULT NULL,
+    `updated_by_uid` INT(10) DEFAULT NULL,
+    FOREIGN KEY (`created_by_uid`) REFERENCES `user`(`id`),
+    FOREIGN KEY (`updated_by_uid`) REFERENCES `user`(`id`),
     FOREIGN KEY (`x_file_id`) REFERENCES `x_file`(`id`)
 );
 

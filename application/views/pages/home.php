@@ -1,10 +1,10 @@
 <main class="d-flex flex-column justify-content-between align-items-center" style="width: 100%;">
     <nav class="d-flex flex-row flex-wrap justify-content-around align-items-center gap-2 p-1 b-color-w shadow" style="width: 100%;">
         <div id="nav-search-stud" class="d-flex flex-row justify-content-center align-items-center">
-            <input id="id-input-search" class="form-control me-2 d-flex flex-grow" type="search" placeholder="Search Record" aria-label="Search">
+            <!-- <input id="id-input-search" class="form-control me-2 d-flex flex-grow" type="search" placeholder="Search Record" aria-label="Search"> -->
             <div class="dropdown">
                 <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i> Advanced Search
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">
@@ -69,6 +69,6 @@
         </div>
     </nav>
     <div class="d-flex flex-column flex-grow-1 justify-content-center loading" id="table-container">
-
+        <table id="dataTable" class="table table-hover"></table>
     </div>
 </main>

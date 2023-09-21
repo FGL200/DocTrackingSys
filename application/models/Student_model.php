@@ -31,13 +31,14 @@ class Student_model extends CI_Model{
 
     public function get_StudRecs_Remarks() {
         $query = 'SELECT 
-                        sr.stud_fname,
-                        sr.stud_mname,
-                        sr.stud_lname,
-                        rm.value,
-                        rm.category
+                        sr.id `Record ID`,
+                        sr.stud_fname `First Name`,
+                        sr.stud_mname `Middle Name`,
+                        sr.stud_lname `Last Name`,
+                        rm.value `Remarks`,
+                        rm.category `Category`
                     FROM stud_rec sr
-                    JOIN remarks rm 
+                    LEFT JOIN remarks rm 
                         ON rm.stud_rec_id = sr.id';
         
         $fetch = $this->db->query($query);

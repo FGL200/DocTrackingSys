@@ -23,7 +23,7 @@ const MODAL = {
      * Submit the form of modal
      * @param {function} callback 
      */
-    onSubmit : function(callback){
+    onSubmit : async function(callback){
         $("#modal-container").on("submit",function (e){
             e.preventDefault();
             if(callback) callback(e);

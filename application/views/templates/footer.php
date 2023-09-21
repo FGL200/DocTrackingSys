@@ -35,9 +35,6 @@
 <script src="<?=base_url('assets/third_party/fontawesome/js/all.min')?>.js"></script>
 
 <!-- CUSTOM JS -->
-<script>
-    let base_url = "<?= base_url(); ?>";
-</script>
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>
 <?php if(isset($js)) foreach($js as $j) {?>

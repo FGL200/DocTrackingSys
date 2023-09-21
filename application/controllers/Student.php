@@ -39,9 +39,9 @@ class Student extends CI_Controller{
         }
         
 
-        $user_id = "2"; // temporary user for encoding
+        $created_by_uid = "2"; // temporary user for encoding
 
-        $data .= (!empty(trim($data)) ? ", " : null) . " `user_id` = '{$user_id}'";
+        $data .= (!empty(trim($data)) ? ", " : null) . " `created_by_uid` = '{$created_by_uid}'";
 
         $this->db->trans_begin();
 

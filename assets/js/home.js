@@ -8,17 +8,32 @@ const HOME = {
     SEARCH: {
 
         /**
+         * 
+         */
+        quickSearch: async function (search_value) {
+            await fetch(base_url + 'api/quicksearch/' + search_value)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => {
+                    console.log(data);
+                    MAIN.addNotif('Error occured!', err, 'r');
+                })
+        },
+
+        /**
          * Add search filter on submit
          */
         onSubmit: function () {
-            MODAL.onSubmit(function (e) {
+            MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 if (document.getElementById("search-filter-holder").children.length < 1) {
                     MAIN.addNotif("Search Failed!", "Filter is empty!", "r");
                 } else {
                     // ADD SEARCH METHOD HERE!
-                    
+
 
 
                     // close modal
@@ -298,7 +313,7 @@ const HOME = {
         },
 
         onSubmit: function () {
-            MODAL.onSubmit(function (e) {
+            MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 // get values
@@ -309,33 +324,29 @@ const HOME = {
                     console.log({ key, val })
                 })
 
-                // insert data (invoke fetch)
-                fetch(base_url + "student/insert-record", {
-                    method : "post",
-                    body : form
+                // insert data (invoke fetch)base_url + 
+                await fetch(base_url + "student/insert-record", {
+                    method: "post",
+                    body: form
                 })
-                .then(resp=>resp.json())
-                .then(data => {
-                    console.log(data);
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
 
-                    // reset fields and add success notify
-                    document.getElementById("modal-container").reset();
-                    MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");;
-                    document.querySelectorAll(".btnFile").forEach(button=>{
-                        button.classList.add("btn-success");
-                        button.classList.remove("btn-warning");
-                        button.disabled = true;
+                        // reset fields and add success notify
+                        document.getElementById("modal-container").reset();
+                        MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");;
+                        document.querySelectorAll(".btnFile").forEach(button => {
+                            button.classList.add("btn-success");
+                            button.classList.remove("btn-warning");
+                            button.disabled = true;
+                        })
+                        $("#stud_id").focus();
                     })
-                    $("#stud_id").focus();
-                })
-                .catch(err=>{
-                    console.log(err);
-                });
-                
-
-            
-
-                
+                    .catch(err => {
+                        console.log(err);
+                        MAIN.addNotif("Error occured!", err, "r");;
+                    });
             })
         },
 
@@ -349,7 +360,7 @@ const HOME = {
             });
 
             document.querySelectorAll(".cb-doc").forEach(checkBox => {
-                checkBox.addEventListener("change", function(){
+                checkBox.addEventListener("change", function () {
                     const fileTag = "#" + this.id + " ~ button";
                     document.querySelector(fileTag).disabled = !this.checked;
                 })
@@ -374,7 +385,7 @@ const HOME = {
         },
 
         onSubmit: function () {
-            MODAL.onSubmit(function (e) {
+            MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 // IMPORT EXCEL
@@ -400,7 +411,7 @@ const HOME = {
         },
 
         onSubmit: function () {
-            MODAL.onSubmit(function (e) {
+            MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 // GENERATE_QR
@@ -426,7 +437,7 @@ const HOME = {
         },
 
         onSubmit: function () {
-            MODAL.onSubmit(function (e) {
+            MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
                 // NEW_USER
@@ -437,4 +448,66 @@ const HOME = {
         }
     },
 
+    DASHBOARD: {
+        load_student_records: async function () {
+            await fetch(base_url + 'student/all')
+                .then(response => response.json())
+                .then((apiResponse) => {
+                    $('#table-container').removeClass('loading');
+
+                    if($.fn.DataTable.isDataTable( '#dataTable' )){
+                        $('#dataTable').DataTable().destroy();
+                        $('#dataTable').html("");
+                    }
+
+                    let cols = []
+
+                    Object.keys(apiResponse.result[0]).forEach(key => {
+                        cols.push({ 'data' : key });
+                    })
+
+                    console.log(cols);
+
+                    // MAY ERROR D2 sa COLS
+                    $('#dataTable').DataTable({
+                        'data' : apiResponse.result,
+                        'columns' : cols
+                    })
+
+
+                    // let table = '<thead>';
+                    // columns.forEach(col => { table += '<th>' + col + '</th>' });
+                    // table += '</thead><tbody>';
+                    // data.result.forEach(row => {
+                    //     table += '<tr>';
+                    //     table += '<td><a href="' + base_url + 'record/' + row['Record ID'] + '">' + row['Record ID'] + '</a></td>';
+                    //     table += '<td>' + row['First Name'] + '</td>';
+                    //     table += '<td>' + row['Middle Name'] + '</td>';
+                    //     table += '<td>' + row['Last Name'] + '</td>';
+                    //     table += '<td>' + row['Remarks'] + '</td>';
+                    //     table += '<td>' + row['Category'] + '</td>';
+                    //     // Object.values(row).forEach(val => { table += '<td>' + val + '</td>'; });
+                    //     table += '</tr>';
+                    // });
+                    // table += '<tbody>';
+
+                    // $("#main-table").html(table);
+                })
+                .catch(err => {
+                    MAIN.addNotif('Error occured!', err, 'r')
+                })
+        }
+    }
+
 }
+
+// on windows load, fetch all the student records
+$(window).on('load', HOME.DASHBOARD.load_student_records);
+
+// on ENTER in search bar, trigger quick-search
+$('#id-input-search').on('keydown', async function (e) {
+    if (e.keyCode === 13) {
+        if ($(this).val()) await HOME.SEARCH.quickSearch($(this).val())
+        else MAIN.addNotif('Search failed', 'Please enter any key word', 'r')
+    }
+});
