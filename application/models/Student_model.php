@@ -31,14 +31,14 @@ class Student_model extends CI_Model{
 
     public function get_StudRecs_Remarks() {
         $query = 'SELECT 
-                        sr.fname,
-                        sr.mname,
-                        sr.lname,
+                        sr.stud_fname,
+                        sr.stud_mname,
+                        sr.stud_lname,
                         rm.value,
                         rm.category
-                    FROM remarks rm
-                    JOIN stud_rec sr
-                        ON sr.id = rm.stud_rec_id';
+                    FROM stud_rec sr
+                    JOIN remarks rm 
+                        ON rm.stud_rec_id = sr.id';
         
         $fetch = $this->db->query($query);
 
@@ -47,9 +47,9 @@ class Student_model extends CI_Model{
 
     public function get_Student_all_Record($id) {
         $query = ' SELECT 
-                    sr.fname,
-                    sr.mname,
-                    sr.lname,
+                    sr.stud_fname,
+                    sr.stud_mname,
+                    sr.stud_lname,
                     sc.regi_form `sc_regi_form`,
                     sc.good_moral `sc_good_moral`,
                     sc.f137 `sc_f137`,
@@ -74,13 +74,14 @@ class Student_model extends CI_Model{
                     d.hd_or_cert_of_trans `doc_hd_or_cert_of_trans`,
                     rm.value,
                     rm.category
-                FROM `remarks` rm
-                JOIN `scan` sc
-                    ON  sc.stud_rec_id = rm.stud_rec_id
-                JOIN `doc` d
-                    ON  d.stud_rec_id = sc.stud_rec_id
-                JOIN `stud_rec` sr
+                FROM `stud_rec` sr
+                LEFT JOIN `remarks` rm  
                     ON rm.stud_rec_id = sr.id
+                LEFT JOIN `scan` sc
+                    ON  sc.stud_rec_id = sr.id
+                LEFT JOIN `doc` d
+                    ON  d.stud_rec_id = sr.id
+                
                 WHERE sr.id = "'.$id.'"
         ';
 

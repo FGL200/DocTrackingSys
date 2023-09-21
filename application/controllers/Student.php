@@ -33,7 +33,6 @@ class Student extends CI_Controller{
         foreach($this->input->post() as $key => $val) {
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
-                $key = explode("stud_", $key)[1];
                 if(!empty($data)) $data .= ",";
                 $data .= "`{$key}` = '".$val."'";
             }
@@ -58,7 +57,7 @@ class Student extends CI_Controller{
                 $key = explode("doc_val_", $key)[1];
 
                 if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = '".(1)."'";
+                $data .= "`{$key}` = '1'";
                 
             }
         }
@@ -88,16 +87,16 @@ class Student extends CI_Controller{
             }
             
         }
-        if(!empty($data)) {
-            $data .= ', `stud_rec_id` = "'.$student_id.'"'; 
-            $this->std->addStudentScanDoc($data);
-        }
+        
+        $data .= (empty($data) ? ' ' : ' ,' ).' `stud_rec_id` = "'.$student_id.'"'; 
+        $this->std->addStudentScanDoc($data);
+        
 
         /** End of Uploading file  */
 
         
         /** Inserting remarks */
-
+        
         $data = "`stud_rec_id` = '{$student_id}'";
         $this->std->insertRemarks($data);
 
@@ -147,6 +146,7 @@ class Student extends CI_Controller{
     }
 
     public function get_Student_Records($id) {
+        echo "<pre>";
         echo json_encode(['result' => $this->std->get_Student_all_Record($id)]);
     }
 
