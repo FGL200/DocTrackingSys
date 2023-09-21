@@ -48,27 +48,41 @@
                     <li><a class="dropdown-item" href="#"><i class="fa-solid fa-rectangle-list"></i> Added by Me</a></li>
                 </ul>
             </div>
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-hand"></i></i> Touch
-                </button>
-                <ul class="dropdown-menu">
-                    <!-- <li><a class="dropdown-item" href="#"><i class="fa-solid fa-plus"></i> New Touch</a></li> -->
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-hand"></i></i> My Touch</a></li>
-                    <!-- <li><hr class="dropdown-divider"></li> -->
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-spell-check"></i> Resolved Touch</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-list-check"></i> All Touch</a></li>
-                    <li>
-                        <!-- <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> See Garamay's new Touch</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> See Blurete's new Touch</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Bianes commented to your Touch</a></li> -->
-                </ul>
-            </div>
         </div>
     </nav>
     <div class="d-flex flex-column flex-grow-1 justify-content-center loading" id="table-container">
         <table id="dataTable" class="table table-hover"></table>
     </div>
 </main>
+
+
+<!-- <div class="dropdown">
+    <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-hand"></i></i> Touch
+    </button>
+    <ul class="dropdown-menu">
+        removed
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-plus"></i> New Touch</a></li>
+
+
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-hand"></i></i> My Touch</a></li>
+
+        removed
+        <li><hr class="dropdown-divider"></li>
+
+
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-spell-check"></i> Resolved Touch</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-list-check"></i> All Touch</a></li>
+        <li>
+
+
+        removed
+            <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> See Garamay's new Touch</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> See Blurete's new Touch</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Bianes commented to your Touch</a></li>
+        -- hangang d2
+    
+    </ul>
+</div> -->
