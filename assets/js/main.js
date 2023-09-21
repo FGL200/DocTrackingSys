@@ -135,7 +135,7 @@ const PROFILE = {
      * Save the profile
      */
     onSubmit : function(){
-        MODAL.onSubmit((e)=>{
+        MODAL.onSubmit( async (e)=>{
             e.preventDefault();
             const profile = new FormData(document.getElementById("modal-container"));
 

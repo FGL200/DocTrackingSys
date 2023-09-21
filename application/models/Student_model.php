@@ -31,11 +31,12 @@ class Student_model extends CI_Model{
 
     public function get_StudRecs_Remarks() {
         $query = 'SELECT 
-                        sr.fname,
-                        sr.mname,
-                        sr.lname,
-                        rm.value,
-                        rm.category
+                        sr.id `Record ID`,
+                        sr.stud_fname `First Name`,
+                        sr.stud_mname `Middle Name`,
+                        sr.stud_lname `Last Name`,
+                        rm.value `Remarks`,
+                        rm.category `Category`
                     FROM remarks rm
                     JOIN stud_rec sr
                         ON sr.id = rm.stud_rec_id';
@@ -47,9 +48,9 @@ class Student_model extends CI_Model{
 
     public function get_Student_all_Record($id) {
         $query = ' SELECT 
-                    sr.fname,
-                    sr.mname,
-                    sr.lname,
+                    sr.stud_fname,
+                    sr.stud_mname,
+                    sr.stud_lname,
                     sc.regi_form `sc_regi_form`,
                     sc.good_moral `sc_good_moral`,
                     sc.f137 `sc_f137`,
