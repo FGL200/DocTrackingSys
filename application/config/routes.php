@@ -11,6 +11,9 @@ $route['student/insert-record']['post'] = "Student/addRecord";
 $route['student/all'] = "Student/get_All_Student_List";
 $route['student/(:num)'] = 'Student/get_Student_Records/$1';
 
+// API
+$route['api/categories'] = "RemarkCategory/getCategories";
+
 // DEFAULT
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

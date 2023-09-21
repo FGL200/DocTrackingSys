@@ -54,7 +54,7 @@ const HOME = {
                         <option data-id="0" value="0_VALUE" selected disabled>--Select Filter--</option>
                         <option data-id="1" value="1_Student">Student</option>
                         <option data-id="2" value="2_Profile">Profile</option>
-                        <option data-id="3" value="3_Touch">Touch</option>
+                        <option data-id="3" value="3_Remarks">Remarks</option>
                     </select>
                 </div>
                 <div id="search-filter-holder" class="d-flex flex-row flex-wrap gap-1 justify-content-center"></div>
@@ -69,7 +69,7 @@ const HOME = {
          * Add a search Modal
          * @param {Element} e select tag 
          */
-        addFilter: function (e) {
+        addFilter: async function (e) {
 
             const value = String(e.value);
             const id = value.split("_")[0];
@@ -119,16 +119,11 @@ const HOME = {
                         <input id="filter-profile-fname" type="text" class="form-control" placeholder="First Name">
                         <input id="filter-profile-lname" type="text" class="form-control" placeholder="Last Name">
                     `;
-                } else if (rawFilterName == "Touch") {
+                } else if (rawFilterName == "Remarks") {
                     body.innerHTML = `
-                        <input id="filter-touch-id" type="text" class="form-control" placeholder="Touch ID">
-                        <select id="filter-touch-category" class="form-control">
-                            <option value="" default selected>--Select Touch Category--</option>
-                            <option value="inc_doc">Incomplete Document</option>
-                            <option value="wrong_doc">Incorrect Document</option>
-                            <option value="not_orig_doc">Not original Document</option>
-                            <option value="not_orig_doc">Missplaced Document</option>
-                            <option value="not_orig_doc">Missing Document</option>
+                        <input id="filter-remarks-value" type="text" class="form-control" placeholder="Remarks Value">
+                        <select id="filter-remarks-category" class="form-control">
+                            <option value="" disabled selected>--Select Category--</option>
                         </select>
                     `;
                 }
@@ -145,6 +140,16 @@ const HOME = {
             if (copy == 0) {
                 itemsHolder.appendChild(filter);
             }
+
+            // get all categories and save is to the Remarks option 'select' tag
+            await fetch(base_url + 'api/categories')
+            .then(response=>response.json())
+            .then(categories=>{
+                let categs = `<option value="" disabled selected>--Select Category--</option>`;
+                for(i in categories)
+                    categs += `<option value="${categories[i]}">${categories[i]}</option>`;
+                $("#filter-remarks-category").html(categs);
+            })
         }
     },
 
@@ -152,7 +157,7 @@ const HOME = {
      * For Inserting new Record
      */
     NEW_RECORD: {
-        open: function () {
+        open: async function () {
             MODAL.setTitle("New Record");
             MODAL.setBody(`
             <div class="d-flex flex-row flex-wrap gap-2">
@@ -175,12 +180,23 @@ const HOME = {
                     <span class="d-flex justify-content-between align-items-center gap-1">
                         <input id="stud_sfx" name="stud_sfx" type="text" class="p-2 card" placeholder="SFX">
                     </span>
+                    <hr>
+                    <span class="flex-grow-1">
+                        <b>Remarks</b>
+                    </span>
+                    <span class="d-flex justify-content-between align-items-center gap-1">
+                        <input id="remarks_value" name="remarks_value" type="text" class="p-2 card" placeholder="Remarks">
+                    </span>
+                    <span class="d-flex justify-content-between align-items-center gap-1">
+                        <select id="remarks-category" name="remarks-category" class="form-control">
+                            <option value="" disabled selected>--Select Category--</option>
+                        </select>
+                    </span>
                 </section>
                 <section class="d-flex flex-column flex-grow-1 gap-1 card p-2 m-2">
                     <span>
                         <b>Documents</b>
                     </span>
-
 
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
                         <label for="doc_val_regi_form">Registration Form</label>
@@ -309,6 +325,17 @@ const HOME = {
             MODAL.setFooter(`<button type="submit" class="btn btn-success">Save</button>`);
             MODAL.setScript(`<script>HOME.NEW_RECORD.onSubmit(); HOME.NEW_RECORD.onFileChange();</script>`);
             MODAL.open();
+
+            // when modal is opened, load all the categories in remarks
+            await fetch(base_url + 'api/categories')
+            .then(response=>response.json())
+            .then(categories=>{
+                let categs = `<option value="" disabled selected>--Select Category--</option>`;
+                for(i in categories)
+                    categs += `<option value="${categories[i]}">${categories[i]}</option>`;
+                $("#remarks-category").html(categs);
+            });
+
             $("#stud_id").focus();
         },
 
@@ -448,50 +475,52 @@ const HOME = {
         }
     },
 
+    /**
+     * Load Records on dashboard
+     */
     DASHBOARD: {
         load_student_records: async function () {
             await fetch(base_url + 'student/all')
                 .then(response => response.json())
                 .then((apiResponse) => {
-                    $('#table-container').removeClass('loading');
+                    if(apiResponse) $('#table-container').removeClass('loading');
+                    // if($.fn.DataTable.isDataTable( '#dataTable' )){
+                    //     $('#dataTable').DataTable().destroy();
+                    //     $('#dataTable').html("");
+                    // }
 
-                    if($.fn.DataTable.isDataTable( '#dataTable' )){
-                        $('#dataTable').DataTable().destroy();
-                        $('#dataTable').html("");
-                    }
+                    // let cols = []
 
-                    let cols = []
+                    // Object.keys(apiResponse.result[0]).forEach(key => {
+                    //     cols.push({ 'data' : key });
+                    // })
 
-                    Object.keys(apiResponse.result[0]).forEach(key => {
-                        cols.push({ 'data' : key });
-                    })
+                    // console.log(cols);
 
-                    console.log(cols);
-
-                    // MAY ERROR D2 sa COLS
-                    $('#dataTable').DataTable({
-                        'data' : apiResponse.result,
-                        'columns' : cols
-                    })
+                    // // MAY ERROR D2 sa COLS
+                    // $('#dataTable').DataTable({
+                    //     'data' : apiResponse.result,
+                    //     'columns' : cols
+                    // })
 
 
-                    // let table = '<thead>';
-                    // columns.forEach(col => { table += '<th>' + col + '</th>' });
-                    // table += '</thead><tbody>';
-                    // data.result.forEach(row => {
-                    //     table += '<tr>';
-                    //     table += '<td><a href="' + base_url + 'record/' + row['Record ID'] + '">' + row['Record ID'] + '</a></td>';
-                    //     table += '<td>' + row['First Name'] + '</td>';
-                    //     table += '<td>' + row['Middle Name'] + '</td>';
-                    //     table += '<td>' + row['Last Name'] + '</td>';
-                    //     table += '<td>' + row['Remarks'] + '</td>';
-                    //     table += '<td>' + row['Category'] + '</td>';
-                    //     // Object.values(row).forEach(val => { table += '<td>' + val + '</td>'; });
-                    //     table += '</tr>';
-                    // });
-                    // table += '<tbody>';
+                    let table = '<thead>';
+                    columns.forEach(col => { table += '<th>' + col + '</th>' });
+                    table += '</thead><tbody>';
+                    data.result.forEach(row => {
+                        table += '<tr>';
+                        table += '<td><a href="' + base_url + 'record/' + row['Record ID'] + '">' + row['Record ID'] + '</a></td>';
+                        table += '<td>' + row['First Name'] + '</td>';
+                        table += '<td>' + row['Middle Name'] + '</td>';
+                        table += '<td>' + row['Last Name'] + '</td>';
+                        table += '<td>' + row['Remarks'] + '</td>';
+                        table += '<td>' + row['Category'] + '</td>';
+                        // Object.values(row).forEach(val => { table += '<td>' + val + '</td>'; });
+                        table += '</tr>';
+                    });
+                    table += '<tbody>';
 
-                    // $("#main-table").html(table);
+                    $("#dataTable").html(table);
                 })
                 .catch(err => {
                     MAIN.addNotif('Error occured!', err, 'r')
