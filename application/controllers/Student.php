@@ -8,6 +8,7 @@ class Student extends CI_Controller{
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
         $this->load->model("student_model", "std");
+        $this->load->model("remarks_model", "rm");
     }
 
     public function  addRecord() {
@@ -72,9 +73,13 @@ class Student extends CI_Controller{
 
         
         /** Inserting remarks */
+        $data = "";
+        $remark_value = "`value` = '". ($this->input->post('remarks_value') || '')."', ";
+        $remark_category = $this->input->post('remarks-category') ? " `category` = '" . ( $this->input->post('remarks-category')). "', " : null;
+
+        $data .= ($remark_value . $remark_category . "`stud_rec_id` = '{$student_id}'");
+        $this->rm->insertRemarks($data);
         
-        $data = "`stud_rec_id` = '{$student_id}'";
-        $this->std->insertRemarks($data);
 
         /** End of inserting remarks */
 

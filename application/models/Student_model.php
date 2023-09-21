@@ -19,16 +19,6 @@ class Student_model extends CI_Model{
         $this->db->query($query);
     }
 
-    public function addStudentScanDoc($data) {
-        $query = "INSERT INTO `scan` SET {$data}";
-        $this->db->query($query);
-    }
-
-    public function insertRemarks($data) {
-        $query = "INSERT INTO `remarks` SET {$data}";
-        $this->db->query($query);
-    }
-
     public function get_StudRecs_Remarks() {
         $query = 'SELECT 
                         sr.id `Record ID`,
