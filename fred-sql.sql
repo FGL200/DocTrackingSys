@@ -33,8 +33,6 @@ CREATE TABLE `x_file`(
 
 CREATE TABLE `stud_rec` (
 	`id` INT(10) PRIMARY KEY AUTO_INCREMENT,
-    `user_id` int(10) NOT NULL,
-    `x_file_id` int(10) DEFAULT NULL,
     `stud_fname` varchar(50) NOT NULL,
     `stud_mname` varchar(50) DEFAULT NULL,
     `stud_lname` varchar(50) DEFAULT NULL,
@@ -44,6 +42,7 @@ CREATE TABLE `stud_rec` (
     `updated_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `created_by_uid` INT(10) DEFAULT NULL,
     `updated_by_uid` INT(10) DEFAULT NULL,
+    `x_file_id` int(10) DEFAULT NULL,
     FOREIGN KEY (`created_by_uid`) REFERENCES `user`(`id`),
     FOREIGN KEY (`updated_by_uid`) REFERENCES `user`(`id`),
     FOREIGN KEY (`x_file_id`) REFERENCES `x_file`(`id`)
@@ -60,35 +59,18 @@ CREATE TABLE `remarks` (
 CREATE TABLE `doc` (
 	`id` INT(10) PRIMARY KEY AUTO_INCREMENT,
     `stud_rec_id` INT(10) UNIQUE NOT NULL,
-    `regi_form` INT(1) DEFAULT 0,
-    `good_moral` INT(1) DEFAULT 0,
-    `f137` INT(1) DEFAULT 0,
-    `f138` INT(1) DEFAULT 0,
-    `birth_cert` INT(1) DEFAULT 0,
-    `tor` INT(1) DEFAULT 0,
-    `app_grad` INT(1) DEFAULT 0,
-    `cert_of_complete` INT(1) DEFAULT 0,
-    `req_clearance_form` INT(1) DEFAULT 0,
-    `req_credentials` INT(1) DEFAULT 0,
-    `hd_or_cert_of_trans` INT(1) DEFAULT 0,
+    `regi_form` JSON DEFAULT '{val: 0, dir:""}',
+    `good_moral` JSON DEFAULT '{val: 0, dir:""}',
+    `f137` JSON DEFAULT '{val: 0, dir:""}',
+    `f138` JSON DEFAULT '{val: 0, dir:""}',
+    `birth_cert` JSON DEFAULT '{val: 0, dir:""}',
+    `tor` JSON DEFAULT '{val: 0, dir:""}',
+    `app_grad` JSON DEFAULT '{val: 0, dir:""}',
+    `cert_of_complete` JSON DEFAULT '{val: 0, dir:""}',
+    `req_clearance_form` JSON DEFAULT '{val: 0, dir:""}',
+    `req_credentials` JSON DEFAULT '{val: 0, dir:""}',
+    `hd_or_cert_of_trans` JSON DEFAULT '{val: 0, dir:""}',
     `shelf` VARCHAR(50),
-    FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec`(`id`)
-);
-
-CREATE TABLE `scan` (
-	`id` INT(10) PRIMARY KEY AUTO_INCREMENT,
-    `stud_rec_id` INT(10) UNIQUE NOT NULL,
-    `regi_form` VARCHAR(255),
-    `good_moral` VARCHAR(255),
-    `f137` VARCHAR(255),
-    `f138` VARCHAR(255),
-    `birth_cert` VARCHAR(255),
-    `tor` VARCHAR(255),
-    `app_grad` VARCHAR(255),
-    `cert_of_complete` VARCHAR(255),
-    `req_clearance_form` VARCHAR(255),
-    `req_credentials` VARCHAR(255),
-    `hd_or_cert_of_trans` VARCHAR(255),
     FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec`(`id`)
 );
 
