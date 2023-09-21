@@ -59,20 +59,33 @@ CREATE TABLE `remarks` (
 CREATE TABLE `doc` (
 	`id` INT(10) PRIMARY KEY AUTO_INCREMENT,
     `stud_rec_id` INT(10) UNIQUE NOT NULL,
-    `regi_form` JSON DEFAULT '{val: 0, dir:""}',
-    `good_moral` JSON DEFAULT '{val: 0, dir:""}',
-    `f137` JSON DEFAULT '{val: 0, dir:""}',
-    `f138` JSON DEFAULT '{val: 0, dir:""}',
-    `birth_cert` JSON DEFAULT '{val: 0, dir:""}',
-    `tor` JSON DEFAULT '{val: 0, dir:""}',
-    `app_grad` JSON DEFAULT '{val: 0, dir:""}',
-    `cert_of_complete` JSON DEFAULT '{val: 0, dir:""}',
-    `req_clearance_form` JSON DEFAULT '{val: 0, dir:""}',
-    `req_credentials` JSON DEFAULT '{val: 0, dir:""}',
-    `hd_or_cert_of_trans` JSON DEFAULT '{val: 0, dir:""}',
+    `regi_form` JSON DEFAULT '{"val": 0, "dir":""}',
+    `good_moral` JSON DEFAULT '{"val": 0, "dir":""}',
+    `f137` JSON DEFAULT '{"val": 0, "dir":""}',
+    `f138` JSON DEFAULT '{"val": 0, "dir":""}',
+    `birth_cert` JSON DEFAULT '{"val": 0, "dir":""}',
+    `tor` JSON DEFAULT '{"val": 0, "dir":""}',
+    `app_grad` JSON DEFAULT '{"val": 0, "dir":""}',
+    `cert_of_complete` JSON DEFAULT '{"val": 0, "dir":""}',
+    `req_clearance_form` JSON DEFAULT '{"val": 0, "dir":""}',
+    `req_credentials` JSON DEFAULT '{"val": 0, "dir":""}',
+    `hd_or_cert_of_trans` JSON DEFAULT '{"val": 0, "dir":""}',
     `shelf` VARCHAR(50),
     FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec`(`id`)
 );
+
+CREATE TABLE `remark_categories` (
+    `id` INT(10) PRIMARY KEY AUTO_INCREMENT,
+    `category` VARCHAR(20)
+);
+
+INSERT INTO `remark_categories`
+(`category`)
+VALUES
+('Incomplete Document'),
+('Incorrect Document'),
+('Missplaced Document'),
+('Not Original');
 
 INSERT INTO `user` 
 (`uname`,`pword`,`active`,`role`)

@@ -12,6 +12,7 @@ $route['record/(:any)'] = 'Student/get_Student_Records/$1';
 
 // API
 $route['api/allrecords'] = "Student/get_Student_List";
+$route['api/categories'] = "RemarkCategory/getCategories";
 
 // DEFAULT
 $route['404_override'] = '';
