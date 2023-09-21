@@ -35,6 +35,7 @@ class Student_model extends CI_Model{
                         sr.stud_fname `First Name`,
                         sr.stud_mname `Middle Name`,
                         sr.stud_lname `Last Name`,
+                        sr.stud_sfx `Suffix`,
                         rm.value `Remarks`,
                         rm.category `Category`
                     FROM stud_rec sr
@@ -48,38 +49,25 @@ class Student_model extends CI_Model{
 
     public function get_Student_all_Record($id) {
         $query = ' SELECT 
-                    sr.stud_fname,
-                    sr.stud_mname,
-                    sr.stud_lname,
-                    sc.regi_form `sc_regi_form`,
-                    sc.good_moral `sc_good_moral`,
-                    sc.f137 `sc_f137`,
-                    sc.f138 `sc_f138`,
-                    sc.birth_cert `sc_birth_cert`,
-                    sc.tor `sc_tor`,
-                    sc.app_grad `sc_app_grad`,
-                    sc.cert_of_complete `sc_cert_of_complete`,
-                    sc.req_clearance_form `sc_req_clearance_form`,
-                    sc.req_credentials `sc_req_credentials`,
-                    sc.hd_or_cert_of_trans `sc_hd_or_cert_of_trans`,
-                    d.regi_form `doc_regi_form`,
-                    d.good_moral `doc_good_moral`,
-                    d.f137 `doc_f137`,
-                    d.f138 `doc_f138`,
-                    d.birth_cert `doc_birth_cert`,
-                    d.tor `doc_tor`,
-                    d.app_grad `doc_app_grad`,
-                    d.cert_of_complete `doc_cert_of_complete`,
-                    d.req_clearance_form `doc_req_clearance_form`,
-                    d.req_credentials `doc_req_credentials`,
-                    d.hd_or_cert_of_trans `doc_hd_or_cert_of_trans`,
-                    rm.value,
-                    rm.category
+                    sr.stud_fname `First Name`,
+                    sr.stud_mname `Middle Name`,
+                    sr.stud_lname `Last Name`,
+                    d.regi_form `Regiform`,
+                    d.good_moral `Good Moral`,
+                    d.f137 `F137`,
+                    d.f138 `F138`,
+                    d.birth_cert `Birth Cert`,
+                    d.tor `TOR`,
+                    d.app_grad `App Grad`,
+                    d.cert_of_complete `Certificate of Completion`,
+                    d.req_clearance_form `Clearance Form`,
+                    d.req_credentials `Request Credential`,
+                    d.hd_or_cert_of_trans `HD or Cert of Trans`,
+                    rm.value `Remarks`,
+                    rm.category `Category`
                 FROM `stud_rec` sr
                 LEFT JOIN `remarks` rm  
                     ON rm.stud_rec_id = sr.id
-                LEFT JOIN `scan` sc
-                    ON  sc.stud_rec_id = sr.id
                 LEFT JOIN `doc` d
                     ON  d.stud_rec_id = sr.id
                 

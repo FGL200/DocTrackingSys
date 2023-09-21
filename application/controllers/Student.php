@@ -14,7 +14,7 @@ class Student extends CI_Controller{
 
         /** Student Information checking */
         $required_fields = "";
-        $input_columns = array('stud_fname', 'stud_mname', 'stud_lname');
+        $input_columns = array('stud_fname',  'stud_lname');
         foreach($this->input->post() as $key=>$val) {
             if(in_array($key, $input_columns) && trim(empty($val))) {
                 if(!empty(trim($required_fields))) $required_fields .= ",";
@@ -51,48 +51,24 @@ class Student extends CI_Controller{
         $data = ""; // reset the data for the next query
 
         /** Inserting data in `doc` table  */
-        foreach($this->input->post() as $key => $val) {
-            $val = trim($val);
-            if(strstr($key, "doc_val_") && !empty($val)){
-                $key = explode("doc_val_", $key)[1];
 
-                if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = '1'";
-                
-            }
-        }
+        $docs = array('regi_form', 'good_moral', 'f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
 
-        if(!empty(trim($data))) {
-            $data .= ", `stud_rec_id` = '{$student_id}'";
-            $this->std->addStudentDoc($data);
+        foreach($docs as $doc) {
+            if(!empty($data)) $data .= ", ";
+
+            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
+ 
+            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc], $student_id) : '';
+            $data .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
+        
+
+        $data .= ", `stud_rec_id` = '{$student_id}'";
+        $this->std->addStudentDoc($data);
+    
 
         /** -- End of inserting data in `doc` table --  */
-
-        
-        /** Uploading file  */
-        $data = "";
-        foreach($_FILES as $key => $val) {
-            if(!empty($val['name']) && !empty($val['tmp_name'])) {
-                if(!empty($data)) $data .= ",";
-
-                $files_to_insert = $this->upload_file($key, $val, $student_id);
-
-                if(!$files_to_insert)  {
-                    $this->db->trans_rollback();
-                    echo json_encode(['status'=>'error', 'message' => 'File upload error!']);
-                    exit;
-                };
-                $data .= $files_to_insert;
-            }
-            
-        }
-        
-        $data .= (empty($data) ? ' ' : ' ,' ).' `stud_rec_id` = "'.$student_id.'"'; 
-        $this->std->addStudentScanDoc($data);
-        
-
-        /** End of Uploading file  */
 
         
         /** Inserting remarks */
@@ -123,30 +99,28 @@ class Student extends CI_Controller{
 
     }
 
-    public function upload_file($key, $val, $stud_rec_id) {
-        if(!is_dir('uploads/')) mkdir('uploads/',0777, true);
+    public function upload_file($file, $stud_rec_id) {
+        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
 
         
         $path = "uploads/";
 
         $new_file_name = md5(time().$stud_rec_id);
-        $file_ext = explode('.',$val['name']);
-        $val['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+        $file_ext = explode('.',$file['name']);
+        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
-        $new_file_path = $path . $val['name'];
+        $new_file_path = $path . $file['name'];
 
-        $key = join('', explode('doc_scan_', $key));
         $data = $new_file_path;
-        return move_uploaded_file($val['tmp_name'], $new_file_path) ? "`{$key}`='{$data}'" : false;
+        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
 
     }
 
-    public function get_Student_List() {
+    public function get_All_Student_List() {
         echo json_encode(['result' => $this->std->get_StudRecs_Remarks()]);
     }
 
     public function get_Student_Records($id) {
-        echo "<pre>";
         echo json_encode(['result' => $this->std->get_Student_all_Record($id)]);
     }
 

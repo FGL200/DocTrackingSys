@@ -8,8 +8,8 @@ $route['home'] = 'Page/home';
 
 // CUSTOM
 $route['student/insert-record']['post'] = "Student/addRecord";
-$route['student/all'] = "Student/get_Student_List";
-$route['student/(:any)'] = 'Student/get_Student_Records/$1';
+$route['student/all'] = "Student/get_All_Student_List";
+$route['student/(:num)'] = 'Student/get_Student_Records/$1';
 
 // DEFAULT
 $route['404_override'] = '';
