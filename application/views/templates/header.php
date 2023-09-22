@@ -74,12 +74,12 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li style="margin-bottom: .4rem;">
-                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile())" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile('<?=$_SESSION['uname']?>','<?=$_SESSION['fname']?>','<?=$_SESSION['lname']?>','<?=$_SESSION['bday']?>','<?=$_SESSION['g']?>'));" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
                                     <i class="fa-solid fa-address-card"></i> Profile
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="<?=base_url()?>">
+                                <a class="dropdown-item" href="<?=base_url()?>logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                                 </a>
                             </li>

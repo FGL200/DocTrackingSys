@@ -20,6 +20,8 @@
             </div>
         </div>
         <div id="nav-other" class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-1">
+            
+            <?php if($_SESSION['role'] === 'A') {?>
             <div class="dropdown">
                 <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-unlock"></i> Admin
@@ -34,6 +36,8 @@
                     <li><a class="dropdown-item" href="#" onclick="HOME.NEW_USER.open()"><i class="fa-solid fa-user-plus"></i> New User</a></li>
                 </ul>
             </div>
+            <?php }?>
+            <?php if($_SESSION['role'] === 'A' || $_SESSION['role'] === 'E') {?>
             <div class="dropdown">
                 <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-folder-open"></i> Records
@@ -48,6 +52,7 @@
                     <li><a class="dropdown-item" href="#"><i class="fa-solid fa-rectangle-list"></i> Added by Me</a></li>
                 </ul>
             </div>
+            <?php }?>
         </div>
     </nav>
     <div class="d-flex flex-column flex-grow-1 justify-content-center">

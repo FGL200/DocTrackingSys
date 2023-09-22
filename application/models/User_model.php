@@ -26,11 +26,14 @@ class User_model extends CI_Model {
 
     public function login_user($username, $password) {
          $query = "SELECT 
-                        `i`.fname,
-                        `i`.lname,
-                        `i`.mname,
-                        `u`.id,
-                        `u`.role 
+                        `i`.fname `fname`,
+                        `i`.lname `lname`,
+                        `i`.mname `mname`,
+                        `i`.bday `bday`,
+                        `i`.gender `g`,
+                        `u`.id `uid`,
+                        `u`.role  `role`,
+                        `u`.uname  `uname`
                 FROM `user_info` as `i` 
                 JOIN `user` as `u` 
                     ON `u`.id = `i`.user_id

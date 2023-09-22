@@ -93,7 +93,7 @@ const PROFILE = {
         <div class="d-flex flex-column gap-2">
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-uname">Username</label>
-                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ profile.uname +`" name="profile-uname" id="profile-uname" readonly>
+                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ profile.uname +`" name="profile-uname" id="profile-uname" disabled>
             </span>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-fname">Firstname</label>

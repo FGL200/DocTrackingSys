@@ -43,7 +43,7 @@ class Student extends CI_Controller{
         }
         
 
-        $created_by_uid = $this->session->userdata('id') ? $this->session->userdata('id') : '2' ; //  user id for encoding
+        $created_by_uid = $this->session->userdata('uid') ? $this->session->userdata('uid') : '2' ; //  user id for encoding
 
         $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 

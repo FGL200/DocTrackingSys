@@ -16,9 +16,10 @@ class Page extends CI_Controller {
     }
 
     public function index(){ 
-
-        // check user session if defined, if not redirect to login page
-        
+        if($this->session->has_userdata('uid')){
+            $this->home();
+            return;
+        }
 
         // HEADER VARIABLES
         $data['header'] = [
@@ -38,6 +39,11 @@ class Page extends CI_Controller {
 
 
     public function home() {
+        if(!$this->session->has_userdata('uid')){
+            $this->index();
+            return;
+        }
+
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'home',
@@ -50,7 +56,6 @@ class Page extends CI_Controller {
                 'g' => 'N',
             ]
         ];
-
 
         // FOOTER VAIRABLES
         $data['footer'] = [

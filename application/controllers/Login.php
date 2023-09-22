@@ -22,6 +22,11 @@ class Login extends CI_Controller {
         }else
             echo json_encode(["result"=>false]);
     }
+
+    public function logout(){
+        $this->session->sess_destroy();
+        redirect(base_url());
+    }
 }
 
 

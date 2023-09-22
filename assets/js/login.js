@@ -8,9 +8,11 @@ const LOGIN = {
         }) 
         .then(response => response.json())
         .then(result => {
-            if(!result.result) MAIN.addNotif("Login failed", "Incorrect username or password", "r");
-            
-            
+            if(!result.result){
+                MAIN.addNotif("Login failed", "Incorrect username or password", "r");
+                return;
+            }else
+                window.location.href = base_url + 'home';
         })
         .catch(err=>{
             console.log(err);
