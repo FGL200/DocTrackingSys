@@ -2,7 +2,7 @@ const LOGIN = {
     login : async function(e) {
         e.preventDefault();
         const form = new FormData(document.getElementById("login-form"));
-        await fetch(base_url + 'login', {
+        await fetch(base_url + 'login-user', {
             method : 'post',
             body : form
         }) 

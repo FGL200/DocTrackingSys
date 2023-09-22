@@ -31,7 +31,7 @@ class User_model extends CI_Model {
                         `i`.mname,
                         `u`.id,
                         `u`.role 
-                FROM `info` as `i` 
+                FROM `user_info` as `i` 
                 JOIN `user` as `u` 
                     ON `u`.id = `i`.user_id
                 WHERE `u`.uname = '{$username}' AND `u`.pword = PASSWORD('{$password}') AND `u`.active = '1'
