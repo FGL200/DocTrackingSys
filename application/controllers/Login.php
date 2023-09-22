@@ -18,12 +18,10 @@ class Login extends CI_Controller {
 
         if($result) {
             $this->session->set_userdata($result);
-            redirect('home');
-            return;
-        }         
-        
+            echo json_encode(["result"=>true]);
+        }else
+            echo json_encode(["result"=>false]);
     }
-
 }
 
 
