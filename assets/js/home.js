@@ -1,4 +1,4 @@
-MAIN.addNotif("Welcome!", "ADMIN USER");
+MAIN.addNotif("Welcome!", uname);
 
 const HOME = {
 
@@ -510,7 +510,7 @@ const HOME = {
      */
     DASHBOARD: {
         load_student_records: async function () {
-            await fetch(base_url + 'student/all')
+            await fetch(base_url + 'student/all-records')
                 .then(response => response.json())
                 .then((apiResponse) => {
 
@@ -528,9 +528,9 @@ const HOME = {
                             <thead>
                                 <tr>
                                     <th style="white-space: nowrap;">Record ID</th>
-                                    <th style="white-space: nowrap;">First Name</th>
-                                    <th style="white-space: nowrap;">Middle Name</th>
                                     <th style="white-space: nowrap;">Last Name</th>
+                                    <th style="white-space: nowrap;">Middle Name</th>
+                                    <th style="white-space: nowrap;">First Name</th>
                                     <th style="white-space: nowrap;">Suffix</th>
                                     <th style="white-space: nowrap;">Remarks</th>
                                     <th style="white-space: nowrap;">Category</th>
@@ -540,9 +540,9 @@ const HOME = {
                             for(let i=0; i<N_TABLE.length; i++) {
                                 table += '<tr>';
                                 table += '<td><a href="' + base_url + 'record/' + N_TABLE[i]['Record ID'] + '" target="_blank">' + N_TABLE[i]['Record ID'] + '</a></td>';
-                                table += '<td>' + (N_TABLE[i]['First Name'] ? N_TABLE[i]['First Name'] : '') + '</td>';
-                                table += '<td>' + (N_TABLE[i]['Middle Name'] ? N_TABLE[i]['Middle Name'] : '') + '</td>';
                                 table += '<td>' + (N_TABLE[i]['Last Name'] ? N_TABLE[i]['Last Name'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['Middle Name'] ? N_TABLE[i]['Middle Name'] : '') + '</td>';
+                                table += '<td>' + (N_TABLE[i]['First Name'] ? N_TABLE[i]['First Name'] : '') + '</td>';
                                 table += '<td>' + (N_TABLE[i]['Suffix'] ? N_TABLE[i]['Suffix'] : '') + '</td>';
                                 table += '<td>' + (N_TABLE[i]['Remarks'] ? N_TABLE[i]['Remarks'] : '') + '</td>';
                                 table += '<td>' + (N_TABLE[i]['Category'] ? N_TABLE[i]['Category'] : '') + '</td>';

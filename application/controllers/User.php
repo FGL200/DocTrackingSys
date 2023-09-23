@@ -54,4 +54,14 @@ class User extends CI_Controller{
         }
     }
 
+    public function get_Student_Records_By_User($user_id) {
+        echo json_encode(['resutlt' => $this->user->get_Student_Records_By_User($user_id)]);  
+    }
+
+    public function get_Last_Record($user_id) {
+        echo json_encode(['resutlt' => $this->user->get_Last_Record_By_User($user_id)]);  
+    }
+
+
+
 }

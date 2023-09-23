@@ -9,6 +9,8 @@ class Student extends CI_Controller{
         
         $this->load->model("student_model", "std");
         $this->load->model("remarks_model", "rm");
+        $this->load->model("user_model", 'user');
+
     }
 
     /**
@@ -136,14 +138,4 @@ class Student extends CI_Controller{
     public function get_Student_Records($id) {
         echo json_encode(['result' => $this->std->get_Student_all_Record($id)]);
     }
-
-    
-
-
-    
-
-    
 }
-
-
-?>

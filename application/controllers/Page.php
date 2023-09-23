@@ -17,7 +17,8 @@ class Page extends CI_Controller {
 
     public function index(){ 
         if($this->session->has_userdata('uid')){
-            $this->home();
+            redirect('home');
+            //$this->home();
             return;
         }
 
@@ -40,7 +41,8 @@ class Page extends CI_Controller {
 
     public function home() {
         if(!$this->session->has_userdata('uid')){
-            $this->index();
+            redirect(''); // para yung url is http://localhost/DocTrackingSys' 
+            // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
             return;
         }
 
