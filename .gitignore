@@ -35,3 +35,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 # Custom files
 /uploads/
+/application/config/constants.php
