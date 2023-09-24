@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => DOC_TRACK_DATABASE_SERVER,
+	'username' => DOC_TRACK_DATABASE_USERNAME,
+	'password' => DOC_TRACK_DATABASE_PASSWORD,
 	'database' => DOC_TRACK_DATABASE_NAME,
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

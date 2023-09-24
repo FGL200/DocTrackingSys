@@ -2,11 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 # CUSTOM CONSTANTS
+
 defined('DOC_TRACK_BASE_URL')  OR define('DOC_TRACK_BASE_URL', 'http://192.168.1.9/DocTrackingSys');
-defined('DOC_TRACK_DATABASE_SERVER')  OR define('DOC_TRACK_DATABASE_SERVER', '192.168.1.9:3306');
+defined('DOC_TRACK_DATABASE_SERVER')  OR define('DOC_TRACK_DATABASE_SERVER', 'localhost');
+
 defined('DOC_TRACK_DATABASE_NAME')  OR define('DOC_TRACK_DATABASE_NAME', 'doc_track_sys');
 
-
+defined('DOC_TRACK_DATABASE_USERNAME')  OR define('DOC_TRACK_DATABASE_USERNAME', 'root');
+defined('DOC_TRACK_DATABASE_PASSWORD')  OR define('DOC_TRACK_DATABASE_PASSWORD', '');
 /*
 |--------------------------------------------------------------------------
 | Display Debug backtrace
