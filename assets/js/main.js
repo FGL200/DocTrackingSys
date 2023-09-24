@@ -29,6 +29,7 @@ const MAIN = {
         notif_title.setAttribute("class", "notif-title font-b");
         notif_title.innerHTML = title;
         notif_title.style.color = tColor;
+        notif_title.style.fontWeight = "bold";
     
         const notif_body = document.createElement("section");
         notif_body.setAttribute("class", "notif-body");
@@ -159,3 +160,13 @@ const ABOUT = {
     }
 }
 
+/**
+ * Run function after seconds of delay
+ * @param {Function} callBack 
+ * @param {number} seconds default 3 seconds
+ * @returns 
+ */
+const DELAY_FUNCTION = (callBack = null, seconds = 3) => {
+    if(!callBack) return;
+    const INTERVAL = setInterval(() => { callBack(); clearInterval(INTERVAL); }, seconds * 1000);
+}

@@ -6,43 +6,34 @@ input[type="checkbox"]:checked{
     background-color: #EAFAF1;
 }
 
-#table-container{
+/* #table-container{
     overflow: hidden;
-    /* overflow-y: auto;
-    overflow-x: hidden; */
     max-width: 90px ;
     max-height: 90px ;
     transition: .5s ease-out ;
+} */
+
+#dataTable_wrapper{
+    padding: 1rem;
+    background-color: #F8F9F9;
+    box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.1);
 }
 
-
-.loading{
-    position: relative;
+#remarks-holder > span {
+    box-shadow: 3px 2px 5px 1px rgba(0,0,0,0.3);
 }
 
-.loading::before{
-    content: "";
-    display: flex;
-    width: 15px;
-    height: 15px;
-    padding: 15px;
-    animation: loading 2s linear infinite;
+.sorting {
+    background-color: rgba(0,0,0,0.02) !important;
 }
 
-@keyframes loading {
-    0%{
-        transform: rotate(0);
-        border-radius: 0;
-        border:  5px solid var(--color_blue);
-    }
-    50%{
-        transform: rotate(180deg); 
-        border-radius: 100px;
-        border:  5px solid var(--color_yellow);
-    }
-    100%{
-        transform: rotate(360deg);
-        border-radius: 0;
-        border:  5px solid var(--color_blue);
-    }
+.stud_rec_id_link{
+    color: #76a9ec;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    overflow-y: auto;
+    overflow-x: hidden;
 }

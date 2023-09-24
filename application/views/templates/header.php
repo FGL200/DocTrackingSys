@@ -30,7 +30,9 @@
 
     <!-- CUSTOM JS -->
     <script>
-        const uname = "<?= $_SESSION['uname'] ;?>";
+        // CONSTANTS IN JS
+        const CONST_UNAME = "<?= isset($_SESSION['uname']) ? $_SESSION['uname'] : null ;?>";
+        const CONST_UID = "<?= isset($_SESSION['uid']) ? $_SESSION['uid'] : null ;?>";
     </script>
     <script>const base_url = '<?=base_url()?>';</script>
     <?php if(isset($js)) foreach($js as $j) {?>
@@ -82,7 +84,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="<?=base_url()?>logout">
+                                <a class="dropdown-item" href="<?=base_url()?>user/logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                                 </a>
                             </li>
@@ -97,4 +99,4 @@
 <div id="notif-holder"></div>
 
 <!-- START OF ROOT -->
-<div id="root" class="d-flex flex-grow-1"> 
+<div id="root" class="flex-grow-1"> 

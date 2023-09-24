@@ -46,20 +46,3 @@ header nav a:focus{
         display: flex;
     }
 }
-
-
-
-
-#notif-holder{
-    position: fixed;
-    min-width: 15%;
-    top: 60px;
-    right: 0;
-    z-index: 100;
-}
-
-.notif{
-    margin: .5rem;
-    padding: .75rem;
-    background-color: white;;
-}

@@ -90,15 +90,9 @@ VALUES
 INSERT INTO `user` 
 (`uname`,`pword`,`active`,`role`)
 VALUES
-('admin', PASSWORD('123'), '1', 'A'),
-('encoder', PASSWORD('123'), '1', 'E'),
-('viewer1', PASSWORD('123'), '1', 'V'),
-('viewer2', PASSWORD('123'), '0', 'V');
+('ADMIN', PASSWORD('123'), '1', 'A');
 
 INSERT INTO `user_info`
 (`user_id`)
 VALUES
-('1'),
-('2'),
-('3'),
-('4');
+('1');

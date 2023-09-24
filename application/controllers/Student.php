@@ -7,7 +7,7 @@ class Student extends CI_Controller{
     {
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
-        $this->load->model("student_model", "std");
+        $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
 
@@ -51,7 +51,7 @@ class Student extends CI_Controller{
 
         $this->db->trans_begin();
 
-        $student_id = $this->std->addStudentInfo($data); 
+        $student_id = $this->stud->addStudentInfo($data); 
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
@@ -71,7 +71,7 @@ class Student extends CI_Controller{
         
 
         $data .= ", `stud_rec_id` = '{$student_id}'";
-        $this->std->addStudentDoc($data);
+        $this->stud->addStudentDoc($data);
     
 
         /** -- End of inserting data in `doc` table --  */
@@ -131,11 +131,31 @@ class Student extends CI_Controller{
 
     }
 
-    public function get_All_Student_List() {
-        echo json_encode(['result' => $this->std->get_StudRecs_Remarks()]);
+    public function get_StudentRecords_With_Remarks() {
+        $result = $this->stud->get_StudentRecords_With_Remarks();
+        $newData = [];
+        foreach ($result as $row){
+            $newRow = [];
+            foreach($row as $key => $val){
+                if($key == 'Record ID')
+                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'">'.$val.'</a>';
+                else
+                    $newRow[$key] = $val;
+            }
+            array_push($newData, $newRow);
+        }
+        echo json_encode(['result' => $newData]);
     }
 
     public function get_Student_Records($id) {
-        echo json_encode(['result' => $this->std->get_Student_all_Record($id)]);
+        echo json_encode(['result' => $this->stud->get_Student_all_Record($id)]);
+    }
+
+    public function get_Student_Records_By($user_id) {
+        echo json_encode(['result' => $this->stud->get_Student_Records_By($user_id)]);  
+    }
+
+    public function get_Last_Student_Records_By($user_id) {
+        echo json_encode(['result' => $this->stud->get_Last_Record_By_User($user_id)]);  
     }
 }

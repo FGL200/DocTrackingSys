@@ -3,6 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Page extends CI_Controller {
 
+    public function __construct()
+    {
+        parent::__construct(); // inherit all the methods, attributes  and etc. from parent
+        
+        $this->load->model("Student_model", "stud");
+    }
+
     /**
      * Load Page
      * @param String $page
@@ -48,7 +55,7 @@ class Page extends CI_Controller {
 
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> 'home',
+            'title'=> 'Dashboard',
             'css' => ['home'],
             'profile' => [
                 'uname' => '',
@@ -71,15 +78,18 @@ class Page extends CI_Controller {
     public function record($record_id){
         $record_id = intval($record_id);
 
+        $record_data = $this->stud->get_Student_all_Record($record_id);
+
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> $record_id,
-            'css' => []
+            'title'=> $record_data['First Name'],
+            'css' => [],
+            'stud_data' => $record_data
         ];
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => []
+            'js' => ['viewRecord']
         ];
 
         // load page

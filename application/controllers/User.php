@@ -29,7 +29,7 @@ class User extends CI_Controller{
         $post = $this->input->post();
 
         // iterate each inuputs and save to data
-        foreach($post as $key => $val) $data .= "{$key}='".$val."',";
+        foreach($post as $key => $val) $data .= "{$key}='".strtoupper($val)."',";
         $data .= "`pword` = PASSWORD('default')";
 
         // -- begin transaction --
@@ -54,14 +54,20 @@ class User extends CI_Controller{
         }
     }
 
-    public function get_Student_Records_By_User($user_id) {
-        echo json_encode(['resutlt' => $this->user->get_Student_Records_By_User($user_id)]);  
+    public function get_All_Viewers(){
+        $my_user_id = $this->input->post()['uid'];
+        echo json_encode(['result' => $this->user->get_All_Viewers($my_user_id)]);  
     }
 
-    public function get_Last_Record($user_id) {
-        echo json_encode(['resutlt' => $this->user->get_Last_Record_By_User($user_id)]);  
+    public function get_All_Encoders(){
+        $my_user_id = $this->input->post()['uid'];
+        echo json_encode(['result' => $this->user->get_All_Encoders($my_user_id)]);  
     }
 
+    public function get_All_Users(){
+        $my_user_id = $this->input->post()['uid'];
+        echo json_encode(['result' => $this->user->get_All_Users($my_user_id)]);  
+    }
 
 
 }

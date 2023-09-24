@@ -33,20 +33,22 @@ const MODAL = {
     /**
      * Hide the modal
      */
-    close : function(){
+    close : function(callBack = null){
         this.fade_out = true;
         $("#modal-holder").addClass("fade-out");
         $("#modal-container").off("submit");
+        if(callBack) callBack(this);
         // console.log(  jQuery._data( document.getElementById("modal-holder"), "events" ) )
     },
 
     /**
      * Show the modal
      */
-    open : function(){
+    open : function(callBack = null){
         this.fade_out = false;
         $("#modal-holder").removeClass("hide");
         $("#modal-holder").addClass("fade-in");
+        if(callBack) callBack(this);
     },
 
     /**
@@ -78,7 +80,7 @@ const MODAL = {
      * @param {str} content 
      */
     setScript: function(content){
-        $("#modal-script").html(content);
+        $("#modal-script").html("<script>" + content + "</script>");
     }
 }
 
