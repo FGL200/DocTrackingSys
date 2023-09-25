@@ -7,12 +7,9 @@
                     <i class="fa-solid fa-magnifying-glass"></i> Search Options
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">
-                        <i class="fa-solid fa-qrcode"></i> Scan QR
-                    </a></li>
-                    <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.open()">
-                        <i class="fa-solid fa-magnifying-glass-plus"></i> More search option...
-                    </a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="fa-solid fa-qrcode"></i> Scan QR </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.open()"> <i class="fa-solid fa-magnifying-glass-plus"></i> More search option... </a></li>
+                    <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table('student/record/all')"> <i class="fa-solid fa-list-ol"></i> All Records</a></li>
                 </ul>
             </div>
         </div>
@@ -40,14 +37,13 @@
                     <i class="fa-solid fa-folder-open"></i> Records
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" onclick="HOME.NEW_RECORD.open()"><i class="fa-solid fa-plus"></i> New Record</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="RECORD.NEW.open()"><i class="fa-solid fa-plus"></i> New Record</a></li>
                     <li><a class="dropdown-item" href="#" onclick="HOME.IMPORT_EXCEL.open()"><i class="fa-solid fa-file-excel"></i> Import Excel</a></li>
                     <li><a class="dropdown-item" href="#" onclick="HOME.GENERATE_QR.open()"><i class="fa-solid fa-qrcode"></i> Generate QR</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table('student/record/by/<?=$_SESSION['uid'];?>')"><i class="fa-solid fa-rectangle-list"></i> Added by Me</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table('student/record/all')"><i class="fa-solid fa-list-ol"></i> All Records</a></li>
                 </ul>
             </div>
             <?php }?>
@@ -55,4 +51,3 @@
     </nav>
     <table id="dataTable" class="table table-hover flex-grow-1 loading" style="margin-bottom:0;"></table>
 </main>
-<script>const USER_NAME = '<?=$_SESSION['uname']?>';</script>

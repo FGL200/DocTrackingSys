@@ -33,8 +33,14 @@
         // CONSTANTS IN JS
         const CONST_UNAME = "<?= isset($_SESSION['uname']) ? $_SESSION['uname'] : null ;?>";
         const CONST_UID = "<?= isset($_SESSION['uid']) ? $_SESSION['uid'] : null ;?>";
+        const base_url = "<?=base_url()?>";
+
+        // OTHER DEFINED CONSTANTS
+        <?php if(isset($constants)) foreach ($constants as $key => $val) { ?>
+            <?="const CONST_".strtoupper($key)." = {$val}";?>
+        <?php }?>
+
     </script>
-    <script>const base_url = '<?=base_url()?>';</script>
     <?php if(isset($js)) foreach($js as $j) {?>
     <script src="<?=base_url("assets/js/$j")?>.js" defer></script>
     <?php }?>
@@ -79,7 +85,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li style="margin-bottom: .4rem;">
-                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile('<?=$_SESSION['uname']?>','<?=$_SESSION['fname']?>','<?=$_SESSION['lname']?>','<?=$_SESSION['bday']?>','<?=$_SESSION['g']?>'));" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile('<?=$profile['uname']?>','<?=$profile['fname']?>','<?=$profile['lname']?>','<?=$profile['bday']?>','<?=$profile['g']?>'));" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
                                     <i class="fa-solid fa-address-card"></i> Profile
                                 </a>
                             </li>
@@ -99,4 +105,4 @@
 <div id="notif-holder"></div>
 
 <!-- START OF ROOT -->
-<div id="root" class="flex-grow-1"> 
+<div id="root" class="flex-grow-1">

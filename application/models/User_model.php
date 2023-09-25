@@ -92,6 +92,13 @@ class User_model extends CI_Model
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
 
+
+
+
+
+
+    /** PRIVATE FUNCTIONS */
+
     private function user_Is_Admin($uid) {
         $query = "  SELECT 
                         `role`

@@ -68,7 +68,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home']
+            'js' => ['home','record']
         ];
 
         // load page
@@ -76,15 +76,26 @@ class Page extends CI_Controller {
     }
 
     public function record($record_id){
-        $record_id = intval($record_id);
 
-        $record_data = $this->stud->get_Student_all_Record($record_id);
+        // $rec_id - is the integer value
+        // $record_id - is the string value
+        $rec_id = intval($record_id);
+
+        $fname = $this->stud->get_Student_all_Record($rec_id)['First Name'];
 
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> $record_data['First Name'],
-            'css' => [],
-            'stud_data' => $record_data
+            'title'=> $fname,
+            'constants' => ['record_id' => $rec_id],
+            'record_id' => $record_id,
+            'css' => ['viewRecord'],
+            'profile' => [
+                'uname' => '',
+                'fname' => '',
+                'lname' => '',
+                'bday' => date('mm/dd/yyyy'),
+                'g' => 'N',
+            ]
         ];
 
         // FOOTER VAIRABLES

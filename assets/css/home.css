@@ -13,10 +13,15 @@ input[type="checkbox"]:checked{
     transition: .5s ease-out ;
 } */
 
+/* #dataTable_wrapper * {
+    font-size: small;
+} */
+
 #dataTable_wrapper{
     padding: 1rem;
     background-color: #F8F9F9;
     box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
 }
 
 #remarks-holder > span {

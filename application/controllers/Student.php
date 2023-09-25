@@ -131,10 +131,55 @@ class Student extends CI_Controller{
 
     }
 
+    /**
+     * Get basic student record info along with their remarks
+     */
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
-        $newData = [];
-        foreach ($result as $row){
+        $newData = $this->__id_link_Student_Record__($result);
+        echo json_encode(['result' => $newData]);
+    }
+
+    /**
+     * Get specific student record info along with their remarks
+     * @param Integer $id The `stud_rec`.`id`
+     */
+    public function get_Student_Records($id) {
+        echo json_encode(['result' => $this->stud->get_Student_all_Record($id)]);
+    }
+
+    /**
+     * Get basic student record info along with their remarks added by `user`
+     * @param Integer $user_id The `id` of user logged in
+     */
+    public function get_Student_Records_By($user_id) {
+        $result = $this->stud->get_Student_Records_By($user_id);
+        $newData = $this->__id_link_Student_Record__($result);
+        echo json_encode(['result' => $newData]);
+    }
+
+    /**
+     * Get the last `stud_rec` inserted by `user`
+     * @param Integer $user_id The `id` of user logged in
+     */
+    public function get_Last_Student_Records_By($user_id) {
+        echo json_encode(['result' => $this->stud->get_Last_Record_By_User($user_id)]);  
+    }
+
+
+
+
+    /** PRIVATE FUNCTIONS */
+
+
+    /**
+     * Change the `Record ID` column to a link in `stud_rec` table
+     * @param Array $array query result 
+     */
+    private function __id_link_Student_Record__(Array $array) {
+        if(count($array) === 0) return [];
+        $fixedData = [];
+        foreach ($array as $row){
             $newRow = [];
             foreach($row as $key => $val){
                 if($key == 'Record ID')
@@ -142,20 +187,8 @@ class Student extends CI_Controller{
                 else
                     $newRow[$key] = $val;
             }
-            array_push($newData, $newRow);
+            array_push($fixedData, $newRow);
         }
-        echo json_encode(['result' => $newData]);
-    }
-
-    public function get_Student_Records($id) {
-        echo json_encode(['result' => $this->stud->get_Student_all_Record($id)]);
-    }
-
-    public function get_Student_Records_By($user_id) {
-        echo json_encode(['result' => $this->stud->get_Student_Records_By($user_id)]);  
-    }
-
-    public function get_Last_Student_Records_By($user_id) {
-        echo json_encode(['result' => $this->stud->get_Last_Record_By_User($user_id)]);  
+        return $fixedData;
     }
 }
