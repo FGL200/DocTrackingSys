@@ -28,21 +28,28 @@ class Student_model extends CI_Model{
     public function get_StudentRecords_With_Remarks() {
         $query = "SELECT 
                         LPAD(sr.id, 6, '0') `Record ID`,
-                        sr.stud_id `Student ID`,
+                        CASE 
+                            WHEN sr.stud_id IS NULL THEN '--'
+                            ELSE sr.stud_id
+                        END `Student ID`,
                         sr.stud_fname `First Name`,
                         sr.stud_mname `Middle Name`,
                         sr.stud_lname `Last Name`,
-                        sr.stud_mname `Middle Name`,
-                        sr.stud_fname `First Name`,
-                        sr.stud_sfx `Suffix`,
-                        rm.value `Remarks`
+                        CASE 
+                            WHEN sr.stud_sfx IS NULL THEN '--'
+                            ELSE sr.stud_sfx 
+                        END `Suffix`,
+                        CASE 
+                            WHEN rm.value = '[]' THEN '--'
+                            ELSE rm.value
+                        END `Remarks`
                     FROM stud_rec sr
                     LEFT JOIN remarks rm 
                         ON rm.stud_rec_id = sr.id";
         
         $fetch = $this->db->query($query);
 
-        return $fetch->num_rows() ? $fetch->result_array() : null;
+        return $fetch->result_array();
     }
 
     /**

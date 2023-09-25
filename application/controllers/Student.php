@@ -17,7 +17,6 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
-
         /** Student Information checking */
         $required_fields = "";
         $input_columns = array('stud_fname',  'stud_lname');
@@ -45,20 +44,20 @@ class Student extends CI_Controller{
         }
         
 
-        $created_by_uid = $this->session->userdata('uid') ? $this->session->userdata('uid') : '2' ; //  user id for encoding
+        $created_by_uid = $this->session->userdata('uid') ? $this->session->userdata('uid') : '1' ; //  user id for encoding
 
         $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 
         $this->db->trans_begin();
 
-        $student_id = $this->stud->addStudentInfo($data); 
+        $student_id = $this->stud->addStudentInfo($data);
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
 
         /** Inserting data in `doc` table  */
 
-        $docs = array('regi_form', 'good_moral', 'f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
+        $docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
 
         foreach($docs as $doc) {
             if(!empty($data)) $data .= ", ";
@@ -79,18 +78,19 @@ class Student extends CI_Controller{
         
         /** Inserting remarks */
         $data = "";
-        $remark_value = "`value` = '". (trim($this->input->post('remarks_value')))."', ";
-        $remark_category = $this->input->post('remarks-category') ? " `category` = '" . (trim($this->input->post('remarks-category'))). "', " : null;
-
-        $data .= ($remark_value . $remark_category . "`stud_rec_id` = '{$student_id}'");
-        $this->rm->insertRemarks($data);
-        
-
-        /** End of inserting remarks */
-
-
-        // $this->db->trans_complete(); // commmit or rollback the transaction
+        $remark_value = "`value` = '[";
        
+        $remarks = [];
+        
+        if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
+        if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
+
+        $remark_value .= implode(',', $remarks);
+        $remark_value .= "]', ";
+
+        $data .= ($remark_value . "`stud_rec_id` = '{$student_id}'");
+        $this->rm->insertRemarks($data);
+        /** End of inserting remarks */
 
         if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
@@ -114,7 +114,7 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    public function upload_file($file, $stud_rec_id) {
+    public function upload_file(Array $file, int$stud_rec_id) {
         if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
 
         
@@ -144,7 +144,7 @@ class Student extends CI_Controller{
      * Get specific student record info along with their remarks
      * @param Integer $id The `stud_rec`.`id`
      */
-    public function get_Student_Records($id) {
+    public function get_Student_Records(int $id) {
         echo json_encode(['result' => $this->stud->get_Student_all_Record($id)]);
     }
 
@@ -152,7 +152,7 @@ class Student extends CI_Controller{
      * Get basic student record info along with their remarks added by `user`
      * @param Integer $user_id The `id` of user logged in
      */
-    public function get_Student_Records_By($user_id) {
+    public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
         $newData = $this->__id_link_Student_Record__($result);
         echo json_encode(['result' => $newData]);
@@ -162,7 +162,7 @@ class Student extends CI_Controller{
      * Get the last `stud_rec` inserted by `user`
      * @param Integer $user_id The `id` of user logged in
      */
-    public function get_Last_Student_Records_By($user_id) {
+    public function get_Last_Student_Records_By(int $user_id) {
         echo json_encode(['result' => $this->stud->get_Last_Record_By_User($user_id)]);  
     }
 
