@@ -57,24 +57,49 @@ class Student_model extends CI_Model{
      * @param Integer $id
      */
     public function get_Student_all_Record($id) {
+        // $query = ' SELECT 
+        //             `sr`.stud_lname `Last Name`,
+        //             `sr`.stud_mname `Middle Name`,
+        //             `sr`.stud_fname `First Name`,
+        //             `d`.regi_form `Regiform`,
+        //             `d`.good_moral `Good Moral`,
+        //             `d`.j_f137 `JF137`,
+        //             `d`.s_f137 `SF137`,
+        //             `d`.f138 `F138`,
+        //             `d`.birth_cert `Birth Cert`,
+        //             `d`.tor `TOR`,
+        //             `d`.app_grad `App Grad`,
+        //             `d`.cert_of_complete `Certificate of Completion`,
+        //             `d`.req_clearance_form `Clearance Form`,
+        //             `d`.req_credentials `Request Credential`,
+        //             `d`.hd_or_cert_of_trans `HD or Cert of Trans`,
+        //             `rm`.value `Remarks`,
+        //             `rm`.category `Category`
+        //         FROM `stud_rec` sr
+        //         LEFT JOIN `remarks` rm  
+        //             ON rm.stud_rec_id = sr.id
+        //         LEFT JOIN `doc` d
+        //             ON  d.stud_rec_id = sr.id
+                
+        //         WHERE sr.id = "'.$id.'"
+        // ';
         $query = ' SELECT 
-                    `sr`.stud_lname `Last Name`,
-                    `sr`.stud_mname `Middle Name`,
-                    `sr`.stud_fname `First Name`,
-                    `d`.regi_form `Regiform`,
-                    `d`.good_moral `Good Moral`,
-                    `d`.j_f137 `JF137`,
-                    `d`.s_f137 `sF137`,
-                    `d`.f138 `F138`,
-                    `d`.birth_cert `Birth Cert`,
-                    `d`.tor `TOR`,
-                    `d`.app_grad `App Grad`,
-                    `d`.cert_of_complete `Certificate of Completion`,
-                    `d`.req_clearance_form `Clearance Form`,
-                    `d`.req_credentials `Request Credential`,
-                    `d`.hd_or_cert_of_trans `HD or Cert of Trans`,
-                    `rm`.value `Remarks`,
-                    `rm`.category `Category`
+                    `sr`.stud_lname,
+                    `sr`.stud_mname,
+                    `sr`.stud_fname,
+                    `d`.regi_form,
+                    `d`.good_moral,
+                    `d`.j_f137,
+                    `d`.s_f137,
+                    `d`.f138,
+                    `d`.birth_cert,
+                    `d`.tor,
+                    `d`.app_grad,
+                    `d`.cert_of_complete,
+                    `d`.req_clearance_form,
+                    `d`.req_credentials,
+                    `d`.hd_or_cert_of_trans,
+                    `rm`.value
                 FROM `stud_rec` sr
                 LEFT JOIN `remarks` rm  
                     ON rm.stud_rec_id = sr.id
@@ -133,7 +158,7 @@ class Student_model extends CI_Model{
             `d`.regi_form `Regiform`,
             `d`.good_moral `Good Moral`,
             `d`.j_f137 `JF137`,
-            `d`.s_f137 `sF137`,
+            `d`.s_f137 `SF137`,
             `d`.f138 `F138`,
             `d`.birth_cert `Birth Cert`,
             `d`.tor `TOR`,

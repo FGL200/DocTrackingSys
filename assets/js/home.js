@@ -669,7 +669,7 @@ const LOAD_REMARKS_ON_ID = async (element_id) => {
 const ON_MODAL_CLOSE = () => {
     if (home_current_open_modal === 'SEARCH') {
         () => { /** SET EFFECT HERE */ }
-    } else if (home_current_open_modal === 'NEW_RECORD') {
+    } else if (home_current_open_modal === 'NEW') {
         HOME.DASHBOARD.load_dashboard_table('student/record/all');
     } else if (home_current_open_modal === 'IMPORT_EXCEL') {
         () => { /** SET EFFECT HERE */ }

@@ -81,7 +81,7 @@ class Page extends CI_Controller {
         // $record_id - is the string value
         $rec_id = intval($record_id);
 
-        $fname = $this->stud->get_Student_all_Record($rec_id)['First Name'];
+        $fname = $this->stud->get_Student_all_Record($rec_id)['stud_fname'];
 
         // HEADER VARIABLES
         $data['header'] = [

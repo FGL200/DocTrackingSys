@@ -3,7 +3,7 @@ const RECORD = {
      * For Inserting new Record
      */
     NEW: {
-        _remarksValue: [],
+        __remarksValue__: [],
 
         open: async function () {
             home_current_open_modal = 'NEW';
@@ -213,21 +213,14 @@ const RECORD = {
                 $(this).remove();
                 if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
                     $("#remarks-holder").html("No Remarks");
-                RECORD.NEW._loadRemearksVal();
+                RECORD.NEW.__loadRemearksVal__();
             });
             let count = 0;
             $("#remarks-holder").find('span').each(function (e) {
                 if ($(this).html() === span.html()) count++;
             });
             if (count === 0) $("#remarks-holder").append(span);
-            RECORD.NEW._loadRemearksVal();
-        },
-
-        _loadRemearksVal: function () {
-            RECORD.NEW._remarksValue = [];
-            $("#remarks-holder").find('span').each(function (e) {
-                RECORD.NEW._remarksValue.push($(this).text());
-            });
+            RECORD.NEW.__loadRemearksVal__();
         },
 
         init_addRemarks: function () {
@@ -256,7 +249,7 @@ const RECORD = {
 
                 // get values
                 const form = new FormData(document.getElementById("modal-container"));
-                form.append("remarks", RECORD.NEW._remarksValue);
+                form.append("remarks", RECORD.NEW.__remarksValue__);
 
                 // insert data (invoke fetch)base_url + 
                 await fetch(base_url + "student/record/insert", {
@@ -295,20 +288,28 @@ const RECORD = {
         },
 
         init_onFileChange: function () {
-            document.querySelectorAll(".scaned-doc").forEach(fileTag => {
-                fileTag.addEventListener("change", function () {
-                    const btnTag = "#" + this.id + " + button";
-                    document.querySelector(btnTag).classList.remove("btn-success");
-                    document.querySelector(btnTag).classList.add("btn-warning");
+            $(".scaned-doc").each(function(e){
+                $(this).on("change", function(e){
+                    const btnTag = `#${$(this).attr('id')} + button`;
+                    $(btnTag).removeClass("btn-success");
+                    $(btnTag).addClass("btn-warning");
                 });
             });
+            
+            $(".cb-doc").each(function(e){
+                $(this).on("change", function(e){
+                    const fileTag = `#${$(this).attr('id')} ~ button`;
+                    $(fileTag).prop("disabled", !$(this).prop('checked'));
+                });
+            });
+        },
 
-            document.querySelectorAll(".cb-doc").forEach(checkBox => {
-                checkBox.addEventListener("change", function () {
-                    const fileTag = "#" + this.id + " ~ button";
-                    document.querySelector(fileTag).disabled = !this.checked;
-                })
-            })
+        __loadRemearksVal__: function () {
+            RECORD.NEW.__remarksValue__ = [];
+            $("#remarks-holder").find('span').each(function (e) {
+                RECORD.NEW.__remarksValue__.push($(this).text());
+            });
         }
-    },
+        
+    }
 }
