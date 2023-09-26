@@ -85,6 +85,10 @@ class Student extends CI_Controller{
         if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
         if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
 
+        foreach($remarks as &$r) {
+            $r = "\"$r\""; // Enclose string to " "
+        } 
+
         $remark_value .= implode(',', $remarks);
         $remark_value .= "]', ";
 
