@@ -81,13 +81,16 @@ class Page extends CI_Controller {
         // $record_id - is the string value
         $rec_id = intval($record_id);
 
-        $fname = $this->stud->get_Student_all_Record($rec_id)['stud_fname'];
+        $studData = $this->stud->get_Student_all_Record($rec_id);
+        $fname = $studData['stud_fname'];
+        $role = $this->session->userdata('role');
 
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> $fname,
             'constants' => ['record_id' => $rec_id],
             'record_id' => $record_id,
+            'role' => $role,
             'css' => ['viewRecord'],
             'profile' => [
                 'uname' => '',

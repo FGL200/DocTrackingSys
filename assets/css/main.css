@@ -69,6 +69,45 @@ main {
     100%{ opacity: 1; }
 }
 
+.pop-in {
+    animation: pop-in .3s linear forwards;
+}
+
+@keyframes pop-in {
+    0%{transform: scale(0);}
+    50%{transform: scale(120%);}
+    100%{transform: scale(100%);}
+}
+
+.pop-out {
+    animation: pop-out .3s linear forwards;
+}
+
+@keyframes pop-out {
+    0%{transform: scale(100%);}
+    50%{transform: scale(120%);}
+    100%{transform: scale(0);}
+}
+
+.fade-out {
+    animation: fade-out .5s linear forwards;
+}
+
+@keyframes fade-out {
+    0%{opacity: 1;}
+    100%{opacity: 0; display: none;}
+}
+
+.slide-in-from-left {
+    animation: slide-in-from-left .3s linear forwards;
+}
+
+@keyframes slide-in-from-left {
+    0%{transform: translateX(150px); opacity: 0;}
+    50%{transform: translateX(-10px);}
+    100%{transform: translateX(0); opacity: 1;}
+}
+
 
 
 .loading{
