@@ -84,7 +84,7 @@ class Student_model extends CI_Model{
         //         WHERE sr.id = "'.$id.'"
         // ';
         $query = ' SELECT 
-                    `sr`.id,
+                    `sr`.stud_id,
                     `sr`.stud_lname,
                     `sr`.stud_mname,
                     `sr`.stud_fname,
