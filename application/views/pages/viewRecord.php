@@ -4,7 +4,7 @@
             <button class="btn btn-danger" type="button" onclick="MAIN.goto(base_url)">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
             <button class="btn btn-success" type="button" id="update-record-btn" onclick="VIEW_RECORD.onSubmit()">Save</button>
-            <input type="hidden" na me="stud_rec_id" value="<?=$record_id?>">
+            <input type="hidden" name="stud_rec_id" value="<?=$record_id?>">
         </div>
         <div class="d-flex flex-row flex-wrap gap-2">
             <section class="d-flex flex-column flex-wrap flex-grow-1 gap-1 card p-2 m-2 flex-end align-self-start">

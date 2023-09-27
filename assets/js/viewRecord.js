@@ -10,6 +10,18 @@ const VIEW_RECORD = {
         form.forEach((val, key)=>{
             console.log({key, val});
         });
+
+        fetch(base_url + 'student/record/update', {
+            method : 'post',
+            body :  form
+        })
+        .then(respose=>respose.json())
+        .then(data=>{
+            console.log(data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     },
 
     /**

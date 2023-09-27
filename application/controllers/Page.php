@@ -82,6 +82,7 @@ class Page extends CI_Controller {
         $rec_id = intval($record_id);
 
         $studData = $this->stud->get_Student_all_Record($rec_id);
+        if(!$studData) redirect('home');
         $fname = $studData['stud_fname'];
         $role = $this->session->userdata('role');
 

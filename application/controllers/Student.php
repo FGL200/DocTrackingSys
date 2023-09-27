@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Student extends CI_Controller{
+
+    private $user_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
     
     public function __construct()
     {
@@ -57,9 +59,7 @@ class Student extends CI_Controller{
 
         /** Inserting data in `doc` table  */
 
-        $docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
-
-        foreach($docs as $doc) {
+        foreach($this->user_docs as $doc) {
             if(!empty($data)) $data .= ", ";
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
@@ -141,7 +141,8 @@ class Student extends CI_Controller{
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
         $newData = $this->__id_link_Student_Record__($result);
-        echo json_encode(['result' => $newData]);
+        $nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $nData]);
     }
 
     /**
@@ -159,7 +160,8 @@ class Student extends CI_Controller{
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
         $newData = $this->__id_link_Student_Record__($result);
-        echo json_encode(['result' => $newData]);
+        $nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $nData]);
     }
 
     /**
@@ -171,6 +173,55 @@ class Student extends CI_Controller{
     }
 
 
+    public function update_Student_Records() {
+        $data = $this->input->post();
+
+        $stud_rec_id = intval($data['stud_rec_id']);
+
+        $stud_set = "";
+
+        /** Update the `stud_rec` table */
+        foreach($data as $key=>$val) {
+            if(strstr($key, 'stud_') && !empty(trim($val)) && !strstr($key, 'rec_id')) {
+                if(!empty($stud_set)) $stud_set .= ",";
+                $stud_set.="`$key` = '$val'";
+            }
+        }
+        $this->db->trans_begin();
+
+        $this->stud->update_data('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
+        
+        /** End Update the `stud_rec` table */
+
+        $doc_set = "";
+
+        foreach($this->user_docs as $doc) {
+            if(!empty($doc_set)) $doc_set .= ", ";
+
+            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
+ 
+            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : '';
+            $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
+        }
+        $this->delete_file($stud_rec_id);
+
+
+        if($this->db->trans_status() === TRUE) {
+            $this->db->trans_commit();
+            echo json_encode(array(
+                "status" => "success"
+            ));
+        } else {
+            $this->db->trans_rollback()();
+            echo json_encode(array(
+                "status" => "error"
+            ));
+
+            exit();
+        }
+
+
+    }
 
 
     /** PRIVATE FUNCTIONS */
@@ -194,5 +245,26 @@ class Student extends CI_Controller{
             array_push($fixedData, $newRow);
         }
         return $fixedData;
+    }
+
+    private function delete_file($stud_id) {
+        $doc = $this->stud->stud_docs($stud_id)[0];
+        foreach($this->user_docs as $d) {
+            echo $d . " " . $doc[$d] . "  => " . $_FILES['doc_scan_' . $d]['name'];
+            echo "<br>";
+        }
+        die;
+    }
+
+    private function count_remarks($data) {
+        if(count($data) < 1) return;
+        $fixed_data = [];
+
+        foreach($data as $row) {
+            if($row['Remarks'] != "--") $row['Remarks'] = count(json_decode($row['Remarks']));
+            array_push($fixed_data, $row);
+        }
+
+        return $fixed_data;
     }
 }

@@ -201,6 +201,35 @@ class Student_model extends CI_Model{
 
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
+
+
+    /**
+     * Get the docs of the student
+     * @param String $stud_id
+     */
+    public function stud_docs($stud_id) {
+        $sql = "SELECT * FROM `doc` WHERE `stud_rec_id` = '$stud_id' LIMIT 1";
+
+        $result = $this->db->query($sql);
+
+        return $result->num_rows() ? $result->result_array() : [];
+    }   
+
+    /**
+     * Update the data of the specific table
+     * @param String $tblname
+     * @param String $data
+     * @param String $condition
+     */
+    public function update_data($tblname, $data, $condition) {
+        $sql = "UPDATE `{$tblname}` SET {$data} $condition";
+        $result = $this->db->query($sql);
+        return $this->db->affected_rows() ? true : false;
+    }
+                            
+
+
+
 }
 
 ?>

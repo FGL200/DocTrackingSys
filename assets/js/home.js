@@ -294,7 +294,7 @@ const HOME = {
          * Load the dashboard table
          * @param {*} route 
          */
-        load_dashboard_table: async function (route = null, form_data = null) {
+        load_dashboard_table: async function (route = null, form_data = null, _order = 'asc') {
             if (!route) return;
             await fetch(`${base_url}${route}`,{
                 method : form_data ? 'post' : 'get',
@@ -330,7 +330,9 @@ const HOME = {
                         };
                         table += '</tbody>';
                         $('#dataTable').html(table);
-                        $('#dataTable').DataTable();
+                        $('#dataTable').DataTable({
+                            order : [[0, _order]]
+                        });
 
                         // For formality and avoid warnings (the next line is removable)
                         $('#dataTable_wrapper input[type="search"]').prop("name", "dataTable_quickSearch");
