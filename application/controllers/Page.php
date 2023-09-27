@@ -56,7 +56,7 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'Dashboard',
-            'css' => ['home'],
+            'css' => ['home','viewRecord'],
             'profile' => [
                 'uname' => '',
                 'fname' => '',

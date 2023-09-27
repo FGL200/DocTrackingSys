@@ -10,7 +10,7 @@ const RECORD = {
             MODAL.setTitle("New Record");
             MODAL.setBody(`
             <div class="d-flex flex-row flex-wrap gap-2">
-                <section class="shadow   d-flex flex-column flex-wrap flex-grow-1 gap-1 card p-2 m-2 flex-end align-self-start">
+                <section class="d-flex flex-column flex-wrap flex-grow-1 gap-1 card p-2 m-2 flex-end align-self-start">
                     <span class="flex-grow-1">
                         <b>Information</b>
                     </span>
@@ -34,9 +34,12 @@ const RECORD = {
                         <b>Remarks</b>
                     </span>
                     <span class="d-flex align-items-center gap-1">
-                        <select id="remarks-category" name="remarks-category" class="p-2 card flex-grow-1">
-                            <option value="" disabled selected>--Select Remarks--</option>
-                        </select>
+                        <div class="dropdown flex-grow-1 d-flex">
+                            <button class="btn dropdown-toggle flex-grow-1 card d-flex flex-row justify-content-center align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select Remarks
+                            </button>
+                            <ul id="remarks-category" class="dropdown-menu"></ul>
+                        </div>
                         <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary">Other</button>
                     </span>
                     <span id="_remarksValue_other_holder" class="d-flex flex-grow-1 gap-2 hide">
@@ -48,7 +51,7 @@ const RECORD = {
                     </span>
                     
                 </section>
-                <section class="shadow   d-flex flex-column flex-grow-1 gap-1 card p-2 m-2">
+                <section class="d-flex flex-column flex-grow-1 gap-1 card p-2 m-2">
                     <span>
                         <b>Documents</b>
                     </span>
@@ -58,9 +61,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_regi_form" name="doc_val_regi_form" type="checkbox" class="cb-doc">
                             <input id="doc_scan_regi_form" name="doc_scan_regi_form" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_regi_form').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_regi_form')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_regi_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -69,42 +73,46 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_good_moral" name="doc_val_good_moral" type="checkbox" class="cb-doc">
                             <input id="doc_scan_good_moral" name="doc_scan_good_moral" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_good_moral').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_good_moral')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_good_moral" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label class="flex-grow-1 align-items-stretch" for="doc_val_j_f137">Junior Form 137</label>
-                        <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_j_f137" name="doc_val_j_f137" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_j_f137" name="doc_scan_j_f137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_j_f137').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
-                            </button>
+                            <label class="flex-grow-1 align-items-stretch" for="doc_val_j_f137">Junior Form 137</label>
+                            <span class="d-flex flex-nowrap gap-1">
+                                <input id="doc_val_j_f137" name="doc_val_j_f137" type="checkbox" class="cb-doc">
+                                <input id="doc_scan_j_f137" name="doc_scan_j_f137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                                <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_j_f137')" >
+                                <span> + </span> <i class="fa-solid fa-image"></i>
+                                </button>
+                                <button class="viewScan btn btn-primary" id="view_scan_j_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            </span>
                         </span>
-                    </span>
 
-                    <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
-                        <label class="flex-grow-1 align-items-stretch" for="doc_val_s_f137">Senior Form 137</label>
-                        <span class="d-flex flex-nowrap gap-1">
-                            <input id="doc_val_s_f137" name="doc_val_s_f137" type="checkbox" class="cb-doc">
-                            <input id="doc_scan_s_f137" name="doc_scan_s_f137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_s_f137').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
-                            </button>
+                        <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
+                            <label class="flex-grow-1 align-items-stretch" for="doc_val_s_f137">Senior Form 137</label>
+                            <span class="d-flex flex-nowrap gap-1">
+                                <input id="doc_val_s_f137" name="doc_val_s_f137" type="checkbox" class="cb-doc">
+                                <input id="doc_scan_s_f137" name="doc_scan_s_f137" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                                <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_s_f137')" >
+                                <span> + </span> <i class="fa-solid fa-image"></i>
+                                </button>
+                                <button class="viewScan btn btn-primary" id="view_scan_s_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            </span>
                         </span>
-                    </span>
 
                     <span class="border border-1 p-1 rounded d-flex justify-content-between align-items-center gap-1">
                         <label class="flex-grow-1 align-items-stretch" for="doc_val_f138">Form 138</label>
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_f138" name="doc_val_f138" type="checkbox" class="cb-doc">
                             <input id="doc_scan_f138" name="doc_scan_f138" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_f138').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_f138')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_f138" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -113,9 +121,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_birth_cert" name="doc_val_birth_cert" type="checkbox" class="cb-doc">
                             <input id="doc_scan_birth_cert" name="doc_scan_birth_cert" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_birth_cert').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_birth_cert')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_birth_cert" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -124,9 +133,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_tor" name="doc_val_tor" type="checkbox" class="cb-doc">
                             <input id="doc_scan_tor" name="doc_scan_tor" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_tor').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_tor')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_tor" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -135,9 +145,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_app_grad" name="doc_val_app_grad" type="checkbox" class="cb-doc">
                             <input id="doc_scan_app_grad" name="doc_scan_app_grad" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_app_grad').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_app_grad')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_app_grad" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -146,9 +157,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_cert_of_complete" name="doc_val_cert_of_complete" type="checkbox" class="cb-doc">
                             <input id="doc_scan_cert_of_complete" name="doc_scan_cert_of_complete" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_cert_of_complete').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_cert_of_complete')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_cert_of_complete" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -157,9 +169,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_req_clearance_form" name="doc_val_req_clearance_form" type="checkbox" class="cb-doc">
                             <input id="doc_scan_req_clearance_form" name="doc_scan_req_clearance_form" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_req_clearance_form').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_clearance_form')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_req_clearance_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -168,9 +181,10 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_req_credentials" name="doc_val_req_credentials" type="checkbox" class="cb-doc">
                             <input id="doc_scan_req_credentials" name="doc_scan_req_credentials" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_req_credentials').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_credentials')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_req_credentials" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -179,13 +193,20 @@ const RECORD = {
                         <span class="d-flex flex-nowrap gap-1">
                             <input id="doc_val_hd_or_cert_of_trans" name="doc_val_hd_or_cert_of_trans" type="checkbox" class="cb-doc">
                             <input id="doc_scan_hd_or_cert_of_trans" name="doc_scan_hd_or_cert_of_trans" type="file" accept=".png, .jpg, .jpeg" class="hide scaned-doc">
-                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="{$('#doc_scan_hd_or_cert_of_trans').trigger('click');}" >
-                            + <i class="fa-solid fa-image"></i>
+                            <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_hd_or_cert_of_trans')" >
+                            <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
+                            <button class="viewScan btn btn-primary" id="view_scan_hd_or_cert_of_tran" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
                     
                 </section>
+            </div>
+            <div id="image-viewer-container" class="hide">
+                <div id="image-viewer-holder">
+                    <button type="button" class="btn btn-danger" id="close-image-viewer-container"><i class="fa-solid fa-xmark"></i></button>
+                    <img id="image-viewer" src="" />
+                </div>
             </div>
             `);
             MODAL.setFooter(`<button id="btn-form-submit" type="submit" class="btn btn-success" id="btn-form-submit">Save</button>`);
@@ -193,14 +214,20 @@ const RECORD = {
             MODAL.open();
 
             // when modal is opened, load all the categories in remarks
-            await LOAD_REMARKS_ON_ID('remarks-category');
+            // await LOAD_REMARKS_ON_ID('remarks-category');
+            await this.init_addRemarks();
 
             $("#stud_lname").focus();
         },
 
-        addRemarksOnChange: function (value) {
+        addRemark: function (value) {
+            // Check if there are no remarks in the Remarks holder
+            // If there are none, clean the innerHTML of Remarks holder
             if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "NoRemarks")
                 $("#remarks-holder").html("");
+    
+            // Creating the Remarks to be place on Remarks holder
+            // -- START --
             const span = $(`<span class="card"></span>`);
             span.text(value);
             span.css({ "cursor": "pointer", "padding": "5px 10px" });
@@ -213,27 +240,35 @@ const RECORD = {
                 $(this).remove();
                 if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
                     $("#remarks-holder").html("No Remarks");
-                RECORD.NEW.__loadRemearksVal__();
+                RECORD.NEW.__loadRemarksVal__();
             });
+            // -- END --
+    
+            // Check if current remark already exist in the Remarks holder
             let count = 0;
             $("#remarks-holder").find('span').each(function (e) {
                 if ($(this).html() === span.html()) count++;
             });
+    
+            // Add the remark if not yet existing
             if (count === 0) $("#remarks-holder").append(span);
-            RECORD.NEW.__loadRemearksVal__();
+    
+            // reload the remarksvalue saved in the variable
+            RECORD.NEW.__loadRemarksVal__();
         },
 
-        init_addRemarks: function () {
-            $("#remarks-category").on("change", function (e) {
-                // Get current value
-                RECORD.NEW.addRemarksOnChange($("#remarks-category").val());
-                // Get all the option elements within the select
-                $(this).find('option').each(function () {
-                    // Remove the "selected" attribute from each option
-                    $(this).prop("selected", false);
-                });
-                // Select the first option
-                $(this).find('option:first').prop("selected", true);
+        init_addRemarks: async function () {
+            await fetch(base_url + 'api/categories')
+            .then(response => response.json())
+            .then(categories => {
+                RECORD.NEW.__remarksCategories__ = categories;
+                let categs = '';
+                for (i in categories)
+                    categs += 
+                    `<li>  
+                        <span href="#remarks-category" class="dropdown-item" onclick="RECORD.NEW.addRemark('${categories[i]}')" style="white-space: nowrap; cursor: pointer;"> ${categories[i]} </span>
+                    </li>`;
+                $("#remarks-category").html(categs);
             });
         },
 
@@ -288,28 +323,102 @@ const RECORD = {
         },
 
         init_onFileChange: function () {
+            
             $(".scaned-doc").each(function(e){
                 $(this).on("change", function(e){
-                    const btnTag = `#${$(this).attr('id')} + button`;
-                    $(btnTag).removeClass("btn-success");
-                    $(btnTag).addClass("btn-warning");
+                    const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
+                    const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+                    if($(this).val()) $(btnView).prop('disabled', false);
+                    toggle_BtnFile(btnFile);
                 });
             });
-            
+
             $(".cb-doc").each(function(e){
                 $(this).on("change", function(e){
-                    const fileTag = `#${$(this).attr('id')} ~ button`;
-                    $(fileTag).prop("disabled", !$(this).prop('checked'));
+                    const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
+                    $(btnFile).prop("disabled", !$(this).prop('checked'));
                 });
             });
+
+            $("#close-image-viewer-container").on("click", function(){
+                $("#image-viewer-container").addClass('fade-out');
+                $("#image-viewer-holder").addClass('pop-out');
+                $("image-viewer").html('');
+            });
+
+            $("#image-viewer-container").on("animationend", function(){
+                if($(this).hasClass('fade-in')){
+                    $(this).removeClass('fade-in');
+                    $(this).removeClass('hide');
+                }else if ($(this).hasClass('fade-out')){
+                    $(this).removeClass('fade-out');
+                    $(this).addClass('hide');
+                }
+            });
+
+
+            $(".viewScan").on("click", function(){
+                if(!$(this).hasClass('imgLoaded')){
+                    const id = $(this).attr('id');
+                    const name = id.replace('view_scan_', '');
+                    const source = document.getElementById("doc_scan_" + name).files[0];
+
+
+                    const reader = new FileReader();
+                    reader.addEventListener('load', ()=>{
+                        $("#image-viewer").prop("src", reader.result);
+                    })
+
+                    if(source) reader.readAsDataURL(source);
+
+                    console.log(name);
+                    
+                    $("#image-viewer-container").removeClass('hide');
+                    $("#image-viewer-container").addClass('fade-in');
+                    $("#image-viewer-holder").addClass('pop-in');
+                }
+            });
+
+            $("#image-viewer-holder").on("animationend", function(){
+                if($(this).hasClass('pop-in')) $(this).removeClass('pop-in');
+                else $(this).removeClass('pop-out');
+            }); 
         },
 
-        __loadRemearksVal__: function () {
+        __loadRemarksVal__: function () {
             RECORD.NEW.__remarksValue__ = [];
             $("#remarks-holder").find('span').each(function (e) {
                 RECORD.NEW.__remarksValue__.push($(this).text());
             });
         }
         
+    }
+}
+
+function toggle_BtnFile(btnFile) {
+    if ($(btnFile).hasClass("btn-success")){
+        $(btnFile).removeClass("btn-success");
+        $(btnFile).addClass("btn-danger");
+        $(btnFile).find('span').text('-')
+        $(btnFile + ' ~ button.viewScan').prop('disabled', false);
+    }else{
+        $(btnFile).removeClass("btn-danger");
+        $(btnFile).addClass("btn-success");
+    }
+}
+
+
+function changeFileDir (inputFile_Element){
+    const btnFile = `${inputFile_Element} ~ button.btnFile`;
+    const btnView = `${inputFile_Element} ~ button.viewScan`;
+
+    if($(btnFile).hasClass('btn-danger')) {
+        $(inputFile_Element).val('')
+        $(btnFile).removeClass('btn-danger');
+        $(btnFile).addClass('btn-success')
+        $(btnView).prop('disabled', true);
+        $(btnFile).find('span').text('+')
+    }else{
+        $(inputFile_Element).trigger('click');
     }
 }

@@ -4,10 +4,12 @@ const VIEW_RECORD = {
      * Update data
      */
     onSubmit: function () {
-        $("#update-record-btn").on("click", function (e) {
-            e.preventDefault();
-            console.log('HELLO');
-        })
+        const form = new FormData(document.getElementById("update-record-form"));
+        form.append("remarks", VIEW_RECORD.__remarksValue__);
+
+        form.forEach((val, key)=>{
+            console.log({key, val});
+        });
     },
 
     /**
@@ -170,6 +172,7 @@ const VIEW_RECORD = {
         });
     }
 }
+
 
 $(".scaned-doc").each(function(e){
     $(this).on("change", function(e){
