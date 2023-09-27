@@ -84,9 +84,11 @@ class Student_model extends CI_Model{
         //         WHERE sr.id = "'.$id.'"
         // ';
         $query = ' SELECT 
+                    `sr`.id,
                     `sr`.stud_lname,
                     `sr`.stud_mname,
                     `sr`.stud_fname,
+                    `sr`.stud_sfx,
                     `d`.regi_form,
                     `d`.good_moral,
                     `d`.j_f137,
@@ -124,14 +126,24 @@ class Student_model extends CI_Model{
     {
         $sql = "SELECT 
             LPAD(sr.id, 6, '0') `Record ID`,
-            sr.stud_id `Student ID`,
-            sr.stud_fname `First Name`,
-            sr.stud_mname `Middle Name`,
+            CASE 
+                WHEN sr.stud_id IS NULL THEN '--'
+                ELSE sr.stud_id
+            END `Student ID`,
             sr.stud_lname `Last Name`,
-            sr.stud_mname `Middle Name`,
+            CASE 
+                WHEN sr.stud_mname IS NULL THEN '--'
+                ELSE sr.stud_mname
+            END `Middle Name`,
             sr.stud_fname `First Name`,
-            sr.stud_sfx `Suffix`,
-            rm.value `Remarks`
+            CASE 
+                WHEN sr.stud_sfx IS NULL THEN '--'
+                ELSE sr.stud_sfx
+            END `Suffix`,
+            CASE 
+                WHEN rm.value = '[]' THEN '--'
+                ELSE rm.value
+            END `Remarks`
         FROM stud_rec sr
         LEFT JOIN remarks rm 
             ON rm.stud_rec_id = sr.id
@@ -151,9 +163,9 @@ class Student_model extends CI_Model{
     {
         $sql = "SELECT
             LPAD(`sr`.`id`, 6, '0') `Record ID`,
-            `sr`.`stud_mname` `Last Name`,
+            `sr`.`stud_lname` `Last Name`,
             `sr`.`stud_mname` `Middle Name`,
-            `sr`.`stud_lname` `First Name`,
+            `sr`.`stud_fname` `First Name`,
             `sr`.`stud_sfx` `Suffix`,
             `d`.regi_form `Regiform`,
             `d`.good_moral `Good Moral`,
