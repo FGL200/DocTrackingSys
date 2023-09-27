@@ -64,7 +64,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_regi_form')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_regi_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_regi_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -76,7 +76,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_good_moral')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_good_moral" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_good_moral" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -88,7 +88,7 @@ const RECORD = {
                                 <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_j_f137')" >
                                 <span> + </span> <i class="fa-solid fa-image"></i>
                                 </button>
-                                <button class="viewScan btn btn-primary" id="view_scan_j_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                                <button class="viewScan btn btn-secondary" id="view_scan_j_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                             </span>
                         </span>
 
@@ -100,7 +100,7 @@ const RECORD = {
                                 <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_s_f137')" >
                                 <span> + </span> <i class="fa-solid fa-image"></i>
                                 </button>
-                                <button class="viewScan btn btn-primary" id="view_scan_s_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                                <button class="viewScan btn btn-secondary" id="view_scan_s_f137" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                             </span>
                         </span>
 
@@ -112,7 +112,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_f138')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_f138" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_f138" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -124,7 +124,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_birth_cert')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_birth_cert" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_birth_cert" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -136,7 +136,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_tor')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_tor" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_tor" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -148,7 +148,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_app_grad')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_app_grad" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_app_grad" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -160,7 +160,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_cert_of_complete')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_cert_of_complete" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_cert_of_complete" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -172,7 +172,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_clearance_form')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_req_clearance_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_req_clearance_form" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -184,7 +184,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_credentials')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_req_credentials" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_req_credentials" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
 
@@ -196,7 +196,7 @@ const RECORD = {
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_hd_or_cert_of_trans')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
                             </button>
-                            <button class="viewScan btn btn-primary" id="view_scan_hd_or_cert_of_tran" type="button" disabled><i class="fa-solid fa-eye"></i></button>
+                            <button class="viewScan btn btn-secondary" id="view_scan_hd_or_cert_of_tran" type="button" disabled><i class="fa-solid fa-eye"></i></button>
                         </span>
                     </span>
                     
@@ -291,34 +291,37 @@ const RECORD = {
                     method: "post",
                     body: form
                 })
-                    .then(resp => resp.json())
-                    .then(data => {
-                        if (data.status === "success") {
-                            // reset fields and add success notify
-                            document.getElementById("modal-container").reset();
-                            MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");
-                            $("btnFile").each(function (e, i) {
-                                console.log(i);
-                            })
-                            document.querySelectorAll(".btnFile").forEach(button => {
-                                button.classList.add("btn-success");
-                                button.classList.remove("btn-warning");
-                                button.disabled = true;
-                            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        // reset fields and add success notify
+                        document.getElementById("modal-container").reset();
+                        $(".btnFile").each(function() {
+                            $(this).prop('disabled', true);
+                            set_BtnFile('.btnFile', true);
+                        });
+                        $(".viewScan").each(function() {
+                            $(this).prop('disabled', true);
+                            set_BtnView('.viewScan', true);
+                        });
+                        $("#remarks-holder").html("No Remarks");
+                        $("#_remarksValue_other_holder").addClass('hide');
+                        RECORD.NEW.__remarksValue__ = [];
 
-                            $("#stud_lname").focus();
-                        }else{
-                            MAIN.addNotif("Error occured!", 
-                            "<b>Message:</b> " + data.message + 
-                            "<br><b>Columns:</b> " + data.columns + 
-                            "<br><b>Status:</b>   "+ data.status, 
-                            "r");;
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        MAIN.addNotif("Error occured!", err, "r");;
-                    });
+                        MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");
+                        $("#stud_lname").focus();
+                    }else{
+                        MAIN.addNotif("Error occured!", 
+                        "<b>Message:</b> " + data.message + 
+                        "<br><b>Columns:</b> " + data.columns + 
+                        "<br><b>Status:</b>   "+ data.status, 
+                        "r");;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    MAIN.addNotif("Error occured!", err, "r");;
+                });
             })
         },
 
@@ -328,15 +331,28 @@ const RECORD = {
                 $(this).on("change", function(e){
                     const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
                     const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-                    if($(this).val()) $(btnView).prop('disabled', false);
-                    toggle_BtnFile(btnFile);
+                    if($(this).val()) { set_BtnView(btnView, false);  /* $(btnView).prop('disabled', false); */ }
+                    set_BtnFile(btnFile);
                 });
             });
-
+            
             $(".cb-doc").each(function(e){
                 $(this).on("change", function(e){
+                    const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
                     const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-                    $(btnFile).prop("disabled", !$(this).prop('checked'));
+                    const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+                    const checked = $(this).prop('checked');
+                    $(btnFile).prop('disabled', !checked);
+                    if(!checked){ 
+                        $(inFile).val('');
+                        $(inFile).prop('disabled', true);
+                        set_BtnView(btnView, true);
+                        set_BtnFile(btnFile, true);
+                    }else{
+                        $(inFile).prop('disabled', false);
+                    }
+                    if($(inFile).val())
+                        set_BtnView(btnView, !checked);
                 });
             });
 
@@ -395,30 +411,47 @@ const RECORD = {
     }
 }
 
-function toggle_BtnFile(btnFile) {
-    if ($(btnFile).hasClass("btn-success")){
+function set_BtnView(btnView, disabled){
+    if(disabled){
+        $(btnView).removeClass('btn-primary');
+        $(btnView).addClass('btn-secondary');
+        $(btnView).prop('disabled', true);
+    }else {
+        $(btnView).removeClass('btn-secondary');
+        $(btnView).addClass('btn-primary');
+        $(btnView).prop('disabled', false);
+    }
+}
+
+function set_BtnFile(btnFile, success) {
+
+    if(success){
+        $(btnFile).removeClass("btn-danger");
+        $(btnFile).addClass("btn-success");
+        $(btnFile).find('span').text('+')
+
+    }else{
         $(btnFile).removeClass("btn-success");
         $(btnFile).addClass("btn-danger");
         $(btnFile).find('span').text('-')
         $(btnFile + ' ~ button.viewScan').prop('disabled', false);
-    }else{
-        $(btnFile).removeClass("btn-danger");
-        $(btnFile).addClass("btn-success");
     }
 }
 
 
-function changeFileDir (inputFile_Element){
-    const btnFile = `${inputFile_Element} ~ button.btnFile`;
-    const btnView = `${inputFile_Element} ~ button.viewScan`;
+function changeFileDir (inFile){
+    const btnFile = `${inFile} ~ button.btnFile`;
+    const btnView = `${inFile} ~ button.viewScan`;
 
     if($(btnFile).hasClass('btn-danger')) {
-        $(inputFile_Element).val('')
-        $(btnFile).removeClass('btn-danger');
-        $(btnFile).addClass('btn-success')
-        $(btnView).prop('disabled', true);
-        $(btnFile).find('span').text('+')
+        if(confirm('Are you sure you want to replace/remove the scaned document?')){
+            $(inFile).val('')
+            $(btnFile).removeClass('btn-danger');
+            $(btnFile).addClass('btn-success')
+            $(btnFile).find('span').text('+')
+            set_BtnView(btnView, true);
+        }
     }else{
-        $(inputFile_Element).trigger('click');
+        $(inFile).trigger('click');
     }
 }

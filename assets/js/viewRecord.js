@@ -31,13 +31,15 @@ const VIEW_RECORD = {
             function () { $(this).css("background-color", "#FDEDEC"); },
             function () { $(this).css("background-color", "#fff"); }
         );
-        span.on("click", function (e) {
-            e.preventDefault();
-            $(this).remove();
-            if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
-                $("#remarks-holder").html("No Remarks");
-            VIEW_RECORD.__loadRemarksVal__();
-        });
+        if(CONST_ROLE !== 'V'){
+            span.on("click", function (e) {
+                e.preventDefault();
+                $(this).remove();
+                if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
+                    $("#remarks-holder").html("No Remarks");
+                VIEW_RECORD.__loadRemarksVal__();
+            });
+        }
         // -- END --
 
         // Check if current remark already exist in the Remarks holder
@@ -58,6 +60,7 @@ const VIEW_RECORD = {
      * @param {Object} data the object data of the strudent records
      */
     loadStudentRecords : function (data) {
+        console.log(data);
         // Get all the keys in the json data
         let keys = Object.keys(data);
 
@@ -117,14 +120,15 @@ const VIEW_RECORD = {
             // If the document 'val' is true, (the student has that specific document),
             // (If the user is Encoder or Admin, The button for adding 'dir' will be default to 'green')
             if(doc.val === 1) {
-                const btn_element = "#doc_scan_" + keys[i];
-                $(btn_element+ " ~ button.btnFile").prop("disabled", false);
-
+                const inFile = "#doc_scan_" + keys[i];
+                
+                // Enable the btnFile and file input if 'val' is not empty
+                $(inFile).prop('disabled', false);
+                $(inFile + " ~ button.btnFile").prop('disabled', false);
 
                 if(doc.dir !== ''){
-                    changeFileDir(btn_element);
-                    toggle_BtnFile(btn_element + " ~ button.btnFile");
-                    $(btn_element+ " ~ button.viewScan").prop("disabled", false);
+                    set_BtnFile(inFile + " ~ button.btnFile", false);
+                    set_BtnView(inFile+ " ~ button.viewScan", false);
                 }
             }
 
@@ -178,44 +182,74 @@ $(".scaned-doc").each(function(e){
     $(this).on("change", function(e){
         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-        if($(this).val()) $(btnView).prop('disabled', false);
-        toggle_BtnFile(btnFile);
+        if($(this).val()) { set_BtnView(btnView, false);  /* $(btnView).prop('disabled', false); */ }
+        set_BtnFile(btnFile);
     });
 });
 
 $(".cb-doc").each(function(e){
     $(this).on("change", function(e){
+        const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-        $(btnFile).prop("disabled", !$(this).prop('checked'));
+        const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+        const checked = $(this).prop('checked');
+        $(btnFile).prop('disabled', !checked);
+        if(!checked){ 
+            $(inFile).val('');
+            $(inFile).prop('disabled', true);
+            set_BtnView(btnView, true);
+            set_BtnFile(btnFile, true);
+        }else{
+            $(inFile).prop('disabled', false);
+        }
+        if($(inFile).val())
+            set_BtnView(btnView, !checked);
     });
 });
 
 
-function toggle_BtnFile(btnFile) {
-    if ($(btnFile).hasClass("btn-success")){
+function set_BtnView(btnView, disabled){
+    if(disabled){
+        $(btnView).removeClass('btn-primary');
+        $(btnView).addClass('btn-secondary');
+        $(btnView).prop('disabled', true);
+    }else {
+        $(btnView).removeClass('btn-secondary');
+        $(btnView).addClass('btn-primary');
+        $(btnView).prop('disabled', false);
+    }
+}
+
+function set_BtnFile(btnFile, success) {
+
+    if(success){
+        $(btnFile).removeClass("btn-danger");
+        $(btnFile).addClass("btn-success");
+        $(btnFile).find('span').text('+')
+
+    }else{
         $(btnFile).removeClass("btn-success");
         $(btnFile).addClass("btn-danger");
         $(btnFile).find('span').text('-')
         $(btnFile + ' ~ button.viewScan').prop('disabled', false);
-    }else{
-        $(btnFile).removeClass("btn-danger");
-        $(btnFile).addClass("btn-success");
     }
 }
 
 
-function changeFileDir (inputFile_Element){
-    const btnFile = `${inputFile_Element} ~ button.btnFile`;
-    const btnView = `${inputFile_Element} ~ button.viewScan`;
+function changeFileDir (inFile){
+    const btnFile = `${inFile} ~ button.btnFile`;
+    const btnView = `${inFile} ~ button.viewScan`;
 
     if($(btnFile).hasClass('btn-danger')) {
-        $(inputFile_Element).val('')
-        $(btnFile).removeClass('btn-danger');
-        $(btnFile).addClass('btn-success')
-        $(btnView).prop('disabled', true);
-        $(btnFile).find('span').text('+')
+        if(confirm('Are you sure you want to replace/remove the scaned document?')){
+            $(inFile).val('')
+            $(btnFile).removeClass('btn-danger');
+            $(btnFile).addClass('btn-success')
+            $(btnFile).find('span').text('+')
+            set_BtnView(btnView, true);
+        }
     }else{
-        $(inputFile_Element).trigger('click');
+        $(inFile).trigger('click');
     }
 }
 
