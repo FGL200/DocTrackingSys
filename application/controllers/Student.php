@@ -119,8 +119,8 @@ class Student extends CI_Controller{
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
         $newData = $this->__id_link_Student_Record__($result);
-        $nData = $this->count_remarks($newData);
-        echo json_encode(['result' => $nData]);
+        //$nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $newData]);
     }
 
     /**
@@ -138,8 +138,8 @@ class Student extends CI_Controller{
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
         $newData = $this->__id_link_Student_Record__($result);
-        $nData = $this->count_remarks($newData);
-        echo json_encode(['result' => $nData]);
+        //$nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $newData]);
     }
 
     /**
@@ -160,7 +160,7 @@ class Student extends CI_Controller{
 
         /** Update the `stud_rec` table */
         foreach($data as $key=>$val) {
-            if(strstr($key, 'stud_') && !empty(trim($val)) && !strstr($key, 'rec_id')) {
+            if(strstr($key, 'stud_')&& !strstr($key, 'rec_id')) {
                 if(!empty($stud_set)) $stud_set .= ",";
                 $stud_set.="`$key` = '$val'";
             }
@@ -195,9 +195,9 @@ class Student extends CI_Controller{
             if(!empty($doc_set)) $doc_set .= ", ";
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
-            if(isset($_FILES['doc_scan_' . $doc]) && !empty($_FILES['doc_scan_' . $doc]['name'])) {
-                $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
-            }
+            
+            $path =  !empty($_FILES['doc_scan_' . $doc]['name']) ? $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : "";
+            
             
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
@@ -251,13 +251,13 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    private function upload_file(Array $file, int$stud_rec_id) {
+    private function upload_file(Array $file, int $stud_rec_id) {
         if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
 
         
         $path = "uploads/";
 
-        $new_file_name = md5(time().$stud_rec_id);
+        $new_file_name = md5(rand() * $stud_rec_id);
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 

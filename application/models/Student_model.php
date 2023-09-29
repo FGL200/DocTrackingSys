@@ -32,9 +32,9 @@ class Student_model extends CI_Model{
                             WHEN sr.stud_id IS NULL THEN '--'
                             ELSE sr.stud_id
                         END `Student ID`,
-                        sr.stud_fname `First Name`,
-                        sr.stud_mname `Middle Name`,
                         sr.stud_lname `Last Name`,
+                        sr.stud_mname `Middle Name`,
+                        sr.stud_fname `First Name`,
                         CASE 
                             WHEN sr.stud_sfx IS NULL THEN '--'
                             ELSE sr.stud_sfx 
