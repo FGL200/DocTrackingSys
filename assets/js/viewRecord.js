@@ -9,8 +9,13 @@ const VIEW_RECORD = {
        
 
         form.forEach((val, key)=>{
-            if(form.get(key)?.name == "")form.delete(key)
-            console.log(form.get(key))
+            VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                // kapag walang laman yung input file iassign yung value na nasa 
+                // VIEW_RECORD.__old_DIRS__
+                if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                    form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
+                }
+            })
         });
         
         fetch(base_url + 'student/record/update', {
@@ -210,15 +215,8 @@ $(".scaned-doc").each(function(e){
         if($(this).val()) { set_BtnView(btnView, false); }
         set_BtnFile(btnFile);
 
-        VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
-            if(VIEW_RECORD.__old_DIRS__[index][`${$(this).attr('id')}`] == "") {
-                VIEW_RECORD.__old_DIRS__[index][`value`] = e.target.files[0];
-                
-            }
-            
-        })
-
-        console.log(VIEW_RECORD.__old_DIRS__)
+        
+        
     });
 });
 
@@ -301,7 +299,7 @@ function changeFileDir (inFile){
             set_BtnView(btnView, true);
 
             
-            
+            // make the dir value as empty if the answer in  confirm is `yes`
             VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
                 
                 if(VIEW_RECORD.__old_DIRS__[index][key]) {
