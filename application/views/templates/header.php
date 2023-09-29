@@ -37,7 +37,7 @@
 
         // OTHER DEFINED CONSTANTS
         <?php if(isset($constants)) foreach ($constants as $key => $val) { ?>
-            <?="const CONST_".strtoupper($key)." = {$val}";?>
+            <?="const CONST_".strtoupper($key)."='{$val}';\n";?>
         <?php }?>
 
     </script>

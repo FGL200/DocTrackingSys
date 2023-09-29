@@ -114,28 +114,6 @@ class Student extends CI_Controller{
     }
 
     /**
-     * Upload student documents
-     * @param Array $file
-     * @param Integer $stud_rec_id
-     */
-    public function upload_file(Array $file, int$stud_rec_id) {
-        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
-
-        
-        $path = "uploads/";
-
-        $new_file_name = md5(time().$stud_rec_id);
-        $file_ext = explode('.',$file['name']);
-        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
-
-        $new_file_path = $path . $file['name'];
-
-        $data = $new_file_path;
-        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
-
-    }
-
-    /**
      * Get basic student record info along with their remarks
      */
     public function get_StudentRecords_With_Remarks() {
@@ -193,17 +171,38 @@ class Student extends CI_Controller{
         
         /** End Update the `stud_rec` table */
 
-        $doc_set = "";
+        $remark_value = "`value` = '[";
+       
+        $remarks = [];
+        
+        if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
+        if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
 
+        foreach($remarks as &$r) {
+            $r = "\"$r\""; // Enclose string to " "
+        } 
+
+        $remark_value .= implode(',', $remarks);
+        $remark_value .= "]'";
+
+        $this->stud->update_data('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
+        
+        /** Update `doc` table  */
+        $doc_set = "";
+        
         foreach($this->user_docs as $doc) {
+            $path = "";
             if(!empty($doc_set)) $doc_set .= ", ";
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
- 
-            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : '';
+            if(isset($_FILES['doc_scan_' . $doc]) && !empty($_FILES['doc_scan_' . $doc]['name'])) {
+                $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
+            }
+            
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
-        $this->delete_file($stud_rec_id);
+        $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+        /** End Update `doc` table  */
 
 
         if($this->db->trans_status() === TRUE) {
@@ -238,7 +237,7 @@ class Student extends CI_Controller{
             $newRow = [];
             foreach($row as $key => $val){
                 if($key == 'Record ID')
-                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'">'.$val.'</a>';
+                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).' " target="_blank">'.$val.'</a>';
                 else
                     $newRow[$key] = $val;
             }
@@ -247,13 +246,34 @@ class Student extends CI_Controller{
         return $fixedData;
     }
 
-    private function delete_file($stud_id) {
-        $doc = $this->stud->stud_docs($stud_id)[0];
-        foreach($this->user_docs as $d) {
-            echo $d . " " . $doc[$d] . "  => " . $_FILES['doc_scan_' . $d]['name'];
-            echo "<br>";
+    /**
+     * Upload student documents
+     * @param Array $file
+     * @param Integer $stud_rec_id
+     */
+    private function upload_file(Array $file, int$stud_rec_id) {
+        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
+
+        
+        $path = "uploads/";
+
+        $new_file_name = md5(time().$stud_rec_id);
+        $file_ext = explode('.',$file['name']);
+        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+
+        $new_file_path = $path . $file['name'];
+
+        $data = $new_file_path;
+        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
+
+    }
+    
+    private function get_doc($stud_id, $key) {
+        foreach($this->stud->stud_docs($stud_id) as $k=>$v) {
+            if($key == $k) {
+                return json_decode($v)['dir'];
+            }
         }
-        die;
     }
 
     private function count_remarks($data) {

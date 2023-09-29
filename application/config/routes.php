@@ -30,6 +30,8 @@ $route['user/viewers']['post'] = 'User/get_All_Viewers';
 $route['user/encoders']['post'] = 'User/get_All_Encoders';
 $route['user/all']['post'] = 'User/get_All_Users';
 
+/// QR
+$route['generate-qr']= "QrGenerator/generate";
 
 // DEFAULT
 $route['404_override'] = '';

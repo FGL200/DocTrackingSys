@@ -68,7 +68,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home','record']
+            'js' => ['home','newRecord']
         ];
 
         // load page
@@ -89,7 +89,10 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> $fname,
-            'constants' => ['record_id' => $rec_id],
+            'constants' => [
+                'record_id' => $rec_id, 
+                'role' => $role
+            ],
             'record_id' => $record_id,
             'role' => $role,
             'css' => ['viewRecord'],
@@ -99,7 +102,8 @@ class Page extends CI_Controller {
                 'lname' => '',
                 'bday' => date('mm/dd/yyyy'),
                 'g' => 'N',
-            ]
+            ],
+            'studData' => $studData
         ];
 
         // FOOTER VAIRABLES

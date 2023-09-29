@@ -1,23 +1,25 @@
 const VIEW_RECORD = {
-
     /**
      * Update data
      */
     onSubmit: function () {
         const form = new FormData(document.getElementById("update-record-form"));
         form.append("remarks", VIEW_RECORD.__remarksValue__);
+        
+       
 
         form.forEach((val, key)=>{
-            console.log({key, val});
+            if(form.get(key)?.name == "")form.delete(key)
+            console.log(form.get(key))
         });
-
+        
         fetch(base_url + 'student/record/update', {
             method : 'post',
             body :  form
         })
         .then(respose=>respose.json())
         .then(data=>{
-            console.log(data);
+            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!!`, "g");
         })
         .catch(err=>{
             console.log(err);
@@ -43,13 +45,15 @@ const VIEW_RECORD = {
             function () { $(this).css("background-color", "#FDEDEC"); },
             function () { $(this).css("background-color", "#fff"); }
         );
-        span.on("click", function (e) {
-            e.preventDefault();
-            $(this).remove();
-            if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
-                $("#remarks-holder").html("No Remarks");
-            VIEW_RECORD.__loadRemarksVal__();
-        });
+        if(CONST_ROLE !== 'V'){
+            span.on("click", function (e) {
+                e.preventDefault();
+                $(this).remove();
+                if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
+                    $("#remarks-holder").html("No Remarks");
+                VIEW_RECORD.__loadRemarksVal__();
+            });
+        }
         // -- END --
 
         // Check if current remark already exist in the Remarks holder
@@ -70,6 +74,7 @@ const VIEW_RECORD = {
      * @param {Object} data the object data of the strudent records
      */
     loadStudentRecords : function (data) {
+        console.log(data);
         // Get all the keys in the json data
         let keys = Object.keys(data);
 
@@ -129,32 +134,41 @@ const VIEW_RECORD = {
             // If the document 'val' is true, (the student has that specific document),
             // (If the user is Encoder or Admin, The button for adding 'dir' will be default to 'green')
             if(doc.val === 1) {
-                const btn_element = "#doc_scan_" + keys[i];
-                $(btn_element+ " ~ button.btnFile").prop("disabled", false);
+                const inFile = "#doc_scan_" + keys[i];
+                
+                // Enable the 'input file' and 'btnFile' input if 'val' is not empty
+                $(inFile).prop('disabled', false);
+                $(inFile + " ~ button.btnFile").prop('disabled', false);
 
-
+                // If there are no dir fetched, diable buttons
                 if(doc.dir !== ''){
-                    changeFileDir(btn_element);
-                    toggle_BtnFile(btn_element + " ~ button.btnFile");
-                    $(btn_element+ " ~ button.viewScan").prop("disabled", false);
+                    set_BtnFile(inFile + " ~ button.btnFile", false);
+                    set_BtnView(inFile+ " ~ button.viewScan", false);
                 }
             }
 
+            // Fetched directories cannot be saved in input file tag
+            // The follwing lines will fetch all the dir with values
+            // and save is as an object to' __old_DIRS__' variable 
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
             VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}" : "${docDir}"}`));
 
         }
 
+        // After fetching all the remarks, validate each remark if they belong to the remark categories,
+        // otherwise, save the remark to `__remarkOther__` which is the other remarks.
         value.forEach(currValue => {
             if(this.__remarksCategories__.includes(currValue)) this.__remarksValue__.push(currValue);
             else this.__remarksOther__ = currValue;
         });
         
+        // The next line will then add all the fetched remarks to the remark holder
         for(v in this.__remarksValue__){
             this.addRemark(value[v]);
         }
 
+        // If other remarks has value, show the other remark field and put the appropriate value
         if(this.__remarksOther__ !== '') {
             $("#_remarksValue_other").val(this.__remarksOther__);
             $("#_remarksValue_other_holder").removeClass("hide");
@@ -176,7 +190,7 @@ const VIEW_RECORD = {
     /** The current remarks added in the remarks holder */
     __remarksValue__ : [],
 
-    /** When invoking addRemark(), place the apropriate remarks in the holder aswell as on the __remarksValue__ variable */
+    /** When invoking __addRemark()__, place the apropriate remarks in the holder aswell as on the __remarksValue__ variable */
     __loadRemarksVal__ : function () {
         VIEW_RECORD.__remarksValue__ = [];
         $("#remarks-holder").find('span').each(function (e) {
@@ -186,57 +200,131 @@ const VIEW_RECORD = {
 }
 
 
+// This line will add an event listener 'change' to every input file element present within the form
+// NOTE that every input file tag are hidden (not visible) by default
+// The btnFile will act as their button to trigger their clicks so user will be able to upload images
 $(".scaned-doc").each(function(e){
     $(this).on("change", function(e){
         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-        if($(this).val()) $(btnView).prop('disabled', false);
-        toggle_BtnFile(btnFile);
+        if($(this).val()) { set_BtnView(btnView, false); }
+        set_BtnFile(btnFile);
+
+        VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+            if(VIEW_RECORD.__old_DIRS__[index][`${$(this).attr('id')}`] == "") {
+                VIEW_RECORD.__old_DIRS__[index][`value`] = e.target.files[0];
+                
+            }
+            
+        })
+
+        console.log(VIEW_RECORD.__old_DIRS__)
     });
 });
 
+// The following lines will listen to every checkbox present within the form
+// When checked, enable the btnFile
+// When unchecked, prompt the user and confirm to remove the directory of the saved image before
 $(".cb-doc").each(function(e){
     $(this).on("change", function(e){
+
+        // Gets the corresponding button to the checkbox ticked
+        const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-        $(btnFile).prop("disabled", !$(this).prop('checked'));
+        const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+        const checked = $(this).prop('checked');
+
+        // Prompts user and perform the correct action when checkbox is ticked
+        $(btnFile).prop('disabled', !checked);
+        if(!checked){ 
+            if($(btnFile).hasClass('btn-danger')){
+                if(confirm("Are you sure you want to replace/remove the scaned document?")){
+                    $(inFile).val('');
+                    $(inFile).prop('disabled', true);
+                    set_BtnView(btnView, true);
+                    set_BtnFile(btnFile, true);
+                    $(btnFile).prop('disabled', true);
+                }else{
+                    $(this).prop('checked', true);
+                    $(btnFile).prop('disabled', !$(this).prop('checked'));
+                }
+            }
+        }
+        $(inFile).prop('disabled', !$(this).prop('checked'));
     });
 });
 
+// The btnView are the buttons for viewing images
+// Enable or disable btnViews through this function
+function set_BtnView(btnView, disabled){
+    if(disabled){
+        $(btnView).removeClass('btn-primary');
+        $(btnView).addClass('btn-secondary');
+        $(btnView).prop('disabled', true);
+    }else {
+        $(btnView).removeClass('btn-secondary');
+        $(btnView).addClass('btn-primary');
+        $(btnView).prop('disabled', false);
+    }
+}
 
-function toggle_BtnFile(btnFile) {
-    if ($(btnFile).hasClass("btn-success")){
-        $(btnFile).removeClass("btn-success");
-        $(btnFile).addClass("btn-danger");
-        $(btnFile).find('span').text('-')
-        $(btnFile + ' ~ button.viewScan').prop('disabled', false);
-    }else{
+// The btnFile are the button responsible for triggering the file upload input
+// Enable or disble btnFile through this function
+function set_BtnFile(btnFile, success) {
+    if(success){
         $(btnFile).removeClass("btn-danger");
         $(btnFile).addClass("btn-success");
-    }
-}
+        $(btnFile).find('span').text('+');
 
-
-function changeFileDir (inputFile_Element){
-    const btnFile = `${inputFile_Element} ~ button.btnFile`;
-    const btnView = `${inputFile_Element} ~ button.viewScan`;
-
-    if($(btnFile).hasClass('btn-danger')) {
-        $(inputFile_Element).val('')
-        $(btnFile).removeClass('btn-danger');
-        $(btnFile).addClass('btn-success')
-        $(btnView).prop('disabled', true);
-        $(btnFile).find('span').text('+')
     }else{
-        $(inputFile_Element).trigger('click');
+        $(btnFile).removeClass("btn-success");
+        $(btnFile).addClass("btn-danger");
+        $(btnFile).find('span').text('-');
+        $(btnFile + ' ~ button.viewScan').prop('disabled', false);
     }
 }
 
+// This function must only run when the user have uploaded new file (image file)
+// or When the user want to replaced the current uploaded image
+function changeFileDir (inFile){
+    const btnFile = `${inFile} ~ button.btnFile`;
+    const btnView = `${inFile} ~ button.viewScan`;
+    const key = $(inFile).attr("id");
+    // Check if there is already an image uploaded, and confirm if the user wants
+    // to replace or remove the saved file
+    if($(btnFile).hasClass('btn-danger')) {
+        if(confirm('Are you sure you want to replace/remove the scaned document?')){
+            $(inFile).val('');
+            $(btnFile).removeClass('btn-danger');
+            $(btnFile).addClass('btn-success');
+            $(btnFile).find('span').text('+');
+            set_BtnView(btnView, true);
+
+            
+            
+            VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+                
+                if(VIEW_RECORD.__old_DIRS__[index][key]) {
+                    VIEW_RECORD.__old_DIRS__[index][key] = "";
+                }
+                
+            })
+
+            console.log(VIEW_RECORD.__old_DIRS__)
+        }
+    }else{
+        $(inFile).trigger('click');
+    }
+}
+
+// This function is for closing the view modal (insides are the animation logic)
 $("#close-image-viewer-container").on("click", function(){
     $("#image-viewer-container").addClass('fade-out');
     $("#image-viewer-holder").addClass('pop-out');
     $("image-viewer").html('');
 });
 
+// This function is for opening and closing of view modal (insides are the animation logic)
 $("#image-viewer-container").on("animationend", function(){
     if($(this).hasClass('fade-in')){
         $(this).removeClass('fade-in');
@@ -247,33 +335,42 @@ $("#image-viewer-container").on("animationend", function(){
     }
 });
 
-
-$(".viewScan").on("click", function(){
-    if(!$(this).hasClass('imgLoaded')){
-        const id = $(this).attr('id');
-        const name = id.replace('view_scan_', '');
-        const source = document.getElementById("doc_scan_" + name).files[0];
-
-
-        const reader = new FileReader();
-        reader.addEventListener('load', ()=>{
-            $("#image-viewer").prop("src", reader.result);
-        })
-
-        if(source) reader.readAsDataURL(source);
-
-        
-        $("#image-viewer-container").removeClass('hide');
-        $("#image-viewer-container").addClass('fade-in');
-        $("#image-viewer-holder").addClass('pop-in');
-    }
-});
-
-
+// This function is for opening and closing of view modal (insides are the animation logic)
 $("#image-viewer-holder").on("animationend", function(){
     if($(this).hasClass('pop-in')) $(this).removeClass('pop-in');
     else $(this).removeClass('pop-out');
 }); 
+
+// The following lines are triggered when the user wants to view the uploaded image
+$(".viewScan").on("click", function(){
+
+    // Check id there is an image already uploaded (from `__old_DIRS__`)
+    if(!$(this).hasClass('imgLoaded')){
+
+        // Get the id, name, and, source of clicked buttons
+        const id = $(this).attr('id');
+        const name = id.replace('view_scan_', '');
+        const source = document.getElementById("doc_scan_" + name).files[0];
+
+        // This line is for reading the uploaded file ()
+        const reader = new FileReader();
+
+        // If the file is successfully loaded,
+        // set the source of the image to the file
+        reader.addEventListener('load', ()=>{
+            $("#image-viewer").prop("src", reader.result);
+        });
+
+        // Check wehter the source has value or none,
+        // If there is a value, read the file as how the browser would read it by default
+        if(source) {
+            reader.readAsDataURL(source);
+            $("#image-viewer-container").removeClass('hide');
+            $("#image-viewer-container").addClass('fade-in');
+            $("#image-viewer-holder").addClass('pop-in');
+        }
+    }
+});
 
 async function loadRemarksCategories() {
     await fetch(base_url + 'api/categories')
@@ -298,7 +395,8 @@ async function prepareStudentRecords() {
     });
 }
 
-
+// When the window has loaded,
+// Load the remarks categories and prepare the values of student records
 $(window).on("load", async function (e) {
     await loadRemarksCategories();
     await prepareStudentRecords();
