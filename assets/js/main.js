@@ -17,13 +17,25 @@ const MAIN = {
             "#F8F9F9";
     
         const notif = document.createElement("section");
-        notif.setAttribute("class", "notif card shadow-lg slide-in-out");
-        // notif.setAttribute("class", "notif card shadow-lg");
+        notif.setAttribute("class", "notif card shadow slide-in-out");
         notif.addEventListener("animationend", ()=>{
             notif.remove();
         })
         notif.style.border = "1px solid " + tColor;
         notif.style.backgroundColor = bColor;
+        notif.style.position = "relative";
+
+        const notif_close = document.createElement("button");
+        notif_close.setAttribute("class", "notif_close_btn shadow");
+        notif_close.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        notif_close.style.position = "absolute";
+        notif_close.style.top = "-15px";
+        notif_close.style.left = "-15px";
+        // notif_close.style.border = `1px solid ${tColor}`;
+        // notif_close.style.backgroundColor = bColor;
+        notif_close.addEventListener("click", ()=>{
+            notif.remove();
+        });
         
         const notif_title = document.createElement("section");
         notif_title.setAttribute("class", "notif-title font-b");
@@ -35,11 +47,12 @@ const MAIN = {
         notif_body.setAttribute("class", "notif-body");
         notif_body.innerHTML = message;
     
+        notif.appendChild(notif_close);
         notif.appendChild(notif_title);
         notif.appendChild(notif_body);
     
         const holder = document.getElementById("notif-holder");
-        if(holder.children.length < 6)
+        if(holder.children.length < 3)
             holder.appendChild(notif);
     },
 

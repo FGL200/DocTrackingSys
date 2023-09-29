@@ -23,7 +23,7 @@ class Student extends CI_Controller{
         $required_fields = "";
         $input_columns = array('stud_fname',  'stud_lname');
         foreach($this->input->post() as $key=>$val) {
-            if(in_array($key, $input_columns) && trim(empty($val))) {
+            if(in_array($key, $input_columns) && empty(trim($val))) {
                 if(!empty(trim($required_fields))) $required_fields .= ",";
                 $required_fields .= $key;
             }
@@ -119,8 +119,8 @@ class Student extends CI_Controller{
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
         $newData = $this->__id_link_Student_Record__($result);
-        //$nData = $this->count_remarks($newData);
-        echo json_encode(['result' => $newData]);
+        $nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $nData]);
     }
 
     /**
@@ -138,8 +138,8 @@ class Student extends CI_Controller{
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
         $newData = $this->__id_link_Student_Record__($result);
-        //$nData = $this->count_remarks($newData);
-        echo json_encode(['result' => $newData]);
+        $nData = $this->count_remarks($newData);
+        echo json_encode(['result' => $nData]);
     }
 
     /**
@@ -192,16 +192,28 @@ class Student extends CI_Controller{
         
         foreach($this->user_docs as $doc) {
             $path = "";
+
             if(!empty($doc_set)) $doc_set .= ", ";
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
             
-            $path =  !empty($_FILES['doc_scan_' . $doc]['name']) ? $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : "";
+            if($this->input->post('doc_scan_' . $doc)) {
+                $path = $this->input->post('doc_scan_' . $doc);
+            }
             
-            
+            if(!empty($_FILES['doc_scan_' . $doc]['name'])) {
+                $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
+            }
+
+            if(empty($path) || !empty($_FILES['doc_scan_' . $doc]['name'])) {  
+                $old_path = $this->get_doc_dir($stud_rec_id, $doc);
+                if($old_path) $this->delete_Image($old_path);
+            }
+             
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
         $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+        $this->stud->update_data('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
         /** End Update `doc` table  */
 
 
@@ -251,13 +263,13 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    private function upload_file(Array $file, int $stud_rec_id) {
+    private function upload_file(Array $file, int $stud_rec_ID) {
         if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
 
         
         $path = "uploads/";
 
-        $new_file_name = md5(rand() * $stud_rec_id);
+        $new_file_name = md5((rand() * $stud_rec_ID));
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
@@ -268,20 +280,38 @@ class Student extends CI_Controller{
 
     }
     
-    private function get_doc($stud_id, $key) {
-        foreach($this->stud->stud_docs($stud_id) as $k=>$v) {
-            if($key == $k) {
-                return json_decode($v)['dir'];
-            }
+    
+    /**
+     * Get the doc dir of the student
+     * @param int $stud_id
+     * @param String $key 
+     */
+    private function get_doc_dir(int $stud_id, String $key) {
+        return json_decode($this->stud->stud_docs($stud_id)[0][$key])->dir;
+    }
+
+    /**
+     * Delete the uploaded file
+     * @param String $dir
+     */
+    private function delete_Image(String $dir) {
+        if(!empty($dir) && is_file("C:\\xampp\\htdocs\\DocTrackingSys\\".$dir)) {
+            return unlink("c:/xampp/htdocs/DocTrackingSys/".$dir);
         }
     }
 
-    private function count_remarks($data) {
+    /**
+     * Count the remarks of the student 
+     * @param Array $data
+     * 
+     */
+    private function count_remarks(Array $data) {
         if(count($data) < 1) return;
         $fixed_data = [];
-
+        
         foreach($data as $row) {
-            if($row['Remarks'] != "--") $row['Remarks'] = count(json_decode($row['Remarks']));
+            $row += ['array_remarks' => $row['Remarks']];
+            if($row['Remarks'] != "--" && !empty($row['Remarks'])) $row['Remarks'] = count(json_decode($row['Remarks']));
             array_push($fixed_data, $row);
         }
 
