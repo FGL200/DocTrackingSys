@@ -51,13 +51,15 @@ const VIEW_RECORD = {
             function () { $(this).css("background-color", "#fff"); }
         );
         if(CONST_ROLE !== 'V'){
+            if(CONST_ROLE !== 'V'){
             span.on("click", function (e) {
-                e.preventDefault();
-                $(this).remove();
-                if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
-                    $("#remarks-holder").html("No Remarks");
-                VIEW_RECORD.__loadRemarksVal__();
-            });
+                    e.preventDefault();
+                    $(this).remove();
+                    if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
+                        $("#remarks-holder").html("No Remarks");
+                    VIEW_RECORD.__loadRemarksVal__();
+                });
+        }
         }
         // -- END --
 
@@ -79,6 +81,7 @@ const VIEW_RECORD = {
      * @param {Object} data the object data of the strudent records
      */
     loadStudentRecords : function (data) {
+        console.log(data);
         console.log(data);
         // Get all the keys in the json data
         let keys = Object.keys(data);
@@ -146,12 +149,18 @@ const VIEW_RECORD = {
                 $(inFile + " ~ button.btnFile").prop('disabled', false);
 
                 // If there are no dir fetched, diable buttons
+                // If there are no dir fetched, diable buttons
                 if(doc.dir !== ''){
+                    set_BtnFile(inFile + " ~ button.btnFile", false);
+                    set_BtnView(inFile+ " ~ button.viewScan", false);
                     set_BtnFile(inFile + " ~ button.btnFile", false);
                     set_BtnView(inFile+ " ~ button.viewScan", false);
                 }
             }
 
+            // Fetched directories cannot be saved in input file tag
+            // The follwing lines will fetch all the dir with values
+            // and save is as an object to' __old_DIRS__' variable 
             // Fetched directories cannot be saved in input file tag
             // The follwing lines will fetch all the dir with values
             // and save is as an object to' __old_DIRS__' variable 
@@ -163,16 +172,20 @@ const VIEW_RECORD = {
 
         // After fetching all the remarks, validate each remark if they belong to the remark categories,
         // otherwise, save the remark to `__remarkOther__` which is the other remarks.
+        // After fetching all the remarks, validate each remark if they belong to the remark categories,
+        // otherwise, save the remark to `__remarkOther__` which is the other remarks.
         value.forEach(currValue => {
             if(this.__remarksCategories__.includes(currValue)) this.__remarksValue__.push(currValue);
             else this.__remarksOther__ = currValue;
         });
         
         // The next line will then add all the fetched remarks to the remark holder
+        // The next line will then add all the fetched remarks to the remark holder
         for(v in this.__remarksValue__){
             this.addRemark(value[v]);
         }
 
+        // If other remarks has value, show the other remark field and put the appropriate value
         // If other remarks has value, show the other remark field and put the appropriate value
         if(this.__remarksOther__ !== '') {
             $("#_remarksValue_other").val(this.__remarksOther__);
@@ -195,7 +208,7 @@ const VIEW_RECORD = {
     /** The current remarks added in the remarks holder */
     __remarksValue__ : [],
 
-    /** When invoking __addRemark()__, place the apropriate remarks in the holder aswell as on the __remarksValue__ variable */
+    /** When invoking ____addRemark()____, place the apropriate remarks in the holder aswell as on the __remarksValue__ variable */
     __loadRemarksVal__ : function () {
         VIEW_RECORD.__remarksValue__ = [];
         $("#remarks-holder").find('span').each(function (e) {
@@ -205,6 +218,9 @@ const VIEW_RECORD = {
 }
 
 
+// This line will add an event listener 'change' to every input file element present within the form
+// NOTE that every input file tag are hidden (not visible) by default
+// The btnFile will act as their button to trigger their clicks so user will be able to upload images
 // This line will add an event listener 'change' to every input file element present within the form
 // NOTE that every input file tag are hidden (not visible) by default
 // The btnFile will act as their button to trigger their clicks so user will be able to upload images
@@ -220,6 +236,9 @@ $(".scaned-doc").each(function(e){
     });
 });
 
+// The following lines will listen to every checkbox present within the form
+// When checked, enable the btnFile
+// When unchecked, prompt the user and confirm to remove the directory of the saved image before
 // The following lines will listen to every checkbox present within the form
 // When checked, enable the btnFile
 // When unchecked, prompt the user and confirm to remove the directory of the saved image before
@@ -249,8 +268,28 @@ $(".cb-doc").each(function(e){
             }
         }
         $(inFile).prop('disabled', !$(this).prop('checked'));
+
+        // Prompts user and perform the correct action when checkbox is ticked
+        $(btnFile).prop('disabled', !checked);
+        if(!checked){ 
+            if($(btnFile).hasClass('btn-danger')){
+                if(confirm("Are you sure you want to replace/remove the scaned document?")){
+                    $(inFile).val('');
+                    $(inFile).prop('disabled', true);
+                    set_BtnView(btnView, true);
+                    set_BtnFile(btnFile, true);
+                    $(btnFile).prop('disabled', true);
+                }else{
+                    $(this).prop('checked', true);
+                    $(btnFile).prop('disabled', !$(this).prop('checked'));
+                }
+            }
+        }
+        $(inFile).prop('disabled', !$(this).prop('checked'));
     });
 });
+
+
 
 // The btnView are the buttons for viewing images
 // Enable or disable btnViews through this function
@@ -277,6 +316,7 @@ function set_BtnFile(btnFile, success) {
     }else{
         $(btnFile).removeClass("btn-success");
         $(btnFile).addClass("btn-danger");
+        $(btnFile).find('span').text('-');
         $(btnFile).find('span').text('-');
         $(btnFile + ' ~ button.viewScan').prop('disabled', false);
     }
@@ -316,12 +356,14 @@ function changeFileDir (inFile){
 }
 
 // This function is for closing the view modal (insides are the animation logic)
+// This function is for closing the view modal (insides are the animation logic)
 $("#close-image-viewer-container").on("click", function(){
     $("#image-viewer-container").addClass('fade-out');
     $("#image-viewer-holder").addClass('pop-out');
     $("image-viewer").html('');
 });
 
+// This function is for opening and closing of view modal (insides are the animation logic)
 // This function is for opening and closing of view modal (insides are the animation logic)
 $("#image-viewer-container").on("animationend", function(){
     if($(this).hasClass('fade-in')){
@@ -339,11 +381,17 @@ $("#image-viewer-holder").on("animationend", function(){
     else $(this).removeClass('pop-out');
 }); 
 
+
+// The following lines are triggered when the user wants to view the uploaded image
 // The following lines are triggered when the user wants to view the uploaded image
 $(".viewScan").on("click", function(){
 
     // Check id there is an image already uploaded (from `__old_DIRS__`)
+
+    // Check id there is an image already uploaded (from `__old_DIRS__`)
     if(!$(this).hasClass('imgLoaded')){
+
+        // Get the id, name, and, source of clicked buttons
 
         // Get the id, name, and, source of clicked buttons
         const id = $(this).attr('id');
@@ -351,7 +399,11 @@ $(".viewScan").on("click", function(){
         const source = document.getElementById("doc_scan_" + name).files[0];
 
         // This line is for reading the uploaded file ()
+        // This line is for reading the uploaded file ()
         const reader = new FileReader();
+
+        // If the file is successfully loaded,
+        // set the source of the image to the file
 
         // If the file is successfully loaded,
         // set the source of the image to the file

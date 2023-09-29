@@ -195,7 +195,7 @@ class Student extends CI_Controller{
 
             if(!empty($doc_set)) $doc_set .= ", ";
 
-            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '    ';
+            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
             
             if($this->input->post('doc_scan_' . $doc)) {
                 $path = $this->input->post('doc_scan_' . $doc);
@@ -205,13 +205,11 @@ class Student extends CI_Controller{
                 $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
             }
 
-            if(empty($path) && !empty($_FILES['doc_scan_' . $doc]['name'])) {  
+            if(empty($path) || !empty($_FILES['doc_scan_' . $doc]['name'])) {  
                 $old_path = $this->get_doc_dir($stud_rec_id, $doc);
                 if($old_path) $this->delete_Image($old_path);
             }
-            
-            
-                        
+             
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
         $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
