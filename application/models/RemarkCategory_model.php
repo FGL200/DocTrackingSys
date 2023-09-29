@@ -8,7 +8,7 @@ class RemarkCategory_model extends CI_Model {
     }
 
     public function getCategories(){
-        $query = "SELECT category FROM remark_categories";
+        $query = "SELECT `category` FROM remark_categories ORDER BY `id` DESC";
         return ($this->db->query($query)->result_array());
     }
 }

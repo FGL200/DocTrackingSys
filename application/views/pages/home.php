@@ -43,7 +43,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table('student/record/by/<?=$_SESSION['uid'];?>')"><i class="fa-solid fa-rectangle-list"></i> Added by Me</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table(route='student/record/by/<?=$_SESSION['uid'];?>',form_data=null,_order='desc')"><i class="fa-solid fa-rectangle-list"></i> Added by Me</a></li>
                 </ul>
             </div>
             <?php }?>

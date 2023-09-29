@@ -1,15 +1,29 @@
 const VIEW_RECORD = {
-
     /**
      * Update data
      */
     onSubmit: function () {
         const form = new FormData(document.getElementById("update-record-form"));
         form.append("remarks", VIEW_RECORD.__remarksValue__);
+        
+       
 
         form.forEach((val, key)=>{
-            console.log({key, val});
+            if(form.get(key)?.name == "")form.delete(key)
+            console.log(form.get(key))
         });
+        
+        fetch(base_url + 'student/record/update', {
+            method : 'post',
+            body :  form
+        })
+        .then(respose=>respose.json())
+        .then(data=>{
+            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!!`, "g");
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     },
 
     /**
@@ -195,6 +209,16 @@ $(".scaned-doc").each(function(e){
         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
         if($(this).val()) { set_BtnView(btnView, false); }
         set_BtnFile(btnFile);
+
+        VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+            if(VIEW_RECORD.__old_DIRS__[index][`${$(this).attr('id')}`] == "") {
+                VIEW_RECORD.__old_DIRS__[index][`value`] = e.target.files[0];
+                
+            }
+            
+        })
+
+        console.log(VIEW_RECORD.__old_DIRS__)
     });
 });
 
@@ -265,7 +289,7 @@ function set_BtnFile(btnFile, success) {
 function changeFileDir (inFile){
     const btnFile = `${inFile} ~ button.btnFile`;
     const btnView = `${inFile} ~ button.viewScan`;
-
+    const key = $(inFile).attr("id");
     // Check if there is already an image uploaded, and confirm if the user wants
     // to replace or remove the saved file
     if($(btnFile).hasClass('btn-danger')) {
@@ -275,6 +299,18 @@ function changeFileDir (inFile){
             $(btnFile).addClass('btn-success');
             $(btnFile).find('span').text('+');
             set_BtnView(btnView, true);
+
+            
+            
+            VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+                
+                if(VIEW_RECORD.__old_DIRS__[index][key]) {
+                    VIEW_RECORD.__old_DIRS__[index][key] = "";
+                }
+                
+            })
+
+            console.log(VIEW_RECORD.__old_DIRS__)
         }
     }else{
         $(inFile).trigger('click');

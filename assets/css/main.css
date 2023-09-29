@@ -27,6 +27,13 @@ main {
     background-color: #EBF5FB;
 }
 
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
+
+
 .color-b{color: var(--color_blue) !important;}
 .color-y{color: var(--color_yellow) !important;}
 .color-w{color: var(--color_white) !important;}

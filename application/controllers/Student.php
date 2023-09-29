@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Student extends CI_Controller{
+
+    private $user_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
     
     public function __construct()
     {
@@ -57,9 +59,7 @@ class Student extends CI_Controller{
 
         /** Inserting data in `doc` table  */
 
-        $docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
-
-        foreach($docs as $doc) {
+        foreach($this->user_docs as $doc) {
             if(!empty($data)) $data .= ", ";
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
@@ -114,33 +114,12 @@ class Student extends CI_Controller{
     }
 
     /**
-     * Upload student documents
-     * @param Array $file
-     * @param Integer $stud_rec_id
-     */
-    public function upload_file(Array $file, int$stud_rec_id) {
-        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
-
-        
-        $path = "uploads/";
-
-        $new_file_name = md5(time().$stud_rec_id);
-        $file_ext = explode('.',$file['name']);
-        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
-
-        $new_file_path = $path . $file['name'];
-
-        $data = $new_file_path;
-        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
-
-    }
-
-    /**
      * Get basic student record info along with their remarks
      */
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
         $newData = $this->__id_link_Student_Record__($result);
+        //$nData = $this->count_remarks($newData);
         echo json_encode(['result' => $newData]);
     }
 
@@ -159,6 +138,7 @@ class Student extends CI_Controller{
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
         $newData = $this->__id_link_Student_Record__($result);
+        //$nData = $this->count_remarks($newData);
         echo json_encode(['result' => $newData]);
     }
 
@@ -171,6 +151,76 @@ class Student extends CI_Controller{
     }
 
 
+    public function update_Student_Records() {
+        $data = $this->input->post();
+
+        $stud_rec_id = intval($data['stud_rec_id']);
+
+        $stud_set = "";
+
+        /** Update the `stud_rec` table */
+        foreach($data as $key=>$val) {
+            if(strstr($key, 'stud_')&& !strstr($key, 'rec_id')) {
+                if(!empty($stud_set)) $stud_set .= ",";
+                $stud_set.="`$key` = '$val'";
+            }
+        }
+        $this->db->trans_begin();
+
+        $this->stud->update_data('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
+        
+        /** End Update the `stud_rec` table */
+
+        $remark_value = "`value` = '[";
+       
+        $remarks = [];
+        
+        if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
+        if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
+
+        foreach($remarks as &$r) {
+            $r = "\"$r\""; // Enclose string to " "
+        } 
+
+        $remark_value .= implode(',', $remarks);
+        $remark_value .= "]'";
+
+        $this->stud->update_data('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
+        
+        /** Update `doc` table  */
+        $doc_set = "";
+        
+        foreach($this->user_docs as $doc) {
+            $path = "";
+            if(!empty($doc_set)) $doc_set .= ", ";
+
+            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
+            
+            $path =  !empty($_FILES['doc_scan_' . $doc]['name']) ? $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : "";
+            
+            
+            $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
+        }
+        $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+        /** End Update `doc` table  */
+
+
+        if($this->db->trans_status() === TRUE) {
+            $this->db->trans_commit();
+            echo json_encode(array(
+                "status" => "success"
+            ));
+        } else {
+            $this->db->trans_rollback()();
+            echo json_encode(array(
+                "status" => "error"
+            ));
+
+            exit();
+        }
+
+
+    }
 
 
     /** PRIVATE FUNCTIONS */
@@ -187,12 +237,54 @@ class Student extends CI_Controller{
             $newRow = [];
             foreach($row as $key => $val){
                 if($key == 'Record ID')
-                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'">'.$val.'</a>';
+                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).' " target="_blank">'.$val.'</a>';
                 else
                     $newRow[$key] = $val;
             }
             array_push($fixedData, $newRow);
         }
         return $fixedData;
+    }
+
+    /**
+     * Upload student documents
+     * @param Array $file
+     * @param Integer $stud_rec_id
+     */
+    private function upload_file(Array $file, int $stud_rec_id) {
+        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
+
+        
+        $path = "uploads/";
+
+        $new_file_name = md5(rand() * $stud_rec_id);
+        $file_ext = explode('.',$file['name']);
+        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+
+        $new_file_path = $path . $file['name'];
+
+        $data = $new_file_path;
+        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
+
+    }
+    
+    private function get_doc($stud_id, $key) {
+        foreach($this->stud->stud_docs($stud_id) as $k=>$v) {
+            if($key == $k) {
+                return json_decode($v)['dir'];
+            }
+        }
+    }
+
+    private function count_remarks($data) {
+        if(count($data) < 1) return;
+        $fixed_data = [];
+
+        foreach($data as $row) {
+            if($row['Remarks'] != "--") $row['Remarks'] = count(json_decode($row['Remarks']));
+            array_push($fixed_data, $row);
+        }
+
+        return $fixed_data;
     }
 }
