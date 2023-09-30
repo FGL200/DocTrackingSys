@@ -229,52 +229,97 @@ $(".scaned-doc").each(function(e){
 // The following lines will listen to every checkbox present within the form
 // When checked, enable the btnFile
 // When unchecked, prompt the user and confirm to remove the directory of the saved image before
-$(".cb-doc").each(function(e){
-    $(this).on("change", function(e){
+$(".cb-doc").on("change", function(e){
+    // Gets the corresponding button to the checkbox ticked
+    const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
+    const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
+    const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+    const checked = $(this).prop('checked');
 
-        // Gets the corresponding button to the checkbox ticked
-        const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
-        const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-        const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-        const checked = $(this).prop('checked');
-
-        // Prompts user and perform the correct action when checkbox is ticked
-        $(btnFile).prop('disabled', !checked);
-        if(!checked){ 
-            if($(btnFile).hasClass('btn-danger')){
-                if(confirm("Are you sure you want to replace/remove the scaned document?")){
-                    $(inFile).val('');
-                    $(inFile).prop('disabled', true);
-                    set_BtnView(btnView, true);
-                    set_BtnFile(btnFile, true);
-                    $(btnFile).prop('disabled', true);
-                }else{
-                    $(this).prop('checked', true);
-                    $(btnFile).prop('disabled', !$(this).prop('checked'));
-                }
+    // Prompts user and perform the correct action when checkbox is ticked
+    $(btnFile).prop('disabled', !checked);
+    if(!checked){ 
+        if($(btnFile).hasClass('btn-danger')){
+            if(confirm("Are you sure you want to replace/remove the scaned document?")){
+                $(inFile).val('');
+                $(inFile).prop('disabled', true);
+                set_BtnView(btnView, true);
+                set_BtnFile(btnFile, true);
+                $(btnFile).prop('disabled', true);
+            }else{
+                $(this).prop('checked', true);
+                $(btnFile).prop('disabled', !$(this).prop('checked'));
             }
         }
-        $(inFile).prop('disabled', !$(this).prop('checked'));
+    }
+    $(inFile).prop('disabled', !$(this).prop('checked'));
 
-        // Prompts user and perform the correct action when checkbox is ticked
-        $(btnFile).prop('disabled', !checked);
-        if(!checked){ 
-            if($(btnFile).hasClass('btn-danger')){
-                if(confirm("Are you sure you want to replace/remove the scaned document?")){
-                    $(inFile).val('');
-                    $(inFile).prop('disabled', true);
-                    set_BtnView(btnView, true);
-                    set_BtnFile(btnFile, true);
-                    $(btnFile).prop('disabled', true);
-                }else{
-                    $(this).prop('checked', true);
-                    $(btnFile).prop('disabled', !$(this).prop('checked'));
-                }
+    // Prompts user and perform the correct action when checkbox is ticked
+    $(btnFile).prop('disabled', !checked);
+    if(!checked){ 
+        if($(btnFile).hasClass('btn-danger')){
+            if(confirm("Are you sure you want to replace/remove the scaned document?")){
+                $(inFile).val('');
+                $(inFile).prop('disabled', true);
+                set_BtnView(btnView, true);
+                set_BtnFile(btnFile, true);
+                $(btnFile).prop('disabled', true);
+            }else{
+                $(this).prop('checked', true);
+                $(btnFile).prop('disabled', !$(this).prop('checked'));
             }
         }
-        $(inFile).prop('disabled', !$(this).prop('checked'));
-    });
+    }
+    $(inFile).prop('disabled', !$(this).prop('checked'));
 });
+
+// $(".cb-doc").each(function(e){
+//     $(this).on("change", function(e){
+
+//         // Gets the corresponding button to the checkbox ticked
+//         const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
+//         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
+//         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
+//         const checked = $(this).prop('checked');
+
+//         // Prompts user and perform the correct action when checkbox is ticked
+//         $(btnFile).prop('disabled', !checked);
+//         if(!checked){ 
+//             if($(btnFile).hasClass('btn-danger')){
+//                 console.log("TOMES")
+//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
+//                     $(inFile).val('');
+//                     $(inFile).prop('disabled', true);
+//                     set_BtnView(btnView, true);
+//                     set_BtnFile(btnFile, true);
+//                     $(btnFile).prop('disabled', true);
+//                 }else{
+//                     $(this).prop('checked', true);
+//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
+//                 }
+//             }
+//         }
+//         $(inFile).prop('disabled', !$(this).prop('checked'));
+
+//         // Prompts user and perform the correct action when checkbox is ticked
+//         $(btnFile).prop('disabled', !checked);
+//         if(!checked){ 
+//             if($(btnFile).hasClass('btn-danger')){
+//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
+//                     $(inFile).val('');
+//                     $(inFile).prop('disabled', true);
+//                     set_BtnView(btnView, true);
+//                     set_BtnFile(btnFile, true);
+//                     $(btnFile).prop('disabled', true);
+//                 }else{
+//                     $(this).prop('checked', true);
+//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
+//                 }
+//             }
+//         }
+//         $(inFile).prop('disabled', !$(this).prop('checked'));
+//     });
+// });
 
 
 

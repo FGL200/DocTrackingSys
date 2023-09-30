@@ -76,6 +76,11 @@ class Page extends CI_Controller {
     }
 
     public function record($record_id){
+        if(!$this->session->has_userdata('uid')){
+            redirect(''); // para yung url is http://localhost/DocTrackingSys' 
+            // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
+            return;
+        }
 
         // $rec_id - is the integer value
         // $record_id - is the string value

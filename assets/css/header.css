@@ -1,7 +1,10 @@
 
 header {
-    background-color: var(--color_blue);
+    /* background-color: var(--color_blue); */
     /* border-bottom: 2px solid var(--color_yellow); */
+    background: linear-gradient(90deg, #265798ef, #4c78b3ef, #265798ef)
+    
+      
 }
 
 header > * {

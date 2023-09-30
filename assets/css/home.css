@@ -17,11 +17,9 @@ input[type="checkbox"]:checked{
     font-size: small;
 } */
 
-/* #dataTable{
-    
-    overflow-x: auto;
-    width: 100%;
-} */
+#dataTable{
+    margin: .5rem;
+}
 
 #dataTable_wrapper{
     overflow-x: scroll  ;

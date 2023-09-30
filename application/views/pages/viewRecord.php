@@ -7,8 +7,11 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
         <div class="doc-header d-flex justify-content-between align-items-center flex-wrap p-2 gap-2">
             <button class="btn btn-danger" type="button" onclick="MAIN.goto(base_url)">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
+            <?php if ($role === 'A') {?>
+            <button class="btn btn-danger" type="button" id="delete-record-btn" onclick="if(confirm('Are you sure you want to remove `<?=$record_id?>` from master list?')) console.log('REMOVE DATA!');"><i class="fa-solid fa-trash"></i> Delete</button>
+            <?php }?>
             <?php if ($role !== 'V') {?>
-            <button class="btn btn-success" type="button" id="update-record-btn" onclick="VIEW_RECORD.onSubmit()">Save</button>
+            <button class="btn btn-success" type="button" id="update-record-btn" onclick="VIEW_RECORD.onSubmit()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
             <?php }?>
             <input type="hidden" name="stud_rec_id" value="<?=$record_id?>">
         </div>
@@ -56,7 +59,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <button type="button" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
                     <?php }?>
                 </span>
-                <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1);">
+                <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1); max-width: 300px;">
                     No Remarks
                 </span>
                 
