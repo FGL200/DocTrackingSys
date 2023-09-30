@@ -164,7 +164,7 @@ nav {
 
 #notif-holder{
     position: fixed;
-    min-width: 15%;
+    width: 300px;
     top: 110px;
     height: calc(100vh - 110px);
     right: 0;

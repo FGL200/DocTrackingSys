@@ -16,9 +16,8 @@ const LOGIN = {
         })
         .catch(err=>{
             console.log(err);
-            MAIN.addNotif("Error Occured!", err, "r");
+            MAIN.addNotif('Server error', "Something went wrong while logging-in", "r");
         })
     }
 }
-
 $("#btn-login").on("click", LOGIN.login);

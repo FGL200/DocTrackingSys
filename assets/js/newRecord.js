@@ -320,7 +320,7 @@ const RECORD = {
                 })
                 .catch(err => {
                     console.log(err);
-                    MAIN.addNotif("Error occured!", err, "r");;
+                    MAIN.addNotif('Server error', "Something went wrong while adding new record", "r");
                 });
             })
         },

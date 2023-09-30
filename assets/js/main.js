@@ -54,6 +54,10 @@ const MAIN = {
         const holder = document.getElementById("notif-holder");
         if(holder.children.length < 3)
             holder.appendChild(notif);
+        else{
+            holder.children[0].remove()
+            holder.appendChild(notif);
+        }
     },
 
     /**

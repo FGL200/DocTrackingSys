@@ -24,10 +24,10 @@ const VIEW_RECORD = {
         })
         .then(respose=>respose.json())
         .then(data=>{
-            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!!`, "g");
+            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
         })
         .catch(err=>{
-            console.log(err);
+            MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
         })
     },
 
@@ -221,31 +221,15 @@ const VIEW_RECORD = {
 // This line will add an event listener 'change' to every input file element present within the form
 // NOTE that every input file tag are hidden (not visible) by default
 // The btnFile will act as their button to trigger their clicks so user will be able to upload images
-// This line will add an event listener 'change' to every input file element present within the form
-// NOTE that every input file tag are hidden (not visible) by default
-// The btnFile will act as their button to trigger their clicks so user will be able to upload images
 $(".scaned-doc").each(function(e){
     $(this).on("change", function(e){
         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
         if($(this).val()) { set_BtnView(btnView, false); }
         set_BtnFile(btnFile);
-
-        VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
-            if(VIEW_RECORD.__old_DIRS__[index][`${$(this).attr('id')}`] == "") {
-                VIEW_RECORD.__old_DIRS__[index][`value`] = e.target.files[0];
-                
-            }
-            
-        })
-
-        console.log(VIEW_RECORD.__old_DIRS__)
     });
 });
 
-// The following lines will listen to every checkbox present within the form
-// When checked, enable the btnFile
-// When unchecked, prompt the user and confirm to remove the directory of the saved image before
 // The following lines will listen to every checkbox present within the form
 // When checked, enable the btnFile
 // When unchecked, prompt the user and confirm to remove the directory of the saved image before
@@ -344,9 +328,6 @@ function changeFileDir (inFile){
             $(btnFile).addClass('btn-success');
             $(btnFile).find('span').text('+');
             set_BtnView(btnView, true);
-
-            
-
             
             // make the dir value as empty if the answer in  confirm is `yes`
             VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{

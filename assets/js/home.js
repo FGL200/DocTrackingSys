@@ -19,7 +19,7 @@ const HOME = {
                 })
                 .catch(err => {
                     console.log(data);
-                    MAIN.addNotif('Error occured!', err, 'r');
+                    MAIN.addNotif('Server error', "Something went wrong while running quick search", 'r');
                 })
         },
 
@@ -261,7 +261,7 @@ const HOME = {
                         }
                     })
                     .catch(err => {
-                        MAIN.addNotif("Error Occured!", "Something went wrong", "r");
+                        MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");
                         console.log(err);
                     })
             })
@@ -344,7 +344,7 @@ const HOME = {
 
             })
             .catch(err => {
-                MAIN.addNotif('Error occured!', err, 'r');
+                MAIN.addNotif('Server error', "Something went wrong while loading table", 'r');
                 console.error(err);
             })
         }
