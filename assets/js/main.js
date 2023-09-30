@@ -6,6 +6,8 @@ const MAIN = {
      * @param {*} flag 
      */
     addNotif : function(title, message, flag){
+        const holder = document.getElementById("notif-holder");
+
         let tColor = 
             (flag == "g") ? "#2ECC71" :
             (flag == "r") ? "#E74C3C" :
@@ -35,6 +37,9 @@ const MAIN = {
         // notif_close.style.backgroundColor = bColor;
         notif_close.addEventListener("click", ()=>{
             notif.remove();
+            if(holder.children.length == 0){
+                holder.classList.add("hide");
+            }
         });
         
         const notif_title = document.createElement("section");
@@ -51,9 +56,11 @@ const MAIN = {
         notif.appendChild(notif_title);
         notif.appendChild(notif_body);
     
-        const holder = document.getElementById("notif-holder");
-        if(holder.children.length < 3)
+        
+        if(holder.children.length < 3){
+            holder.classList.remove("hide");
             holder.appendChild(notif);
+        }
         else{
             holder.children[0].remove()
             holder.appendChild(notif);

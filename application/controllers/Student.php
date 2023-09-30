@@ -249,7 +249,7 @@ class Student extends CI_Controller{
             $newRow = [];
             foreach($row as $key => $val){
                 if($key == 'Record ID')
-                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).' " target="_blank">'.$val.'</a>';
+                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'">'.$val.'</a>';
                 else
                     $newRow[$key] = $val;
             }
@@ -300,6 +300,11 @@ class Student extends CI_Controller{
         }
     }
 
+
+    private function to_Hoverable(int $count, String $value) {
+        return "<div title='{$value}' style='cursor: context-menu; text-align: center;'>{$count}</div>";
+    }
+
     /**
      * Count the remarks of the student 
      * @param Array $data
@@ -310,8 +315,12 @@ class Student extends CI_Controller{
         $fixed_data = [];
         
         foreach($data as $row) {
-            $row += ['array_remarks' => $row['Remarks']];
-            if($row['Remarks'] != "--" && !empty($row['Remarks'])) $row['Remarks'] = count(json_decode($row['Remarks']));
+            
+            if(empty($row['Remarks'])) $row['Remarks'] = $this->to_Hoverable(0, "No remarks");
+            else if($row['Remarks'] === '--') $row['Remarks'] = $this->to_Hoverable(0, "No remarks");
+            else if(str_contains($row['Remarks'], "[")) $row['Remarks'] = $this->to_Hoverable(count(json_decode($row['Remarks'])), $row['Remarks']); 
+            else $row['Remarks'] = $this->to_Hoverable(1, $row['Remarks']);
+
             array_push($fixed_data, $row);
         }
 

@@ -18,7 +18,7 @@ const HOME = {
                     console.log(data);
                 })
                 .catch(err => {
-                    console.log(data);
+                    console.log(err);
                     MAIN.addNotif('Server error', "Something went wrong while running quick search", 'r');
                 })
         },

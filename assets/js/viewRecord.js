@@ -27,6 +27,7 @@ const VIEW_RECORD = {
             MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
         })
         .catch(err=>{
+            console.log(err);
             MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
         })
     },

@@ -20,4 +20,4 @@ const LOGIN = {
         })
     }
 }
-$("#btn-login").on("click", LOGIN.login);
+$("#btn-login").on("click", LOGIN.login);   
