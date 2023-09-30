@@ -29,18 +29,18 @@ class Student_model extends CI_Model{
         $query = "SELECT 
                         LPAD(sr.id, 6, '0') `Record ID`,
                         CASE 
-                            WHEN sr.stud_id IS NULL THEN '--'
+                            WHEN sr.stud_id IS NULL OR sr.stud_id = '' THEN '--'
                             ELSE sr.stud_id
                         END `Student ID`,
                         sr.stud_lname `Last Name`,
                         sr.stud_mname `Middle Name`,
                         sr.stud_fname `First Name`,
                         CASE 
-                            WHEN sr.stud_sfx IS NULL THEN '--'
+                            WHEN sr.stud_sfx IS NULL OR sr.stud_sfx = '' THEN '--'
                             ELSE sr.stud_sfx 
                         END `Suffix`,
                         CASE 
-                            WHEN rm.value = '[]' THEN '--'
+                            WHEN rm.value = '[]' OR rm.value = '' THEN '--'
                             ELSE rm.value
                         END `Remarks`
                     FROM stud_rec sr
@@ -127,7 +127,7 @@ class Student_model extends CI_Model{
         $sql = "SELECT 
             LPAD(sr.id, 6, '0') `Record ID`,
             CASE 
-                WHEN sr.stud_id IS NULL THEN '--'
+                WHEN sr.stud_id IS NULL OR sr.stud_id = '' THEN '--'
                 ELSE sr.stud_id
             END `Student ID`,
             sr.stud_lname `Last Name`,
@@ -137,11 +137,11 @@ class Student_model extends CI_Model{
             END `Middle Name`,
             sr.stud_fname `First Name`,
             CASE 
-                WHEN sr.stud_sfx IS NULL THEN '--'
+                WHEN sr.stud_sfx IS NULL OR sr.stud_sfx = '' THEN '--'
                 ELSE sr.stud_sfx
             END `Suffix`,
             CASE 
-                WHEN rm.value = '[]' THEN '--'
+                WHEN rm.value = '[]' OR rm.value = '' THEN '--'
                 ELSE rm.value
             END `Remarks`
         FROM stud_rec sr

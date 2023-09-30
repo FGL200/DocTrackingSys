@@ -224,14 +224,14 @@ const HOME = {
                         <b>User Information</b>
                     </span>
                     <span>
-                        <input type="text" name="uname" class="card p-2" placeholder="Username" style="width: 100%;">
-                    </span>
-                    <span>
                         <select name="role" class="card p-2" style="width: 100%;">
                             <option value="V">Viewer</option>
                             <option value="E">Encoder</option>
                             <option value="A">Admin</option>
                         </select>
+                    </span>
+                    <span>
+                        <input type="text" name="uname" class="card p-2" placeholder="Username" style="width: 100%;" autofocus>
                     </span>
                     <span>
                         <p class="card p-2" style="width: 100%; color: grey; background-color: #E5E5E5;">Password is set to 'default'</p>

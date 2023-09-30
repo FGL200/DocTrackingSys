@@ -3,7 +3,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
 ?>
 
 <main class="d-flex justify-content-center align-items-center">
-    <<?=($role !== 'V') ? 'form' : 'div'?> id="update-record-form" class="d-flex flex-column" method="post">
+    <<?=($role !== 'V') ? 'form' : 'div'?> id="update-record-form" class="d-flex flex-column m-1" method="post">
         <div class="doc-header d-flex justify-content-between align-items-center flex-wrap p-2 gap-2">
             <button class="btn btn-danger" type="button" onclick="MAIN.goto(base_url)">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
@@ -47,13 +47,16 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary">Other</button>
                 </span>
                 <?php }?>
-                <span id="_remarksValue_other_holder" class="d-flex flex-grow-1 gap-2 hide">
-                    <input class="card p-1 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Enter Remarks" <?=($role==='V')?'disabled':''?>  />
+                <span id="_remarksValue_other_holder" class="d-flex align-items-center justify-content-between flex-grow-1 gap-2 hide">
+                    <div class="d-flex flex-column">
+                        <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
+                        <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" <?=($role==='V')?'disabled':''?>  />
+                    </div>
                     <?php if ($role !== 'V') {?>
                     <button type="button" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
                     <?php }?>
                 </span>
-                <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1); max-width: 380px;">
+                <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1);">
                     No Remarks
                 </span>
                 

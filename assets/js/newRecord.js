@@ -42,8 +42,11 @@ const RECORD = {
                         </div>
                         <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary">Other</button>
                     </span>
-                    <span id="_remarksValue_other_holder" class="d-flex flex-grow-1 gap-2 hide">
-                        <input class="card p-1 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Enter Remarks" />
+                    <span id="_remarksValue_other_holder" class="d-flex align-items-center justify-content-between flex-grow-1 gap-2 hide">
+                        <div class="d-flex flex-column">
+                            <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
+                            <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" />
+                        </div>
                         <button type="button" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
                     </span>
                     <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1); max-width: 380px;">
@@ -326,6 +329,21 @@ const RECORD = {
         },
 
         init_onFileChange: function () {
+
+            $("#_remarksValue_other").on("keydown", function(e){
+                const val = $(this).val();
+                if(e.key === '"')  {
+                    e.preventDefault();
+                    MAIN.addNotif("Error", "That character is not allowed", "r");
+                }
+                if(e.key === "Enter") {
+                    e.preventDefault();
+                    if(val !== '') {
+                        RECORD.NEW.addRemark(val.toUpperCase());
+                        $(this).val('')
+                    }
+                }
+            });
             
             $(".scaned-doc").each(function(e){
                 $(this).on("change", function(e){

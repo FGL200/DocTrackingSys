@@ -52,15 +52,13 @@ const VIEW_RECORD = {
             function () { $(this).css("background-color", "#fff"); }
         );
         if(CONST_ROLE !== 'V'){
-            if(CONST_ROLE !== 'V'){
             span.on("click", function (e) {
-                    e.preventDefault();
-                    $(this).remove();
-                    if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
-                        $("#remarks-holder").html("No Remarks");
-                    VIEW_RECORD.__loadRemarksVal__();
-                });
-        }
+                e.preventDefault();
+                $(this).remove();
+                if ($("#remarks-holder").html().replaceAll(' ', '').replaceAll(/(\r\n|\n|\r)/gm, "") === "")
+                    $("#remarks-holder").html("No Remarks");
+                VIEW_RECORD.__loadRemarksVal__();
+            });
         }
         // -- END --
 
@@ -82,8 +80,6 @@ const VIEW_RECORD = {
      * @param {Object} data the object data of the strudent records
      */
     loadStudentRecords : function (data) {
-        console.log(data);
-        console.log(data);
         // Get all the keys in the json data
         let keys = Object.keys(data);
 
@@ -96,7 +92,10 @@ const VIEW_RECORD = {
             // If the key is 'value', the value of this object must be a remarks section
             if(keys[i] === 'value'){
                 if(data[keys[i]] == "") continue;
-                value = JSON.parse(data[keys[i]]);
+
+                if(data[keys[i]].includes('[')) value = JSON.parse(data[keys[i]]);
+                else value.push(data[keys[i]]);
+
                 continue;
             }
 
@@ -149,8 +148,7 @@ const VIEW_RECORD = {
                 $(inFile).prop('disabled', false);
                 $(inFile + " ~ button.btnFile").prop('disabled', false);
 
-                // If there are no dir fetched, diable buttons
-                // If there are no dir fetched, diable buttons
+                // If there are no dir fetched, disable buttons
                 if(doc.dir !== ''){
                     set_BtnFile(inFile + " ~ button.btnFile", false);
                     set_BtnView(inFile+ " ~ button.viewScan", false);
@@ -161,37 +159,34 @@ const VIEW_RECORD = {
 
             // Fetched directories cannot be saved in input file tag
             // The follwing lines will fetch all the dir with values
-            // and save is as an object to' __old_DIRS__' variable 
-            // Fetched directories cannot be saved in input file tag
-            // The follwing lines will fetch all the dir with values
-            // and save is as an object to' __old_DIRS__' variable 
+            // and save is as an object to' __old_DIRS__' variable
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
             VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}" : "${docDir}"}`));
 
         }
 
-        // After fetching all the remarks, validate each remark if they belong to the remark categories,
-        // otherwise, save the remark to `__remarkOther__` which is the other remarks.
-        // After fetching all the remarks, validate each remark if they belong to the remark categories,
-        // otherwise, save the remark to `__remarkOther__` which is the other remarks.
-        value.forEach(currValue => {
-            if(this.__remarksCategories__.includes(currValue)) this.__remarksValue__.push(currValue);
-            else this.__remarksOther__ = currValue;
+        value.forEach(remarks=>{
+            this.addRemark(remarks);
         });
-        
-        // The next line will then add all the fetched remarks to the remark holder
-        // The next line will then add all the fetched remarks to the remark holder
-        for(v in this.__remarksValue__){
-            this.addRemark(value[v]);
-        }
 
-        // If other remarks has value, show the other remark field and put the appropriate value
-        // If other remarks has value, show the other remark field and put the appropriate value
-        if(this.__remarksOther__ !== '') {
-            $("#_remarksValue_other").val(this.__remarksOther__);
-            $("#_remarksValue_other_holder").removeClass("hide");
-        }
+        // // After fetching all the remarks, validate each remark if they belong to the remark categories,
+        // // otherwise, save the remark to `__remarkOther__` which is the other remarks.
+        // value.forEach(currValue => {
+        //     if(this.__remarksCategories__.includes(currValue)) this.__remarksValue__.push(currValue);
+        //     else this.__remarksOther__ = currValue;
+        // });
+        
+        // // The next line will then add all the fetched remarks to the remark holder
+        // for(v in this.__remarksValue__){
+        //     this.addRemark(value[v]);
+        // }
+
+        // // If other remarks has value, show the other remark field and put the appropriate value
+        // if(this.__remarksOther__ !== '') {
+        //     $("#_remarksValue_other").val(this.__remarksOther__);
+        //     $("#_remarksValue_other_holder").removeClass("hide");
+        // }
     },
 
     /** PRIVATES */
@@ -374,15 +369,10 @@ $("#image-viewer-holder").on("animationend", function(){
 
 
 // The following lines are triggered when the user wants to view the uploaded image
-// The following lines are triggered when the user wants to view the uploaded image
 $(".viewScan").on("click", function(){
 
     // Check id there is an image already uploaded (from `__old_DIRS__`)
-
-    // Check id there is an image already uploaded (from `__old_DIRS__`)
     if(!$(this).hasClass('imgLoaded')){
-
-        // Get the id, name, and, source of clicked buttons
 
         // Get the id, name, and, source of clicked buttons
         const id = $(this).attr('id');
@@ -390,12 +380,8 @@ $(".viewScan").on("click", function(){
         const source = document.getElementById("doc_scan_" + name).files[0];
 
         // This line is for reading the uploaded file ()
-        // This line is for reading the uploaded file ()
         const reader = new FileReader();
-
-        // If the file is successfully loaded,
-        // set the source of the image to the file
-
+        
         // If the file is successfully loaded,
         // set the source of the image to the file
         reader.addEventListener('load', ()=>{
@@ -409,6 +395,22 @@ $(".viewScan").on("click", function(){
             $("#image-viewer-container").removeClass('hide');
             $("#image-viewer-container").addClass('fade-in');
             $("#image-viewer-holder").addClass('pop-in');
+        }
+    }
+});
+
+$("#_remarksValue_other").on("keydown", function(e){
+    const val = $(this).val();
+    if(e.key === '"' || e.key === "'")  {
+        e.preventDefault();
+        $(this).val(val + `\\'` );
+        // MAIN.addNotif("Error", "That character is not allowed", "r");
+    }
+    if(e.key === "Enter") {
+        e.preventDefault();
+        if(val !== '') {
+            VIEW_RECORD.addRemark(val.toUpperCase());
+            $(this).val('')
         }
     }
 });
