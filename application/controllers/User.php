@@ -56,17 +56,55 @@ class User extends CI_Controller{
 
     public function get_All_Viewers(){
         $my_user_id = $this->input->post()['uid'];
-        echo json_encode(['result' => $this->user->get_All_Viewers($my_user_id)]);  
+        // echo json_encode(['result' => $this->user->get_All_Viewers($my_user_id)]);  
+        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Viewers($my_user_id));
+        echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Encoders(){
         $my_user_id = $this->input->post()['uid'];
-        echo json_encode(['result' => $this->user->get_All_Encoders($my_user_id)]);  
+        // echo json_encode(['result' => $this->user->get_All_Encoders($my_user_id)]);  
+        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Encoders($my_user_id));
+        echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Users(){
         $my_user_id = $this->input->post()['uid'];
-        echo json_encode(['result' => $this->user->get_All_Users($my_user_id)]);  
+        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Users($my_user_id));
+        echo json_encode(['result' => $nData]);  
+    }
+
+
+
+    private function __change_User_To_Proper_Format_(Array $data) {
+        $fixedData = [];
+        foreach($data as $row){
+            $nRow = $row;
+            foreach($row as $key => $val){
+                if($key === "Role"){
+                    switch($val){
+                        case "V" : $nRow["Role"] = "Viewer"; break;
+                        case "E" : $nRow["Role"] = "Encoder"; break;
+                        case "A" : $nRow["Role"] = "Admin"; break;
+                        default : break;
+                    }
+                }
+                if($key === "Status"){
+                    switch(intval($val)){
+                        case 1 : $nRow["Status"] = "<span class='user-status user-active'> Active </span>"; break;
+                        case 0 : $nRow["Status"] = "<span class='user-status user-inactive'> Inactive </span>"; break;
+                        default : break;
+                    }
+                }
+                if($key === "User ID"){
+                    $id = str_pad($nRow["User ID"], 6, "0", STR_PAD_LEFT);
+                    // $nRow["<input type='checkbox' id='cb-select-all-user'/> User ID"] = "<input type='checkbox' class='cb-select-user' /> <a href='#' class='user_id_link'>{$id}</a>";
+                    $nRow["User ID"] = "<a href='#' class='user_id_link'>{$id}</a>";
+                }
+            }
+            array_push($fixedData, $nRow);
+        }
+        return $fixedData;
     }
 
 

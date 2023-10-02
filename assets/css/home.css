@@ -22,7 +22,7 @@ input[type="checkbox"]:checked{
 }
 
 #dataTable_wrapper{
-    overflow-x: scroll  ;
+    overflow-x: auto;
     padding: 1rem;
     background-color: #F8F9F9;
     box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.1);
@@ -38,7 +38,8 @@ input[type="checkbox"]:checked{
     background-color: rgba(0,0,0,0.02) !important;
 }
 
-.stud_rec_id_link{
+.stud_rec_id_link,
+.user_id_link{
     color: #76a9ec;
     text-decoration: none;
     font-weight: bold;
@@ -48,3 +49,33 @@ main {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+
+
+
+.user-status {
+    font-size: small;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.user-status.user-active {
+    border: 1px solid #30CD73;
+    color: #30CD73;
+    background-color: #EAFAF1;
+}
+
+.user-status.user-inactive {
+    border: 1px solid #E74D3E;
+    color: #E74D3E;
+    background-color: #FDEDEC;
+}
+
+
+
+/* .stud-rec-remarks{
+    font-size: small;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #E74D3E;
+} */

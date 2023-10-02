@@ -40,16 +40,16 @@ const RECORD = {
                             </button>
                             <ul id="remarks-category" class="dropdown-menu"></ul>
                         </div>
-                        <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary">Other</button>
+                        <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                     </span>
-                    <span id="_remarksValue_other_holder" class="d-flex align-items-center justify-content-between flex-grow-1 gap-2 hide">
-                        <div class="d-flex flex-column">
-                            <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
+                    <span id="_remarksValue_other_holder" class="d-flex flex-column flex-grow-1 gap-2 hide">
+                        <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
+                        <div class="d-flex justify-content-between gap-2">
                             <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" />
+                            <button type="button" class="btn btn-danger align-self-center" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <button type="button" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
                     </span>
-                    <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1); max-width: 380px;">
+                    <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card align-self-center" style="background-color: rgba(0,0,0,0.1); max-width: 380px;">
                         No Remarks
                     </span>
                     

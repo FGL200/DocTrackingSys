@@ -29,14 +29,23 @@ class Student_model extends CI_Model{
         $query = "SELECT 
                         LPAD(sr.id, 6, '0') `Record ID`,
                         CASE 
-                            WHEN sr.stud_id IS NULL OR sr.stud_id = '' THEN '--'
+                            WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
                             ELSE sr.stud_id
                         END `Student ID`,
-                        sr.stud_lname `Last Name`,
-                        sr.stud_mname `Middle Name`,
-                        sr.stud_fname `First Name`,
                         CASE 
-                            WHEN sr.stud_sfx IS NULL OR sr.stud_sfx = '' THEN '--'
+                            WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+                            ELSE sr.stud_lname 
+                        END `Last Name`,
+                        CASE 
+                            WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+                            ELSE sr.stud_mname 
+                        END `Middle Name`,
+                        CASE 
+                            WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+                            ELSE sr.stud_fname 
+                        END `First Name`,
+                        CASE 
+                            WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
                             ELSE sr.stud_sfx 
                         END `Suffix`,
                         CASE 
@@ -127,18 +136,24 @@ class Student_model extends CI_Model{
         $sql = "SELECT 
             LPAD(sr.id, 6, '0') `Record ID`,
             CASE 
-                WHEN sr.stud_id IS NULL OR sr.stud_id = '' THEN '--'
+                WHEN sr.stud_id IS NULL OR COALESCE(sr.stud_id, '') = '' THEN '--'
                 ELSE sr.stud_id
             END `Student ID`,
-            sr.stud_lname `Last Name`,
             CASE 
-                WHEN sr.stud_mname IS NULL THEN '--'
-                ELSE sr.stud_mname
+                WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+                ELSE sr.stud_lname 
+            END `Last Name`,
+            CASE 
+                WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+                ELSE sr.stud_mname 
             END `Middle Name`,
-            sr.stud_fname `First Name`,
             CASE 
-                WHEN sr.stud_sfx IS NULL OR sr.stud_sfx = '' THEN '--'
-                ELSE sr.stud_sfx
+                WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+                ELSE sr.stud_fname 
+            END `First Name`,
+            CASE 
+                WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
+                ELSE sr.stud_sfx 
             END `Suffix`,
             CASE 
                 WHEN rm.value = '[]' OR rm.value = '' THEN '--'

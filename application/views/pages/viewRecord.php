@@ -5,7 +5,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
 <main class="d-flex justify-content-center align-items-center">
     <<?=($role !== 'V') ? 'form' : 'div'?> id="update-record-form" class="d-flex flex-column m-1" method="post">
         <div class="doc-header d-flex justify-content-between align-items-center flex-wrap p-2 gap-2">
-            <button class="btn btn-danger" type="button" onclick="MAIN.goto(base_url)">Back</button>
+            <button class="btn btn-danger" type="button" onclick="window.close();">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
             <?php if ($role === 'A') {?>
             <button class="btn btn-danger" type="button" id="delete-record-btn" onclick="if(confirm('Are you sure you want to remove `<?=$record_id?>` from master list?')) console.log('REMOVE DATA!');"><i class="fa-solid fa-trash"></i> Delete</button>
@@ -47,21 +47,35 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                         </button>
                         <ul id="remarks-category" class="dropdown-menu"></ul>
                     </div>
-                    <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary">Other</button>
+                    <button type="button" onclick="$('#_remarksValue_other_holder').removeClass('hide'); $('#_remarksValue_other').focus();" class="btn btn-primary"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 </span>
                 <?php }?>
-                <span id="_remarksValue_other_holder" class="d-flex align-items-center justify-content-between flex-grow-1 gap-2 hide">
+                
+
+                <span id="_remarksValue_other_holder" class="d-flex flex-column flex-grow-1 gap-2 hide">
+                    <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
+                    <div class="d-flex justify-content-between gap-2">
+                        <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" />
+                        <button type="button" class="btn btn-danger align-self-center" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </span>
+                <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card align-self-center" style="background-color: rgba(0,0,0,0.1); max-width: 380px;">
+                    No Remarks
+                </span>
+
+                <!-- NOT SURE PA KUNG AALISIN KO NA TO TALAGA -->
+                <!-- <span id="_remarksValue_other_holder" class="d-flex align-items-center justify-content-between flex-grow-1 gap-2 hide">
                     <div class="d-flex flex-column">
                         <label for="_remarksValue_other" style="font-size: 10pt; text-align: center; color: rgba(0,0,0,0.5);">Press 'Enter' to add to list</label>
-                        <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" <?=($role==='V')?'disabled':''?>  />
+                        <input class="card p-2 flex-grow-1" type="text" name="_remarksValue_other" id="_remarksValue_other" placeholder="Add Remarks" <? //=($role==='V')?'disabled':''?>  />
                     </div>
-                    <?php if ($role !== 'V') {?>
+                    <?php // if ($role !== 'V') {?>
                     <button type="button" onclick="$('#_remarksValue_other_holder').addClass('hide'); $('#_remarksValue_other').val('');" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
-                    <?php }?>
+                    <?php // }?>
                 </span>
                 <span id="remarks-holder" class="d-flex flex-row flex-wrap gap-1 p-1 card" style="background-color: rgba(0,0,0,0.1); max-width: 300px;">
                     No Remarks
-                </span>
+                </span> -->
                 
             </section>
             <section class="d-flex flex-column flex-grow-1 gap-1 card p-2 m-2">

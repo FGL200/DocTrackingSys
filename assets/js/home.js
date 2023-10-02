@@ -296,6 +296,15 @@ const HOME = {
          */
         load_dashboard_table: async function (route = null, form_data = null, _order = 'asc') {
             if (!route) return;
+
+            // Add the loading page
+            if ($.fn.DataTable.isDataTable('#dataTable')) {
+                $('#dataTable').DataTable().destroy();
+                $('#dataTable').html("");
+            }
+            $('#dataTable').addClass('loading');
+
+
             await fetch(`${base_url}${route}`,{
                 method : form_data ? 'post' : 'get',
                 body : form_data ? form_data : null
@@ -304,12 +313,7 @@ const HOME = {
             .then((apiResponse) => {
 
                 $('#dataTable').removeClass('loading');
-
-                if ($.fn.DataTable.isDataTable('#dataTable')) {
-                    $('#dataTable').DataTable().destroy();
-                    $('#dataTable').html("");
-                }
-
+                
                 const N_TABLE = apiResponse.result;
                 if (N_TABLE) {
                     MAIN.addNotif("Table loaded", N_TABLE.length + " item(s) found", "g");

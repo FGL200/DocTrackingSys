@@ -249,7 +249,7 @@ class Student extends CI_Controller{
             $newRow = [];
             foreach($row as $key => $val){
                 if($key == 'Record ID')
-                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'">'.$val.'</a>';
+                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'" target="_blank">'.$val.'</a>';
                 else
                     $newRow[$key] = $val;
             }
@@ -302,7 +302,7 @@ class Student extends CI_Controller{
 
 
     private function to_Hoverable(int $count, String $value) {
-        return "<div title='{$value}' style='cursor: context-menu; text-align: center;'>{$count}</div>";
+        return "<div title='{$value}' style='cursor: context-menu;'>".($count===0?"--":$count." Remarks")."</div>";
     }
 
     /**

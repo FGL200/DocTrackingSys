@@ -55,7 +55,7 @@ class User_model extends CI_Model
         $query = "  SELECT 
                         `id` `User ID`,
                         `uname` `Username`,
-                        `active` `Active`,
+                        `active` `Status`,
                         `role` `Role`
                     FROM `user`
                     WHERE `role` = 'V'
@@ -69,7 +69,7 @@ class User_model extends CI_Model
         $query = "  SELECT 
                         `id` `User ID`,
                         `uname` `Username`,
-                        `active` `Active`,
+                        `active` `Status`,
                         `role` `Role`
                     FROM `user`
                     WHERE `role` = 'E'
@@ -83,7 +83,7 @@ class User_model extends CI_Model
         $query = "  SELECT 
                         `id` `User ID`,
                         `uname` `Username`,
-                        `active` `Active`,
+                        `active` `Status`,
                         `role` `Role`
                     FROM `user`
                     WHERE `id` <> '{$my_user_id}'
