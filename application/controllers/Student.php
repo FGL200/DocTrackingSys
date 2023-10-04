@@ -118,8 +118,9 @@ class Student extends CI_Controller{
      */
     public function get_StudentRecords_With_Remarks() {
         $result = $this->stud->get_StudentRecords_With_Remarks();
-        $newData = $this->__id_link_Student_Record__($result);
-        $nData = $this->count_remarks($newData);
+        $nData = $this->to_Id_Link_Student_Record($result);
+        $nData = $this->count_remarks($nData);
+        $nData = $this->to_grouped_style($nData);
         echo json_encode(['result' => $nData]);
     }
 
@@ -137,8 +138,9 @@ class Student extends CI_Controller{
      */
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
-        $newData = $this->__id_link_Student_Record__($result);
-        $nData = $this->count_remarks($newData);
+        $nData = $this->to_Id_Link_Student_Record($result);
+        $nData = $this->count_remarks($nData);
+        $nData = $this->to_grouped_style($nData);
         echo json_encode(['result' => $nData]);
     }
 
@@ -150,7 +152,9 @@ class Student extends CI_Controller{
         echo json_encode(['result' => $this->stud->get_Last_Record_By_User($user_id)]);  
     }
 
-
+    /**
+     * Update Student record
+     */
     public function update_Student_Records() {
         $data = $this->input->post();
 
@@ -235,14 +239,56 @@ class Student extends CI_Controller{
     }
 
 
+
     /** PRIVATE FUNCTIONS */
+
+    private function to_grouped_style(Array $stud_records){
+        $nRecord = [];
+        foreach ($stud_records as $row){
+            $nRow = [];
+            $lname = "";
+            $fname = "";
+            $mname = "";
+            $sfx = "";      
+            $cdate = "";    // created date
+            $cby = "";      // created by
+            $udate = "";    // updated date
+            $uby = "";      // updated by
+            $remarks = "";
+            foreach($row as $key => $val){
+                if($key === 'Record ID') $nRow[$key] = $val;
+                if($key === "Last Name" && !empty($val) && $val !== "--") $lname = $val;
+                if($key === "First Name" && !empty($val) && $val !== "--") $fname = $val;
+                if($key === "Middle Name" && !empty($val) && $val !== "--") $mname = $val;
+                if($key === "Suffix" && !empty($val) && $val !== "--") $sfx = $val;
+                if($key === "cdate") {
+                    $tempDate = intval(date_diff(new DateTime(), new DateTime($val))->format("%a"));
+                    $cdate = ($tempDate == 0) ? "today" : (($tempDate == 1) ? "yesterday" : "{$tempDate} days ago") ;
+                }
+                if($key === "cby") $cby = $val;
+                if($key === "udate") {
+                    $tempDate = intval(date_diff(new DateTime(), new DateTime($val))->format("%a"));
+                    $udate = ($tempDate == 0) ? "today" : (($tempDate == 1) ? "yesterday" : "{$tempDate} days ago") ;
+                }
+                if($key === "uby") $uby = $val;
+                if($key === "Remarks") $remarks = $val;
+            }
+            $nRow['Student'] = 
+                "<div class='fw-bold' style='white-space: nowrap;'>{$lname}, {$fname} {$mname} {$sfx}</div> 
+                 <div style='font-size: small; margin-left: 10px;'>Created by <i>{$cby}</i> {$cdate}
+                 ".(($uby == "") ? "" : ", updated by <i>{$uby}</i> {$udate}")." </div>";
+            $nRow["Remarks"] = $remarks;
+            array_push($nRecord, $nRow);
+        }
+        return $nRecord;
+    }
 
 
     /**
      * Change the `Record ID` column to a link in `stud_rec` table
      * @param Array $array query result 
      */
-    private function __id_link_Student_Record__(Array $array) {
+    private function to_Id_Link_Student_Record(Array $array) {
         if(count($array) === 0) return [];
         $fixedData = [];
         foreach ($array as $row){
@@ -280,7 +326,6 @@ class Student extends CI_Controller{
 
     }
     
-    
     /**
      * Get the doc dir of the student
      * @param int $stud_id
@@ -300,9 +345,14 @@ class Student extends CI_Controller{
         }
     }
 
-
+    /**
+     * Change `Remarks` column to hoverable panel
+     * @param int $count number of remarks
+     * @param String $value remarks values
+     */
     private function to_Hoverable(int $count, String $value) {
-        return "<div title='{$value}' style='cursor: context-menu;'>".($count===0?"--":$count." Remarks")."</div>";
+        return "<div class='stud_rec-status stud_rec-".($count===0?"success":"danger")."' title='{$value}' style='cursor: context-menu; text-align: center;'>"
+                .($count===0?"No Remarks":$count." Remarks")."</div>";
     }
 
     /**

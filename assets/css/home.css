@@ -18,7 +18,7 @@ input[type="checkbox"]:checked{
 } */
 
 #dataTable{
-    margin: .5rem;
+    /* margin: .5rem; */
 }
 
 #dataTable_wrapper{
@@ -26,8 +26,8 @@ input[type="checkbox"]:checked{
     padding: 1rem;
     background-color: #F8F9F9;
     box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.1);
-    margin-bottom: 1rem;
-    margin: 1rem;
+    margin-bottom: 3rem;
+    /* margin: 1rem; */
 }
 
 #remarks-holder > span {
@@ -53,22 +53,25 @@ main {
 
 
 
-.user-status {
+.user-status,
+.stud_rec-status {
     font-size: small;
     padding: 5px;
     border-radius: 5px;
 }
 
-.user-status.user-active {
+.user-status.user-active,
+.stud_rec-status.stud_rec-success {
     border: 1px solid #30CD73;
     color: #30CD73;
     background-color: #EAFAF1;
 }
 
-.user-status.user-inactive {
-    border: 1px solid #E74D3E;
-    color: #E74D3E;
-    background-color: #FDEDEC;
+.user-status.user-inactive,
+.stud_rec-status.stud_rec-danger {
+    border: 1px solid #F44336;
+    color: #F44336;
+    background-color: #FFEBEE;
 }
 
 

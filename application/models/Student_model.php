@@ -27,34 +27,56 @@ class Student_model extends CI_Model{
 
     public function get_StudentRecords_With_Remarks() {
         $query = "SELECT 
-                        LPAD(sr.id, 6, '0') `Record ID`,
-                        CASE 
-                            WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
-                            ELSE sr.stud_id
-                        END `Student ID`,
-                        CASE 
-                            WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
-                            ELSE sr.stud_lname 
-                        END `Last Name`,
-                        CASE 
-                            WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
-                            ELSE sr.stud_mname 
-                        END `Middle Name`,
-                        CASE 
-                            WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
-                            ELSE sr.stud_fname 
-                        END `First Name`,
-                        CASE 
-                            WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
-                            ELSE sr.stud_sfx 
-                        END `Suffix`,
-                        CASE 
-                            WHEN rm.value = '[]' OR rm.value = '' THEN '--'
-                            ELSE rm.value
-                        END `Remarks`
-                    FROM stud_rec sr
-                    LEFT JOIN remarks rm 
-                        ON rm.stud_rec_id = sr.id";
+                    LPAD(sr.id, 6, '0') `Record ID`,
+                    CASE 
+                        WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
+                        ELSE sr.stud_id
+                    END `Student ID`,
+                    CASE 
+                        WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+                        ELSE sr.stud_lname 
+                    END `Last Name`,
+                    CASE 
+                        WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+                        ELSE sr.stud_mname 
+                    END `Middle Name`,
+                    CASE 
+                        WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+                        ELSE sr.stud_fname 
+                    END `First Name`,
+                    CASE 
+                        WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
+                        ELSE sr.stud_sfx 
+                    END `Suffix`,
+                    CASE 
+                        WHEN rm.value = '[]' OR rm.value = '' THEN '--'
+                        ELSE rm.value
+                    END `Remarks`,
+                    sr.`updated_date` `udate`,
+                    sr.`created_date` `cdate`,
+                    u.`uname` `cby`,
+                    u2.`uname` `uby`
+                FROM stud_rec sr
+                INNER JOIN remarks rm 
+                    ON rm.stud_rec_id = sr.id
+                INNER JOIN `user` u
+                    ON u.`id` = sr.`created_by_uid`
+                LEFT JOIN `user` u2
+                    ON u2.`id` = sr.`updated_by_uid`
+                ORDER BY `Student ID`
+                    DESC
+                -- GROUP BY 
+                --     `Student ID`,
+                --     `Last Name`,
+                --     `Middle Name`,
+                --     `First Name`,
+                --     `Suffix`,
+                --     `Remarks`,
+                --     `udate`,
+                --     `cdate`,
+                --     `cby`,
+                --     `uby`
+                ";
         
         $fetch = $this->db->query($query);
 
@@ -134,35 +156,48 @@ class Student_model extends CI_Model{
     public function get_Student_Records_By($user_id)
     {
         $sql = "SELECT 
-            LPAD(sr.id, 6, '0') `Record ID`,
-            CASE 
-                WHEN sr.stud_id IS NULL OR COALESCE(sr.stud_id, '') = '' THEN '--'
-                ELSE sr.stud_id
-            END `Student ID`,
-            CASE 
-                WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
-                ELSE sr.stud_lname 
-            END `Last Name`,
-            CASE 
-                WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
-                ELSE sr.stud_mname 
-            END `Middle Name`,
-            CASE 
-                WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
-                ELSE sr.stud_fname 
-            END `First Name`,
-            CASE 
-                WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
-                ELSE sr.stud_sfx 
-            END `Suffix`,
-            CASE 
-                WHEN rm.value = '[]' OR rm.value = '' THEN '--'
-                ELSE rm.value
-            END `Remarks`
-        FROM stud_rec sr
-        LEFT JOIN remarks rm 
-            ON rm.stud_rec_id = sr.id
-        WHERE `sr`.`created_by_uid` = '{$user_id}'";
+                    LPAD(sr.id, 6, '0') `Record ID`,
+                    CASE 
+                        WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
+                        ELSE sr.stud_id
+                    END `Student ID`,
+                    CASE 
+                        WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+                        ELSE sr.stud_lname 
+                    END `Last Name`,
+                    CASE 
+                        WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+                        ELSE sr.stud_mname 
+                    END `Middle Name`,
+                    CASE 
+                        WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+                        ELSE sr.stud_fname 
+                    END `First Name`,
+                    CASE 
+                        WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
+                        ELSE sr.stud_sfx 
+                    END `Suffix`,
+                    CASE 
+                        WHEN rm.value = '[]' OR rm.value = '' THEN '--'
+                        ELSE rm.value
+                    END `Remarks`,
+                    sr.`updated_date` `udate`,
+                    sr.`created_date` `cdate`,
+                    u.`uname` `cby`,
+                    u2.`uname` `uby`
+                FROM stud_rec sr
+                INNER JOIN remarks rm 
+                    ON rm.stud_rec_id = sr.id
+                INNER JOIN `user` u
+                    ON u.`id` = sr.`created_by_uid`
+                LEFT JOIN `user` u2
+                    ON u2.`id` = sr.`updated_by_uid`
+                WHERE 
+                    `sr`.`created_by_uid` = '{$user_id}'
+                ORDER BY `Student ID`
+                    DESC
+        
+        ";
 
         $fetch = $this->db->query($sql);
 
