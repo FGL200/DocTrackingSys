@@ -1,10 +1,15 @@
 const VIEW_RECORD = {
+    __ROTATION__ : 0,
+
     /**
      * Update data
      */
     onSubmit: function () {
         const form = new FormData(document.getElementById("update-record-form"));
         form.append("remarks", VIEW_RECORD.__remarksValue__);
+
+        $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+        $("#update-record-btn").prop("disabled", true);
         
        
 
@@ -25,6 +30,8 @@ const VIEW_RECORD = {
         .then(respose=>respose.json())
         .then(data=>{
             MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
+            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
+            $("#update-record-btn").prop("disabled", false);
         })
         .catch(err=>{
             console.log(err);
@@ -392,6 +399,8 @@ $("#close-image-viewer-container").on("click", function(){
     $("#image-viewer-container").addClass('fade-out');
     $("#image-viewer-holder").addClass('pop-out');
     $("image-viewer").html('');
+    VIEW_RECORD.__ROTATION__ = 0;
+    updateRotateOfImg();
 });
 
 // This function is for opening and closing of view modal (insides are the animation logic)
@@ -459,6 +468,17 @@ $("#_remarksValue_other").on("keydown", function(e){
         }
     }
 });
+
+$("#rotate-img").on("click", function(e){
+    VIEW_RECORD.__ROTATION__ += 90;
+    if(VIEW_RECORD.__ROTATION__ >= 360) VIEW_RECORD.__ROTATION__ = 0;
+
+    updateRotateOfImg();
+});
+
+function updateRotateOfImg() {
+    $("#image-viewer").css({"transform" : `rotate(${VIEW_RECORD.__ROTATION__}deg)`});
+}
 
 async function loadRemarksCategories() {
     await fetch(base_url + 'api/categories')

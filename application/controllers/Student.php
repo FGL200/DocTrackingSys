@@ -243,6 +243,7 @@ class Student extends CI_Controller{
     /** PRIVATE FUNCTIONS */
 
     private function to_grouped_style(Array $stud_records){
+	//if(len($stud_records) == 0) return [];
         $nRecord = [];
         foreach ($stud_records as $row){
             $nRow = [];
