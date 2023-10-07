@@ -7,6 +7,7 @@ class Student extends CI_Controller{
     
     public function __construct()
     {
+        
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
         $this->load->model("student_model", "stud");
@@ -243,7 +244,6 @@ class Student extends CI_Controller{
     /** PRIVATE FUNCTIONS */
 
     private function to_grouped_style(Array $stud_records){
-	//if(len($stud_records) == 0) return [];
         $nRecord = [];
         foreach ($stud_records as $row){
             $nRow = [];
@@ -316,7 +316,7 @@ class Student extends CI_Controller{
         
         $path = "uploads/";
 
-        $new_file_name = md5((rand() * $stud_rec_ID));
+        $new_file_name = md5((uniqid($stud_rec_ID)));
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
@@ -362,7 +362,6 @@ class Student extends CI_Controller{
      * 
      */
     private function count_remarks(Array $data) {
-        if(count($data) < 1) return;
         $fixed_data = [];
         
         foreach($data as $row) {
