@@ -17,6 +17,7 @@ $route['student/record/(:num)'] = 'Student/get_Student_Records/$1';
 
 $route['student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
+$route['student/filter']['post'] = 'Student/filter_search';
 
 $route['api/categories'] = 'RemarkCategory/getCategories';
 

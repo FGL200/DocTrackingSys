@@ -276,6 +276,50 @@ class Student_model extends CI_Model{
         $result = $this->db->query($sql);
         return $this->db->affected_rows() ? true : false;
     }
+
+
+    public function filter_student($conditions) {
+        $sql = "
+        \rSELECT 
+        \r    `sr`.stud_id,
+        \r    `sr`.stud_lname,
+        \r    `sr`.stud_mname,
+        \r    `sr`.stud_fname,
+        \r    `sr`.stud_sfx,
+        \r    `d`.regi_form,
+        \r    `d`.good_moral,
+        \r    `d`.j_f137,
+        \r    `d`.s_f137,
+        \r    `d`.f138,
+        \r    `d`.birth_cert,
+        \r    `d`.tor,
+        \r    `d`.app_grad,
+        \r    `d`.cert_of_complete,
+        \r    `d`.req_clearance_form,
+        \r    `d`.req_credentials,
+        \r    `d`.hd_or_cert_of_trans,
+        \r    `rm`.value,
+        \r    `u`.id,
+        \r    sr.`updated_date` `udate`,
+        \r    sr.`created_date` `cdate`,
+        \r    u.`uname` `cby`,
+        \r    u2.`uname` `uby`
+        \rFROM  stud_rec as `sr`
+        \rJOIN remarks `rm`
+        \r    ON `rm`.stud_rec_id = `sr`.id
+        \rJOIN doc `d`
+        \r    ON `d`.stud_rec_id = `sr`.id 
+        \rLEFT JOIN user_info `ui`
+        \r    ON `ui`.user_id = `sr`.created_by_uid
+        \rLEFT JOIN user `u`
+        \r    ON `u`.id = `sr`.created_by_uid
+        \rLEFT JOIN user `u2`
+        \r    ON `u2`.id = `sr`.updated_by_uid
+        \rWHERE $conditions";
+
+        $result = $this->db->query($sql);
+        return $result->num_rows() ? ["sql" => $sql, "result" => $result->result_array()] : [];
+    }
                             
 
 

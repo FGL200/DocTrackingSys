@@ -34,12 +34,34 @@ const HOME = {
                     MAIN.addNotif("Search Failed!", "Filter is empty!", "r");
                 } else {
                     // ADD SEARCH METHOD HERE!
+                    const form = new FormData();
+                    const inputs_values = $("#search-filter-holder > span > span:last-of-type");
 
-
-
-                    // close modal
-                    MAIN.addNotif("Search in Progress!", "Filtering Tables...", "g");
-                    MODAL.close();
+                    for(let i = 0; i < inputs_values.length ; i++) {
+                        
+                        for(let j = 0; j < inputs_values[i].children.length; j++) {
+                            
+                            const id = inputs_values[i].children[j].id;
+                            const val = inputs_values[i].children[j].value;
+                            if(val.trim().length > 0) form.append(id, val);
+                            
+                        }
+                    }
+                    fetch("student/filter",{
+                        method : "POST",
+                        body : form
+                    })
+                    .then(resp => resp.json())
+                    .then(data=>{
+                        // close modal
+                        MAIN.addNotif("Search in Progress!", "Filtering Tables...", "g");
+                        MODAL.close();
+                        console.log(data)
+                    })
+                    .catch(err=>{
+                        MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");
+                        console.log(err);
+                    })
                 }
             });
         },
@@ -61,7 +83,7 @@ const HOME = {
                 </div>
                 <div id="search-filter-holder" class="d-flex flex-row flex-wrap gap-1 justify-content-center"></div>
             `);
-            MODAL.setFooter('<button class="btn btn-secondary">Search</button>');
+            MODAL.setFooter('<button id="search" class="btn btn-secondary">Search</button>');
             MODAL.setScript(`HOME.SEARCH.onSubmit();`)
 
             MODAL.open();

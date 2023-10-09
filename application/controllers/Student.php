@@ -239,7 +239,45 @@ class Student extends CI_Controller{
 
     }
 
+    public function filter_search() {
+        $columns = [];
+        $remarksColumns = [];
 
+        foreach($this->input->post() as $k=>$val) {
+            $nKey = preg_replace('/-/', '_', $k);
+            if(strstr($k, "student")) {
+                $nKey = preg_replace('/student/', 'stud', $nKey);
+                $arr = explode("_", $nKey, 2);
+                $colname = $arr[count($arr) - 1];
+                array_push($columns, "`sr`.$colname = '{$val}'");
+            }
+
+            if(strstr($k, "profile")) {
+                $arr = explode("_", $nKey);
+                $colname = $arr[count($arr) - 1];
+
+                if($colname == "uname") array_push($columns, "`u`.$colname = '{$val}'");
+                else if( $colname == "id") array_push($columns, "(`sr`.created_by_uid = '{$val}' OR `sr`.updated_by_uid = '{$val}')");
+                else array_push($columns, "`ui`.$colname = '{$val}'");
+               
+            }
+
+            if(strstr($k, "remarks")) {
+                $arr = explode("_", $nKey);
+                $colname = $arr[count($arr) - 1];
+                array_push($remarksColumns, "`rm`.value LIKE '%{$val}%'");
+                
+            }
+        }
+
+        $nColumns = implode(" AND \n", $columns);
+        $nRemarks = implode(" OR ", $remarksColumns);
+
+        $conditions =  $nColumns . ((!empty($nColumns) && !(empty($nRemarks))) ? " AND " : null) . (!empty($nRemarks) > 0 ? " (". $nRemarks .")" : null);
+        $student = $this->stud->filter_student($conditions);
+
+        echo json_encode($student);
+    }
 
     /** PRIVATE FUNCTIONS */
 
@@ -323,7 +361,7 @@ class Student extends CI_Controller{
         $new_file_path = $path . $file['name'];
 
         $data = $new_file_path;
-        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : null;
+        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : false;
 
     }
     
