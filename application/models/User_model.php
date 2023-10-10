@@ -42,10 +42,10 @@ class User_model extends CI_Model
                 FROM `user_info` as `i` 
                 JOIN `user` as `u` 
                     ON `u`.id = `i`.user_id
-                WHERE `u`.uname = '{$username}' AND `u`.pword = PASSWORD('{$password}') AND `u`.active = '1'
+                WHERE `u`.uname = ? AND `u`.pword = PASSWORD(?) AND `u`.active = '1'
                 LIMIT 1
                 ";
-        $fetch = $this->db->query($query);
+        $fetch = $this->db->query($query, array($username, $password));
 
         return $fetch->num_rows() ? $fetch->result_array()[0]  : [];
     }
@@ -86,9 +86,9 @@ class User_model extends CI_Model
                         `active` `Status`,
                         `role` `Role`
                     FROM `user`
-                    WHERE `id` <> '{$my_user_id}'
+                    WHERE `id` <> ?
         ";
-        $fetch = $this->db->query($query);
+        $fetch = $this->db->query($query, array($my_user_id));
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
 

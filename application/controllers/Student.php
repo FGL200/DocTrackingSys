@@ -47,7 +47,7 @@ class Student extends CI_Controller{
         }
         
 
-        $created_by_uid = $this->session->userdata('uid') ? $this->session->userdata('uid') : '1' ; //  user id for encoding
+        $created_by_uid = $this->session->userdata('uid') ?? '1' ; //  user id for encoding
 
         $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 
@@ -202,13 +202,9 @@ class Student extends CI_Controller{
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
             
-            if($this->input->post('doc_scan_' . $doc)) {
-                $path = $this->input->post('doc_scan_' . $doc);
-            }
+            $path = $this->input->post('doc_scan_' . $doc) ?? "";
             
-            if(!empty($_FILES['doc_scan_' . $doc]['name'])) {
-                $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
-            }
+            $path =  !empty($_FILES['doc_scan_' . $doc]['name']) ? $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id) : "";
 
             if(empty($path) || !empty($_FILES['doc_scan_' . $doc]['name'])) {  
                 $old_path = $this->get_doc_dir($stud_rec_id, $doc);
@@ -249,16 +245,16 @@ class Student extends CI_Controller{
                 $nKey = preg_replace('/student/', 'stud', $nKey);
                 $arr = explode("_", $nKey, 2);
                 $colname = $arr[count($arr) - 1];
-                array_push($columns, "`sr`.$colname = '{$val}'");
+                array_push($columns, "`sr`.$colname LIKE '%{$val}%'");
             }
 
             if(strstr($k, "profile")) {
                 $arr = explode("_", $nKey);
                 $colname = $arr[count($arr) - 1];
 
-                if($colname == "uname") array_push($columns, "`u`.$colname = '{$val}'");
+                if($colname == "uname") array_push($columns, "`u`.$colname LIKE '%{$val}%'");
                 else if( $colname == "id") array_push($columns, "(`sr`.created_by_uid = '{$val}' OR `sr`.updated_by_uid = '{$val}')");
-                else array_push($columns, "`ui`.$colname = '{$val}'");
+                else array_push($columns, "`ui`.$colname LIKE '%{$val}%'");
                
             }
 
@@ -275,9 +271,13 @@ class Student extends CI_Controller{
 
         $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks;
         
-        $student = $this->stud->filter_student($conditions);
+        $result = $this->stud->filter_student($conditions);
 
-        echo json_encode($student);
+        $student = $this->to_Id_Link_Student_Record($result['data']);
+        $student = $this->to_grouped_style($student);
+        $student = $this->count_remarks($student);
+
+        echo json_encode(['result'=>$student, 'sql' => $result['sql']]);
     }
 
     /** PRIVATE FUNCTIONS */
@@ -355,7 +355,7 @@ class Student extends CI_Controller{
         
         $path = "uploads/";
 
-        $new_file_name = date("Ymd_Hisu");
+        $new_file_name = date("Y-m-d_H:i:s:u");
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 

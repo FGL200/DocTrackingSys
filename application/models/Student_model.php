@@ -139,10 +139,10 @@ class Student_model extends CI_Model{
                 LEFT JOIN `doc` d
                     ON  d.stud_rec_id = sr.id
                 
-                WHERE sr.id = "'.$id.'"
+                WHERE sr.id = ?
         ';
 
-        $fetch = $this->db->query($query);
+        $fetch = $this->db->query($query, array($id));
 
         return $fetch->num_rows() ? $fetch->result_array()[0] : null;
     }
@@ -193,13 +193,13 @@ class Student_model extends CI_Model{
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
                 WHERE 
-                    `sr`.`created_by_uid` = '{$user_id}'
+                    `sr`.`created_by_uid` = ?
                 ORDER BY `Student ID`
                     DESC
         
         ";
 
-        $fetch = $this->db->query($sql);
+        $fetch = $this->db->query($sql, array($user_id));
 
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
@@ -281,25 +281,31 @@ class Student_model extends CI_Model{
     public function filter_student($conditions) {
         $sql = "
         \rSELECT 
-        \r    `sr`.stud_id,
-        \r    `sr`.stud_lname,
-        \r    `sr`.stud_mname,
-        \r    `sr`.stud_fname,
-        \r    `sr`.stud_sfx,
-        \r    `d`.regi_form,
-        \r    `d`.good_moral,
-        \r    `d`.j_f137,
-        \r    `d`.s_f137,
-        \r    `d`.f138,
-        \r    `d`.birth_cert,
-        \r    `d`.tor,
-        \r    `d`.app_grad,
-        \r    `d`.cert_of_complete,
-        \r    `d`.req_clearance_form,
-        \r    `d`.req_credentials,
-        \r    `d`.hd_or_cert_of_trans,
-        \r    `rm`.value,
-        \r    `u`.id,
+        \r    LPAD(sr.id, 6, '0') `Record ID`,
+        \r    CASE 
+        \r        WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
+        \r        ELSE sr.stud_id
+        \r    END `Student ID`,
+        \r    CASE 
+        \r        WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+        \r        ELSE sr.stud_lname 
+        \r    END `Last Name`,
+        \r    CASE 
+        \r        WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+        \r        ELSE sr.stud_mname 
+        \r    END `Middle Name`,
+        \r    CASE 
+        \r        WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+        \r        ELSE sr.stud_fname 
+        \r    END `First Name`,
+        \r    CASE 
+        \r        WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
+        \r        ELSE sr.stud_sfx 
+        \r    END `Suffix`,
+        \r    CASE 
+        \r        WHEN rm.value = '[]' OR rm.value = '' THEN '--'
+        \r        ELSE rm.value
+        \r    END `Remarks`,
         \r    sr.`updated_date` `udate`,
         \r    sr.`created_date` `cdate`,
         \r    u.`uname` `cby`,
@@ -318,7 +324,7 @@ class Student_model extends CI_Model{
         \rWHERE $conditions";
 
         $result = $this->db->query($sql);
-        return $result->num_rows() ? ["sql" => $sql, "result" => $result->result_array()] : [];
+        return $result->num_rows() ? ["sql" => $sql, "data" => $result->result_array()] : [];
     }
                             
 
