@@ -1,0 +1,42 @@
+#login-form,
+#login-form > div:nth-child(1) {
+    border-top-left-radius: 30px;
+}
+
+#login-form,
+#login-form > div:nth-child(2) {
+    border-bottom-right-radius: 30px;
+}
+
+#login-form > div:nth-child(1) {
+    background-color: white;
+    position: relative;
+}
+
+#login-form > div:nth-child(2) {
+    background-color: #265798;
+    color: white;
+    position: relative;
+}
+
+.note-item::before {
+    content: "* ";
+    margin-left: .5rem;
+}
+
+#welcome-text {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#welcome-text::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 30px;
+    /* border-radius: 100px; */
+    background-color: #FFC100;
+    left: -5px;
+    /* top: 12px; */
+}

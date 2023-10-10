@@ -1,0 +1,121 @@
+.fade-out {
+    animation: fade-out .5s linear forwards;
+}
+
+@keyframes fade-out {
+    0%{opacity: 1;}
+    100%{opacity: 0; display: none;}
+}
+
+.fade-in{
+    animation: fade-in .3s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+    0%{ opacity: 0; }
+    100%{ opacity: 1; }
+}
+
+
+
+
+
+.fade-in-slide-up {
+    animation: fade-in-slide-up .3s linear forwards;
+}
+
+@keyframes fade-in-slide-up {
+    0%{opacity: 0; transform: translateY(100px);}
+    100%{opacity: 1; transform: translateY(0);}
+}
+
+.fade-in-slide-down {
+    animation: fade-in-slide-down .3s linear forwards;
+}
+
+@keyframes fade-in-slide-down {
+    0%{opacity: 0; transform: translateY(-100px);}
+    100%{opacity: 1; transform: translateY(0);}
+}
+
+.fade-in-slide-right {
+    animation: fade-in-slide-right .3s linear forwards;
+}
+
+@keyframes fade-in-slide-right {
+    0%{opacity: 0; transform: translateX(100px);}
+    100%{opacity: 1; transform: translateX(0);}
+}
+
+.fade-in-slide-left {
+    animation: fade-in-slide-left .3s linear forwards;
+}
+
+@keyframes fade-in-slide-left {
+    0%{opacity: 0; transform: translateX(-100px);}
+    100%{opacity: 1; transform: translateX(0);}
+}
+
+
+
+.fade-out-slide-up {
+    animation: fade-out-slide-up .5s linear forwards;
+}
+
+@keyframes fade-out-slide-up {
+    0%{opacity: 1; transform: translateY(0);}
+    100%{display: none; opacity: 0; transform: translateY(100px);}
+}
+
+.fade-out-slide-down {
+    animation: fade-out-slide-down .5s linear forwards;
+}
+
+@keyframes fade-out-slide-down {
+    0%{opacity: 1; transform: translateY(0);}
+    100%{display: none; opacity: 0; transform: translateY(-100px);}
+}
+
+.fade-out-slide-right {
+    animation: fade-out-slide-right .5s linear forwards;
+}
+
+@keyframes fade-out-slide-right {
+    0%{opacity: 1; transform: translateX(0);}
+    100%{display: none; opacity: 0; transform: translateX(100px);}
+}
+
+.fade-out-slide-left {
+    animation: fade-out-slide-left .5s linear forwards;
+}
+
+@keyframes fade-out-slide-left {
+    0%{opacity: 1; transform: translateX(0);}
+    100%{display: none; opacity: 0; transform: translateX(-100px);}
+}
+
+
+
+
+
+
+
+.pop-in {
+    animation: pop-in .3s linear forwards;
+}
+
+@keyframes pop-in {
+    0%{transform: scale(0);}
+    50%{transform: scale(120%);}
+    100%{transform: scale(100%);}
+}
+
+.pop-out {
+    animation: pop-out .3s linear forwards;
+}
+
+@keyframes pop-out {
+    0%{transform: scale(100%);}
+    50%{transform: scale(120%);}
+    100%{transform: scale(0);}
+}

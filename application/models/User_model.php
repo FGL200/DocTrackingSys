@@ -92,12 +92,37 @@ class User_model extends CI_Model
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
 
+    public function get_user(Int $uid) {
+        if(!$this->__is_currently_logged_in__($uid)) return [];
+
+        $query = "SELECT
+                    u.`uname`,
+                    u.`active`,
+                    u.`role`,
+                    i.`fname`,
+                    i.`mname`,
+                    i.`lname`,
+                    i.`bday`,
+                    i.`gender`
+                FROM `user` u
+                INNER JOIN `user_info` i
+                    ON i.`user_id` = u.`id`
+                WHERE u.`id` = {$uid}
+        ";
+        $fetch = $this->db->query($query);
+        return $fetch->num_rows() ? $fetch->result_array() : [];
+    }
+
 
 
 
 
 
     /** PRIVATE FUNCTIONS */
+
+    private function __is_currently_logged_in__($uid){
+        return $uid === $this->sesstion->user_data('user')['uid'];
+    }
 
     private function user_Is_Admin($uid) {
         $query = "  SELECT 

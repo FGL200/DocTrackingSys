@@ -74,7 +74,10 @@ class User extends CI_Controller{
         echo json_encode(['result' => $nData]);  
     }
 
-
+    public function get_user(Int $uid) {
+        $nData = $this->user->get_user($uid);
+        echo json_encode(['result' => $nData]);  
+    }
 
     private function __change_User_To_Proper_Format_(Array $data) {
         $fixedData = [];

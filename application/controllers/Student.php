@@ -314,8 +314,8 @@ class Student extends CI_Controller{
             }
             $nRow['Student'] = 
                 "<div class='fw-bold' style='white-space: nowrap;'>{$lname}, {$fname} {$mname} {$sfx}</div> 
-                 <div style='font-size: small; margin-left: 10px;'>Created by <i>{$cby}</i> {$cdate}
-                 ".(($uby == "") ? "" : ", updated by <i>{$uby}</i> {$udate}")." </div>";
+                 <div style='font-size: small; margin-left: 10px;'>Created by <i>{$cby}</i> {$cdate}"
+                 .(($uby == "") ? "" : ", updated by <i>{$uby}</i> {$udate}")." </div>";
             $nRow["Remarks"] = $remarks;
             array_push($nRecord, $nRow);
         }

@@ -333,8 +333,6 @@ const HOME = {
             })
             .then(response => response.json())
             .then((apiResponse) => {
-
-                $('#dataTable').removeClass('loading');
                 
                 const N_TABLE = apiResponse.result;
                 if (N_TABLE) {
@@ -367,6 +365,8 @@ const HOME = {
                     MAIN.addNotif("Table loaded", "No data found");
                     $("#dataTable").html('');
                 }
+
+                $('#dataTable').removeClass('loading');
 
             })
             .catch(err => {

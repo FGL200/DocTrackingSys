@@ -17,12 +17,13 @@
     <link rel="stylesheet" href="<?=base_url('assets/third_party/fontawesome/css/all.min')?>.css">
 
     <!-- MDB5 -->
-    <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css   /mdb.min')?>.css">
+    <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css/mdb.min')?>.css">
 
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/css/main')?>.css">
     <link rel="stylesheet" href="<?=base_url('assets/css/header')?>.css">
     <link rel="stylesheet" href="<?=base_url('assets/css/footer')?>.css">
+    <link rel="stylesheet" href="<?=base_url('assets/css/animation')?>.css">
 
     <?php if(isset($css)) foreach($css as $c) {?>
     <link rel="stylesheet" href="<?=base_url("assets/css/$c")?>.css">
@@ -55,7 +56,7 @@
     <a href="<?=base_url()?>" class="d-flex flex-row gap-1 align-items-center p-1">
         <img src="<?=base_url('assets/images/rtu-logo')?>.png" alt="logo" width="45" height="45">
         <section class="pc sys-title color-w">
-            SRAC Document Tracker
+            SRAC Document Tracking System
         </section>
         <section class="phone sys-title color-w">
             Tracker

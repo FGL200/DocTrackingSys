@@ -32,7 +32,7 @@ class Page extends CI_Controller {
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> 'Login',
-            'css' => [],
+            'css' => ['login'],
             'hide_nav' => true
         ];
 
@@ -45,6 +45,25 @@ class Page extends CI_Controller {
         $this->loadPage("login", $data);
     }
 
+    public function dashboard() {
+        if(!$this->session->has_userdata('uid')){
+            redirect(''); // para yung url is http://localhost/DocTrackingSys' 
+            // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
+            return;
+        }
+
+        $data["header"] = [
+            "title" => "Dashboard",
+            "uid" => 0,
+            'hide_nav' => true
+        ];
+        $data["footer"] = [
+            "js" => ["alert"]
+        ];
+
+        $this->loadPage("dashboard", $data);
+    }
+
 
     public function home() {
         if(!$this->session->has_userdata('uid')){
@@ -55,7 +74,7 @@ class Page extends CI_Controller {
 
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> 'Dashboard',
+            'title'=> 'Home',
             'css' => ['home','viewRecord'],
             'profile' => [
                 'uname' => '',
