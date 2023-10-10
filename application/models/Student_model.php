@@ -63,6 +63,7 @@ class Student_model extends CI_Model{
                     ON u.`id` = sr.`created_by_uid`
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
+                WHERE sr.deleted_flag = '0'
                 ORDER BY `Student ID`
                     DESC
                 -- GROUP BY 
@@ -139,7 +140,7 @@ class Student_model extends CI_Model{
                 LEFT JOIN `doc` d
                     ON  d.stud_rec_id = sr.id
                 
-                WHERE sr.id = ?
+                WHERE sr.id = ? AND sr.deleted_flag = "0"
         ';
 
         $fetch = $this->db->query($query, array($id));
@@ -193,7 +194,8 @@ class Student_model extends CI_Model{
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
                 WHERE 
-                    `sr`.`created_by_uid` = ?
+                    `sr`.`created_by_uid` = ? AND
+                    `sr`.deleted_flag = '0'
                 ORDER BY `Student ID`
                     DESC
         
@@ -243,7 +245,7 @@ class Student_model extends CI_Model{
             ON `d`.`stud_rec_id` = `sr`.`id`
         INNER JOIN `remarks` as `rm`
             ON `rm`.`stud_rec_id` = `sr`.`id`
-        WHERE `sr`.`created_by_uid` = '{$user_id}'
+        WHERE `sr`.`created_by_uid` = '{$user_id}' AND `sr`.deleted_flag = '0'
         ORDER BY `sr`.`id` DESC 
         LIMIT 1";
 
@@ -321,7 +323,7 @@ class Student_model extends CI_Model{
         \r    ON `u`.id = `sr`.created_by_uid
         \rLEFT JOIN user `u2`
         \r    ON `u2`.id = `sr`.updated_by_uid
-        \rWHERE $conditions";
+        \rWHERE $conditions AND `sr`.deleted_flag = '0'";
 
         $result = $this->db->query($sql);
         return $result->num_rows() ? ["sql" => $sql, "data" => $result->result_array()] : [];
