@@ -270,10 +270,11 @@ class Student extends CI_Controller{
             }
         }
 
-        $nColumns = implode(" AND \n", $columns);
-        $nRemarks = implode(" OR ", $remarksColumns);
+        $nColumns = count($columns) > 0 ?  implode(" AND \n", $columns) : null;
+        $nRemarks = count($remarksColumns) > 0 ? implode(" OR \n", $remarksColumns) : null;
 
-        $conditions =  $nColumns . ((!empty($nColumns) && !(empty($nRemarks))) ? " AND " : null) . (!empty($nRemarks) > 0 ? " (". $nRemarks .")" : null);
+        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks;
+        
         $student = $this->stud->filter_student($conditions);
 
         echo json_encode($student);
@@ -354,7 +355,7 @@ class Student extends CI_Controller{
         
         $path = "uploads/";
 
-        $new_file_name = md5((uniqid($stud_rec_ID)));
+        $new_file_name = date("Ymd_Hisu");
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
@@ -379,8 +380,9 @@ class Student extends CI_Controller{
      * @param String $dir
      */
     private function delete_Image(String $dir) {
-        if(!empty($dir) && is_file("C:\\xampp\\htdocs\\DocTrackingSys\\".$dir)) {
-            return unlink("c:/xampp/htdocs/DocTrackingSys/".$dir);
+        $filePath = str_replace('system/', $dir, BASEPATH);
+        if(!empty($dir) && file_exists($filePath)) {
+            return unlink($filePath);
         }
     }
 

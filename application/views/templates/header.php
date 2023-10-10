@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="<?=base_url('assets/third_party/fontawesome/css/all.min')?>.css">
 
     <!-- MDB5 -->
-    <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css   /mdb.min')?>.css">
+    <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css/mdb.min')?>.css">
 
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/css/main')?>.css">
