@@ -57,13 +57,7 @@ class Page extends CI_Controller {
         $data['header'] = [
             'title'=> 'Dashboard',
             'css' => ['home','viewRecord'],
-            'profile' => [
-                'uname' => '',
-                'fname' => '',
-                'lname' => '',
-                'bday' => date('mm/dd/yyyy'),
-                'g' => 'N',
-            ]
+            'profile' => $this->session->userdata()
         ];
 
         // FOOTER VAIRABLES

@@ -14,7 +14,33 @@ class User extends CI_Controller{
      * UPDATE USER INFO
      */
     public function update() {
+        if(!empty(trim($this->input->post("profile-old-pass"))) || !empty(trim($this->input->post("profile-new-pass")))) {
+            if(trim($this->input->post("profile-old-pass")) != trim($this->input->post("profile-new-pass"))) {
+                echo json_encode(['status'=>"error", "message" => "Password's not match"]);
+                die;
+            }
+        }
         
+        $data = "";
+
+        foreach($this->input->post() as $key=>$val) {
+            
+            if(!empty(trim($val))) {
+                if(!empty($data) && $key != "profile-old-pass" && $key != "uid") $data .= ",";
+                if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
+                if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
+                if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
+                if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
+                if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
+                if($key == "profile-new-pass") $data .= " `u`.`pword` = PASSWORD('".$val."') ";
+            }
+            
+        }
+        $data .= " WHERE `u`.`id` = '".$this->input->post("uid")."'";
+        
+        $result = $this->user->update_user_info($data);
+        echo json_encode(['status' => ( $result == true ? 'success' : 'error'), 'is_update' => $result]);
+
     }
     
 

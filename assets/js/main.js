@@ -153,7 +153,7 @@ const PROFILE = {
         </div>
         `);
         MODAL.setFooter(`<button type="submit" class="btn btn-success">Save</button>`);
-        MODAL.setScript(`<script>PROFILE.onSubmit()</script>`);
+        MODAL.setScript(`PROFILE.onSubmit()`);
         MODAL.open();
     },
     /**
@@ -163,13 +163,25 @@ const PROFILE = {
         MODAL.onSubmit( async (e)=>{
             e.preventDefault();
             const profile = new FormData(document.getElementById("modal-container"));
-
+            profile.append("uid", CONST_UID);
+            
             // UPDATE PROFILE 
             console.log("save profile function is on main.js datas: ", profile);
             
+            fetch("user/update", {
+                method : "POST",
+                body : profile
+            })
+            .then(resp=>resp.json())
+            .then(data=>{
+                console.log(data)
+            })
+            .catch(err=>{
+
+            })
             
             MAIN.addNotif("Profile Updated!", "Information saved!", "g");
-            MODAL.close();
+            // MODAL.close();
         })
     }
 }

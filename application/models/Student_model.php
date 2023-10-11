@@ -326,7 +326,7 @@ class Student_model extends CI_Model{
         \rWHERE $conditions AND `sr`.deleted_flag = '0'";
 
         $result = $this->db->query($sql);
-        return $result->num_rows() ? ["sql" => $sql, "data" => $result->result_array()] : [];
+        return ["sql" => $sql, "data" => $result->result_array()];
     }
                             
 
