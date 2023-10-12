@@ -35,6 +35,7 @@
 <!-- CUSTOM JS -->
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>
+<script src="<?=base_url('assets/js/profile')?>.js"></script>
 <?php if(isset($js)) foreach($js as $j) {?>
 <script src="<?=base_url("assets/js/$j")?>.js"></script>
 <?php }?>

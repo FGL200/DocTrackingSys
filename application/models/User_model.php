@@ -108,6 +108,7 @@ class User_model extends CI_Model
                 INNER JOIN `user_info` i
                     ON i.`user_id` = u.`id`
                 WHERE u.`id` = {$uid}
+                LIMIT 1
         ";
         $fetch = $this->db->query($query);
         return $fetch->num_rows() ? $fetch->result_array() : [];
@@ -120,8 +121,8 @@ class User_model extends CI_Model
 
     /** PRIVATE FUNCTIONS */
 
-    private function __is_currently_logged_in__($uid){
-        return $uid === $this->sesstion->user_data('user')['uid'];
+    private function __is_currently_logged_in__(Int $uid){
+        return $uid === intval($this->session->get_userdata('user')['uid']);
     }
 
     private function user_Is_Admin($uid) {

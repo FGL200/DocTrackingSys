@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?=isset($title) ? $title : "DOCUMENT"; ?></title>
+    <link rel="shortcut icon" href="<?=base_url('assets/images/rtu-logo')?>.png" type="image/x-icon">
 
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/bootstrap/css/bootstrap.min')?>.css">
@@ -34,15 +35,15 @@
 
     <!-- CUSTOM JS -->
     <script>
-        // CONSTANTS IN JS
-        const CONST_UNAME = "<?= isset($_SESSION['uname']) ? $_SESSION['uname'] : null ;?>";
-        const CONST_UID = "<?= isset($_SESSION['uid']) ? $_SESSION['uid'] : null ;?>";
-        const base_url = "<?=base_url()?>";
+    // CONSTANTS IN JS
+    const CONST_UNAME = "<?= isset($_SESSION['uname']) ? $_SESSION['uname'] : null ;?>";
+    const CONST_UID = "<?= isset($_SESSION['uid']) ? $_SESSION['uid'] : null ;?>";
+    const base_url = "<?=base_url()?>";
 
-        // OTHER DEFINED CONSTANTS
-        <?php if(isset($constants)) foreach ($constants as $key => $val) { ?>
-            <?="const CONST_".strtoupper($key)."='{$val}';\n";?>
-        <?php }?>
+    // OTHER DEFINED CONSTANTS
+    <?php if(isset($constants)) foreach ($constants as $key => $val) { ?>
+        <?="const CONST_".strtoupper($key)."='{$val}';\n";?>
+    <?php }?>
 
     </script>
     <?php if(isset($js)) foreach($js as $j) {?>
@@ -59,7 +60,7 @@
             SRAC Document Tracking System
         </section>
         <section class="phone sys-title color-w">
-            Tracker
+            SRAC DTS
         </section>
     </a>
     <?php if(!$hidden){?>
@@ -89,7 +90,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li style="margin-bottom: .4rem;">
-                                <a class="dropdown-item" href="#" onclick="PROFILE.open(new Profile('<?=$profile['uname']?>','<?=$profile['fname']?>','<?=$profile['lname']?>','<?=$profile['bday']?>','<?=$profile['g']?>'));" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <a class="dropdown-item" href="#" onclick="PROFILE.open(PROFILE.USER_INFO)" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
                                     <i class="fa-solid fa-address-card"></i> Profile
                                 </a>
                             </li>

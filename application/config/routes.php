@@ -31,7 +31,7 @@ $route['user/logout'] = 'Login/logout';
 $route['user/viewers']['post'] = 'User/get_All_Viewers';
 $route['user/encoders']['post'] = 'User/get_All_Encoders';
 $route['user/all']['post'] = 'User/get_All_Users';
-$route['user/(:num)']['post'] = 'User/get_user/$1';
+$route['user']['post'] = 'User/get_user';
 
 /// QR
 $route['generate-qr']= "QrGenerator/generate";

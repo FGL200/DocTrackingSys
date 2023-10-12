@@ -74,7 +74,8 @@ class User extends CI_Controller{
         echo json_encode(['result' => $nData]);  
     }
 
-    public function get_user(Int $uid) {
+    public function get_user() {
+        $uid = $this->input->post()['uid'];
         $nData = $this->user->get_user($uid);
         echo json_encode(['result' => $nData]);  
     }
