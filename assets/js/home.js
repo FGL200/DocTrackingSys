@@ -47,21 +47,22 @@ const HOME = {
                             
                         }
                     }
-                    fetch("student/filter",{
-                        method : "POST",
-                        body : form
-                    })
-                    .then(resp => resp.json())
-                    .then(data=>{
-                        // close modal
-                        MAIN.addNotif("Search in Progress!", "Filtering Tables...", "g");
-                        MODAL.close();
-                        console.log(data)
-                    })
-                    .catch(err=>{
-                        MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");
-                        console.log(err);
-                    })
+                    HOME.DASHBOARD.load_dashboard_table('student/filter', form)
+                    // fetch("student/filter",{
+                    //     method : "POST",
+                    //     body : form
+                    // })
+                    // .then(resp => resp.json())
+                    // .then(data=>{
+                    //     // close modal
+                    //     MAIN.addNotif("Search in Progress!", "Filtering Tables...", "g");
+                    //     MODAL.close();
+                    //     console.log(data)
+                    // })
+                    // .catch(err=>{
+                    //     MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");
+                    //     console.log(err);
+                    // })
                 }
             });
         },

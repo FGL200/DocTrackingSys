@@ -19,7 +19,8 @@ $route['student/record/(:num)'] = 'Student/get_Student_Records/$1';
 $route['student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
 $route['student/filter']['post'] = 'Student/filter_search';
-
+$route['student/record/delete']['post'] = "Student/delete_Student";
+$route['student/generateQR/all'] = 'Student/generateQR';
 $route['api/categories'] = 'RemarkCategory/getCategories';
 
 
@@ -32,6 +33,7 @@ $route['user/viewers']['post'] = 'User/get_All_Viewers';
 $route['user/encoders']['post'] = 'User/get_All_Encoders';
 $route['user/all']['post'] = 'User/get_All_Users';
 $route['user']['post'] = 'User/get_user';
+$route['user/update']['post'] = 'User/update';
 
 /// QR
 $route['generate-qr']= "QrGenerator/generate";

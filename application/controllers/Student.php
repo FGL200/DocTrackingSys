@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 class Student extends CI_Controller{
 
     private $user_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
@@ -42,18 +48,18 @@ class Student extends CI_Controller{
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
                 if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = '{$val}'";
+                $data .= "`{$key}` = UPPER('{$val}')";
             }
         }
         
 
-        $created_by_uid = $this->session->userdata('uid') ? $this->session->userdata('uid') : '1' ; //  user id for encoding
+        $created_by_uid = $this->session->userdata('uid') ?? '1' ; //  user id for encoding
 
         $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 
         $this->db->trans_begin();
 
-        $student_id = $this->stud->addStudentInfo($data);
+        $student_id = $this->stud->add_student($data);
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
@@ -65,7 +71,7 @@ class Student extends CI_Controller{
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
  
-            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc], $student_id) : '';
+            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc]) : '';
             $data .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
         
@@ -105,7 +111,8 @@ class Student extends CI_Controller{
         } else {
             $this->db->trans_rollback()();
             echo json_encode(array(
-                "status" => "error"
+                "status" => "error",
+                "message" => $this->db->error()
             ));
 
             exit();
@@ -167,12 +174,12 @@ class Student extends CI_Controller{
         foreach($data as $key=>$val) {
             if(strstr($key, 'stud_')&& !strstr($key, 'rec_id')) {
                 if(!empty($stud_set)) $stud_set .= ",";
-                $stud_set.="`$key` = '$val'";
+                $stud_set.="`$key` = UPPER('$val')";
             }
         }
         $this->db->trans_begin();
 
-        $this->stud->update_data('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
+        $this->stud->update_table('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
         
         /** End Update the `stud_rec` table */
 
@@ -190,7 +197,7 @@ class Student extends CI_Controller{
         $remark_value .= implode(',', $remarks);
         $remark_value .= "]'";
 
-        $this->stud->update_data('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
+        $this->stud->update_table('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
         
         /** Update `doc` table  */
         $doc_set = "";
@@ -202,13 +209,8 @@ class Student extends CI_Controller{
 
             $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
             
-            if($this->input->post('doc_scan_' . $doc)) {
-                $path = $this->input->post('doc_scan_' . $doc);
-            }
-            
-            if(!empty($_FILES['doc_scan_' . $doc]['name'])) {
-                $path =  $this->upload_file($_FILES['doc_scan_' . $doc], $stud_rec_id);
-            }
+            if($this->input->post('doc_scan_' . $doc)) $path = $this->input->post('doc_scan_' . $doc);
+            if(!empty($_FILES['doc_scan_' . $doc]['name'])) $path = $this->upload_file($_FILES['doc_scan_' . $doc]);
 
             if(empty($path) || !empty($_FILES['doc_scan_' . $doc]['name'])) {  
                 $old_path = $this->get_doc_dir($stud_rec_id, $doc);
@@ -217,8 +219,9 @@ class Student extends CI_Controller{
              
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
-        $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
-        $this->stud->update_data('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
+
+        $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+        $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
         /** End Update `doc` table  */
 
 
@@ -230,13 +233,23 @@ class Student extends CI_Controller{
         } else {
             $this->db->trans_rollback()();
             echo json_encode(array(
-                "status" => "error"
+                "status" => "error",
+                "message" => $this->db->error()
             ));
 
             exit();
         }
 
 
+    }
+
+    public function delete_Student() {
+        $stud_rec_id = $this->input->post("stud_rec_id");
+
+        $result = $this->stud->delete_student($stud_rec_id);
+
+        if($result) echo json_encode(['status' => 'success']);
+        else echo json_encode(['status' => 'error', 'message' => $this->db->error()]);
     }
 
     public function filter_search() {
@@ -249,16 +262,16 @@ class Student extends CI_Controller{
                 $nKey = preg_replace('/student/', 'stud', $nKey);
                 $arr = explode("_", $nKey, 2);
                 $colname = $arr[count($arr) - 1];
-                array_push($columns, "`sr`.$colname = '{$val}'");
+                array_push($columns, "`sr`.$colname LIKE '%{$val}%'");
             }
 
             if(strstr($k, "profile")) {
                 $arr = explode("_", $nKey);
                 $colname = $arr[count($arr) - 1];
 
-                if($colname == "uname") array_push($columns, "`u`.$colname = '{$val}'");
+                if($colname == "uname") array_push($columns, "(`u`.$colname LIKE '%{$val}%' OR `u2`.$colname LIKE '%{$val}%')");
                 else if( $colname == "id") array_push($columns, "(`sr`.created_by_uid = '{$val}' OR `sr`.updated_by_uid = '{$val}')");
-                else array_push($columns, "`ui`.$colname = '{$val}'");
+                else array_push($columns, "`ui`.$colname LIKE '%{$val}%'");
                
             }
 
@@ -270,14 +283,67 @@ class Student extends CI_Controller{
             }
         }
 
-        $nColumns = implode(" AND \n", $columns);
-        $nRemarks = implode(" OR ", $remarksColumns);
+        $nColumns = count($columns) > 0 ?  implode(" AND \n", $columns) : null;
+        $nRemarks = count($remarksColumns) > 0 ? implode(" OR \n", $remarksColumns) : null;
 
-        $conditions =  $nColumns . ((!empty($nColumns) && !(empty($nRemarks))) ? " AND " : null) . (!empty($nRemarks) > 0 ? " (". $nRemarks .")" : null);
-        $student = $this->stud->filter_student($conditions);
+        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks;
+        
+        $result = $this->stud->filter_student($conditions);
 
-        echo json_encode($student);
+        $student = $this->to_Id_Link_Student_Record($result['data']);
+        $student = $this->to_grouped_style($student);
+        $student = $this->count_remarks($student);
+
+        echo json_encode(['result'=>$student, 'sql' => $result['sql']]);
     }
+
+
+
+    public function generateQR() {
+        if (!class_exists('chillerlan\QRCode\QRCode')) {
+            require 'C:\xampp\htdocs\DocTrackingSys\vendor\autoload.php';
+        }
+
+        $text = "";
+
+        $data = $this->stud->get_StudentRecords_With_Remarks();
+
+        foreach($data as $k => $v) {
+            $text = json_encode(['First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
+            
+
+            $result =Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($text)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(300)
+            ->margin(10)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->logoPath('C:\xampp\htdocs\DocTrackingSys\assets\images\rtu-logo.png')
+            ->logoResizeToWidth(100)
+            ->logoPunchoutBackground(false)
+            // ->labelText($v['First Name'] . " " . $v['Last Name'])
+            ->validateResult(false)
+            ->build();
+        
+        // Generate a data URI to include image data inline (i.e. inside an <img> tag)
+            $dataUri = $result->getDataUri();
+            echo "<img src='$dataUri'>" . PHP_EOL;
+            $text = "";
+        }
+
+
+
+        
+
+        
+
+        
+
+    }
+
 
     /** PRIVATE FUNCTIONS */
 
@@ -348,19 +414,20 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    private function upload_file(Array $file, int $stud_rec_ID) {
-        if(!is_dir('uploads/')) mkdir('uploads/',DIR_WRITE_MODE, true);
+    private function upload_file(Array $file) {
+        $path = str_replace('\\', '/', BASEPATH);
+        $path = str_replace('system/', 'uploads/', $path);
 
-        
-        $path = "uploads/";
+        if(!is_dir($path)) mkdir($path,DIR_WRITE_MODE, true);
 
-        $new_file_name = md5((uniqid($stud_rec_ID)));
+        $new_file_name = date("Y_m_d_H_i_s") . bin2hex(random_bytes(5));
+
         $file_ext = explode('.',$file['name']);
         $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
-        $new_file_path = $path . $file['name'];
-
+        $new_file_path =  'uploads/' . $file['name'];
         $data = $new_file_path;
+        // echo $new_file_name;
         return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : false;
 
     }
@@ -379,8 +446,11 @@ class Student extends CI_Controller{
      * @param String $dir
      */
     private function delete_Image(String $dir) {
-        if(!empty($dir) && is_file("C:\\xampp\\htdocs\\DocTrackingSys\\".$dir)) {
-            return unlink("c:/xampp/htdocs/DocTrackingSys/".$dir);
+        $path = str_replace('\\', '/', BASEPATH);
+        $path = str_replace('system/', $dir, $path);
+
+        if(!empty($dir) && file_exists($path)) {
+            return unlink($path);
         }
     }
 

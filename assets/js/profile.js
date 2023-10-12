@@ -1,4 +1,4 @@
-class Profile {
+class Profile{
     /**
      * New Instance of Profile
      * @param {string} uname Username
@@ -9,17 +9,14 @@ class Profile {
      */
     constructor(uname = "", fname = "", lname = "", bday = "2000-01-01", g = "N"){
         this.uname = uname;
-        this.fname = fname == null? "" : fname;
-        this.lname = lname == null? "" : lname;
-        this.bday = bday == null ? "2000-01-01" : bday;
+        this.fname = fname;
+        this.lname = lname;
+        this.bday = bday;
         this.g = g;
     };
 }
 
 const PROFILE = {
-    
-    USER_INFO : undefined,
-
     /**
      * 
      * @param {Profile} profile 
@@ -75,13 +72,25 @@ const PROFILE = {
         MODAL.onSubmit( async (e)=>{
             e.preventDefault();
             const profile = new FormData(document.getElementById("modal-container"));
-
-            // UPDATE PROFILE 
-            console.log("save profile function is on profile.js datas: ", profile);
+            profile.append("uid", CONST_UID);
             
+            // UPDATE PROFILE 
+            console.log("save profile function is on main.js datas: ", profile);
+            
+            fetch("user/update", {
+                method : "POST",
+                body : profile
+            })
+            .then(resp=>resp.json())
+            .then(data=>{
+                console.log(data)
+            })
+            .catch(err=>{
+
+            })
             
             MAIN.addNotif("Profile Updated!", "Information saved!", "g");
-            MODAL.close();
+            // MODAL.close();
         })
     }
 }
