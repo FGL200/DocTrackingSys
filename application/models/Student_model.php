@@ -11,7 +11,7 @@ class Student_model extends CI_Model{
      * Insert into `stud_rec`
      * @param String $data
      */
-    public function addStudentInfo($data) {
+    public function add_student($data) {
         $query = "INSERT INTO `stud_rec` SET {$data}";
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
@@ -273,7 +273,7 @@ class Student_model extends CI_Model{
      * @param String $data
      * @param String $condition
      */
-    public function update_data($tblname, $data, $condition) {
+    public function update_table($tblname, $data, $condition) {
         $sql = "UPDATE `{$tblname}` SET {$data} $condition";
         $result = $this->db->query($sql);
         return $this->db->affected_rows() ? true : false;
@@ -328,7 +328,16 @@ class Student_model extends CI_Model{
         $result = $this->db->query($sql);
         return ["sql" => $sql, "data" => $result->result_array()];
     }
-                            
+                      
+    public function delete_student($id) {
+        $sql = "UPDATE `stud_rec` `sr` 
+                SET `sr`.deleted_flag = '1' 
+                WHERE `sr`.id = ?";
+        
+        $this->db->query($sql, array($id));
+
+        return $this->db->affected_rows() ? true : false;
+    }
 
 
 

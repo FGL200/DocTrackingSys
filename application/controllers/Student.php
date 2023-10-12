@@ -48,7 +48,7 @@ class Student extends CI_Controller{
             $val = trim($val);
             if(strstr($key, "stud_") && !empty($val)){
                 if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = '{$val}'";
+                $data .= "`{$key}` = UPPER('{$val}')";
             }
         }
         
@@ -59,7 +59,7 @@ class Student extends CI_Controller{
 
         $this->db->trans_begin();
 
-        $student_id = $this->stud->addStudentInfo($data);
+        $student_id = $this->stud->add_student($data);
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
@@ -174,12 +174,12 @@ class Student extends CI_Controller{
         foreach($data as $key=>$val) {
             if(strstr($key, 'stud_')&& !strstr($key, 'rec_id')) {
                 if(!empty($stud_set)) $stud_set .= ",";
-                $stud_set.="`$key` = '$val'";
+                $stud_set.="`$key` = UPPER('$val')";
             }
         }
         $this->db->trans_begin();
 
-        $this->stud->update_data('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
+        $this->stud->update_table('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
         
         /** End Update the `stud_rec` table */
 
@@ -197,7 +197,7 @@ class Student extends CI_Controller{
         $remark_value .= implode(',', $remarks);
         $remark_value .= "]'";
 
-        $this->stud->update_data('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
+        $this->stud->update_table('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
         
         /** Update `doc` table  */
         $doc_set = "";
@@ -220,8 +220,8 @@ class Student extends CI_Controller{
             $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
         }
 
-        $this->stud->update_data('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
-        $this->stud->update_data('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
+        $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+        $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
         /** End Update `doc` table  */
 
 
@@ -241,6 +241,15 @@ class Student extends CI_Controller{
         }
 
 
+    }
+
+    public function delete_Student() {
+        $stud_rec_id = $this->input->post("stud_rec_id");
+
+        $result = $this->stud->delete_student($stud_rec_id);
+
+        if($result) echo json_encode(['status' => 'success']);
+        else echo json_encode(['status' => 'error', 'message' => $this->db->error()]);
     }
 
     public function filter_search() {

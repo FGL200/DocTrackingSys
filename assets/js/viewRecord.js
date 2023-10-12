@@ -2,43 +2,62 @@ const VIEW_RECORD = {
     __ROTATION__ : 0,
 
     /**
-     * Update data
+     * Update / Delete data
      */
-    onSubmit: function () {
+    onSubmit: function (e) {
+        let action = "";
+
         const form = new FormData(document.getElementById("update-record-form"));
-        form.append("remarks", VIEW_RECORD.__remarksValue__);
-
-        $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
-        $("#update-record-btn").prop("disabled", true);
         
-       
+        if(e.id === "update-record-btn") {
+            action = "update";
 
-        form.forEach((val, key)=>{
-            VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                // kapag walang laman yung input file iassign yung value na nasa 
-                // VIEW_RECORD.__old_DIRS__
-                if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                    form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
-                }
-            })
-        });
+            form.append("remarks", VIEW_RECORD.__remarksValue__);
+
+            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+            $("#update-record-btn").prop("disabled", true);
+            
+           
+    
+            form.forEach((val, key)=>{
+                VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                    // kapag walang laman yung input file iassign yung value na nasa 
+                    // VIEW_RECORD.__old_DIRS__
+                    if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                        form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
+                    }
+                })
+            });
+        } else {
+            action = "delete";
+
+            $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
+            $("#delete-record-btn").prop("disabled", true);
+        }
         
-        fetch(base_url + 'student/record/update', {
+        
+        fetch(base_url + 'student/record/' + action, {
             method : 'post',
             body :  form
         })
         .then(respose=>respose.json())
-        .then(data=>{
-            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
-            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
-            $("#update-record-btn").prop("disabled", false);
+        .then(()=>{
+            if(action === "update") {
+                MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
+                $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
+                $("#update-record-btn").prop("disabled", false);
+            } else {
+                MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
+                $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
+                $("#delete-record-btn").prop("disabled", false);
+            }
+           
         })
         .catch(err=>{
             console.log(err);
             MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
         })
     },
-
     /**
      * Add remarks to remark holder
      * @param {String} value The value to be added in remarks holder 

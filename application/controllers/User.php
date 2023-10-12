@@ -14,7 +14,10 @@ class User extends CI_Controller{
      * UPDATE USER INFO
      */
     public function update() {
+        /** Check if profile-old-pass OR profile-new-pass is not empty */
         if(!empty(trim($this->input->post("profile-old-pass"))) || !empty(trim($this->input->post("profile-new-pass")))) {
+
+            /** Check if both passwords is same */
             if(trim($this->input->post("profile-old-pass")) != trim($this->input->post("profile-new-pass"))) {
                 echo json_encode(['status'=>"error", "message" => "Password's not match"]);
                 die;
@@ -25,7 +28,7 @@ class User extends CI_Controller{
 
         foreach($this->input->post() as $key=>$val) {
             
-            if(!empty(trim($val))) {
+            if(!empty(trim($val))) { 
                 if(!empty($data) && $key != "profile-old-pass" && $key != "uid") $data .= ",";
                 if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
                 if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
@@ -37,9 +40,11 @@ class User extends CI_Controller{
             
         }
         $data .= " WHERE `u`.`id` = '".$this->input->post("uid")."'";
-        
+
         $result = $this->user->update_user_info($data);
+
         echo json_encode(['status' => ( $result == true ? 'success' : 'error'), 'is_update' => $result]);
+        $this->session->set_userdata($this->user->get_User_Info($this->input->post("uid")));
 
     }
     
@@ -125,7 +130,7 @@ class User extends CI_Controller{
                 if($key === "User ID"){
                     $id = str_pad($nRow["User ID"], 6, "0", STR_PAD_LEFT);
                     // $nRow["<input type='checkbox' id='cb-select-all-user'/> User ID"] = "<input type='checkbox' class='cb-select-user' /> <a href='#' class='user_id_link'>{$id}</a>";
-                    $nRow["User ID"] = "<a href='#' class='user_id_link'>{$id}</a>";
+                    $nRow["User ID"] = "<a href='#' class='user_id_link'>{$id}</a>";    
                 }
             }
             array_push($fixedData, $nRow);
