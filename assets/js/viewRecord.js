@@ -5,43 +5,58 @@ const VIEW_RECORD = {
      * Update / Delete data
      */
     onSubmit: function (e) {
-        dts_alert({
-            title : "Save Record?",
-            body : `Are you sure you want to <b>overwrite ${CONST_RECORD_ID}</b> record?`,
+        let dts_alert_content = e.id === ("update-record-btn") ? {
+            title : "Save Record?", 
+            body : `Are you sure you want to <b style='color: #139C49; text-decoration: underline;'>overwrite ${CONST_RECORD_ID}</b> record?`,
             buttons : ["YES", "NO"]
-        }, (answer)=>{
+        } : {
+            title : "Delete Record?", 
+            body : `Are you sure you want <b style='color: #DC4C64; text-decoration: underline;'>remove ${CONST_RECORD_ID}</b> data?`,
+            buttons : ["YES", "NO"]
+        };
+
+        dts_alert(dts_alert_content, (answer)=>{
             if(!answer) return;
             let action = "";
-    
+
             const form = new FormData(document.getElementById("update-record-form"));
             
             if(e.id === "update-record-btn") {
                 action = "update";
-    
+
                 form.append("remarks", VIEW_RECORD.__remarksValue__);
-    
-                $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
-                $("#update-record-btn").prop("disabled", true);
+
+                // $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+                // $("#update-record-btn").prop("disabled", true);
                 
-               
+            
         
                 form.forEach((val, key)=>{
                     VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
                         // kapag walang laman yung input file iassign yung value na nasa 
                         // VIEW_RECORD.__old_DIRS__
-                        if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                            form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
+                        if(form.get(key) instanceof File) {
+                            if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                                const nKey = key.replace(/[\[\]]/g, "");
+
+                                form.delete(key);
+
+                                form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
+                                console.log(nKey)
+                            }
                         }
+                        
                     })
                 });
             } else {
                 action = "delete";
-    
+
                 $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
                 $("#delete-record-btn").prop("disabled", true);
             }
             
-            
+            // return;
+
             fetch(base_url + 'student/record/' + action, {
                 method : 'post',
                 body :  form
@@ -57,12 +72,12 @@ const VIEW_RECORD = {
                     $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
                     $("#delete-record-btn").prop("disabled", false);
                 }
-               
+            
             })
             .catch(err=>{
                 console.log(err);
                 MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
-            });
+            })
         });
     },
     /**
@@ -164,8 +179,11 @@ const VIEW_RECORD = {
             if(doc.dir !== '') {
                 $('#view_scan_' + keys[i]).on("click", function(){
                     $(this).addClass('imgLoaded');
-                    const source = doc.dir;
-                    $("#image-viewer").prop("src", base_url + source);
+                    const sources = doc.dir.split(",");
+                    console.log(sources)
+                    $("#image-viewer-container").find("img").remove()
+                    for(let src of sources ) $("#rotate-img").before(`<img src='${base_url + src}'>`) /** Created By Patrick */
+                    // $("#image-viewer").prop("src", base_url + source[0]);
                     $("#image-viewer-container").removeClass('hide');
                     $("#image-viewer-container").addClass('fade-in');
                     $("#image-viewer-holder").addClass('pop-in');
@@ -193,7 +211,7 @@ const VIEW_RECORD = {
             // and save is as an object to' __old_DIRS__' variable
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
-            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}" : "${docDir}"}`));
+            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}"}`));
 
         }
 
@@ -550,18 +568,3 @@ $(window).on("load", async function (e) {
     await loadRemarksCategories();
     await prepareStudentRecords();
 });
-
-
-function deleteRecord(record_id) {
-    dts_alert({
-        title : "Delete Record?",
-        body : `Are you sure you want remove <b>${record_id}</b> data?`,
-        buttons: ["YES", "NO"]
-    }, (answer)=>{
-        if(answer) {
-            
-            // update the deletedflag, set to 1
-
-        }
-    });
-}

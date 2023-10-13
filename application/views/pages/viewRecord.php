@@ -8,7 +8,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
             <button class="btn btn-danger" type="button" onclick="window.close();">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
             <?php if ($role === 'A') {?>
-            <button class="btn btn-danger" type="button" id="delete-record-btn" onclick="deleteRecord(`<?=$record_id?>`);"><i class="fa-solid fa-trash"></i> Delete</button>
+            <button class="btn btn-danger" type="button" id="delete-record-btn" onclick="VIEW_RECORD.onSubmit(this);"><i class="fa-solid fa-trash"></i> Delete</button>
             <?php }?>
             <?php if ($role !== 'V') {?>
             <button class="btn btn-success" type="button" id="update-record-btn" onclick="VIEW_RECORD.onSubmit(this)"><i class="fa-solid fa-floppy-disk"></i> Save</button>
@@ -87,7 +87,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_regi_form">Registration Form</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_regi_form" name="doc_val_regi_form" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_regi_form" name="doc_scan_regi_form" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_regi_form" name="doc_scan_regi_form[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_regi_form')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -101,7 +101,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_good_moral">Good Moral</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_good_moral" name="doc_val_good_moral" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_good_moral" name="doc_scan_good_moral" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_good_moral" name="doc_scan_good_moral[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_good_moral')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -115,7 +115,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                         <label class="flex-grow-1 align-items-stretch" for="doc_val_j_f137">Junior Form 137</label>
                         <span class="d-flex flex-nowrap gap-1">
                             <input  <?=($role==='V')?'disabled':''?> id="doc_val_j_f137" name="doc_val_j_f137" type="checkbox" class="cb-doc">
-                            <input  <?=($role==='V')?'disabled':''?> id="doc_scan_j_f137" name="doc_scan_j_f137" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <input  <?=($role==='V')?'disabled':''?> id="doc_scan_j_f137" name="doc_scan_j_f137[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                             <?php if($role !== 'V') {?>
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_j_f137')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
@@ -129,7 +129,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                         <label class="flex-grow-1 align-items-stretch" for="doc_val_s_f137">Senior Form 137</label>
                         <span class="d-flex flex-nowrap gap-1">
                             <input  <?=($role==='V')?'disabled':''?> id="doc_val_s_f137" name="doc_val_s_f137" type="checkbox" class="cb-doc">
-                            <input  <?=($role==='V')?'disabled':''?> id="doc_scan_s_f137" name="doc_scan_s_f137" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                            <input  <?=($role==='V')?'disabled':''?> id="doc_scan_s_f137" name="doc_scan_s_f137[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                             <?php if($role !== 'V') {?>
                             <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_s_f137')" >
                             <span> + </span> <i class="fa-solid fa-image"></i>
@@ -143,7 +143,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_f138">Form 138</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_f138" name="doc_val_f138" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_f138" name="doc_scan_f138" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_f138" name="doc_scan_f138[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_f138')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -157,7 +157,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_birth_cert">Birth Certificate</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_birth_cert" name="doc_val_birth_cert" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_birth_cert" name="doc_scan_birth_cert" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_birth_cert" name="doc_scan_birth_cert[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_birth_cert')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -171,7 +171,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_tor">Transcript of Records</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_tor" name="doc_val_tor" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_tor" name="doc_scan_tor" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_tor" name="doc_scan_tor[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_tor')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -185,7 +185,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_app_grad">App for Graduation</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_app_grad" name="doc_val_app_grad" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_app_grad" name="doc_scan_app_grad" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_app_grad" name="doc_scan_app_grad[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_app_grad')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -199,7 +199,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_cert_of_complete">Certificate of Completion</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_cert_of_complete" name="doc_val_cert_of_complete" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_cert_of_complete" name="doc_scan_cert_of_complete" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_cert_of_complete" name="doc_scan_cert_of_complete[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_cert_of_complete')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -213,7 +213,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_req_clearance_form">Request for Clearance</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_req_clearance_form" name="doc_val_req_clearance_form" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_req_clearance_form" name="doc_scan_req_clearance_form" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_req_clearance_form" name="doc_scan_req_clearance_form[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_clearance_form')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -227,7 +227,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_req_credentials">Request for Credentials Form</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_req_credentials" name="doc_val_req_credentials" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_req_credentials" name="doc_scan_req_credentials" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_req_credentials" name="doc_scan_req_credentials[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_req_credentials')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -241,7 +241,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <label class="flex-grow-1 align-items-stretch" for="doc_val_hd_or_cert_of_trans">Honorable Dismisal / Certificate of Transferee</label>
                     <span class="d-flex flex-nowrap gap-1">
                         <input  <?=($role==='V')?'disabled':''?> id="doc_val_hd_or_cert_of_trans" name="doc_val_hd_or_cert_of_trans" type="checkbox" class="cb-doc">
-                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_hd_or_cert_of_trans" name="doc_scan_hd_or_cert_of_trans" type="file" disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
+                        <input  <?=($role==='V')?'disabled':''?> id="doc_scan_hd_or_cert_of_trans" name="doc_scan_hd_or_cert_of_trans[]" type="file" multiple disabled accept=".png, .jpg, .jpeg" class="hide scaned-doc">
                         <?php if($role !== 'V') {?>
                         <button disabled class="btnFile btn btn-success d-flex flex-nowrap align-items-center gap-1" type="button" onclick="changeFileDir('#doc_scan_hd_or_cert_of_trans')" >
                         <span> + </span> <i class="fa-solid fa-image"></i>
@@ -259,7 +259,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
     <div id="image-viewer-holder" class="d-flex flex-column gap-2">
         <button class="btn btn-danger" id="close-image-viewer-container"><i class="fa-solid fa-xmark"></i></button>
         <!-- <div id="image-viewer"></div> -->
-        <img id="image-viewer" src="" />
+        <!-- <img id="image-viewer" src="" />  -->  <!-- Comment by Patrick -->
         <button id="rotate-img" class="btn btn-primary align-self-end"><i class="fa-solid fa-rotate"></i></button>
     </div>
 </div>

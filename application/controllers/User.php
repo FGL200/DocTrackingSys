@@ -43,9 +43,8 @@ class User extends CI_Controller{
 
         $result = $this->user->update_user_info($data);
 
-        echo json_encode(['status' => ( $result == true ? 'success' : 'error'), 'is_update' => $result]);
-        $this->session->set_userdata($this->user->get_User_Info($this->input->post("uid")));
-
+        if($result) $this->get_user($this->input->post("uid"));
+        else echo json_encode(['status' => $this->db->error()]);
     }
     
 
