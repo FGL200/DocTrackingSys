@@ -8,7 +8,7 @@
  * 6. MODAL.setScript(str) to set script of modal 
  * 7. NOTE(1): setScript function is important since modal is a form tag.
  * 8. NOTE(2): Everytime a button is pressed inside the footer tag, You need a function that will be invoke
- * as soon as the modal is loded, this function will add an 'onSubmit' event listener to the modal, wich if
+ * as soon as the modal is loaded, this function will add an 'onSubmit' event listener to the modal, which if
  * tiggred, will invoke whatever fucntion you wish to invoke,
  * 9. MODAL.close() will automatically remove the 'onSubmit' listener and clear the inside of the modal 
  */

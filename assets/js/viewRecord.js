@@ -5,58 +5,65 @@ const VIEW_RECORD = {
      * Update / Delete data
      */
     onSubmit: function (e) {
-        let action = "";
-
-        const form = new FormData(document.getElementById("update-record-form"));
-        
-        if(e.id === "update-record-btn") {
-            action = "update";
-
-            form.append("remarks", VIEW_RECORD.__remarksValue__);
-
-            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
-            $("#update-record-btn").prop("disabled", true);
-            
-           
+        dts_alert({
+            title : "Save Record?",
+            body : `Are you sure you want to <b>overwrite ${CONST_RECORD_ID}</b> record?`,
+            buttons : ["YES", "NO"]
+        }, (answer)=>{
+            if(!answer) return;
+            let action = "";
     
-            form.forEach((val, key)=>{
-                VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                    // kapag walang laman yung input file iassign yung value na nasa 
-                    // VIEW_RECORD.__old_DIRS__
-                    if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                        form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
-                    }
-                })
-            });
-        } else {
-            action = "delete";
-
-            $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
-            $("#delete-record-btn").prop("disabled", true);
-        }
+            const form = new FormData(document.getElementById("update-record-form"));
+            
+            if(e.id === "update-record-btn") {
+                action = "update";
+    
+                form.append("remarks", VIEW_RECORD.__remarksValue__);
+    
+                $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+                $("#update-record-btn").prop("disabled", true);
+                
+               
         
-        
-        fetch(base_url + 'student/record/' + action, {
-            method : 'post',
-            body :  form
-        })
-        .then(respose=>respose.json())
-        .then(()=>{
-            if(action === "update") {
-                MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
-                $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
-                $("#update-record-btn").prop("disabled", false);
+                form.forEach((val, key)=>{
+                    VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                        // kapag walang laman yung input file iassign yung value na nasa 
+                        // VIEW_RECORD.__old_DIRS__
+                        if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                            form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
+                        }
+                    })
+                });
             } else {
-                MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
-                $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
-                $("#delete-record-btn").prop("disabled", false);
+                action = "delete";
+    
+                $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
+                $("#delete-record-btn").prop("disabled", true);
             }
-           
-        })
-        .catch(err=>{
-            console.log(err);
-            MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
-        })
+            
+            
+            fetch(base_url + 'student/record/' + action, {
+                method : 'post',
+                body :  form
+            })
+            .then(respose=>respose.json())
+            .then(()=>{
+                if(action === "update") {
+                    MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
+                    $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
+                    $("#update-record-btn").prop("disabled", false);
+                } else {
+                    MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
+                    $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
+                    $("#delete-record-btn").prop("disabled", false);
+                }
+               
+            })
+            .catch(err=>{
+                console.log(err);
+                MAIN.addNotif('Server error', "Something went wrong while updating record", "r");
+            });
+        });
     },
     /**
      * Add remarks to remark holder
@@ -178,8 +185,6 @@ const VIEW_RECORD = {
                 if(doc.dir !== ''){
                     set_BtnFile(inFile + " ~ button.btnFile", false);
                     set_BtnView(inFile+ " ~ button.viewScan", false);
-                    set_BtnFile(inFile + " ~ button.btnFile", false);
-                    set_BtnView(inFile+ " ~ button.viewScan", false);
                 }
             }
 
@@ -266,88 +271,72 @@ $(".cb-doc").on("change", function(e){
     $(btnFile).prop('disabled', !checked);
     if(!checked){ 
         if($(btnFile).hasClass('btn-danger')){
-            if(confirm("Are you sure you want to replace/remove the scaned document?")){
-                $(inFile).val('');
-                $(inFile).prop('disabled', true);
-                set_BtnView(btnView, true);
-                set_BtnFile(btnFile, true);
-                $(btnFile).prop('disabled', true);
-            }else{
-                $(this).prop('checked', true);
-                $(btnFile).prop('disabled', !$(this).prop('checked'));
-            }
+            dts_alert({
+                title : "Remove scanned document?",
+                body : "Are you sure you want to replace/remove the scanned document?",
+                buttons: ["YES", "NO"]
+            }, (answer)=>{
+                if(answer) {
+                    $(inFile).val('');
+                    $(inFile).prop('disabled', true);
+                    set_BtnView(btnView, true);
+                    set_BtnFile(btnFile, true);
+                    $(btnFile).prop('disabled', true);
+                } else {
+                    $(this).prop('checked', true);
+                    $(btnFile).prop('disabled', !$(this).prop('checked'));
+                }
+            });
+
+            // if(confirm("Are you sure you want to replace/remove the scaned document?")){
+            //     $(inFile).val('');
+            //     $(inFile).prop('disabled', true);
+            //     set_BtnView(btnView, true);
+            //     set_BtnFile(btnFile, true);
+            //     $(btnFile).prop('disabled', true);
+            // }else{
+            //     $(this).prop('checked', true);
+            //     $(btnFile).prop('disabled', !$(this).prop('checked'));
+            // }
         }
     }
     $(inFile).prop('disabled', !$(this).prop('checked'));
 
-    // Prompts user and perform the correct action when checkbox is ticked
-    $(btnFile).prop('disabled', !checked);
-    if(!checked){ 
-        if($(btnFile).hasClass('btn-danger')){
-            if(confirm("Are you sure you want to replace/remove the scaned document?")){
-                $(inFile).val('');
-                $(inFile).prop('disabled', true);
-                set_BtnView(btnView, true);
-                set_BtnFile(btnFile, true);
-                $(btnFile).prop('disabled', true);
-            }else{
-                $(this).prop('checked', true);
-                $(btnFile).prop('disabled', !$(this).prop('checked'));
-            }
-        }
-    }
-    $(inFile).prop('disabled', !$(this).prop('checked'));
+    // // Prompts user and perform the correct action when checkbox is ticked
+    // $(btnFile).prop('disabled', !checked);
+    // if(!checked){ 
+    //     if($(btnFile).hasClass('btn-danger')){
+    //         dts_alert({
+    //             title : "Remove scanned document?",
+    //             body : "Are you sure you want to replace/remove the scanned document?",
+    //             buttons: ["YES", "NO"]
+    //         }, (answer)=>{
+    //             if(answer) {
+    //                 $(inFile).val('');
+    //                 $(inFile).prop('disabled', true);
+    //                 set_BtnView(btnView, true);
+    //                 set_BtnFile(btnFile, true);
+    //                 $(btnFile).prop('disabled', true);
+    //             } else {
+    //                 $(this).prop('checked', true);
+    //             $(btnFile).prop('disabled', !$(this).prop('checked'));
+    //             }
+    //         });
+
+    //         // if(confirm("Are you sure you want to replace/remove the scaned document?")){
+    //         //     $(inFile).val('');
+    //         //     $(inFile).prop('disabled', true);
+    //         //     set_BtnView(btnView, true);
+    //         //     set_BtnFile(btnFile, true);
+    //         //     $(btnFile).prop('disabled', true);
+    //         // }else{
+    //         //     $(this).prop('checked', true);
+    //         //     $(btnFile).prop('disabled', !$(this).prop('checked'));
+    //         // }
+    //     }
+    // }
+    // $(inFile).prop('disabled', !$(this).prop('checked'));
 });
-
-// $(".cb-doc").each(function(e){
-//     $(this).on("change", function(e){
-
-//         // Gets the corresponding button to the checkbox ticked
-//         const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
-//         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-//         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-//         const checked = $(this).prop('checked');
-
-//         // Prompts user and perform the correct action when checkbox is ticked
-//         $(btnFile).prop('disabled', !checked);
-//         if(!checked){ 
-//             if($(btnFile).hasClass('btn-danger')){
-//                 console.log("TOMES")
-//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
-//                     $(inFile).val('');
-//                     $(inFile).prop('disabled', true);
-//                     set_BtnView(btnView, true);
-//                     set_BtnFile(btnFile, true);
-//                     $(btnFile).prop('disabled', true);
-//                 }else{
-//                     $(this).prop('checked', true);
-//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
-//                 }
-//             }
-//         }
-//         $(inFile).prop('disabled', !$(this).prop('checked'));
-
-//         // Prompts user and perform the correct action when checkbox is ticked
-//         $(btnFile).prop('disabled', !checked);
-//         if(!checked){ 
-//             if($(btnFile).hasClass('btn-danger')){
-//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
-//                     $(inFile).val('');
-//                     $(inFile).prop('disabled', true);
-//                     set_BtnView(btnView, true);
-//                     set_BtnFile(btnFile, true);
-//                     $(btnFile).prop('disabled', true);
-//                 }else{
-//                     $(this).prop('checked', true);
-//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
-//                 }
-//             }
-//         }
-//         $(inFile).prop('disabled', !$(this).prop('checked'));
-//     });
-// });
-
-
 
 // The btnView are the buttons for viewing images
 // Enable or disable btnViews through this function
@@ -386,27 +375,54 @@ function changeFileDir (inFile){
     const btnFile = `${inFile} ~ button.btnFile`;
     const btnView = `${inFile} ~ button.viewScan`;
     const key = $(inFile).attr("id");
+    const id = key.replaceAll("doc_scan_", "view_scan_")
+
     // Check if there is already an image uploaded, and confirm if the user wants
     // to replace or remove the saved file
     if($(btnFile).hasClass('btn-danger')) {
-        if(confirm('Are you sure you want to replace/remove the scaned document?')){
-            $(inFile).val('');
-            $(btnFile).removeClass('btn-danger');
-            $(btnFile).addClass('btn-success');
-            $(btnFile).find('span').text('+');
-            set_BtnView(btnView, true);
-            
-            // make the dir value as empty if the answer in  confirm is `yes`
-            VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
-                
-                if(VIEW_RECORD.__old_DIRS__[index][key]) {
-                    VIEW_RECORD.__old_DIRS__[index][key] = "";
-                }
-                
-            })
+        dts_alert({
+            title : "Remove scanned document?",
+            body : "Are you sure you want to replace/remove the scanned document?",
+            buttons: ["YES", "NO"]
+        }, (answer)=>{
+            if(answer) {
+                $(inFile).val('');
+                $(btnFile).removeClass('btn-danger');
+                $(btnFile).addClass('btn-success');
+                $(btnFile).find('span').text('+');
+                set_BtnView(btnView, true);
 
-            console.log(VIEW_RECORD.__old_DIRS__)
-        }
+                // make the dir value to empty if the answer in  confirm is `yes`
+                VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+                    if(VIEW_RECORD.__old_DIRS__[index][key]) {
+                        VIEW_RECORD.__old_DIRS__[index][key] = "";
+                        $(`#${id}`).removeClass("imgLoaded");
+                        $(`#${id}`).off("click");
+                        $(`#${id}`).on("click", viewScannedDocument);
+                    }
+                });
+                // console.log({key, id});
+                // console.log(VIEW_RECORD.__old_DIRS__);
+            }
+        });
+        // if(confirm('Are you sure you want to replace/remove the scaned document?')){
+        //     $(inFile).val('');
+        //     $(btnFile).removeClass('btn-danger');
+        //     $(btnFile).addClass('btn-success');
+        //     $(btnFile).find('span').text('+');
+        //     set_BtnView(btnView, true);
+            
+        //     // make the dir value as empty if the answer in  confirm is `yes`
+        //     VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+                
+        //         if(VIEW_RECORD.__old_DIRS__[index][key]) {
+        //             VIEW_RECORD.__old_DIRS__[index][key] = "";
+        //         }
+                
+        //     })
+
+        //     console.log(VIEW_RECORD.__old_DIRS__)
+        // }
     }else{
         $(inFile).trigger('click');
     }
@@ -442,9 +458,11 @@ $("#image-viewer-holder").on("animationend", function(){
 
 
 // The following lines are triggered when the user wants to view the uploaded image
-$(".viewScan").on("click", function(){
+// the function after this will invoke this function
+function viewScannedDocument() {
 
     // Check id there is an image already uploaded (from `__old_DIRS__`)
+    // If there is an image, open that image
     if(!$(this).hasClass('imgLoaded')){
 
         // Get the id, name, and, source of clicked buttons
@@ -470,7 +488,11 @@ $(".viewScan").on("click", function(){
             $("#image-viewer-holder").addClass('pop-in');
         }
     }
-});
+}
+
+// The following lines are triggered when the user wants to view the uploaded image
+$(".viewScan").on("click", viewScannedDocument);
+
 
 $("#_remarksValue_other").on("keydown", function(e){
     const val = $(this).val();
@@ -528,3 +550,18 @@ $(window).on("load", async function (e) {
     await loadRemarksCategories();
     await prepareStudentRecords();
 });
+
+
+function deleteRecord(record_id) {
+    dts_alert({
+        title : "Delete Record?",
+        body : `Are you sure you want remove <b>${record_id}</b> data?`,
+        buttons: ["YES", "NO"]
+    }, (answer)=>{
+        if(answer) {
+            
+            // update the deletedflag, set to 1
+
+        }
+    });
+}

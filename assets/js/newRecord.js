@@ -404,8 +404,6 @@ const RECORD = {
                     })
 
                     if(source) reader.readAsDataURL(source);
-
-                    console.log(name);
                     
                     $("#image-viewer-container").removeClass('hide');
                     $("#image-viewer-container").addClass('fade-in');
@@ -462,13 +460,26 @@ function changeFileDir (inFile){
     const btnView = `${inFile} ~ button.viewScan`;
 
     if($(btnFile).hasClass('btn-danger')) {
-        if(confirm('Are you sure you want to replace/remove the scaned document?')){
+        dts_alert({
+            title : "Remove scanned document?",
+            body : "Are you sure you want to replace/remove the scanned document?",
+            buttons : ["Yes", "No"]
+        }, (answer)=>{
+            if(!answer) return;
+
             $(inFile).val('')
             $(btnFile).removeClass('btn-danger');
             $(btnFile).addClass('btn-success')
             $(btnFile).find('span').text('+')
             set_BtnView(btnView, true);
-        }
+        });
+        // if(confirm('Are you sure you want to replace/remove the scaned document?')){
+        //     $(inFile).val('')
+        //     $(btnFile).removeClass('btn-danger');
+        //     $(btnFile).addClass('btn-success')
+        //     $(btnFile).find('span').text('+')
+        //     set_BtnView(btnView, true);
+        // }
     }else{
         $(inFile).trigger('click');
     }
