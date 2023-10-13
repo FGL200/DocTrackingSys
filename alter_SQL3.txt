@@ -33,4 +33,7 @@ WHERE
     OR 
    `hd_or_cert_of_trans` NOT LIKE '%"dir"%:%""%' )
    	AND sr.updated_by_uid = '5'
-    
+
+ALTER TABLE `stud_rec` CHANGE `updated_date` `updated_date` DATETIME NULL DEFAULT NULL;
+
+UPDATE `stud_rec` SET `updated_date` = NULL WHERE `updated_by_uid` is NULL

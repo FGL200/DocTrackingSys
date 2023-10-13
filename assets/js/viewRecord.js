@@ -14,8 +14,8 @@ const VIEW_RECORD = {
 
             form.append("remarks", VIEW_RECORD.__remarksValue__);
 
-            // $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
-            // $("#update-record-btn").prop("disabled", true);
+            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+            $("#update-record-btn").prop("disabled", true);
             
            
     
@@ -169,7 +169,12 @@ const VIEW_RECORD = {
                     const sources = doc.dir.split(",");
                     console.log(sources)
                     $("#image-viewer-container").find("img").remove()
-                    for(let src of sources ) $("#rotate-img").before(`<img src='${base_url + src}'>`) /** Created By Patrick */
+                    let count = 0;
+                    for(let src of sources ) {
+                        $("#rotate-img").before(`<img class='image-viewer${count===0?"":" hide"}' src='${base_url + src}'>`);
+                        count++;
+                    } /** Created By Patrick */
+
                     // $("#image-viewer").prop("src", base_url + source[0]);
                     $("#image-viewer-container").removeClass('hide');
                     $("#image-viewer-container").addClass('fade-in');
@@ -508,7 +513,7 @@ $("#rotate-img").on("click", function(e){
 });
 
 function updateRotateOfImg() {
-    $("#image-viewer").css({"transform" : `rotate(${VIEW_RECORD.__ROTATION__}deg)`});
+    $(".image-viewer").css({"transform" : `rotate(${VIEW_RECORD.__ROTATION__}deg)`});
 }
 
 async function loadRemarksCategories() {
