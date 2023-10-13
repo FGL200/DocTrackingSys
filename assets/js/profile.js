@@ -83,7 +83,14 @@ const PROFILE = {
             })
             .then(resp=>resp.json())
             .then(data=>{
-                console.log(data)
+                const result = data.result[0];
+                PROFILE.USER_INFO = new Profile (
+                    result.uname,
+                    result.fname,
+                    result.lname,
+                    result.bday,
+                    result.gender
+                );
             })
             .catch(err=>{
 
@@ -112,6 +119,8 @@ async function load_profile(){
             result.bday,
             result.gender
         );
+
+        console.log(result.bday)
     })
     .catch(err => {
         console.error("ERROR: " + err); 

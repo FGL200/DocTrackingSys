@@ -121,8 +121,6 @@ class User_model extends CI_Model
 
 
 
-
-
     /** PRIVATE FUNCTIONS */
 
     private function __is_currently_logged_in__(Int $uid){

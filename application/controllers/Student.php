@@ -63,20 +63,28 @@ class Student extends CI_Controller{
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
-
+        $stud_docs = [];
         /** Inserting data in `doc` table  */
+        foreach($_FILES as $key => $val) {
+            $doc = str_replace("doc_scan_","", $key);
+            
+            $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
 
-        foreach($this->user_docs as $doc) {
-            if(!empty($data)) $data .= ", ";
+            for($i = 0; $i < count($_FILES[$key]['name']); $i++) {
+                $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
 
-            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
- 
-            $path = !empty($_FILES['doc_scan_' . $doc]['name']) ?  $this->upload_file($_FILES['doc_scan_' . $doc]) : '';
-            $data .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
+                if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
+            }
+            
+
+            if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
         }
+       
         
+        $data = implode(', ', array_values($stud_docs));
 
         $data .= ", `stud_rec_id` = '{$student_id}'";
+    
         $this->stud->addStudentDoc($data);
     
 
@@ -201,25 +209,39 @@ class Student extends CI_Controller{
         
         /** Update `doc` table  */
         $doc_set = "";
+        $docs_set = [];
         
         foreach($this->user_docs as $doc) {
             $path = "";
 
-            if(!empty($doc_set)) $doc_set .= ", ";
+            if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
+            else $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
 
-            $doc_val = $this->input->post('doc_val_'.$doc) ? '1' : '0';
-            
-            if($this->input->post('doc_scan_' . $doc)) $path = $this->input->post('doc_scan_' . $doc);
-            if(!empty($_FILES['doc_scan_' . $doc]['name'])) $path = $this->upload_file($_FILES['doc_scan_' . $doc]);
+            if($this->input->post("doc_scan_" . $doc)) $docs_set[$doc] .= $this->input->post("doc_scan_" . $doc)."\"}'";
 
-            if(empty($path) || !empty($_FILES['doc_scan_' . $doc]['name'])) {  
-                $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-                if($old_path) $this->delete_Image($old_path);
+            if(isset($_FILES['doc_scan_' . $doc])) {
+
+                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+                    if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
+                        $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
+                    }
+                    if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
+                    
+                }
+
+                $docs_set[$doc] .= "\"}'";
+
+                
             }
-             
-            $doc_set .= "`$doc` = '{\"val\" : \"$doc_val\", \"dir\" : \"$path\"}'";
-        }
+            
 
+            // $old_path = $this->get_doc_dir($stud_rec_id, $doc);
+            // if($old_path) $this->delete_Image($old_path);
+            
+        }
+       
+        $doc_set = implode(", ", array_values($docs_set));
+        
         $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
         $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
         /** End Update `doc` table  */
@@ -414,7 +436,7 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    private function upload_file(Array $file) {
+    private function upload_file($tmp_name, $file_name) {
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', 'uploads/', $path);
 
@@ -422,13 +444,13 @@ class Student extends CI_Controller{
 
         $new_file_name = date("Y_m_d_H_i_s") . bin2hex(random_bytes(5));
 
-        $file_ext = explode('.',$file['name']);
-        $file['name'] = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+        $file_ext = explode('.',$file_name);
+        $file_name = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
 
-        $new_file_path =  'uploads/' . $file['name'];
+        $new_file_path =  'uploads/' . $file_name;
         $data = $new_file_path;
         // echo $new_file_name;
-        return move_uploaded_file($file['tmp_name'], $new_file_path) ? $data : false;
+        return move_uploaded_file($tmp_name, $new_file_path) ? $data : '';
 
     }
     

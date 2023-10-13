@@ -14,8 +14,8 @@ const VIEW_RECORD = {
 
             form.append("remarks", VIEW_RECORD.__remarksValue__);
 
-            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
-            $("#update-record-btn").prop("disabled", true);
+            // $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
+            // $("#update-record-btn").prop("disabled", true);
             
            
     
@@ -23,9 +23,17 @@ const VIEW_RECORD = {
                 VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
                     // kapag walang laman yung input file iassign yung value na nasa 
                     // VIEW_RECORD.__old_DIRS__
-                    if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                        form.set(key, VIEW_RECORD.__old_DIRS__[k][key]);
+                    if(form.get(key) instanceof File) {
+                        if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                            const nKey = key.replace(/[\[\]]/g, "");
+
+                            form.delete(key);
+
+                            form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
+                            console.log(nKey)
+                        }
                     }
+                    
                 })
             });
         } else {
@@ -35,7 +43,8 @@ const VIEW_RECORD = {
             $("#delete-record-btn").prop("disabled", true);
         }
         
-        
+        // return;
+
         fetch(base_url + 'student/record/' + action, {
             method : 'post',
             body :  form
@@ -157,8 +166,11 @@ const VIEW_RECORD = {
             if(doc.dir !== '') {
                 $('#view_scan_' + keys[i]).on("click", function(){
                     $(this).addClass('imgLoaded');
-                    const source = doc.dir;
-                    $("#image-viewer").prop("src", base_url + source);
+                    const sources = doc.dir.split(",");
+                    console.log(sources)
+                    $("#image-viewer-container").find("img").remove()
+                    for(let src of sources ) $("#rotate-img").before(`<img src='${base_url + src}'>`) /** Created By Patrick */
+                    // $("#image-viewer").prop("src", base_url + source[0]);
                     $("#image-viewer-container").removeClass('hide');
                     $("#image-viewer-container").addClass('fade-in');
                     $("#image-viewer-holder").addClass('pop-in');
@@ -188,7 +200,7 @@ const VIEW_RECORD = {
             // and save is as an object to' __old_DIRS__' variable
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
-            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}" : "${docDir}"}`));
+            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}"}`));
 
         }
 
@@ -399,8 +411,8 @@ function changeFileDir (inFile){
             // make the dir value as empty if the answer in  confirm is `yes`
             VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
                 
-                if(VIEW_RECORD.__old_DIRS__[index][key]) {
-                    VIEW_RECORD.__old_DIRS__[index][key] = "";
+                if(VIEW_RECORD.__old_DIRS__[index][key + "[]"]) {
+                    VIEW_RECORD.__old_DIRS__[index][key + "[]"] = "";
                 }
                 
             })
