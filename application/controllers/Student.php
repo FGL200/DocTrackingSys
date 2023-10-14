@@ -234,9 +234,13 @@ class Student extends CI_Controller{
                 
             }
             
-
-            // $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-            // if($old_path) $this->delete_Image($old_path);
+            // Deleting old_files
+            $old_path = $this->get_doc_dir($stud_rec_id, $doc);
+            $dirs = explode(',', $old_path);
+            foreach($dirs as $d) {
+                if($d) $this->delete_Image($d);
+            }
+            
             
         }
        
