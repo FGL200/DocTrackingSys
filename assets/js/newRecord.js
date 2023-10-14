@@ -490,13 +490,26 @@ function changeFileDir (inFile){
     const btnView = `${inFile} ~ button.viewScan`;
 
     if($(btnFile).hasClass('btn-danger')) {
-        if(confirm('Are you sure you want to replace/remove the scaned document?')){
+        dts_alert({
+            title : "Removing scanned document",
+            body : "Are you sure you want to <b>remove</b> the scanned document?",
+            buttons : ["yes", "no"]
+        }, function(ans){
+            if(!ans) return;
+            
             $(inFile).val('')
             $(btnFile).removeClass('btn-danger');
             $(btnFile).addClass('btn-success')
             $(btnFile).find('span').text('+')
             set_BtnView(btnView, true);
-        }
+        });
+        // if(confirm('Are you sure you want to replace/remove the scaned document?')){
+        //     $(inFile).val('')
+        //     $(btnFile).removeClass('btn-danger');
+        //     $(btnFile).addClass('btn-success')
+        //     $(btnFile).find('span').text('+')
+        //     set_BtnView(btnView, true);
+        // }
     }else{
         $(inFile).trigger('click');
     }

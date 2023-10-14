@@ -82,7 +82,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home', 'alert','newRecord']
+            'js' => ['home', 'alert', 'newRecord']
         ];
 
         // load page
@@ -112,14 +112,14 @@ class Page extends CI_Controller {
             'studData' => $studData,
             'css' => ['viewRecord'],
             'constants' => [
-                'record_id' => $rec_id, 
+                'record_id' => $record_id, 
                 'role' => $role
             ]
         ];
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['viewRecord']
+            'js' => ['viewRecord', 'alert']
         ];
 
         // load page

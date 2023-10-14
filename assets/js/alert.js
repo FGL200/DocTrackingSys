@@ -14,7 +14,7 @@ function dts_alert(content = {
     const e_CONTAINER = $("<div class='d-flex flex-column m-5 p-4 card fade-in-slide-down' id='dts_alert-container' style='position: absolute; min-width: 300px;'></div>");
     const e_HEADER = $(`<div class='fw-bold' id='dts_alert-header'>${content.title}<hr style='margin: 0; margin-bottom: 1rem;'/></div>`);
     const e_BODY = $(`<div class='' id='dts_alert-body' style='margin-bottom: 1rem;'>${content.body}</div>`);
-    const e_FOOTER = $("<div class='d-flex flex-row-reverse gap-2' id='dts_alert-footer'></div>");
+    const e_FOOTER = $("<div class='d-flex flex-row justify-content-end gap-2' id='dts_alert-footer'></div>");
 
     if(!content.buttons) content.buttons = ["Okay"];
 
