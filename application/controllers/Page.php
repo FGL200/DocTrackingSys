@@ -52,18 +52,19 @@ class Page extends CI_Controller {
             return;
         }
 
-        $data["header"] = [
-            "title" => "Dashboard",
-            "uid" => 0,
+        $uid = $this->session->userdata('uid');
+
+        $data['header'] = [
+            'title' => 'Dashboard',
+            'uid' => $uid,
             'hide_nav' => true
         ];
-        $data["footer"] = [
-            "js" => ["alert"]
+        $data['footer'] = [
+            'js' => ['alert', 'dashboard']
         ];
 
-        $this->loadPage("dashboard", $data);
+        $this->loadPage('dashboard', $data);
     }
-
 
     public function home() {
         if(!$this->session->has_userdata('uid')){
@@ -81,7 +82,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home','newRecord']
+            'js' => ['home', 'alert','newRecord']
         ];
 
         // load page
@@ -101,27 +102,19 @@ class Page extends CI_Controller {
 
         $studData = $this->stud->get_Student_all_Record($rec_id);
         if(!$studData) redirect('home');
-        $fname = $studData['stud_fname'];
         $role = $this->session->userdata('role');
 
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> $fname,
+            'title'=> "#{$record_id}",
+            'record_id' => $record_id,
+            'role' => $role,
+            'studData' => $studData,
+            'css' => ['viewRecord'],
             'constants' => [
                 'record_id' => $rec_id, 
                 'role' => $role
-            ],
-            'record_id' => $record_id,
-            'role' => $role,
-            'css' => ['viewRecord'],
-            'profile' => [
-                'uname' => '',
-                'fname' => '',
-                'lname' => '',
-                'bday' => date('mm/dd/yyyy'),
-                'g' => 'N',
-            ],
-            'studData' => $studData
+            ]
         ];
 
         // FOOTER VAIRABLES

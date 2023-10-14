@@ -69,8 +69,8 @@ class Student extends CI_Controller{
             $doc = str_replace("doc_scan_","", $key);
             
             $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
-
-            for($i = 0; $i < count($_FILES[$key]['name']); $i++) {
+                
+            for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
                 $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
 
                 if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
@@ -398,6 +398,7 @@ class Student extends CI_Controller{
                 }
                 if($key === "cby") $cby = $val;
                 if($key === "udate") {
+                    if($val == null) continue;
                     $tempDate = intval(date_diff(new DateTime(), new DateTime($val))->format("%a"));
                     $udate = ($tempDate == 0) ? "today" : (($tempDate == 1) ? "yesterday" : "{$tempDate} days ago") ;
                 }

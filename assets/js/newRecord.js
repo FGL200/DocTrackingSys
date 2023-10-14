@@ -4,6 +4,7 @@ const RECORD = {
      */
     NEW: {
         __remarksValue__: [],
+        __ROTATION__ : 0,
 
         open: async function () {
             home_current_open_modal = 'NEW';
@@ -206,9 +207,9 @@ const RECORD = {
                 </section>
             </div>
             <div id="image-viewer-container" class="hide">
-                <div id="image-viewer-holder">
+                <div id="image-viewer-holder" class="d-flex flex-column gap-2">
                     <button type="button" class="btn btn-danger" id="close-image-viewer-container"><i class="fa-solid fa-xmark"></i></button>
-                    <img id="image-viewer" src="" />
+                    <button type="button" id="rotate-img" class="btn btn-primary align-self-end"><i class="fa-solid fa-rotate"></i></button>
                 </div>
             </div>
             `);
@@ -394,21 +395,45 @@ const RECORD = {
             });
 
 
+            $("#rotate-img").on("click", function(e){
+                RECORD.NEW.__ROTATION__ += 90;
+                if(RECORD .NEW.__ROTATION__ >= 360) RECORD .NEW.__ROTATION__ = 0;
+            
+                updateRotateOfImg();
+            });
+            
+            
+
+
             $(".viewScan").on("click", function(){
                 if(!$(this).hasClass('imgLoaded')){
+                    $("img.image-viewer").remove();
+
+                    // Get the id, name, and, source of clicked buttons
                     const id = $(this).attr('id');
                     const name = id.replace('view_scan_', '');
-                    const source = document.getElementById("doc_scan_" + name).files[0];
+                    // const source = document.getElementById("doc_scan_" + name).files[0];
 
+                    let count = 0;
+                    for(let src of document.getElementById("doc_scan_" + name).files) {
+                        // console.log(src);
+                        // continue;
+                        
+                        const reader = new FileReader();
+                        
+                        reader.addEventListener('load', ()=>{
+                            // console.log(reader.result);
+                            $("#rotate-img").before(`<img class='image-viewer${count===0?"":" hide"}'  height = '500' width = '500' src='${reader.result}'>`);
+                            // $(".image-viewer").prop("src", reader.result);
+                            count++;
+                        });
 
-                    const reader = new FileReader();
-                    reader.addEventListener('load', ()=>{
-                        $("#image-viewer").prop("src", reader.result);
-                    })
-
-                    if(source) reader.readAsDataURL(source);
-
-                    console.log(name);
+                        
+                        
+                        if(src) {
+                            reader.readAsDataURL(src);
+                        }
+                    } 
                     
                     $("#image-viewer-container").removeClass('hide');
                     $("#image-viewer-container").addClass('fade-in');
@@ -475,4 +500,8 @@ function changeFileDir (inFile){
     }else{
         $(inFile).trigger('click');
     }
+}
+
+function updateRotateOfImg() {
+    $(".image-viewer").css({"transform" : `rotate(${RECORD.NEW.__ROTATION__}deg)`});
 }

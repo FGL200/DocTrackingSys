@@ -16,9 +16,11 @@
     align-items: center;
 }
 
-#image-viewer {
+.image-viewer {
     max-width: calc(100vw - 100px);
     max-height: calc(100vh - 100px);
+    /* max-width: calc(100% - 100px);
+    max-height: calc(100% - 100px); */
 }
 
 #image-viewer-holder {
@@ -26,6 +28,9 @@
     border-radius: 5px;
     padding: 1rem;
     position: relative;;
+    /* max-height: calc(100vh - 100px);
+    max-width: calc(100vw - 100px); */
+    /* max-width: 500px; */
 }
 
 #close-image-viewer-container{
