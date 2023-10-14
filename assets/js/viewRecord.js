@@ -403,10 +403,14 @@ function changeFileDir (inFile){
     const btnFile = `${inFile} ~ button.btnFile`;
     const btnView = `${inFile} ~ button.viewScan`;
     const key = $(inFile).attr("id");
+
+    console.log({btnFile, btnView, key});
+
     // Check if there is already an image uploaded, and confirm if the user wants
     // to replace or remove the saved file
     if($(btnFile).hasClass('btn-danger')) {
         if(confirm('Are you sure you want to replace/remove the scaned document?')){
+
             $(inFile).val('');
             $(btnFile).removeClass('btn-danger');
             $(btnFile).addClass('btn-success');
@@ -418,6 +422,10 @@ function changeFileDir (inFile){
                 
                 if(VIEW_RECORD.__old_DIRS__[index][key + "[]"]) {
                     VIEW_RECORD.__old_DIRS__[index][key + "[]"] = "";
+                    
+                    let temp_id = key.replace("doc_scan_", "view_scan_"); 
+                    $(`#${temp_id}`).off("click");
+                    $(`#${temp_id}`).on("click", viewScannedDoc);
                 }
                 
             })
@@ -458,8 +466,9 @@ $("#image-viewer-holder").on("animationend", function(){
 }); 
 
 
-// The following lines are triggered when the user wants to view the uploaded image
-$(".viewScan").on("click", function(){
+// (DEFINITION) The following lines are triggered when the user wants to view the uploaded image
+function viewScannedDoc(){
+    $("img.image-viewer").remove();
 
     // Check id there is an image already uploaded (from `__old_DIRS__`)
     if(!$(this).hasClass('imgLoaded')){
@@ -467,27 +476,65 @@ $(".viewScan").on("click", function(){
         // Get the id, name, and, source of clicked buttons
         const id = $(this).attr('id');
         const name = id.replace('view_scan_', '');
-        const source = document.getElementById("doc_scan_" + name).files[0];
+        // const source = document.getElementById("doc_scan_" + name).files[0];
+
+        let count = 0;
+        for(let src of document.getElementById("doc_scan_" + name).files) {
+            // console.log(src);
+            // continue;
+            
+            const reader = new FileReader();
+            
+            reader.addEventListener('load', ()=>{
+                // console.log(reader.result);
+                $("#rotate-img").before(`<img class='image-viewer${count===0?"":" hide"}'  height = '500' width = '500' src='${reader.result}'>`);
+                // $(".image-viewer").prop("src", reader.result);
+                count++;
+            });
+
+            
+            
+            if(src) {
+                reader.readAsDataURL(src);
+            }
+        } 
+        
+        $("#image-viewer-container").removeClass('hide');
+        $("#image-viewer-container").addClass('fade-in');
+        $("#image-viewer-holder").addClass('pop-in');
 
         // This line is for reading the uploaded file ()
-        const reader = new FileReader();
+        // const reader = new FileReader();
         
         // If the file is successfully loaded,
         // set the source of the image to the file
-        reader.addEventListener('load', ()=>{
-            $("#image-viewer").prop("src", reader.result);
-        });
+        // reader.addEventListener('load', ()=>{
+        //     $("#image-viewer").prop("src", reader.result);
+            
+        // });
 
+        
         // Check wehter the source has value or none,
         // If there is a value, read the file as how the browser would read it by default
-        if(source) {
-            reader.readAsDataURL(source);
-            $("#image-viewer-container").removeClass('hide');
-            $("#image-viewer-container").addClass('fade-in');
-            $("#image-viewer-holder").addClass('pop-in');
-        }
+        // if(source) {
+        //     reader.readAsDataURL(source);
+        //     $("#image-viewer-container").removeClass('hide');
+        //     $("#image-viewer-container").addClass('fade-in');
+        //     $("#image-viewer-holder").addClass('pop-in');
+        // }
+
+        // let count = 0;
+        // for(let src of sources ) {
+        //     $("#rotate-img").before(`<img class='image-viewer${count===0?"":" hide"}' src='${base_url + src}'>`);
+        //     count++;
+        // } /** Created By Patrick */
+
     }
-});
+}
+
+// (INVOKATION) The following lines are triggered when the user wants to view the uploaded image
+$(".viewScan").on("click", viewScannedDoc);
+
 
 $("#_remarksValue_other").on("keydown", function(e){
     const val = $(this).val();

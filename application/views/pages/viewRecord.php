@@ -258,8 +258,6 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
 <div id="image-viewer-container" class="hide">
     <div id="image-viewer-holder" class="d-flex flex-column gap-2">
         <button class="btn btn-danger" id="close-image-viewer-container"><i class="fa-solid fa-xmark"></i></button>
-        <!-- <div id="image-viewer"></div> -->
-        <!-- <img id="image-viewer" src="" />  -->  <!-- Comment by Patrick -->
         <button id="rotate-img" class="btn btn-primary align-self-end"><i class="fa-solid fa-rotate"></i></button>
     </div>
 </div>
