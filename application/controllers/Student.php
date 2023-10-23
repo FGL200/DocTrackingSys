@@ -39,8 +39,16 @@ class Student extends CI_Controller{
             echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
             exit;
         }
-        /** END Student Information checking */
+        $student_info = array($this->input->post("stud_fname"),$this->input->post("stud_lname") );
+        $student = $this->stud->get_Student_By($student_info);
+        if($student) {
+            
+            echo json_encode(array('status'=>'error', 'message'=>'Record already exist'));
+            exit; 
+        }
 
+        /** END Student Information checking */
+        
         $data = "";
 
         /** Inserting data in `stud_rec` table */

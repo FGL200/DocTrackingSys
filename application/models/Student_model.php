@@ -339,7 +339,39 @@ class Student_model extends CI_Model{
         return $this->db->affected_rows() ? true : false;
     }
 
+    public function get_Student_By($student_info) {
+        $sql = "SELECT 
+                    stud_fname,
+                    stud_mname,
+                    stud_lname
+                FROM stud_rec 
+                WHERE (stud_fname LIKE '%".$student_info[0]."%' AND stud_lname LIKE '%".$student_info[1]."%')
+                ";
 
+        $fetch = $this->db->query($sql);
+        return $fetch->result();
+    }
+    /**
+     * User total encoded data in current day
+     * @param int $user 
+     */
+    public function get_Total_Encoded_By_Current_Day($userID) {
+        $current_day = date("Y-m-d");
+        
+        $sql = "SELECT 
+                    `u`.`uname`,
+                    count(*) as `total`
+                FROM `stud_rec` as `sr` 
+                JOIN user `u`
+                    ON `u`.id =  `sr`.`created_by_uid`
+                    WHERE CAST(`sr`.`created_date` as DATE) = '".$current_day."'
+                    AND `sr`.created_by_uid = '".$userID."' 
+                GROUP BY `sr`.`created_by_uid`";
+
+        $result = $this->db->query($sql);
+
+        return $result->row();
+    }
 
 }
 
