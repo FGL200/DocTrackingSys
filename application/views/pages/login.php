@@ -20,12 +20,15 @@
             <!-- <section class="m-2">
                 Login to get started!
             </section> -->
-            <section style="margin-top: 1rem; font-size: small; text-align: justify; color: #E5E5F7;">
+            <section class="d-flex flex-column" style="margin-top: 1rem; font-size: small; text-align: justify; color: #E5E5F7;">
                 <div class="fw-bold fs-6">Note:</div>
                 <div class="note-item">If you <b style="color: white;">do not have account</b>, contact admin <br /> to register new account.</div>
                 <div class="note-item">If you <b style="color: white;">forgot your password</b>, contact admin <br /> to reset your password.</div>
                 <div class="note-item"><b style="color: white;">Unauthorized use</b> of the system will result <br /> to disciplinary actions.</div>
+                <div class="note-item">View Terms and Conditions <a href="#" style="color: white; font-weight:bold; text-decoration:underline;">here</a>.</div>
             </section>
+        </div>
+        <div>
         </div>
     </form>
 </main>

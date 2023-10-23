@@ -12,7 +12,7 @@ const LOGIN = {
                 MAIN.addNotif("Login failed", "Incorrect username or password", "r");
                 return;
             }else
-                window.location.href = base_url + 'home';
+                window.location.href = base_url + 'dashboard';
         })
         .catch(err=>{
             console.log(err);

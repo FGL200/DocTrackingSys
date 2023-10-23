@@ -53,14 +53,18 @@ class Page extends CI_Controller {
         }
 
         $uid = $this->session->userdata('uid');
+        $role = $this->session->userdata('role');
 
         $data['header'] = [
             'title' => 'Dashboard',
             'uid' => $uid,
-            'hide_nav' => true
+            'role' => $role,
+            // 'hide_nav' => true,
+            'constants' => ["role" => $role],
+            'css' => ["dashboard"]
         ];
         $data['footer'] = [
-            'js' => ['alert', 'dashboard']
+            'js' => ['alert', ($role === 'A') ? 'dashboard' : null]
         ];
 
         $this->loadPage('dashboard', $data);

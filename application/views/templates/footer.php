@@ -32,6 +32,9 @@
 <!-- FONTAWESOME -->
 <script src="<?=base_url('assets/third_party/fontawesome/js/all.min')?>.js"></script>
 
+<!-- jsCalendar -->
+<script src="<?=base_url('assets/third_party/jsCalendar/jsCalendar.min')?>.js"></script>
+
 <!-- CUSTOM JS -->
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>

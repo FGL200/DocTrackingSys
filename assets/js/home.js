@@ -1,4 +1,3 @@
-MAIN.addNotif("Welcome!", CONST_UNAME);
 let home_current_open_modal = null;
 
 const HOME = {

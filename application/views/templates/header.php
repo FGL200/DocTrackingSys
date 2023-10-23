@@ -20,6 +20,9 @@
     <!-- MDB5 -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css/mdb.min')?>.css">
 
+    <!-- jsCalendar -->
+    <link rel="stylesheet" href="<?=base_url('assets/third_party/jsCalendar/jsCalendar.min')?>.css">
+
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/css/main')?>.css">
     <link rel="stylesheet" href="<?=base_url('assets/css/header')?>.css">
@@ -72,7 +75,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav gap-1">
                     <li class="nav-item">
-                        <a class="nav-link active color-w" aria-current="page" href="<?=base_url('home')?>">
+                        <a class="nav-link active color-w" aria-current="page" href="<?=base_url('dashboard')?>">
                             <i class="fa-solid fa-house"></i>
                             Home
                         </a>
