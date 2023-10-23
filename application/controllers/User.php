@@ -105,8 +105,13 @@ class User extends CI_Controller{
     }
 
     public function get_user() {
-        $uid = $this->input->post()['uid'];
-        $nData = $this->user->get_user($uid);
+        // user id na ife-fetch 
+        $uid = $this->input->post()['uid']; 
+
+        // requester ng user id (dapat admin) if hindi admin, dapat pareho ang requester at ung nirerequest na ID
+        $rid = $this->input->post()['rid']; 
+
+        $nData = $this->user->get_user($rid, $uid);
         echo json_encode(['result' => $nData]);  
     }
 
@@ -133,7 +138,7 @@ class User extends CI_Controller{
                 if($key === "User ID"){
                     $id = str_pad($nRow["User ID"], 6, "0", STR_PAD_LEFT);
                     // $nRow["<input type='checkbox' id='cb-select-all-user'/> User ID"] = "<input type='checkbox' class='cb-select-user' /> <a href='#' class='user_id_link'>{$id}</a>";
-                    $nRow["User ID"] = "<a href='#' class='user_id_link'>{$id}</a>";    
+                    $nRow["User ID"] = "<a href='#' class='user_id_link' onclick='viewUser(".intval($id).")'>{$id}</a>";    
                 }
             }
             array_push($fixedData, $nRow);

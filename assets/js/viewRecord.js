@@ -104,7 +104,7 @@ const VIEW_RECORD = {
             function () { $(this).css("background-color", "#FDEDEC"); },
             function () { $(this).css("background-color", "#fff"); }
         );
-        if(CONST_ROLE !== 'V'){
+        if(CONST_ROLE === 'E'){
             span.on("click", function (e) {
                 e.preventDefault();
                 $(this).remove();

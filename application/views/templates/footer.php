@@ -18,7 +18,7 @@
         <button type="button" class="btn btn-primary" onclick="(typeof ON_MODAL_CLOSE !== 'undefined') ? MODAL.close(ON_MODAL_CLOSE()) : MODAL.close();"><i class="fa-solid fa-xmark"></i></button>
         <div id="modal-title" class="fw-bold fs-6 p-1 text-center"></div>
         <div id="modal-body" class="p-1"></div>
-        <div id="modal-footer" class="d-flex flex-row-reverse p-1"></div>
+        <div id="modal-footer" class="d-flex flex-row-reverse p-1 gap-2"></div>
         <div id="modal-script"></div>
     </form>
 </div>
@@ -39,9 +39,9 @@
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>
 <script src="<?=base_url('assets/js/profile')?>.js"></script>
-<?php if(isset($js)) foreach($js as $j) {?>
+<?php if(isset($js)) foreach($js as $j) { if($j != null) { ?>
 <script src="<?=base_url("assets/js/$j")?>.js"></script>
-<?php }?>
+<?php } }?>
 
 
 <!-- END OF HTML -->

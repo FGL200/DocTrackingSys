@@ -97,10 +97,12 @@ class User_model extends CI_Model
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
 
-    public function get_user(Int $uid) {
-        if(!$this->__is_currently_logged_in__($uid)) return [];
+    public function get_user(Int $requesterId,Int $userId) {
+        if(!$this->__is_currently_logged_in__($requesterId)) return [];
+        if(!$this->user_Is_Admin($requesterId)) if($requesterId !== $userId) return[];
 
         $query = "SELECT
+                    u.`id`,
                     u.`uname`,
                     u.`active`,
                     u.`role`,
@@ -112,7 +114,7 @@ class User_model extends CI_Model
                 FROM `user` u
                 INNER JOIN `user_info` i
                     ON i.`user_id` = u.`id`
-                WHERE u.`id` = {$uid}
+                WHERE u.`id` = {$userId}
                 LIMIT 1
         ";
         $fetch = $this->db->query($query);

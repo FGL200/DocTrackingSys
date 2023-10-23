@@ -177,6 +177,7 @@ async function setupEncoded_monthly() {
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
     chart.appear(1000, 100);
+    $('g:has(> g[stroke="#3cabff"])').hide();
 }
 
 async function setupEncoded_live() {
@@ -437,29 +438,17 @@ $(window).on("load", function (e) {
     });
 });
 
-
-let view_one = true;
-function toggleView() {
-    view_one = !view_one;
-
-    console.log(view_one);
-
-    if (view_one) {
-        $("#toggleButton").html(`<i class="fa-solid fa-chart-line"></i> Statistics`);
-
-        $("#shelf").removeClass("hide");
-        $("#visual-analytics").addClass("hide");
-    } else {
-        $("#toggleButton").html(`<i class="fa-solid fa-lines-leaning"></i> Shelves`);
-
-        $("#shelf").addClass("hide");
-        $("#visual-analytics").removeClass("hide");
-    }
-}
-
 function newShelf() {
-    MODAL.setTitle("header");
-    MODAL.setBody("body");
-    MODAL.setFooter("footer");
+    MODAL.setTitle("<span class='fs-5'>New Shelf<span>");
+    MODAL.setBody(`<div>
+        <input type='text' class='form-control'name='name' placeholder='Shelf name'>
+    </div>`);
+    MODAL.setFooter("<button class='btn btn-success'>Add</button><button class='btn btn-danger' type='button' onClick='MODAL.close()'>Cancel</button>");
+    MODAL.onSubmit((e)=>{
+        const form = new FormData(MODAL.form);
+        
+        // add new shelf here
+    });
+    
     MODAL.open();
 }

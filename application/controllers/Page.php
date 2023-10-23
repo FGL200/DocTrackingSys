@@ -24,7 +24,7 @@ class Page extends CI_Controller {
 
     public function index(){ 
         if($this->session->has_userdata('uid')){
-            redirect('home');
+            redirect('dashboard');
             //$this->home();
             return;
         }
@@ -128,5 +128,30 @@ class Page extends CI_Controller {
 
         // load page
         $this->loadPage("viewRecord", $data);
+    }
+
+    public function manage_users() {
+        if(!$this->session->has_userdata('uid')){
+            redirect('');
+            return;
+        }
+
+        $role = $this->session->userdata('role');
+
+        if($role != 'A'){
+            redirect('');
+            return;
+        }
+
+        $data['header'] = [
+            'title' => 'Manage Users',
+            'css' => ['manage_users']
+        ];
+
+        $data['footer'] = [
+            'js' => ['alert', 'manage_users']
+        ];
+
+        $this->loadPage("manage_users", $data);
     }
 }

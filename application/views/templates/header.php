@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="<?=base_url('assets/css/footer')?>.css">
     <link rel="stylesheet" href="<?=base_url('assets/css/animation')?>.css">
 
-    <?php if(isset($css)) foreach($css as $c) {?>
+    <?php if(isset($css)) foreach($css as $c) { ?>
     <link rel="stylesheet" href="<?=base_url("assets/css/$c")?>.css">
     <?php }?>
     
@@ -44,14 +44,14 @@
     const base_url = "<?=base_url()?>";
 
     // OTHER DEFINED CONSTANTS
-    <?php if(isset($constants)) foreach ($constants as $key => $val) { ?>
-        <?="const CONST_".strtoupper($key)."='{$val}';\n";?>
-    <?php }?>
+    <?php if(isset($constants)) foreach ($constants as $key => $val) { if($val != null) {?>
+    <?="const CONST_".strtoupper($key)."='{$val}';\n";?>
+    <?php } }?>
 
     </script>
-    <?php if(isset($js)) foreach($js as $j) {?>
+    <?php if(isset($js)) foreach($js as $j) { if($j != null) { ?>
     <script src="<?=base_url("assets/js/$j")?>.js" defer></script>
-    <?php }?>
+    <?php } }?>
 
 </head>
 <body class="d-flex flex-column justify-content-between">
