@@ -318,11 +318,13 @@ const RECORD = {
                         MAIN.addNotif("Record Saved!", "New Record has been saved!", "g");
                         $("#stud_lname").focus();
                     }else{
-                        MAIN.addNotif("Error occured!", 
-                        "<b>Message:</b> " + data.message + 
-                        "<br><b>Columns:</b> " + data.columns + 
-                        "<br><b>Status:</b>   "+ data.status, 
-                        "r");;
+                        const keys = Object.keys(data);
+                        let html = ""
+                        for(const k of keys) {
+                            if(html.length > 0) html += "<br>";
+                            html += `<b>${k}:</b> ${data[k]}`
+                        }
+                        MAIN.addNotif("Error occured!", html, "r");
                     }
                 })
                 .catch(err => {
