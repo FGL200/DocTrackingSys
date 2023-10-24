@@ -55,6 +55,21 @@ async function setupEncoded_monthly() {
         return data;
     }
 
+    function setUpSeries(chart, name) {
+        return chart.series.push(am5xy.LineSeries.new(root, {
+            name: "Series " + name,
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "value",
+            valueXField: "date",
+            legendValueText: "{valueY}",
+            tooltip: am5.Tooltip.new(root, {
+                pointerOrientation: "horizontal",
+                labelText: "{valueY}"
+            })
+        }));
+    }
+
 
     // Create axes
     // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
@@ -72,35 +87,30 @@ async function setupEncoded_monthly() {
         renderer: am5xy.AxisRendererY.new(root, {})
     }));
 
+    let series = null;
 
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
     for (let i = 0; i < 10; i++) {
-        let series = chart.series.push(am5xy.LineSeries.new(root, {
-            name: "Series " + i,
-            xAxis: xAxis,
-            yAxis: yAxis,
-            valueYField: "value",
-            valueXField: "date",
-            legendValueText: "{valueY}",
-            tooltip: am5.Tooltip.new(root, {
-                pointerOrientation: "horizontal",
-                labelText: "{valueY}"
-            })
-        }));
+        series = setUpSeries(chart, i);        
 
         date = new Date();
         date.setHours(0, 0, 0, 0);
         value = 0;
 
-        let data = generateDatas(100);
+        let data = generateDatas(10);
         series.data.setAll(data);
-
+        
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear();
     }
 
+    setTimeout(()=>{
+        
+    }, 3000)
+    
+    
 
     // Add cursor
     // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
@@ -222,7 +232,7 @@ async function setupEncoded_live() {
 
     let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
         maxDeviation: 0.3,
-        categoryField: "country",
+        categoryField: "uname",
         renderer: xRenderer
     }));
 
@@ -239,8 +249,8 @@ async function setupEncoded_live() {
         name: "Series 1",
         xAxis: xAxis,
         yAxis: yAxis,
-        valueYField: "value",
-        categoryXField: "country"
+        valueYField: "total",
+        categoryXField: "uname"
     }));
 
     // Rounded corners for columns
@@ -274,35 +284,59 @@ async function setupEncoded_live() {
     });
 
 
-    // Set data
-    let data = GRAPH.bar.data = [{
-        "country": "USA",
-        "value": 2025
-    }, {
-        "country": "China",
-        "value": 1882
-    }, {
-        "country": "Japan",
-        "value": 1809
-    }, {
-        "country": "Germany",
-        "value": 1322
-    }, {
-        "country": "UK",
-        "value": 1122
-    }];
+    let data = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
+    data = await data.json();
+    let temp = [];
 
-    xAxis.data.setAll(data);
-    series.data.setAll(data);
+    for(let d of data) {
+        temp.push({uname : d.uname, total : parseInt(d.total)});
+    }
+
+    xAxis.data.setAll(temp);
+    series.data.setAll(temp);
 
     // update data with random values each 1.5 sec
-    setInterval(function () {
-        updateData();
+    setInterval(async function () {
+        let users = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
+        users = await users.json();
+
+
+        for(let user of users) {
+            addNewData(user);
+        }
+        // updateData();
+
     }, 1500)
 
+    function addNewData(data) {
+        const keys = xAxis.data.values.map(data => data.uname);
+        
+        const uname = data.uname;
+        const total = data.total;
+        if(!keys.includes(uname)) {
+
+            let nData = {"uname" : uname, "total" : total};
+
+            xAxis.data.push(nData);
+            series.data.push(nData);
+        } else {
+            let sort = false;
+            if(series.data.values[keys.indexOf(uname)].total !== total) sort = true;
+        
+            series.data.setIndex(keys.indexOf(uname), {
+                "uname" : uname,
+                "total" : total
+            });
+
+            if(sort) sortCategoryAxis();
+
+    }
+}
     function updateData() {
+
         am5.array.each(series.dataItems, function (dataItem) {
-            let value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
+        
+            var value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
             if (value < 0) {
                 value = 10;
             }
@@ -313,13 +347,27 @@ async function setupEncoded_live() {
                 to: value,
                 duration: 600,
                 easing: am5.ease.out(am5.ease.cubic)
-            });
+            }); 
         })
+        // am5.array.each(series.dataItems, function (dataItem) {
+        //     let value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
+        //     if (value < 0) {
+        //         value = 10;
+        //     }
+        //     // both valueY and workingValueY should be changed, we only animate workingValueY
+        //     dataItem.set("valueY", value);
+        //     dataItem.animate({
+        //         key: "valueYWorking",
+        //         to: value,
+        //         duration: 600,
+        //         easing: am5.ease.out(am5.ease.cubic)
+        //     });
+        // })
 
-        sortCategoryAxis();
+        // sortCategoryAxis();
     }
 
-
+    
     // Get series item by category
     function getSeriesItem(category) {
         for (let i = 0; i < series.dataItems.length; i++) {
@@ -451,4 +499,9 @@ function newShelf() {
     });
     
     MODAL.open();
+}
+
+// Patrick
+function fetch_data(url, method = null, series) {
+    return fetch(url, method);
 }

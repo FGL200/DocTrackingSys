@@ -27,18 +27,22 @@ class Student extends CI_Controller{
      */
     public function  addRecord() {
         /** Student Information checking */
-        $required_fields = "";
-        $input_columns = array('stud_fname',  'stud_lname');
-        foreach($this->input->post() as $key=>$val) {
-            if(in_array($key, $input_columns) && empty(trim($val))) {
-                if(!empty(trim($required_fields))) $required_fields .= ",";
-                $required_fields .= $key;
-            }
+        $required_fields = array();
+        if(empty(trim($this->input->post("stud_fname")))) {
+            array_push($required_fields, "First Name");
         }
+
+        if(empty(trim($this->input->post("stud_lname")))) {
+            array_push($required_fields, "Last Name");
+        }
+        
+        $required_fields = implode(",", $required_fields);
+
         if(!empty(trim($required_fields))) {
             echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
             exit;
         }
+
         $student_info = array($this->input->post("stud_fname"),$this->input->post("stud_lname") );
         $student = $this->stud->get_Student_By($student_info);
         if($student) {
@@ -89,9 +93,9 @@ class Student extends CI_Controller{
         }
        
         
-        $data = implode(', ', array_values($stud_docs));
+        $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
 
-        $data .= ", `stud_rec_id` = '{$student_id}'";
+        $data .= " `stud_rec_id` = '{$student_id}'";
     
         $this->stud->addStudentDoc($data);
     

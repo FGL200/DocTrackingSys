@@ -121,6 +121,27 @@ class User_model extends CI_Model
         return $fetch->num_rows() ? $fetch->result_array() : [];
     }
 
+    /**
+     * User total encoded data in current day
+     * @param int $user 
+     */
+    public function get_Total_Encoded_By_Users() {
+        $current_day = date("Y-m-d");
+        
+        $sql = "SELECT 
+                    `u`.`uname`,
+                    CAST(count(*) as int) as `total`
+                FROM `stud_rec` as `sr` 
+                JOIN user `u`
+                    ON `u`.id =  `sr`.`created_by_uid`
+                    WHERE CAST(`sr`.`created_date` as DATE) = '".$current_day."'
+                GROUP BY `sr`.`created_by_uid`";
+
+        $fetch = $this->db->query($sql);
+
+        return $fetch->result();
+    }
+
 
 
     /** PRIVATE FUNCTIONS */

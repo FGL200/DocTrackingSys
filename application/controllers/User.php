@@ -115,6 +115,12 @@ class User extends CI_Controller{
         echo json_encode(['result' => $nData]);  
     }
 
+    public function total_Encoded_By_Users() {
+        $result = $this->user->get_Total_Encoded_By_Users();
+
+        echo json_encode($result);
+    }
+
     private function __change_User_To_Proper_Format_(Array $data) {
         $fixedData = [];
         foreach($data as $row){
