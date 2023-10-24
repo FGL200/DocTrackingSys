@@ -14,6 +14,8 @@
  */
 const MODAL = {
 
+    form : document.getElementById("modal-container"),
+
     /**
      * For opening / closing modal (variable flag)
      */

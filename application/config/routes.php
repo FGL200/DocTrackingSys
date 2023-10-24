@@ -9,6 +9,7 @@ $route['login'] = 'Page/index';
 $route['home'] = 'Page/home';
 $route['dashboard'] = 'Page/dashboard';
 $route['record/(:num)'] = 'Page/record/$1';
+$route['manage'] = 'Page/manage_users';
 
 // API
 $route['student/record/insert']['post'] = 'Student/addRecord';

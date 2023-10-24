@@ -73,7 +73,8 @@ const MAIN = {
      * @returns 
      */
     dateToInputDate : function(date){
-        let today = date;
+        if(!date) return '1234-01-01';
+        let today = new Date(date);
         let day = (today.getDate() < 10) ? "0" + today.getDate() : today.getDate() ;
         let month = (today.getMonth() + 1 < 10) ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);    
         let year = today.getFullYear();
@@ -82,10 +83,10 @@ const MAIN = {
 
     /**
      * Go to another page
-     * @param {string} url 
+     * @param {string} page 
      */
-    goto : function(url){
-        window.location.href = url;
+    goto : function(page){
+        window.location.href = base_url + page;
     }
 }
 

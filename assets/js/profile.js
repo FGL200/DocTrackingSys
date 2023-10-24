@@ -105,6 +105,7 @@ const PROFILE = {
 async function load_profile(){
     const form = new FormData();
     form.append("uid", CONST_UID);
+    form.append("rid", CONST_UID);
     await fetch(base_url + 'user', {
         method : 'post',
         body : form
@@ -119,8 +120,6 @@ async function load_profile(){
             result.bday,
             result.gender
         );
-
-        console.log(result.bday)
     })
     .catch(err => {
         console.error("ERROR: " + err); 
