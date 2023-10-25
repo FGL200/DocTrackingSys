@@ -21,7 +21,10 @@ const PROFILE = {
      * 
      * @param {Profile} profile 
      */
-    open : function(profile){
+    open : async function(){
+
+        const profile = await load_profile(); 
+
         MODAL.setTitle("Profile");
         MODAL.setBody(`
         <div class="d-flex flex-column gap-2">
@@ -73,6 +76,7 @@ const PROFILE = {
             e.preventDefault();
             const profile = new FormData(document.getElementById("modal-container"));
             profile.append("uid", CONST_UID);
+            profile.append("rid", CONST_UID);
             
             // UPDATE PROFILE 
             console.log("save profile function is on main.js datas: ", profile);
@@ -81,23 +85,14 @@ const PROFILE = {
                 method : "POST",
                 body : profile
             })
-            .then(resp=>resp.json())
-            .then(data=>{
-                const result = data.result[0];
-                PROFILE.USER_INFO = new Profile (
-                    result.uname,
-                    result.fname,
-                    result.lname,
-                    result.bday,
-                    result.gender
-                );
-            })
             .catch(err=>{
-
+                console.error("ERROR: " + err);
             })
-            
-            MAIN.addNotif("Profile Updated!", "Information saved!", "g");
-            // MODAL.close();
+            .then(resp=>resp.json())
+            .then(()=>{
+                MAIN.addNotif("Profile Updated!", "Information saved!", "g");
+                MODAL.close();
+            });
         })
     }
 }
@@ -106,24 +101,22 @@ async function load_profile(){
     const form = new FormData();
     form.append("uid", CONST_UID);
     form.append("rid", CONST_UID);
-    await fetch(base_url + 'user', {
+    return await fetch(base_url + 'user', {
         method : 'post',
         body : form
+    })
+    .catch(err => {
+        console.error("ERROR: " + err); 
     })
     .then(respose => respose.json())
     .then(respose => {
         const result = respose.result[0];
-        PROFILE.USER_INFO = new Profile (
+        return new Profile (
             result.uname,
             result.fname,
             result.lname,
             result.bday,
             result.gender
         );
-    })
-    .catch(err => {
-        console.error("ERROR: " + err); 
     });
 }
-
-load_profile(); 

@@ -187,7 +187,6 @@ async function setupEncoded_monthly() {
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
     chart.appear(1000, 100);
-    $('g:has(> g[stroke="#3cabff"])').hide();
 }
 
 async function setupEncoded_live() {
@@ -524,3 +523,11 @@ function newShelf() {
 function fetch_data(url, method = null, series) {
     return fetch(url, method);
 }
+
+$(document).ready(function(e){
+    let child = $("#encoded-live").children().children().children();
+    $.each(child, function(key, val){
+console({key, val});
+    })
+    // console.log(child);
+});

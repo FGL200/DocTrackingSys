@@ -54,6 +54,9 @@
             <?php if ($role === 'A') { ?>
                 <div class="tab-pane fade" id="visual-analytics" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                     <div class="d-flex flex-column flex-grow-1 gap-2">
+                        <div class="d-flex flex-row-reverse">
+                            <button class="btn btn-primary">Generate Report</button>
+                        </div>
                         <div class="d-flex flex-wrap gap-2">
                             <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Live update of encoders</span>

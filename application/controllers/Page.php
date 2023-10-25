@@ -149,7 +149,7 @@ class Page extends CI_Controller {
         ];
 
         $data['footer'] = [
-            'js' => ['alert', 'manage_users']
+            'js' => ['alert', 'manage_users', 'profile']
         ];
 
         $this->loadPage("manage_users", $data);

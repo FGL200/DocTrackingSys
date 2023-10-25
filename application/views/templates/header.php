@@ -93,7 +93,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li style="margin-bottom: .4rem;">
-                                <a class="dropdown-item" href="#" onclick="PROFILE.open(PROFILE.USER_INFO)" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
+                                <a class="dropdown-item" href="#" onclick="PROFILE.open()" style="border-bottom: 1px solid rgba(0, 0, 0, 0.3);">
                                     <i class="fa-solid fa-address-card"></i> Profile
                                 </a>
                             </li>
