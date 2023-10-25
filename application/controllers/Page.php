@@ -64,7 +64,7 @@ class Page extends CI_Controller {
             'css' => ["dashboard"]
         ];
         $data['footer'] = [
-            'js' => ['alert', ($role === 'A') ? 'dashboard' : null]
+            'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile']
         ];
 
         $this->loadPage('dashboard', $data);
@@ -86,7 +86,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home', 'alert', 'newRecord']
+            'js' => ['home', 'alert', 'newRecord','profile']
         ];
 
         // load page
@@ -123,7 +123,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['viewRecord', 'alert']
+            'js' => ['viewRecord', 'alert','profile']
         ];
 
         // load page
