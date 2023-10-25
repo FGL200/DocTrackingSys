@@ -312,7 +312,10 @@ async function setupEncoded_live() {
         const keys = xAxis.data.values.map(data => data.uname);
         
         const uname = data.uname;
-        const total = data.total;
+        const total = parseInt(data.total);
+
+        
+
         if(!keys.includes(uname)) {
 
             let nData = {"uname" : uname, "total" : total};
@@ -320,15 +323,29 @@ async function setupEncoded_live() {
             xAxis.data.push(nData);
             series.data.push(nData);
         } else {
-            let sort = false;
-            if(series.data.values[keys.indexOf(uname)].total !== total) sort = true;
-        
-            series.data.setIndex(keys.indexOf(uname), {
-                "uname" : uname,
-                "total" : total
-            });
+            
+            const prev_total = series.data.values[keys.indexOf(uname)].total ;
 
-            if(sort) sortCategoryAxis();
+
+            if(prev_total != total) {
+                // console.log(prev_total, total);
+                am5.array.each(series.dataItems, function (dataItem) {
+                    if(dataItem.get("categoryX") == uname) {
+                        let value = total;
+                        // both valueY and workingValueY should be changed, we only animate workingValueY
+                        dataItem.set("valueY", value);
+                        dataItem.set("categoryX", uname);
+                        
+                        dataItem.animate({
+                            key: "valueYWorking",
+                            to: value,
+                            duration: 600,
+                            easing: am5.ease.out(am5.ease.cubic)
+                        });
+                    }
+                })
+                sortCategoryAxis()
+            }
 
     }
 }
@@ -349,20 +366,22 @@ async function setupEncoded_live() {
                 easing: am5.ease.out(am5.ease.cubic)
             }); 
         })
-        // am5.array.each(series.dataItems, function (dataItem) {
-        //     let value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
-        //     if (value < 0) {
-        //         value = 10;
-        //     }
-        //     // both valueY and workingValueY should be changed, we only animate workingValueY
-        //     dataItem.set("valueY", value);
-        //     dataItem.animate({
-        //         key: "valueYWorking",
-        //         to: value,
-        //         duration: 600,
-        //         easing: am5.ease.out(am5.ease.cubic)
-        //     });
-        // })
+        am5.array.each(series.dataItems, function (dataItem) {
+            let value = dataItem.get("valueY") + Math.round(Math.random() * 300 - 150);
+            if (value < 0) {
+                value = 10;
+            }
+
+            console.log(dataItem.get("category"));
+            // both valueY and workingValueY should be changed, we only animate workingValueY
+            // dataItem.set("valueY", value);
+            // dataItem.animate({
+            //     key: "valueYWorking",
+            //     to: value,
+            //     duration: 600,
+            //     easing: am5.ease.out(am5.ease.cubic)
+            // });
+        })
 
         // sortCategoryAxis();
     }
@@ -392,7 +411,7 @@ async function setupEncoded_live() {
         am5.array.each(xAxis.dataItems, function (dataItem) {
             // get corresponding series item
             let seriesDataItem = getSeriesItem(dataItem.get("category"));
-
+            console.log(seriesDataItem);
             if (seriesDataItem) {
                 // get index of series data item
                 let index = series.dataItems.indexOf(seriesDataItem);

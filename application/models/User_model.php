@@ -134,7 +134,10 @@ class User_model extends CI_Model
                 FROM `stud_rec` as `sr` 
                 JOIN user `u`
                     ON `u`.id =  `sr`.`created_by_uid`
-                    WHERE CAST(`sr`.`created_date` as DATE) = '".$current_day."'
+                WHERE 
+                    CAST(`sr`.`created_date` as DATE) = '".$current_day."' AND 
+                    `u`.active = '1' AND 
+                    `u`.role = 'E'
                 GROUP BY `sr`.`created_by_uid`";
 
         $fetch = $this->db->query($sql);

@@ -9,7 +9,7 @@ use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
 class Student extends CI_Controller{
 
-    private $user_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
+    private $student_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
     
     public function __construct()
     {
@@ -26,44 +26,63 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
+        $stud_id = $this->input->post("stud_id");
+        $stud_fname = $this->input->post("stud_fname");
+        $stud_lname = $this->input->post("stud_lname");
+        $stud_mname = $this->input->post("stud_mname");
+        $stud_sfx = $this->input->post("stud_sfx");
+
         /** Student Information checking */
         $required_fields = array();
-        if(empty(trim($this->input->post("stud_fname")))) {
-            array_push($required_fields, "First Name");
-        }
 
-        if(empty(trim($this->input->post("stud_lname")))) {
-            array_push($required_fields, "Last Name");
-        }
-        
+        if(empty(trim($stud_fname))) array_push($required_fields, "First Name");
+        if(empty(trim($stud_lname))) array_push($required_fields, "Last Name");
+    
         $required_fields = implode(",", $required_fields);
 
         if(!empty(trim($required_fields))) {
             echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
             exit;
-        }
+        }  
+        
+        $invalid_fields = array();
+        if(!empty($stud_id) && empty(trim($stud_id, "\\'`\""))) array_push($invalid_fields, "ID");
+        if(empty(trim($stud_fname, " \t\n\r\0\x0B/\\'`\""))) array_push($invalid_fields, "First Name");
+        if(empty(trim($stud_lname, " \t\n\r\0\x0B/\\'`\""))) array_push($invalid_fields, "Last Name");
+        if(!empty($stud_mname) && empty(trim($stud_mname, "\\'`\""))) array_push($invalid_fields, "Middle Name");
+        if(!empty($stud_sfx) && empty(trim($stud_sfx, "\\'`\""))) array_push($invalid_fields, "SFX");
 
-        $student_info = array($this->input->post("stud_fname"),$this->input->post("stud_lname") );
+        $invalid_fields = implode(",", $invalid_fields);
+
+        if(!empty(trim($invalid_fields))) {
+            echo json_encode(array('status'=>'error', 'message'=>'Value must contain characters', 'columns'=>$invalid_fields));
+            exit;
+        }  
+        
+        $this->insert_slashes($stud_id);
+        $this->insert_slashes($stud_fname);
+        $this->insert_slashes($stud_lname);
+        $this->insert_slashes($stud_mname);
+        $this->insert_slashes($stud_sfx);
+
+        $student_info = ["stud_id"=>$stud_id, "stud_fname"=>$stud_fname,"stud_lname"=>$stud_lname, "stud_mname"=>$stud_mname, "stud_sfx"=>$stud_sfx];
         $student = $this->stud->get_Student_By($student_info);
         if($student) {
-            
             echo json_encode(array('status'=>'error', 'message'=>'Record already exist'));
             exit; 
         }
-
+        
         /** END Student Information checking */
         
         $data = "";
 
         /** Inserting data in `stud_rec` table */
-        foreach($this->input->post() as $key => $val) {
-            $val = trim($val);
-            if(strstr($key, "stud_") && !empty($val)){
+        foreach($student_info as $key => $val) {
+            if(!empty($val)){
                 if(!empty($data)) $data .= ",";
                 $data .= "`{$key}` = UPPER('{$val}')";
             }
         }
-        
 
         $created_by_uid = $this->session->userdata('uid') ?? '1' ; //  user id for encoding
 
@@ -184,19 +203,59 @@ class Student extends CI_Controller{
      * Update Student record
      */
     public function update_Student_Records() {
-        $data = $this->input->post();
+        $stud_rec_id = intval($this->input->post("stud_rec_id"));
 
-        $stud_rec_id = intval($data['stud_rec_id']);
+        $stud_id = $this->input->post("stud_id");
+        $stud_fname = $this->input->post("stud_fname");
+        $stud_lname = $this->input->post("stud_lname");
+        $stud_mname = $this->input->post("stud_mname");
+        $stud_sfx = $this->input->post("stud_sfx");
 
-        $stud_set = "";
+        $required_fields = array();
+
+        if(empty(trim($stud_fname))) array_push($required_fields, "First Name");
+        if(empty(trim($stud_lname))) array_push($required_fields, "Last Name");
+    
+        $required_fields = implode(",", $required_fields);
+
+        if(!empty(trim($required_fields))) {
+            echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
+            exit;
+        }  
+        
+        $invalid_fields = array();
+
+        if(!empty($stud_id) && (empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_id)))) array_push($invalid_fields, "ID");
+        if(empty(preg_replace("/[^A-Za-z0-9\"-\.,]/", "", $stud_fname))) array_push($invalid_fields, "First Name");
+        if(empty(preg_replace("/[^A-Za-z0-9\"-\.,]/", "", $stud_lname))) array_push($invalid_fields, "Last Name");
+        if(!empty($stud_mname) && empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_mname))) array_push($invalid_fields, "Middle Name");
+        if(!empty($stud_sfx) && empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_sfx))) array_push($invalid_fields, "SFX");
+
+        $invalid_fields = implode(",", $invalid_fields);
+
+        if(!empty(trim($invalid_fields))) {
+            echo json_encode(array('status'=>'error', 'message'=>'Value must contain characters', 'columns'=>$invalid_fields));
+            exit;
+        }  
+        
+        $this->insert_slashes($stud_id);
+        $this->insert_slashes($stud_fname);
+        $this->insert_slashes($stud_lname);
+        $this->insert_slashes($stud_mname);
+        $this->insert_slashes($stud_sfx);
 
         /** Update the `stud_rec` table */
-        foreach($data as $key=>$val) {
-            if(strstr($key, 'stud_')&& !strstr($key, 'rec_id')) {
+        $stud_set = "";
+        $student_info = ["stud_id" => $stud_id, "stud_fname" => $stud_fname, "stud_lname" => $stud_lname, "stud_mname" => $stud_mname, "stud_sfx" => $stud_sfx];
+
+        foreach($student_info as $key => $val) {
+            if(!empty($val)) {
                 if(!empty($stud_set)) $stud_set .= ",";
-                $stud_set.="`$key` = UPPER('$val')";
+                if($key == "stud_id") $stud_set .= "`$key` = '$val'";
+                else $stud_set .= "`$key` = UPPER('$val')";
             }
         }
+
         $this->db->trans_begin();
 
         $this->stud->update_table('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
@@ -223,11 +282,14 @@ class Student extends CI_Controller{
         $doc_set = "";
         $docs_set = [];
         
-        foreach($this->user_docs as $doc) {
+        foreach($this->student_docs as $doc) {
             $path = "";
 
             if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
-            else $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
+            else { 
+                $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
+                continue;
+            }
 
             if($this->input->post("doc_scan_" . $doc)) $docs_set[$doc] .= $this->input->post("doc_scan_" . $doc)."\"}'";
 
@@ -240,10 +302,7 @@ class Student extends CI_Controller{
                     if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
                     
                 }
-
                 $docs_set[$doc] .= "\"}'";
-
-                
             }
             
             // Deleting old_files
@@ -522,5 +581,13 @@ class Student extends CI_Controller{
         }
 
         return $fixed_data;
+    }
+
+    /**
+     * Insert slashes to the characters like ["/\'`]
+     * @param Array $inputs
+     */
+    private function insert_slashes(& $input, $pattern = "\/\"'`") {
+        $input = addcslashes($input, $pattern);
     }
 }

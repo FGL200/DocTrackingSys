@@ -26,57 +26,96 @@ const VIEW_RECORD = {
             
             if(e.id === "update-record-btn") {
                 action = "update";
-    
+
                 form.append("remarks", VIEW_RECORD.__remarksValue__);
     
                 $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
                 $("#update-record-btn").prop("disabled", true);
                 
-               
-        
-                form.forEach((val, key)=>{
-                    VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                        // kapag walang laman yung input file iassign yung value na nasa 
-                        // VIEW_RECORD.__old_DIRS__
-                        if(form.get(key) instanceof File) {
-                            if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                                const nKey = key.replace(/[\[\]]/g, "");
+                // form.forEach((val, key)=>{
+                //     VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                //         // kapag walang laman yung input file iassign yung value na nasa 
+                //         // VIEW_RECORD.__old_DIRS__
+                //         if(form.get(key) instanceof File) {
+                //             if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                //                 const nKey = key.replace(/[\[\]]/g, "");
     
-                                form.delete(key);
+                //                 form.delete(key);
     
-                                form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
-                                console.log(nKey)
-                            }
-                        }
+                //                 form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
+                //                 console.log(nKey)
+                //             }
+                //         }
                         
-                    })
-                });
+                //     })
+                // });
+
+                VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
+                    const key = Object.keys(data)[0];
+
+                    const old_dir = VIEW_RECORD.__old_DIRS__[index];
+                    const new_dir = VIEW_RECORD.__new_DIRS__[index];
+                    
+                    const cb_name = key.replace("scan", "val").replace("[]","");
+                    
+                    if(old_dir[key] != new_dir[key]){ 
+                        form.set(key, new_dir[key]);
+                    } 
+                    if(old_dir["val"] != new_dir["val"]) {
+                        form.set(cb_name, new_dir["val"]);
+                    }
+
+                    if(old_dir[key] == new_dir[key]) {
+                        form.delete(key);
+                    }
+                    
+                    if(old_dir["val"] == new_dir["val"]) {
+                        form.delete(cb_name);
+                    }
+                })
+                
+
             } else {
                 action = "delete";
     
                 $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
                 $("#delete-record-btn").prop("disabled", true);
             }
-            
+
+            form.forEach((val, key)=>{
+                console.log(val, key)
+            })
             // return;
-    
             fetch(base_url + 'student/record/' + action, {
                 method : 'post',
                 body :  form
             })
             .then(respose=>respose.json())
-            .then(()=>{
-                DELAY_FUNCTION(()=>{
-                    if(action === "update") {
-                        MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
-                        $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
-                        $("#update-record-btn").prop("disabled", false);
-                    } else {
-                        MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
-                        $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
-                        $("#delete-record-btn").prop("disabled", false);
+            .then((message)=>{
+                if(message.status === "success") {
+                    DELAY_FUNCTION(()=>{
+                        if(action === "update") {
+                            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
+                            $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
+                            $("#update-record-btn").prop("disabled", false);
+                        } else {
+                            MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
+                            $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
+                            $("#delete-record-btn").prop("disabled", false);
+                        }
+                    });
+                } else {
+                    const keys = Object.keys(message);
+                    let html = "";
+                    for(const k of keys) {
+                        if(html.length > 0) html += "<br>";
+                        html += `<b>${k}:</b> ${message[k]}`
                     }
-                });
+                    MAIN.addNotif("Error occured!", html, "r");
+                    $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
+                    $("#update-record-btn").prop("disabled", false);
+                }
+                
             })
             .catch(err=>{
                 console.log(err);
@@ -185,7 +224,6 @@ const VIEW_RECORD = {
                 $('#view_scan_' + keys[i]).on("click", function(){
                     $(this).addClass('imgLoaded');
                     const sources = doc.dir.split(",");
-                    console.log(sources)
                     $("#image-viewer-container").find("img").remove()
                     let count = 0;
                     for(let src of sources ) {
@@ -223,8 +261,8 @@ const VIEW_RECORD = {
             // and save is as an object to' __old_DIRS__' variable
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
-            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}"}`));
-
+            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val)}}`));
+            VIEW_RECORD.__new_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val)}}`));
         }
 
         value.forEach(remarks=>{
@@ -252,7 +290,8 @@ const VIEW_RECORD = {
 
     /** PRIVATES */
 
-
+    /** New Directories of Every Scanned Files */
+    __new_DIRS__ : [],
     /** The OLD Values OF Direcroties of every scanced file */
     __old_DIRS__ : [],
 
@@ -299,6 +338,8 @@ $(".cb-doc").on("change", function(e){
 
     const currElem = $(this);
 
+    const key = currElem.attr("id").replace("val", "scan") + "[]";
+
     // Prompts user and perform the correct action when checkbox is ticked
     $(btnFile).prop('disabled', !checked);
     if(!checked){ 
@@ -313,7 +354,15 @@ $(".cb-doc").on("change", function(e){
                     $(inFile).prop('disabled', true);
                     set_BtnView(btnView, true);
                     set_BtnFile(btnFile, true);
-                    $(btnFile).prop('disabled', true);
+                    $(btnFile).prop('disabled', true);                    
+
+                    VIEW_RECORD.__new_DIRS__.forEach((data, index)=>{
+                        const k = Object.keys(data)[0];
+                        if(k === key) {
+                            VIEW_RECORD.__new_DIRS__[index][key] = "";
+                            VIEW_RECORD.__new_DIRS__[index]["val"] = 0;
+                        }
+                    })
                 } else {
                     currElem.prop('checked', true);
                     $(btnFile).prop('disabled', !currElem.prop('checked'));
@@ -329,9 +378,29 @@ $(".cb-doc").on("change", function(e){
             //     $(this).prop('checked', true);
             //     $(btnFile).prop('disabled', !$(this).prop('checked'));
             // }
+        } else {
+            VIEW_RECORD.__new_DIRS__.forEach((data, index)=>{
+                const k = Object.keys(data)[0];
+                if(k === key) {
+                    VIEW_RECORD.__new_DIRS__[index]["val"] = 0;
+                }
+            })
         }
+        
+    } else {
+        VIEW_RECORD.__new_DIRS__.forEach((data, index)=>{
+            const k = Object.keys(data)[0];
+            if(k === key) {
+                VIEW_RECORD.__new_DIRS__[index]["val"] = 1;
+            }
+        })
     }
     $(inFile).prop('disabled', !$(this).prop('checked'));
+
+    
+
+    console.log(VIEW_RECORD.__new_DIRS__);
+    console.log(VIEW_RECORD.__old_DIRS__);
 
     // // Prompts user and perform the correct action when checkbox is ticked
     // $(btnFile).prop('disabled', !checked);
@@ -440,7 +509,6 @@ function changeFileDir (inFile){
     const btnView = `${inFile} ~ button.viewScan`;
     const key = $(inFile).attr("id");
 
-    console.log({btnFile, btnView, key});
 
     // Check if there is already an image uploaded, and confirm if the user wants
     // to replace or remove the saved file
@@ -459,10 +527,10 @@ function changeFileDir (inFile){
             set_BtnView(btnView, true);
             
             // make the dir value as empty if the answer in  confirm is `yes`
-            VIEW_RECORD.__old_DIRS__.forEach((value, index)=>{
+            VIEW_RECORD.__new_DIRS__.forEach((value, index)=>{
                 
-                if(VIEW_RECORD.__old_DIRS__[index][key + "[]"]) {
-                    VIEW_RECORD.__old_DIRS__[index][key + "[]"] = "";
+                if(VIEW_RECORD.__new_DIRS__[index][key + "[]"]) {
+                    VIEW_RECORD.__new_DIRS__[index][key + "[]"] = "";
                     
                     let temp_id = key.replace("doc_scan_", "view_scan_"); 
                     $(`#${temp_id}`).off("click");
@@ -497,6 +565,23 @@ function changeFileDir (inFile){
         // }
     }else{
         $(inFile).trigger('click');
+        
+        $(inFile).on("change", function(){
+
+            VIEW_RECORD.__new_DIRS__.forEach((data, index)=>{
+                const inFile_name = this.name;
+                const key = Object.keys(data)[0];
+
+                if(key === inFile_name) {
+                    VIEW_RECORD.__new_DIRS__[index][inFile_name] = this.files;
+
+                    let temp_id = key.replace("doc_scan_", "view_scan_").replace("[]", ""); 
+                    $(`#${temp_id}`).off("click");
+                    $(`#${temp_id}`).on("click", viewScannedDoc);
+                }
+            });
+
+        });
     }
 }
 

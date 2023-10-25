@@ -345,7 +345,7 @@ class Student_model extends CI_Model{
                     stud_mname,
                     stud_lname
                 FROM stud_rec 
-                WHERE (stud_fname LIKE '%".$student_info[0]."%' AND stud_lname LIKE '%".$student_info[1]."%')
+                WHERE (stud_fname LIKE '%".$student_info['stud_fname']."%' AND stud_lname LIKE '%".$student_info['stud_lname']."%')
                 ";
 
         $fetch = $this->db->query($sql);
