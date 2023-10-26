@@ -28,7 +28,7 @@ class User_model extends CI_Model
                     INNER JOIN `user` `u`
                         ON `u`.`id` = `ui`.`user_id`
                     SET {$data}";
-        echo $sql;
+        // echo $sql; die;
         $this->db->query($sql);
         return $this->db->affected_rows() ? true : false;
     }
@@ -144,6 +144,26 @@ class User_model extends CI_Model
 
         return $fetch->result();
     }
+
+    /**
+     * Get the all the password of the user
+     * @param Int $uid
+     * @param String $oldPass
+     */
+
+     public function get_Old_Password($uid, $oldPass) {
+        $sql = "
+            SELECT 
+                `u`.pword
+            FROM user `u`
+            WHERE `u`.id = ? AND `u`.pword = PASSWORD(?) AND `u`.active = '1'
+            LIMIT 1
+        ";
+
+        $result = $this->db->query($sql, array($uid, $oldPass));
+
+        return $result->row();
+     }
 
 
 

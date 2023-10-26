@@ -81,17 +81,20 @@ const PROFILE = {
             // UPDATE PROFILE 
             console.log("save profile function is on main.js datas: ", profile);
             
-            fetch("user/update", {
+            fetch(base_url + "user/update", {
                 method : "POST",
                 body : profile
             })
+            .then(resp=>resp.json())
+            .then((resp)=>{
+                if(resp.status === "error")  MAIN.addNotif("Incomplete fields!", resp.message, "r");
+                else {
+                    MAIN.addNotif("Profile Updated!", "Information saved!", "g");
+                    MODAL.close();
+                }
+            })
             .catch(err=>{
                 console.error("ERROR: " + err);
-            })
-            .then(resp=>resp.json())
-            .then(()=>{
-                MAIN.addNotif("Profile Updated!", "Information saved!", "g");
-                MODAL.close();
             });
         })
     }
