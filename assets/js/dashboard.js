@@ -524,10 +524,17 @@ function fetch_data(url, method = null, series) {
     return fetch(url, method);
 }
 
-$(document).ready(function(e){
-    let child = $("#encoded-live").children().children().children();
-    $.each(child, function(key, val){
-console({key, val});
-    })
-    // console.log(child);
-});
+$("#statistics-tab").on("click", ()=>{
+    am5WaterMarkRemover(["encoded-live", "remarks-pie", "encoded-monthly"]);
+})
+
+function am5WaterMarkRemover(ids = []) {
+    $("div.am5-html-container").remove();
+    $("div.am5-reader-container").remove();
+    $("div.am5-focus-container").remove();
+    $("div.am5-tooltip-container").remove();
+
+    for(let id of ids) {
+        const tip = $(`#${id} > div > div > div`).children()[1].remove();
+    }
+}

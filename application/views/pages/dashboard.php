@@ -7,12 +7,12 @@
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#shelf" type="button" role="tab" aria-selected="true">
+                            <button class="nav-link active" id="shelves-tab" data-bs-toggle="tab" data-bs-target="#shelf" type="button" role="tab" aria-selected="true">
                                 <i class="fa-solid fa-lines-leaning"></i> Shelves
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#visual-analytics" type="button" role="tab" aria-selected="false">
+                            <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#visual-analytics" type="button" role="tab" aria-selected="false">
                                 <i class="fa-solid fa-chart-line"></i> Statistics
                             </button>
                         </li>
@@ -23,7 +23,7 @@
             <?php } ?>
         </div>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="shelf" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <div class="tab-pane fade show active" id="shelf" role="tabpanel" aria-labelledby="shelves-tab" tabindex="0">
                 <div class="d-flex flex-wrap flex-grow-1 gap-3">
                     <!-- jsCalendar -->
                     <div class="auto-jsCalendar shadow-0 card align-self-start"></div>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <?php if ($role === 'A') { ?>
-                <div class="tab-pane fade" id="visual-analytics" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <div class="tab-pane fade" id="visual-analytics" role="tabpanel" aria-labelledby="statistics-tab" tabindex="0">
                     <div class="d-flex flex-column flex-grow-1 gap-2">
                         <div class="d-flex flex-row-reverse">
                             <button class="btn btn-primary">Generate Report</button>
