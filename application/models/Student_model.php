@@ -22,6 +22,8 @@ class Student_model extends CI_Model{
      */
     public function addStudentDoc($data) {
         $query = "INSERT INTO `doc` SET {$data}";
+
+        // echo $query; die;
         $this->db->query($query);
     }
 
@@ -345,7 +347,7 @@ class Student_model extends CI_Model{
                     stud_mname,
                     stud_lname
                 FROM stud_rec 
-                WHERE (stud_fname LIKE '%".$student_info['stud_fname']."%' AND stud_lname LIKE '%".$student_info['stud_lname']."%')
+                WHERE (stud_fname LIKE '%".$student_info['stud_fname']."%' AND stud_lname LIKE '%".$student_info['stud_lname']."%' AND deleted_flag = '0')
                 ";
 
         $fetch = $this->db->query($sql);

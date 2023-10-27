@@ -111,10 +111,13 @@ class Student extends CI_Controller{
             if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
         }
        
+
         
         $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
 
         $data .= " `stud_rec_id` = '{$student_id}'";
+
+        // echo $data; die;
     
         $this->stud->addStudentDoc($data);
     

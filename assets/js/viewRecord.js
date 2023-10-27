@@ -32,47 +32,47 @@ const VIEW_RECORD = {
                 $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
                 $("#update-record-btn").prop("disabled", true);
                 
-                // form.forEach((val, key)=>{
-                //     VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                //         // kapag walang laman yung input file iassign yung value na nasa 
-                //         // VIEW_RECORD.__old_DIRS__
-                //         if(form.get(key) instanceof File) {
-                //             if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                //                 const nKey = key.replace(/[\[\]]/g, "");
+                form.forEach((val, key)=>{
+                    VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                        // kapag walang laman yung input file iassign yung value na nasa 
+                        // VIEW_RECORD.__old_DIRS__
+                        if(form.get(key) instanceof File) {
+                            if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                                const nKey = key.replace(/[\[\]]/g, "");
     
-                //                 form.delete(key);
+                                form.delete(key);
     
-                //                 form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
-                //                 console.log(nKey)
-                //             }
-                //         }
+                                form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
+                                console.log(nKey)
+                            }
+                        }
                         
-                //     })
-                // });
+                    })
+                });
 
-                VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
-                    const key = Object.keys(data)[0];
+                // VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
+                //     const key = Object.keys(data)[0];
 
-                    const old_dir = VIEW_RECORD.__old_DIRS__[index];
-                    const new_dir = VIEW_RECORD.__new_DIRS__[index];
+                //     const old_dir = VIEW_RECORD.__old_DIRS__[index];
+                //     const new_dir = VIEW_RECORD.__new_DIRS__[index];
                     
-                    const cb_name = key.replace("scan", "val").replace("[]","");
+                //     const cb_name = key.replace("scan", "val").replace("[]","");
                     
-                    if(old_dir[key] != new_dir[key]){ 
-                        form.set(key, new_dir[key]);
-                    } 
-                    if(old_dir["val"] != new_dir["val"]) {
-                        form.set(cb_name, new_dir["val"]);
-                    }
+                //     if(old_dir[key] != new_dir[key]){ 
+                //         form.set(key, new_dir[key]);
+                //     } 
+                //     if(old_dir["val"] != new_dir["val"]) {
+                //         form.set(cb_name, new_dir["val"]);
+                //     }
 
-                    if(old_dir[key] == new_dir[key]) {
-                        form.delete(key);
-                    }
+                //     if(old_dir[key] == new_dir[key]) {
+                //         form.delete(key);
+                //     }
                     
-                    if(old_dir["val"] == new_dir["val"]) {
-                        form.delete(cb_name);
-                    }
-                })
+                //     if(old_dir["val"] == new_dir["val"]) {
+                //         form.delete(cb_name);
+                //     }
+                // })
                 
 
             } else {
