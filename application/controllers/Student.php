@@ -26,6 +26,8 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
+        // echo "<pre>";
+        // var_dump($this->input->post()); die;
         $stud_id = $this->input->post("stud_id");
         $stud_fname = $this->input->post("stud_fname");
         $stud_lname = $this->input->post("stud_lname");
@@ -94,22 +96,45 @@ class Student extends CI_Controller{
         /** -- End of inserting data in `stud_rec` table -- */
  
         $data = ""; // reset the data for the next query
+
+        $input_docs = ["doc_val_regi_form","doc_val_good_moral","doc_val_j_f137","doc_val_s_f137","doc_val_f138","doc_val_birth_cert","doc_val_tor","doc_val_app_grad","doc_val_cert_of_complete", "doc_val_req_clearance_form","doc_val_req_credentials","doc_val_hd_or_cert_of_trans"];
+
         $stud_docs = [];
         /** Inserting data in `doc` table  */
-        foreach($_FILES as $key => $val) {
-            $doc = str_replace("doc_scan_","", $key);
-            
-            $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
+
+        foreach($input_docs as $input_doc) {
+            if(!empty($this->input->post($input_doc))) {
+                $doc = str_replace("doc_val_", "", $input_doc);
+
+                $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
+
+                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+                    $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+    
+                    if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
+                }
                 
-            for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+    
+                if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
 
-                if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
             }
+        }
+
+        
+        // foreach($_FILES as $key => $val) {
+        //     $doc = str_replace("doc_scan_","", $key);
+            
+        //     $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
+                
+        //     for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+        //         $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+
+        //         if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
+        //     }
             
 
-            if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
-        }
+        //     if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
+        // }
        
 
         
