@@ -469,6 +469,12 @@ class Student extends CI_Controller{
 
     }
 
+    public function get_all_stud_rec_as_select() {
+        $uid = $this->input->post("uid");
+        
+        echo json_encode(["result"=> $this->stud->get_all_stud_rec_as_select()]);
+    }
+
 
     /** PRIVATE FUNCTIONS */
 

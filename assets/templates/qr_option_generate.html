@@ -1,0 +1,121 @@
+<div class="d-flex flex-column gap-2">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-type="all" class="generate-type">
+                <td>
+                    <input type="radio" name="type" value="all" id="type-all" checked>
+                    <label for="type-all">
+                        Generate all student records
+                    </label>
+                </td>
+                <td></td>
+            </tr>
+            <tr data-type="last-letter" class="generate-type">
+                <td>
+                    <input type="radio" name="type" value="last-letter" id="type-last-letter">
+                    <label for="type-last-letter">
+                        Generate by Last letter
+                    </label>
+                </td>
+                <td class="d-flex gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text">From</span>
+                        <input type="text" class="form-control" maxlength="1" id="last-letter-from" disabled>
+                        <span class="input-group-text">To</span>
+                        <input type="text" class="form-control" maxlength="1" id="last-letter-to" disabled>
+                    </div>
+                </td>
+            </tr>
+            <tr data-type="specific" class="generate-type">
+                <td>
+                    <input type="radio" name="type" value="specific" id="type-specific">
+                    <label for="type-specific">
+                        Specific
+                    </label>
+                </td>
+                <td class="d-flex flex-column gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Search</span>
+                        <select name="" id="student-record" class="form-control">
+                            <option value="" disabled selected>Search here</option>
+                        </select>
+                    </div>
+                    <div id="search-container" class="d-flex gap-2 flex-wrap"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    qr_generate_selected_students = [];
+    selected_type = "all";
+    $(".generate-type").on("click", function (e) {
+        const selected_data = $(this).data("type");
+        if (selected_data == selected_type) return;
+
+        selected_type = selected_data;
+
+        $(".generate-type").find("input").prop("disabled", true);
+        const check_box = $(".generate-type").find("input[name='type']");
+        check_box.prop("checked", false);
+        check_box.prop("disabled", false);
+
+        const field = $(this);
+        field.find("input[name='type']").prop("checked", true);
+        field.find("input").prop("disabled", false);
+    });
+
+    (async function(){
+        const form = new FormData();
+        form.append('uid', CONST_UID);
+        await fetch(`${base_url}student/record/select`, {
+            method: 'post',
+            body: form
+        })
+        .then(respose => respose.json())
+        .then(respose => {
+            const result = respose.result;
+            $("#student-record").select2({ data: result });
+            $(".select2").addClass("form-control");
+        })
+        .catch(err => console.error(err));
+
+    })();
+
+    $("#student-record").on("change", function(e){
+        // get the value from the selected option in select tag
+        const value = JSON.parse($(this).val());
+
+        // reset the selected value
+        $(this).children()[0].selected = true;
+        
+        // check if the selected option already exist in the list
+        if(qr_generate_selected_students.includes(value[0])) return;
+        
+        // push the selected item to the array
+        qr_generate_selected_students.push(value[0]);
+        
+        // add the selected item to the list
+        addStudent(value[0], value[1]);
+    });
+
+    function addStudent(value, text) {
+        const item = $(`<span class="card flex-row align-items-center p-2 gap-2">
+            <p class="p-0 m-0">${text}</p>
+            <p class="generate-specific-student hide">${value}</p>
+        </span>`);
+        const close = $(`<button style="width: 25px; height: 25px; border-radius: 100px; border: none; font-size: small;" class="d-flex justify-content-center align-items-center" ><i class="fa-solid fa-xmark"></i></button>`);
+        close.on("click", function(e){
+            item.remove();
+        });
+        item.append(close);
+        $("#search-container").append(item);
+    }
+
+</script>

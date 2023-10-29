@@ -6,21 +6,6 @@ input[type="checkbox"]:checked{
     background-color: #EAFAF1;
 }
 
-/* #table-container{
-    overflow: hidden;
-    max-width: 90px ;
-    max-height: 90px ;
-    transition: .5s ease-out ;
-} */
-
-/* #dataTable_wrapper * {
-    font-size: small;
-} */
-
-#dataTable{
-    /* margin: .5rem; */
-}
-
 #dataTable_wrapper{
     overflow-x: auto;
     padding: 1rem;
@@ -48,6 +33,14 @@ input[type="checkbox"]:checked{
 main {
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+
+
+
+.select2-container--default 
+.select2-selection--single {
+    border: none !important;
 }
 
 

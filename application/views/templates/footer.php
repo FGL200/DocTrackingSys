@@ -23,16 +23,16 @@
     </form>
 </div>
 
-<!-- BOOTSTRAP -->
+<!-- BOOTSTRAP JS -->
 <script src="<?=base_url('assets/third_party/bootstrap/js/bootstrap.bundle.min')?>.js"></script>
 
-<!-- DATATABLES -->
+<!-- DATATABLES JS -->
 <script src="<?=base_url('assets/third_party/datatables/datatables.min')?>.js"></script>
 
-<!-- FONTAWESOME -->
+<!-- FONTAWESOME JS -->
 <script src="<?=base_url('assets/third_party/fontawesome/js/all.min')?>.js"></script>
 
-<!-- jsCalendar -->
+<!-- jsCalendar JS -->
 <script src="<?=base_url('assets/third_party/jsCalendar/jsCalendar.min')?>.js"></script>
 
 <!-- CUSTOM JS -->

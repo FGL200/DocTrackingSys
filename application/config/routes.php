@@ -16,6 +16,7 @@ $route['student/record/insert']['post'] = 'Student/addRecord';
 $route['student/record/update']['post'] = 'Student/update_Student_Records';
 $route['student/record/all'] = 'Student/get_StudentRecords_With_Remarks';
 $route['student/record/(:num)'] = 'Student/get_Student_Records/$1';
+$route['student/record/select']['post'] = 'Student/get_all_stud_rec_as_select';
 
 
 $route['student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';

@@ -8,20 +8,23 @@
     <title><?=isset($title) ? $title : "DOCUMENT"; ?></title>
     <link rel="shortcut icon" href="<?=base_url('assets/images/rtu-logo')?>.png" type="image/x-icon">
 
-    <!-- BOOTSTRAP -->
+    <!-- BOOTSTRAP CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/bootstrap/css/bootstrap.min')?>.css">
 
-    <!-- DATATABLES -->
+    <!-- DATATABLES CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/datatables/datatables.min')?>.css">
 
-    <!-- FONTAWESOME -->
+    <!-- FONTAWESOME CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/fontawesome/css/all.min')?>.css">
 
-    <!-- MDB5 -->
+    <!-- MDB5 CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/mdb5/css/mdb.min')?>.css">
 
-    <!-- jsCalendar -->
+    <!-- jsCalendar CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/third_party/jsCalendar/jsCalendar.min')?>.css">
+    
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="<?=base_url('assets/third_party/select2/select2.min')?>.css">
 
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="<?=base_url('assets/css/main')?>.css">
@@ -35,6 +38,9 @@
     
     <!-- JQUERY -->
     <script src="<?=base_url('assets/third_party/jquery/jquery.min')?>.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="<?=base_url('assets/third_party/select2/select2.min')?>.js"></script>
 
     <!-- CUSTOM JS -->
     <script>

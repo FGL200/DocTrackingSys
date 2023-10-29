@@ -210,25 +210,53 @@ const HOME = {
      * For generating qr codes
      */
     GENERATE_QR: {
-        open: function () {
+        open: async function () {
             home_current_open_modal = 'GENERATE_QR';
-            MODAL.setTitle("Genrate QR");
-            MODAL.setBody(`
-            
-            `);
-            MODAL.setFooter(``);
-            MODAL.setScript(`HOME.GENERATE_QR.onSubmit();`);
-            MODAL.open();
+
+            await fetch(`${base_url}assets/templates/qr_option_generate.html`)
+            .then(response => response.text())
+            .then(response => {
+                MODAL.setTitle("Genrate QR");
+                MODAL.setBody(`${response}`);
+                MODAL.setFooter(`<button class='btn btn-primary'>Generate</button>`);
+                MODAL.setScript(`HOME.GENERATE_QR.onSubmit();`);
+                MODAL.open();
+            })
+            .catch(err => console.error(err));
         },
 
         onSubmit: function () {
             MODAL.onSubmit(async function (e) {
                 e.preventDefault();
 
-                // GENERATE_QR
+                const datas = new FormData();
+                datas.append("type", selected_type);
+                
+                switch(selected_type) {
+                    case "all" : 
+                    
+                        break;
+                    case "last-letter" : 
+                        datas.append("from", $("#last-letter-from").val());
+                        datas.append("to", $("#last-letter-to").val());
+                        break;
+                    case "specific" : 
+                        // let students = [];
+                        // $(".generate-specific-student").each(function(e){
+                        //     students.push($(this).html());
+                        // });
+                        datas.append("students", JSON.stringify(qr_generate_selected_students));
+                        break;
+                    default : 
+                        break;
+                }
+                
+                //check passed values
+                datas.forEach((val, key)=>{
+                    console.log({key, val});
+                })
 
-
-                MODAL.close();
+                MAIN.addNotif("QR Generating!", "QR codes are being generated!", "g");
             })
         }
     },

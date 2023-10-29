@@ -353,6 +353,47 @@ class Student_model extends CI_Model{
         $fetch = $this->db->query($sql);
         return $fetch->result();
     }
+
+    public function get_all_stud_rec_as_select() {
+        // $sql = "SELECT
+        //         CONCAT(`rec`.`record_id`, ' ', `rec`.`text`) `text`,
+        //         CONCAT('[\"', `rec`.`id` , '\", \"', `text` ,'\"]') `id`
+        //     FROM
+        //     (
+        //         SELECT
+        //             CONCAT('(#', LPAD(sr.`id`, 6, '0') , ')') `record_id`,
+        //             CONCAT(
+        //                 CASE WHEN sr.`stud_lname` IS NULL THEN '' ELSE REPLACE(CONCAT(sr.`stud_lname`, ', '), '\"', '\\\\\"') END, 
+        //                 CASE WHEN sr.`stud_fname` IS NULL THEN '' ELSE REPLACE(CONCAT(sr.`stud_fname`, ' '), '\"', '\\\\\"') END,  
+        //                 CASE WHEN sr.`stud_mname` IS NULL THEN '' ELSE REPLACE(CONCAT(sr.`stud_mname`, ' '), '\"', '\\\\\"') END,  
+        //                 CASE WHEN sr.`stud_sfx` IS NULL THEN '' ELSE REPLACE(sr.`stud_sfx`, '\"', '\\\\\"') END
+        //             ) `text`,
+        //             sr.`id` `id`
+        //         FROM `stud_rec` `sr`
+        //     ) `rec`
+        // ";
+        $sql = "SELECT
+                CONCAT(`rec`.`record_id`, ' ', `rec`.`text`) `text`,
+                CONCAT('[\"', `rec`.`id` , '\", \"', 
+                    REPLACE(`rec`.`text`, '\"', '\\\\\"')
+                 ,'\"]') `id`
+            FROM
+            (
+                SELECT
+                    CONCAT('(#', LPAD(sr.`id`, 6, '0') , ')') `record_id`,
+                    CONCAT(
+                        CASE WHEN sr.`stud_lname` IS NULL THEN '' ELSE CONCAT(sr.`stud_lname`, ', ') END, 
+                        CASE WHEN sr.`stud_fname` IS NULL THEN '' ELSE CONCAT(sr.`stud_fname`, ' ') END,  
+                        CASE WHEN sr.`stud_mname` IS NULL THEN '' ELSE CONCAT(sr.`stud_mname`, ' ') END,  
+                        CASE WHEN sr.`stud_sfx` IS NULL THEN '' ELSE sr.`stud_sfx` END
+                    ) `text`,
+                    sr.`id` `id`
+                FROM `stud_rec` `sr`
+            ) `rec`
+        ";
+        $fetch = $this->db->query($sql);
+        return $fetch->result();
+    }
 }
 
 ?>
