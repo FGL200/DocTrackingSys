@@ -21,6 +21,7 @@ async function setupEncoded_monthly() {
         am5themes_Animated.new(root)
     ]);
 
+    remove_logo(root);
 
     // Create chart
     // https://www.amcharts.com/docs/v5/charts/xy-chart/
@@ -32,6 +33,8 @@ async function setupEncoded_monthly() {
         maxTooltipDistance: 0,
         pinchZoomX: true
     }));
+
+    
 
 
     let date = new Date();
@@ -202,6 +205,7 @@ async function setupEncoded_live() {
         am5themes_Animated.new(root)
     ]);
 
+    remove_logo(root);
 
     // Create chart
     // https://www.amcharts.com/docs/v5/charts/xy-chart/
@@ -458,6 +462,7 @@ async function setupRemarks_pie() {
         am5themes_Animated.new(root)
     ]);
 
+    remove_logo(root); 
 
     // Create chart
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
@@ -517,6 +522,10 @@ function newShelf() {
     });
     
     MODAL.open();
+}
+
+function remove_logo(root) {
+    root._logo.dispose();
 }
 
 // Patrick

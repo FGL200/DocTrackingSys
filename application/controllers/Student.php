@@ -20,6 +20,9 @@ class Student extends CI_Controller{
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
 
+        /** File uploder helper */
+        $this->load->helper(array("form", "url"));
+
     }
 
     /**
@@ -140,9 +143,7 @@ class Student extends CI_Controller{
         
         $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
 
-        $data .= " `stud_rec_id` = '{$student_id}'";
-
-        // echo $data; die;
+        $data .= "`stud_rec_id` = '{$student_id}'";
     
         $this->stud->addStudentDoc($data);
     
@@ -307,11 +308,10 @@ class Student extends CI_Controller{
         $this->stud->update_table('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
         
         /** Update `doc` table  */
-        $doc_set = "";
-        $docs_set = [];
+        $doc_set = ""; // sql statement
+        $docs_set = []; // columns to be updated
         
-        foreach($this->student_docs as $doc) {
-            $path = "";
+        foreach($this->user_docs as $doc) {
 
             if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
             else { 
@@ -333,17 +333,19 @@ class Student extends CI_Controller{
                 $docs_set[$doc] .= "\"}'";
             }
             
-            // Deleting old_files
+
             $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-            $dirs = explode(',', $old_path);
-            foreach($dirs as $d) {
-                if($d) $this->delete_Image($d);
+            if($old_path) { 
+                /** convert the old_path to array */
+                $dirs = explode(",", $old_path);
+
+                /** delete each dir */
+                foreach($dirs as $dir) $this->delete_Image($dir); 
             }
-            
             
         }
        
-        $doc_set = implode(", ", array_values($docs_set));
+        $doc_set = count($docs_set) > 0 ? implode(",", array_values($docs_set)) : "";
         
         $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
         $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
@@ -550,12 +552,13 @@ class Student extends CI_Controller{
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', 'uploads/', $path);
 
+        $f = file_get_contents($tmp_name);
+
         if(!is_dir($path)) mkdir($path,DIR_WRITE_MODE, true);
 
         $new_file_name = date("Y_m_d_H_i_s") . bin2hex(random_bytes(5));
 
-        $file_ext = explode('.',$file_name);
-        $file_name = $new_file_name . '.' . ($file_ext[count($file_ext) - 1]);
+        $file_name = $new_file_name . '.' . basename($file_name);
 
         $new_file_path =  'uploads/' . $file_name;
         $data = $new_file_path;
@@ -580,7 +583,7 @@ class Student extends CI_Controller{
     private function delete_Image(String $dir) {
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', $dir, $path);
-
+        
         if(!empty($dir) && file_exists($path)) {
             return unlink($path);
         }

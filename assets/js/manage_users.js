@@ -28,7 +28,7 @@ function showUser(user) {
             <input name="uname" type="text" class="form-control" value="${user.uname}" disabled>
             
             <div class="input-group-text form-check form-switch gap-2">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" ${user.active == '1' ? 'checked' : ''}>
+                <input class="form-check-input" type="checkbox" name="active" role="switch" id="flexSwitchCheckDefault" ${user.active == '1' ? 'checked' : ''}>
                 <label class="form-check-label" for="flexSwitchCheckDefault">Active</label>
             </div>
         </div>
@@ -60,6 +60,9 @@ function showUser(user) {
     MODAL.open();
     MODAL.onSubmit((e)=>{
         const form = new FormData(MODAL.form);
+        form.append("uid", user.id);
+        form.append("uname", user.uname);
+        form.append("action", "set-active");
 
         dts_alert({
             title: "Overwrite user",
@@ -67,9 +70,20 @@ function showUser(user) {
             buttons : ["Yes", "No"]
         }, function (ans){
             if(!ans) return;
-            
-            MODAL.close();
-            MAIN.addNotif("Successfully updated!", "User data updated!", "g");
+    
+            fetch(base_url + "user/update", {
+                method : "POST",
+                body : form
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                MODAL.close();
+                MAIN.addNotif("Updated Successfully!!", "Status updated!", "g");
+            })
+            .catch(err => {
+                MODAL.close();
+                MAIN.addNotif("Server Error!", "Error in updating status!", "r");
+            })
         });
     });
 }
@@ -82,8 +96,27 @@ async function resetPass(uid, uname) {
     }, function (ans){
         if(!ans) return;
 
-        MODAL.close();
-        MAIN.addNotif("Password reset!!", "Password has been reset!", "g");
+        const form = new FormData();
+        form.append("uid", uid);
+        form.append("uname", uname);
+        form.append("action", "reset-password");
+
+        fetch(base_url + "user/update", {
+            method : "POST",
+            body : form
+        })
+        .then(resp => resp.json())
+        .then(data=>{
+            MODAL.close();
+            MAIN.addNotif("Password reset!!", "Password has been reset!", "g");
+        })
+        .catch(err=>{
+            MODAL.close();
+            MAIN.addNotif("Server error!!", "Cannot reset password!", "r");
+        })
+
+
+        
     });
 }
 

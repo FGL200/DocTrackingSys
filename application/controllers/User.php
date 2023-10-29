@@ -14,38 +14,75 @@ class User extends CI_Controller{
      * UPDATE USER INFO
      */
     public function update() {
-        /** Check if profile-old-pass OR profile-new-pass is not empty */
-        if(!empty(trim($this->input->post("profile-old-pass"))) || !empty(trim($this->input->post("profile-new-pass")))) {
+        switch($this->session->userdata("role")) {
+            case "E":
+            case "V":
+                if(!empty(trim($this->input->post("profile-old-pass"))) && empty(trim($this->input->post("profile-new-pass")))) {
+                    echo json_encode(['status'=>'error', 'message'=>'New Password must not be empty']);
+                    die;
+                }
+                if(empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
+                    echo json_encode(['status'=>'error', 'message'=>'Old Password must not be empty']);
+                    die;
+                }
+        
+                if(!empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
+                    $isMatch = $this->user->get_Old_Password($this->input->post("uid"), $this->input->post("profile-old-pass"));
+                    
+                    if(!$isMatch) { echo json_encode(['status' =>  "error", 'message' =>  "Password did not match."]); die; }
+                }
+                
+                $data = "";
+        
+                foreach($this->input->post() as $key=>$val) {
+                    
+                    if(!empty(trim($val))) { 
+                        if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
+                        if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
+                        if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
+                        if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
+                        if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
+                        if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
+                        if($key == "profile-new-pass") $data .= " `u`.`pword` = PASSWORD('".$val."') ";
+                    }
+                    
+                }
+                $data .= " WHERE `u`.`id` = '".$this->input->post("uid")."'";
+        
+                $result = $this->user->update_user_info($data);
+        
+                // if($result) $this->get_user($this->input->post("uid"));
+                
+        
+                if($result)$this->get_user(); //FRED
+                else echo json_encode(['status' =>  "error", 'message' =>  "Error in saving profile"]); die;
+            break;
 
-            /** Check if both passwords is same */
-            if(trim($this->input->post("profile-old-pass")) != trim($this->input->post("profile-new-pass"))) {
-                echo json_encode(['status'=>"error", "message" => "Password's not match"]);
-                die;
-            }
+            case "A":
+                if($this->input->post("action") == "reset-password") {
+                    $uid = $this->input->post("uid");
+                    $uname = $this->input->post("uname");
+
+                    $data = "`u`.`pword` = PASSWORD('default')";
+                    $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
+
+                    // echo $data; die;
+                    echo json_encode(["response" => $this->user->update_user($data)]);
+                }
+
+                if($this->input->post("action") == "set-active") {
+                    $uid = $this->input->post("uid");
+                    $uname = $this->input->post("uname");
+                    $active = $this->input->post("active") ? "1" : "0";
+
+                    $data = "`u`.`active` = '$active'";
+                    $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
+
+                    echo json_encode(["response" => $this->user->update_user($data)]);
+                }
+            break;
         }
         
-        $data = "";
-
-        foreach($this->input->post() as $key=>$val) {
-            
-            if(!empty(trim($val))) { 
-                if(!empty($data) && $key != "profile-old-pass" && $key != "uid") $data .= ",";
-                if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
-                if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
-                if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
-                if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
-                if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
-                if($key == "profile-new-pass") $data .= " `u`.`pword` = PASSWORD('".$val."') ";
-            }
-            
-        }
-        $data .= " WHERE `u`.`id` = '".$this->input->post("uid")."'";
-
-        $result = $this->user->update_user_info($data);
-
-        // if($result) $this->get_user($this->input->post("uid"));
-        if($result) $this->get_user(); //FRED
-        else echo json_encode(['status' => $this->db->error()]);
     }
     
 
@@ -121,6 +158,7 @@ class User extends CI_Controller{
 
         echo json_encode($result);
     }
+    // PRIVATE FUNCTIONS 
 
     private function __change_User_To_Proper_Format_(Array $data) {
         $fixedData = [];
