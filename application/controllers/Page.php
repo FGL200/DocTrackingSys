@@ -93,7 +93,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['home', 'alert', 'newRecord','profile']
+            'js' => ['alert', 'newRecord','profile', 'scan_qr', 'home']
         ];
 
         // load page

@@ -7,6 +7,19 @@ const HOME = {
      */
     SEARCH: {
 
+        scan : async function () {
+            // StartScan();
+            
+            MODAL.setTitle(`Scan QR <i class="fa-solid fa-qrcode"></i>`);
+            MODAL.setBody(`<div class="d-flex flex-column">
+            <video id="qr-camera" style="width: 400px; height: 400px;"></video>
+            <button type="button" onclick="DTS_QR.swapCamera()" class="btn btn-primary align-self-center"><i class="fa-solid fa-rotate"></i></button>
+            </div>`);
+            MODAL.open();
+
+            await DTS_QR.initialize();
+        },
+
         /**
          * 
          */
@@ -185,8 +198,12 @@ const HOME = {
             home_current_open_modal = 'IMPORT_EXCEL';
             MODAL.setTitle("Import Excel");
             MODAL.setBody(`
-                <div class="d-flex justify-content-center align-items-center gap-2">
-                    <i class="fa-solid fa-newspaper"></i> FEATURE COMMING SOON!
+                <div class="d-flex flex-column gap-2">
+                    <div id="file-drop" class="d-flex justify-content-center align-items-center" style="height: 300px; background: rgba(0,0,0,0.1); user-select: none;">
+                        Drop Spreadsheet file here
+                    </div>
+                    <input type="file" id="file-upload" class="hide" accept=".xls, .xlsx, .csv" />
+                    <button onclick="$('#file-upload').trigger('click')" class="btn btn-primary">Upload</button>
                 </div>
             `);
             MODAL.setFooter(``);
@@ -197,11 +214,6 @@ const HOME = {
         onSubmit: function () {
             MODAL.onSubmit(async function (e) {
                 e.preventDefault();
-
-                // IMPORT EXCEL
-
-
-                MODAL.close();
             })
         }
     },
