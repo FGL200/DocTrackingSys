@@ -427,8 +427,9 @@ class Student extends CI_Controller{
 
 
     public function build_qr() {
+        $path = str_replace('\\', '/', BASEPATH);
+        
         if (!class_exists('chillerlan\QRCode\QRCode')) {
-            $path = str_replace('\\', '/', BASEPATH);
             $path = str_replace('system/', 'vendor/', $path);
             require $path . 'autoload.php';
         }
@@ -450,6 +451,7 @@ class Student extends CI_Controller{
         
         $data = $this->stud->get_StudentRecords_With_Remarks($cond, $order);
         
+        $path = str_replace('vendor/', 'assets/', $path);
         foreach($data as $k => $v) {   
             $text = json_encode(['Record ID' => $v['Record ID'] ,'First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
 
@@ -463,7 +465,7 @@ class Student extends CI_Controller{
             ->size(300)
             ->margin(10)
             ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-            ->logoPath('C:\xampp\htdocs\DocTrackingSys\assets\images\rtu-logo.png')
+            ->logoPath($path . 'images/rtu-logo.png')
             ->logoResizeToWidth(100)
             ->logoPunchoutBackground(false)
             // ->labelText($v['First Name'] . " " . $v['Last Name'])
