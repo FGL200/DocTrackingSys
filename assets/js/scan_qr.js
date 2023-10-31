@@ -3,8 +3,13 @@ const DTS_QR = {
     onScan: function (value) {
         DTS_QR.audio().play();
 
-        // VALUE OF QR CODE
-        console.log({value});
+        value = JSON.parse(value);
+        record_id = value["Record ID"];
+
+        window.open(`${base_url}record/${record_id}`);
+
+        DTS_QR.stopScanner();
+        MODAL.close();
     },
 
     audio: function () {
