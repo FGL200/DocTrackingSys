@@ -428,7 +428,9 @@ class Student extends CI_Controller{
 
     public function build_qr() {
         if (!class_exists('chillerlan\QRCode\QRCode')) {
-            require 'C:\xampp\htdocs\DocTrackingSys\vendor\autoload.php';
+            $path = str_replace('\\', '/', BASEPATH);
+            $path = str_replace('system/', 'vendor/', $path);
+            require $path . 'autoload.php';
         }
         $cond = null;
         $order = null;
