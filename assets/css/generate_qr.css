@@ -1,0 +1,8 @@
+main {
+    overflow-y: scroll !important;
+    height: 100vh;
+}
+
+main::-webkit-scrollbar{
+    display: none;
+}

@@ -27,7 +27,7 @@ class Student_model extends CI_Model{
         $this->db->query($query);
     }
 
-    public function get_StudentRecords_With_Remarks() {
+    public function get_StudentRecords_With_Remarks($cond = null, $order = null) {
         $query = "SELECT 
                     LPAD(sr.id, 6, '0') `Record ID`,
                     CASE 
@@ -65,9 +65,7 @@ class Student_model extends CI_Model{
                     ON u.`id` = sr.`created_by_uid`
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
-                WHERE sr.deleted_flag = '0'
-                ORDER BY `Student ID`
-                    DESC
+                WHERE sr.deleted_flag = '0' {$cond}
                 -- GROUP BY 
                 --     `Student ID`,
                 --     `Last Name`,
@@ -79,8 +77,8 @@ class Student_model extends CI_Model{
                 --     `cdate`,
                 --     `cby`,
                 --     `uby`
-                ";
-        
+                " . ($order ? $order : "ORDER BY `Student ID` DESC");
+        // echo $query; die;
         $fetch = $this->db->query($query);
 
         return $fetch->result_array();

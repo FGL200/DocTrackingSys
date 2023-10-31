@@ -22,15 +22,27 @@ class User_model extends CI_Model
         return $result ? $this->db->insert_id() : false;
     }
 
+    // For user_info table
     public function update_user_info($data)
     {   
         $sql = "UPDATE user_info `ui`
-                    INNER JOIN `user` `u`
-                        ON `u`.`id` = `ui`.`user_id`
-                    SET {$data}";
+                INNER JOIN `user` `u`
+                    ON `u`.`id` = `ui`.`user_id`
+                SET {$data}";
         // echo $sql; die;
-        $this->db->query($sql);
-        return $this->db->affected_rows() ? true : false;
+        $fetch = $this->db->query($sql);
+        return $fetch ? true : false;
+    }
+
+    // For user table 
+    public function update_user($data)
+    {   
+        $sql = "UPDATE `user` `u`
+                SET {$data}";
+
+        // echo $sql; die;
+        $fetch = $this->db->query($sql);
+        return $fetch ? true : false;
     }
 
     public function login_user($username, $password)

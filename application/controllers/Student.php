@@ -426,18 +426,31 @@ class Student extends CI_Controller{
 
 
 
-    public function generateQR() {
+    public function build_qr() {
         if (!class_exists('chillerlan\QRCode\QRCode')) {
             require 'C:\xampp\htdocs\DocTrackingSys\vendor\autoload.php';
         }
+        $cond = null;
+        $order = null;
+        if($this->input->post("get") && $this->input->post("get") == "all") {
+            
+        }
+        else if($this->input->post("from") && $this->input->post("to")) {
+            $from = $this->input->post("from") ;
+            $to = $this->input->post("to");
+
+            $cond = " AND (LEFT(`sr`.stud_lname, ".strlen($from).") >= '$from' AND LEFT(`sr`.stud_lname, ".strlen($to).") <= '$to')";
+            $order = "ORDER BY `Last Name` ASC";
+        }
 
         $text = "";
+        $qr_list = array();
+        
+        $data = $this->stud->get_StudentRecords_With_Remarks($cond, $order);
+        
+        foreach($data as $k => $v) {   
+            $text = json_encode(['Record ID' => $v['Record ID'] ,'First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
 
-        $data = $this->stud->get_StudentRecords_With_Remarks();
-
-        foreach($data as $k => $v) {
-            $text = json_encode(['First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
-            
 
             $result =Builder::create()
             ->writer(new PngWriter())
@@ -457,17 +470,12 @@ class Student extends CI_Controller{
         
         // Generate a data URI to include image data inline (i.e. inside an <img> tag)
             $dataUri = $result->getDataUri();
-            echo "<img src='$dataUri'>" . PHP_EOL;
+            array_push($qr_list, ["<img src='$dataUri'>", $text]);
             $text = "";
+            
         }
 
-
-
-        
-
-        
-
-        
+        echo json_encode(["data" => $qr_list]);
 
     }
 

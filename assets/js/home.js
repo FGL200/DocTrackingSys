@@ -234,11 +234,13 @@ const HOME = {
                 
                 switch(selected_type) {
                     case "all" : 
-                    
+                        window.location.href = new URL(base_url + "generate-qr?get=all");
                         break;
                     case "last-letter" : 
                         datas.append("from", $("#last-letter-from").val());
                         datas.append("to", $("#last-letter-to").val());
+
+                        window.location.href = new URL(base_url + `generate-qr?from=${$("#last-letter-from").val()}&to=${$("#last-letter-to").val()}`);
                         break;
                     case "specific" : 
                         // let students = [];

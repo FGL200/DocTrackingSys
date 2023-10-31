@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 
 class Page extends CI_Controller {
 
@@ -153,5 +160,54 @@ class Page extends CI_Controller {
         ];
 
         $this->loadPage("manage_users", $data);
+    }
+
+    
+    public function generate_qr() {
+        if($this->session->userdata("role") == "A"){
+            redirect("home");
+        }
+
+        // if (!class_exists('chillerlan\QRCode\QRCode')) {
+        //     require 'C:\xampp\htdocs\DocTrackingSys\vendor\autoload.php';
+        // }
+        
+        // $data['qr_list'] = [];
+
+        // $students = $this->stud->get_StudentRecords_With_Remarks();
+
+        // foreach($students as $k => $v) {
+        //     $text = json_encode(['First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
+            
+
+        //     $result =Builder::create()
+        //     ->writer(new PngWriter())
+        //     ->writerOptions([])
+        //     ->data($text)
+        //     ->encoding(new Encoding('UTF-8'))
+        //     ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        //     ->size(300)
+        //     ->margin(10)
+        //     ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+        //     ->logoPath('C:\xampp\htdocs\DocTrackingSys\assets\images\rtu-logo.png')
+        //     ->logoResizeToWidth(100)
+        //     ->logoPunchoutBackground(false)
+        //     // ->labelText($v['First Name'] . " " . $v['Last Name'])
+        //     ->validateResult(false)
+        //     ->build();
+        
+        // // Generate a data URI to include image data inline (i.e. inside an <img> tag)
+        //     $dataUri = $result->getDataUri();
+        //     array_push($data['qr_list'],"<img src='$dataUri'>");
+        // }
+        $data['header'] = [
+            'css' => ['generate_qr']
+        ];
+
+        $data['footer'] = [
+            'js' => ['generate_qr']
+        ];
+
+        $this->loadPage('generated_qr', $data);
     }
 }
