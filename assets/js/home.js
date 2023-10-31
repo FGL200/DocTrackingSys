@@ -8,16 +8,17 @@ const HOME = {
     SEARCH: {
 
         scan : async function () {
-            // StartScan();
             
             MODAL.setTitle(`Scan QR <i class="fa-solid fa-qrcode"></i>`);
-            MODAL.setBody(`<div class="d-flex flex-column">
-            <video id="qr-camera" style="width: 400px; height: 400px;"></video>
-            <button type="button" onclick="DTS_QR.swapCamera()" class="btn btn-primary align-self-center"><i class="fa-solid fa-rotate"></i></button>
+            MODAL.setBody(`<div class="d-flex flex-column gap-2">
+            <video id="qr-camera" style="max-height: 300px"></video>
+                <button type="button" onclick="DTS_QR.swapCamera()" class="btn btn-primary align-self-center"><i class="fa-solid fa-rotate"></i></button>
             </div>`);
             MODAL.open();
-
+            
             await DTS_QR.initialize();
+            
+            MODAL.onClose(()=>{ DTS_QR.stopScanner(); });
         },
 
         /**

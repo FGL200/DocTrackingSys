@@ -32,14 +32,21 @@ const MODAL = {
         });
     },
 
+    __onClose__ : null,
+
+    onClose : function (callBack = null) {
+        return MODAL.__onClose__ = callBack;
+    },
+
     /**
      * Hide the modal
      */
-    close : function(callBack = null){
+    close : function(callBack = MODAL.__onClose__){
         this.fade_out = true;
         $("#modal-holder").addClass("fade-out");
         $("#modal-container").off("submit");
         if(callBack) callBack(this);
+        MODAL.__onClose__ = null;
         // console.log(  jQuery._data( document.getElementById("modal-holder"), "events" ) )
     },
 

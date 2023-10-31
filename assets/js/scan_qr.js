@@ -1,125 +1,70 @@
 const DTS_QR = {
 
-    onScan : function (value) {
+    onScan: function (value) {
         DTS_QR.audio().play();
+
+        // VALUE OF QR CODE
         console.log({value});
     },
 
-    audio : function () {
-        if(DTS_QR.__audio__ !== null) return DTS_QR.__audio__;
+    audio: function () {
+        if (DTS_QR.__audio__ !== null) return DTS_QR.__audio__;
         const _audio = new Audio(`${base_url}assets/audio/beep.mp3`);
         _audio.loop = false;
         return DTS_QR.__audio__ = _audio;
     },
 
-    scanner : function () {
+    scanner: function () {
         if (DTS_QR.__scanner__ !== null) return DTS_QR.__scanner__;
-        const _scanner = new Instascan.Scanner({
-            video : document.getElementById("qr-camera"),
-            mirror: false, // prevents the video to be mirrored
-        });
-        _scanner.addListener("scan", DTS_QR.onScan)
-        return DTS_QR.__scanner__ = _scanner; 
+        const args = {
+            video: document.getElementById("qr-camera"),
+            //mirror: false, // prevents the video to be mirrored
+        };
+        window.URL.createObjectURL = (stream) => {
+            args.video.srcObject = stream;
+            return stream;
+        };
+        const _scanner = new Instascan.Scanner(args);
+        return DTS_QR.__scanner__ = _scanner;
     },
 
-    initialize : async function () {
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                DTS_QR.scanner().start(cameras[0]);
+    initialize: async function () {
+        await Instascan.Camera.getCameras().then(function (cameras) {
+            let length = DTS_QR.length = cameras.length;
+            let use = DTS_QR.camUse;
+
+            if (length > 0) {
+                DTS_QR.scanner().start(cameras[use]);
             } else {
-                console.error('No cameras found.');
+                dts_alert({
+                    title: "Error Scanning QR",
+                    body : `No Camera device available`
+                }, ()=>{ DTS_QR.stopScanner(); });
             }
+
+            DTS_QR.scanner().addListener("scan", DTS_QR.onScan);
+
         }).catch(function (e) {
             console.error(e);
         });
     },
 
-    swapCamera : function () {
+    swapCamera: function () {
+        DTS_QR.stopScanner();
 
+        DTS_QR.camUse ++;
+        if(DTS_QR.camUse > (DTS_QR.length - 1)) DTS_QR.camUse = 0;
+
+        DTS_QR.initialize();
     },
 
-    length : 0,
-    camUse : 0,
-    __scanner__ : null,
-    __audio__ : null,
+    stopScanner: function () {
+        DTS_QR.scanner().stop();
+        DTS_QR.__scanner__ = null;
+    },
+
+    length: 0,
+    camUse: 0,
+    __scanner__: null,
+    __audio__: null,
 }
-
-
-
-
-
-
-// var audio = new Audio(`${base_url}assets/audio/beep.mp3`);
-// audio.loop = false;
-
-// let camSize = 0;
-// let camUse = 0;
-
-// let scanner = new Instascan.Scanner({
-//     video: document.getElementById("qr-camera"),
-//     mirror: false, // prevents the video to be mirrored
-// });
-
-// function StartScan() {
-//     Instascan.Camera.getCameras().then((cameras) => {
-//         camSize = cameras.length;
-
-//         if (cameras.length > 0) {
-//             scanner.start(cameras[camUse]);
-//         } else {
-//             console.log("No Camera")
-//         }
-//     }).catch((e) => {
-//         alert(e);
-//     });
-// }
-
-// function playSound() {
-//     audio.play();
-// }
-
-// function Swap() {
-//     if (camUse == 0) {
-//         camUse = 1;
-//         scanner.mirror = false;
-//     } else {
-//         camUse = 0;
-//         scanner.mirror = true;
-//     }
-
-//     StartScan();
-// }
-
-// scanner.addListener("scan", (content) => {
-//     playSound();
-//     for (let index = 0; index < 25000; index++) {
-//         console.log(index);
-//     }
-//     window.location = "./qr_read.php?data=" + content;
-// });
-
-
-// const CAMERA = document.getElementById("qr-camera");
-
-// const DTS_QR = {
-//     onScan : function (value) {
-//         console.log(value);
-//     },
-
-//     onError : function (err) {
-//         console.log(err);
-//     },
-
-//     scanner : function () {
-//         return DTS_QR.__scanner__ == null ? new Html5QrcodeScanner('qr-camera', {
-//             fps : 20,
-//             qrbox: { width: 250, height: 250 }
-//         }) : DTS_QR.__scanner__;
-//     },
-
-//     initialize : async function () {
-//         DTS_QR.scanner().render(DTS_QR.onScan, DTS_QR.onError);
-//     },
-
-//     __scanner__ : null,
-// }
