@@ -93,8 +93,19 @@ const MAIN = {
 const ABOUT = {
     open : function(){
         MODAL.setTitle("About the System");
-        MODAL.setBody(`
-            The system is all about being a crazy version of you!
+        MODAL.setBody(`<div class="d-flex flex-column gap-2 p-3" style="max-width: 700px;">
+        <section style="text-align: justify;">
+            Welcome to the <b>Student Records and Admission Center Document Tracking System</b>, a powerful tracker system that allows RTU SRAC to store and manage vast amounts of information in a simple, secure, and efficient way.
+        </section>
+        <section style="text-align: justify;">
+            <b>Our goal is to give RTU SRAC the tools they need to get insight from their data.</b> Although RTU SRAC's administration is rather small, it can benefit from this platform because of its ability to help it streamline operations, improve decision-making, and provide a better experience for clients.
+        </section>
+        <section style="text-align: justify;">
+            <b>The QR system allows RTU SRAC to store massive volumes of data in a compact format.</b> Our user-friendly interface makes it simple to store, retrieve, and examine data from RTU customers in real time, making it easy for RTU SRAC to manage your data. In addition, RTU SRAC's customers' data will be safe and secured because this system is built to be secure and comply with industry standards.
+        </section>
+        </div>`);
+        MODAL.setFooter(`
+            <section>Checkout the <a href="#">System's Manual</a> to learn more!</section>
         `);
         MODAL.open();
     }
