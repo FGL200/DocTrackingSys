@@ -16,8 +16,10 @@ class QR {
                 
                 let data_len = result.data.length;
                 let i = 0;
-                // let delay = setInterval(()=>{
-                //     if(i >= result.data.length) {clearInterval(delay); console.log("HEY"); console.log($(".qr-container").length);}
+                let delay = setInterval(()=>{
+                    if(i >= result.data.length) {clearInterval(delay); console.log("HEY"); console.log($(".qr-container").length);
+                        $("main").removeClass("loading");
+                    }
                     for(i ; i < data_len; i++) {
                         
                        
@@ -74,15 +76,15 @@ class QR {
 
                         this.display_qr(qr_cont);
                         
-                        // if(i > 0 && i % 20 === 0) {
-                        //     i += 1;
-                        //     break;
-                        // }
+                        if(i > 0 && i % 20 === 0) {
+                            i += 1;
+                            break;
+                        }
 
                         console.log(i, result.data.length);
                     }
                     
-                // }, 1000)
+                }, 100)
 
                 
                 

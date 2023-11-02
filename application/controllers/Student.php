@@ -19,7 +19,7 @@ class Student extends CI_Controller{
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
 
-        $this->load->library("async");
+        // $this->load->library("async");
 
         $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
