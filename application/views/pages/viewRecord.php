@@ -3,7 +3,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
 ?>
 
 <main class="d-flex justify-content-center align-items-center">
-    <<?=($role === 'E') ? 'form' : 'div'?> id="update-record-form" class="d-flex flex-column m-1" method="post">
+    <<?=($role === 'E') ? 'form enctype="multipart/form-data"' : 'div'?> id="update-record-form" class="d-flex flex-column m-1" method="post">
         <div class="doc-header d-flex justify-content-between align-items-center flex-wrap p-2 gap-2">
             <button class="btn btn-danger" type="button" onclick="window.close();">Back</button>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>

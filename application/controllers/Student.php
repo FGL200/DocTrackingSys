@@ -7,6 +7,8 @@ use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
 use Endroid\QrCode\Label\Font\NotoSans;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
+use SebastianBergmann\CodeCoverage\Report\PHP;
+
 class Student extends CI_Controller{
 
     private $student_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
@@ -16,6 +18,9 @@ class Student extends CI_Controller{
         
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
+
+        $this->load->library("async");
+
         $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
@@ -100,27 +105,32 @@ class Student extends CI_Controller{
  
         $data = ""; // reset the data for the next query
 
-        $input_docs = ["doc_val_regi_form","doc_val_good_moral","doc_val_j_f137","doc_val_s_f137","doc_val_f138","doc_val_birth_cert","doc_val_tor","doc_val_app_grad","doc_val_cert_of_complete", "doc_val_req_clearance_form","doc_val_req_credentials","doc_val_hd_or_cert_of_trans"];
-
         $stud_docs = [];
+
+        $doc_keys = array_filter($this->input->post(), function($key){
+            return str_contains($key, "doc_val_");
+        }, ARRAY_FILTER_USE_KEY);
+
+        // var_dump($doc_keys); die;
         /** Inserting data in `doc` table  */
 
-        foreach($input_docs as $input_doc) {
-            if(!empty($this->input->post($input_doc))) {
-                $doc = str_replace("doc_val_", "", $input_doc);
+        foreach($doc_keys as $key => $val) {
+            if(str_contains($key, "doc_val")) {
+                $doc = str_replace("doc_val_", "", $key);
 
                 $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
-
-                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                    $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
-    
-                    if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
-                }
                 
-    
+                // echo  $doc . PHP_EOL;
+                // var_dump($_FILES['doc_scan_' . $doc]['name']) . PHP_EOL;
+                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+                    if(!empty($_FILES["doc_scan_".$doc]['name'][$i]) && !empty($_FILES["doc_scan_".$doc]['tmp_name'][$i])) {
+                        $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+                        // echo($_FILES["doc_scan_".$doc]['tmp_name'][$i]); continue;
+                        if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
+                    }    
+                }
                 if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
-
-            }
+            }    
         }
 
         
@@ -311,46 +321,89 @@ class Student extends CI_Controller{
         $doc_set = ""; // sql statement
         $docs_set = []; // columns to be updated
         
-        foreach($this->user_docs as $doc) {
+        // foreach($this->student_docs as $doc) {
 
-            if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
-            else { 
-                $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
-                continue;
-            }
+        //     if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
+        //     else { 
+        //         $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
+        //         continue;
+        //     }
 
-            if($this->input->post("doc_scan_" . $doc)) $docs_set[$doc] .= $this->input->post("doc_scan_" . $doc)."\"}'";
+        //     if($this->input->post("doc_scan_" . $doc)) $docs_set[$doc] .= $this->input->post("doc_scan_" . $doc)."\"}'";
 
-            if(isset($_FILES['doc_scan_' . $doc])) {
+        //     if(isset($_FILES['doc_scan_' . $doc])) {
 
-                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                    if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
-                        $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
-                    }
-                    if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
+        //         for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+        //             if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
+        //                 $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
+        //             }
+        //             if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
                     
+        //         }
+        //         $docs_set[$doc] .= "\"}'";
+        //     }
+            
+
+        //     $old_path = $this->get_doc_dir($stud_rec_id, $doc);
+        //     if($old_path) { 
+        //         /** convert the old_path to array */
+        //         $dirs = explode(",", $old_path);
+
+        //         /** delete each dir */
+        //         foreach($dirs as $dir) $this->delete_Image($dir); 
+        //     }
+            
+        // }
+        $doc_keys = array_filter($this->input->post(), function($key){
+            return str_contains($key, "doc_val_");
+        }, ARRAY_FILTER_USE_KEY);
+
+        foreach($doc_keys as $key=>$val) {
+            if(str_contains($key, "doc_val")) {
+                $doc = str_contains($key, "doc_val") ? str_replace("doc_val_", "", $key) : str_replace("doc_scan_", "", $key);
+                
+                if(intval($val) == 0) {
+                    $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"";   
+                } else {
+                    $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
                 }
+                
+
+                if(isset($_FILES['doc_scan_' . $doc])) {
+                    for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+                        if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
+                            $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
+                        }
+                        if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
+                    }
+                }
+
                 $docs_set[$doc] .= "\"}'";
-            }
-            
 
-            $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-            if($old_path) { 
-                /** convert the old_path to array */
-                $dirs = explode(",", $old_path);
+                $old_path = $this->get_doc_dir($stud_rec_id, $doc);
+                
+                if(!empty(trim($old_path))) { 
+                    // echo $old_path . PHP_EOL;
+                    /** convert the old_path to array */
+                    $dirs = explode(",", $old_path);
 
-                /** delete each dir */
-                foreach($dirs as $dir) $this->delete_Image($dir); 
+                    /** delete each dir */
+                    foreach($dirs as $dir) $this->delete_Image($dir); 
+                }
             }
-            
         }
-       
-        $doc_set = count($docs_set) > 0 ? implode(",", array_values($docs_set)) : "";
-        
-        $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
-        $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
+        // var_dump($docs_set);
+        // die;
+       if(count($docs_set) > 0) {
+            $doc_set =  implode(",", array_values($docs_set)) ;
+            
+            $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
+            $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
         /** End Update `doc` table  */
+       }
+       
 
+        
 
         if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
@@ -425,7 +478,13 @@ class Student extends CI_Controller{
     }
 
 
+    public function async() {
+        $url = base_url() . "student/build_qr";
+        $params = array("from" => "P", "to"=>"P");
 
+
+        $this->async->do_in_background($url, $params);
+    }
     public function build_qr() {
         $path = str_replace('\\', '/', BASEPATH);
         
@@ -451,35 +510,35 @@ class Student extends CI_Controller{
         
         $data = $this->stud->get_StudentRecords_With_Remarks($cond, $order);
         
-        $path = str_replace('vendor/', 'assets/', $path);
-        foreach($data as $k => $v) {   
-            $text = json_encode(['Record ID' => $v['Record ID'] ,'First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
+        // $path = str_replace('vendor/', 'assets/', $path);
+        // foreach($data as $k => $v) {   
+        //     $text = json_encode(['Record ID' => $v['Record ID'] ,'First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
 
 
-            $result =Builder::create()
-            ->writer(new PngWriter())
-            ->writerOptions([])
-            ->data($text)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-            ->size(300)
-            ->margin(10)
-            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-            ->logoPath($path . 'images/rtu-logo.png')
-            ->logoResizeToWidth(100)
-            ->logoPunchoutBackground(false)
-            // ->labelText($v['First Name'] . " " . $v['Last Name'])
-            ->validateResult(false)
-            ->build();
+        //     $result =Builder::create()
+        //     ->writer(new PngWriter())
+        //     ->writerOptions([])
+        //     ->data($text)
+        //     ->encoding(new Encoding('UTF-8'))
+        //     ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        //     ->size(300)
+        //     ->margin(10)
+        //     ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+        //     ->logoPath($path . 'images/rtu-logo.png')
+        //     ->logoResizeToWidth(100)
+        //     ->logoPunchoutBackground(false)
+        //     // ->labelText($v['First Name'] . " " . $v['Last Name'])
+        //     ->validateResult(false)
+        //     ->build();
         
-        // Generate a data URI to include image data inline (i.e. inside an <img> tag)
-            $dataUri = $result->getDataUri();
-            array_push($qr_list, ["<img src='$dataUri'>", $text]);
-            $text = "";
+        // // Generate a data URI to include image data inline (i.e. inside an <img> tag)
+        //     $dataUri = $result->getDataUri();
+        //     array_push($qr_list, ["<img src='$dataUri'>", $text]);
+        //     $text = "";
             
-        }
+        // }
 
-        echo json_encode(["data" => $qr_list]);
+        echo json_encode(["data" => $data]);
 
     }
 

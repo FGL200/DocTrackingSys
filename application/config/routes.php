@@ -11,7 +11,7 @@ $route['dashboard'] = 'Page/dashboard';
 $route['record/(:num)'] = 'Page/record/$1';
 $route['manage'] = 'Page/manage_users';
 $route['generate-qr']= "Page/generate_qr";
-
+$route['async']["post"] = "Student/async";
 // API
 $route['student/record/insert']['post'] = 'Student/addRecord';
 $route['student/record/update']['post'] = 'Student/update_Student_Records';

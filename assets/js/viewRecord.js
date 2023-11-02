@@ -32,47 +32,49 @@ const VIEW_RECORD = {
                 $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
                 $("#update-record-btn").prop("disabled", true);
                 
-                form.forEach((val, key)=>{
-                    VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                        // kapag walang laman yung input file iassign yung value na nasa 
-                        // VIEW_RECORD.__old_DIRS__
-                        if(form.get(key) instanceof File) {
-                            if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                                const nKey = key.replace(/[\[\]]/g, "");
+                // form.forEach((val, key)=>{
+                //     VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
+                //         // kapag walang laman yung input file iassign yung value na nasa 
+                //         // VIEW_RECORD.__old_DIRS__
+                //         if(form.get(key) instanceof File) {
+                //             if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
+                //                 const nKey = key.replace(/[\[\]]/g, "");
     
-                                form.delete(key);
+                //                 form.delete(key);
     
-                                form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
-                                console.log(nKey)
-                            }
-                        }
+                //                 form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
+                //                 console.log(nKey)
+                //             }
+                //         }
                         
-                    })
-                });
+                //     })
+                // });
 
-                // VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
-                //     const key = Object.keys(data)[0];
+                VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
+                    const key = Object.keys(data)[0];
 
-                //     const old_dir = VIEW_RECORD.__old_DIRS__[index];
-                //     const new_dir = VIEW_RECORD.__new_DIRS__[index];
+                    const old_dir = VIEW_RECORD.__old_DIRS__[index];
+                    const new_dir = VIEW_RECORD.__new_DIRS__[index];
                     
-                //     const cb_name = key.replace("scan", "val").replace("[]","");
+                    const cb_name = key.replace("scan", "val").replace("[]","");
                     
-                //     if(old_dir[key] != new_dir[key]){ 
-                //         form.set(key, new_dir[key]);
-                //     } 
-                //     if(old_dir["val"] != new_dir["val"]) {
-                //         form.set(cb_name, new_dir["val"]);
-                //     }
+                    if(old_dir["val"] != new_dir["val"]) {
+                        form.set(cb_name, new_dir["val"]);
+                    }
+                    
+                    if(old_dir["val"] == new_dir["val"]) {
+                        form.delete(cb_name);
+                    }
 
-                //     if(old_dir[key] == new_dir[key]) {
-                //         form.delete(key);
-                //     }
+                    if(old_dir[key] == new_dir[key]) {
+                        form.delete(key);
+                    }
+
+                    if(old_dir[key] != new_dir[key]){ 
+                        form.set(cb_name, new_dir["val"]);
+                    } 
                     
-                //     if(old_dir["val"] == new_dir["val"]) {
-                //         form.delete(cb_name);
-                //     }
-                // })
+                })
                 
 
             } else {
@@ -103,6 +105,26 @@ const VIEW_RECORD = {
                             $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
                             $("#delete-record-btn").prop("disabled", false);
                         }
+
+                        fetch(base_url + "student/record/" + $("input[name='stud_rec_id']").val())
+                        .then(resp=>resp.json())
+                        .then(data=>{
+                            const result = data.result;
+                            console.log(VIEW_RECORD.__old_DIRS__);
+                            VIEW_RECORD.__old_DIRS__ = [];
+                            VIEW_RECORD.__new_DIRS__ = [];
+
+                            for(let key of Object.keys(result)) {
+                                if(!key.includes("stud") && key !== "value") {
+                                    const dir = JSON.parse(result[key])["dir"];
+                                    const val = JSON.parse(result[key])["val"]
+                                    VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"doc_scan_${key}[]" : "${dir}" , "val" : ${parseInt(val)}}`));
+                                    VIEW_RECORD.__new_DIRS__.push(JSON.parse(`{"doc_scan_${key}[]" : "${dir}" , "val" : ${parseInt(val)}}`));
+                                }
+                            }
+
+                            console.log(VIEW_RECORD.__old_DIRS__);
+                        })
                     });
                 } else {
                     const keys = Object.keys(message);
@@ -574,7 +596,6 @@ function changeFileDir (inFile){
 
                 if(key === inFile_name) {
                     VIEW_RECORD.__new_DIRS__[index][inFile_name] = this.files;
-
                     let temp_id = key.replace("doc_scan_", "view_scan_").replace("[]", ""); 
                     $(`#${temp_id}`).off("click");
                     $(`#${temp_id}`).on("click", viewScannedDoc);

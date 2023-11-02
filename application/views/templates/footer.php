@@ -35,6 +35,9 @@
 <!-- jsCalendar JS -->
 <script src="<?=base_url('assets/third_party/jsCalendar/jsCalendar.min')?>.js"></script>
 
+<!-- Jquery qrcode -->
+<script src="<?=base_url('assets/third_party/jquery-qrcode/dist/jquery-qrcode')?>.js"></script>
+
 <!-- CUSTOM JS -->
 <script src="<?=base_url('assets/js/modal')?>.js"></script>
 <script src="<?=base_url('assets/js/main')?>.js"></script>

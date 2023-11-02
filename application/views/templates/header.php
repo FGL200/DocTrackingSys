@@ -59,6 +59,10 @@
     <script src="<?=base_url("assets/js/$j")?>.js" defer></script>
     <?php } }?>
 
+    <!-- Jquery qrcode -->
+    <script src="<?=base_url('assets/third_party/jquery-qrcode/dist/jquery-qrcode')?>.js" defer></script>
+
+
 </head>
 <body class="d-flex flex-column justify-content-between">
 <!-- START OF HTML -->

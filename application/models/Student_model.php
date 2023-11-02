@@ -77,7 +77,7 @@ class Student_model extends CI_Model{
                 --     `cdate`,
                 --     `cby`,
                 --     `uby`
-                " . ($order ? $order : "ORDER BY `Student ID` DESC");
+                " . ($order ? $order : "ORDER BY sr.id ASC");
         // echo $query; die;
         $fetch = $this->db->query($query);
 
@@ -263,6 +263,7 @@ class Student_model extends CI_Model{
         $sql = "SELECT * FROM `doc` WHERE `stud_rec_id` = '$stud_id' LIMIT 1";
 
         $result = $this->db->query($sql);
+        // var_dump($result);
 
         return $result->num_rows() ? $result->result_array() : [];
     }   
@@ -391,6 +392,10 @@ class Student_model extends CI_Model{
         ";
         $fetch = $this->db->query($sql);
         return $fetch->result();
+    }
+
+    public function get_all_docs() {
+
     }
 }
 

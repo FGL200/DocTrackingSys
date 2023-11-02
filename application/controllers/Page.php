@@ -168,38 +168,6 @@ class Page extends CI_Controller {
             redirect("home");
         }
 
-        // if (!class_exists('chillerlan\QRCode\QRCode')) {
-        //     require 'C:\xampp\htdocs\DocTrackingSys\vendor\autoload.php';
-        // }
-        
-        // $data['qr_list'] = [];
-
-        // $students = $this->stud->get_StudentRecords_With_Remarks();
-
-        // foreach($students as $k => $v) {
-        //     $text = json_encode(['First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
-            
-
-        //     $result =Builder::create()
-        //     ->writer(new PngWriter())
-        //     ->writerOptions([])
-        //     ->data($text)
-        //     ->encoding(new Encoding('UTF-8'))
-        //     ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-        //     ->size(300)
-        //     ->margin(10)
-        //     ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-        //     ->logoPath('C:\xampp\htdocs\DocTrackingSys\assets\images\rtu-logo.png')
-        //     ->logoResizeToWidth(100)
-        //     ->logoPunchoutBackground(false)
-        //     // ->labelText($v['First Name'] . " " . $v['Last Name'])
-        //     ->validateResult(false)
-        //     ->build();
-        
-        // // Generate a data URI to include image data inline (i.e. inside an <img> tag)
-        //     $dataUri = $result->getDataUri();
-        //     array_push($data['qr_list'],"<img src='$dataUri'>");
-        // }
         $data['header'] = [
             'css' => ['generate_qr']
         ];
