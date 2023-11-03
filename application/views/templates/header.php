@@ -41,6 +41,12 @@
 
     <!-- Select2 JS -->
     <script src="<?=base_url('assets/third_party/select2/select2.min')?>.js"></script>
+    
+    <!-- SHEETJS -->
+    <!-- add the shim first -->
+    <script type="text/javascript" src="<?=base_url('assets/third_party/sheetjs/dist/shim.min')?>.js"></script>
+    <!-- after the shim is referenced, add the library -->
+    <script type="text/javascript"  src="<?=base_url('assets/third_party/sheetjs/dist/xlsx.full.min')?>.js"></script>
 
     <!-- CUSTOM JS -->
     <script>
