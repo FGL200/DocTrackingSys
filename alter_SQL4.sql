@@ -1,0 +1,3 @@
+UPDATE `remark_categories` SET `category`='HAS IRRELEVANT DOCUMENTS' WHERE `id`='3';
+
+UPDATE `remarks` SET `value`=REPLACE(`value`, '"MISPLACED DOCUMENTS"', '"HAS IRRELEVANT DOCUMENTS"') WHERE `value` LIKE '%\"MISPLACED DOCUMENTS\"%';
