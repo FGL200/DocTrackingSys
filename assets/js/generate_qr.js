@@ -24,12 +24,13 @@ class QR {
                         
                        
                         let qr_cont = $("<div class='qr-container d-flex justify-content-center align-items-center flex-column'></div>");
+                        let qr = $("<div class='qr'></div>");
+                        let qr_logo = $("<div class='qr-logo'></div>");
                         const qr_label = $("<p></p>");
-
                         const qr_data = JSON.stringify({"Record ID" : result.data[i]["Record ID"], "First Name" : result.data[i]['First Name'], "Last Name" : result.data[i]['Last Name'], "Middle Name" : result.data[i]['Middle Name']})
                         // let qr_logo = $(`<img src='${base_url}assets/images/rtu-logo.png'>`);
                         // console.log(`${base_url}assets/images/rtu-logo.png`)
-                        qr_cont.qrcode({
+                        qr.qrcode({
                             // 'canvas', 'image' or 'div'
                             render: 'canvas',
                         
@@ -72,6 +73,8 @@ class QR {
                         });
                         
                         qr_label.text(`(${result.data[i]["Record ID"]}) ${result.data[i]["Last Name"]} ${result.data[i]["First Name"]} ${result.data[i]["Middle Name"]}`);
+                        qr.append(qr_logo);
+                        qr_cont.append(qr);
                         qr_cont.append(qr_label);
 
                         this.display_qr(qr_cont);

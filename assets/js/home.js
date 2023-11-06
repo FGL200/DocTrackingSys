@@ -200,11 +200,11 @@ const HOME = {
             MODAL.setTitle("Import Excel");
             MODAL.setBody(`
                 <div class="d-flex flex-column gap-2">
-                    <div id="file-drop" class="d-flex justify-content-center align-items-center" style="height: 300px; background: rgba(0,0,0,0.1); user-select: none;">
+                    <div onclick="$('#file-upload').trigger('click')" id="file-drop" class="d-flex justify-content-center align-items-center" style="height: 300px; background: rgba(0,0,0,0.1); user-select: none;">
                         Drop Spreadsheet file here
                     </div>
-                    <input type="file" id="file-upload" class="hide" accept=".xls, .xlsx, .csv" />
-                    <button onclick="$('#file-upload').trigger('click')" class="btn btn-primary">Upload</button>
+                    <input type="file" id="file-upload" class="hide" name="excel-file" accept=".xls, .xlsx, .csv" />
+                    <button class="btn btn-primary">Upload</button>
                 </div>
             `);
             MODAL.setFooter(``);
@@ -213,9 +213,56 @@ const HOME = {
         },
 
         onSubmit: function () {
-            MODAL.onSubmit(async function (e) {
+            MODAL.onSubmit(function (e) {
                 e.preventDefault();
+
+                const form = new FormData(document.getElementById("modal-container"));
+
+                HOME.IMPORT_EXCEL.readFileData(document.getElementById("file-upload").files[0]);
+
+                // form.forEach((val, key)=>{
+                //     console.log(val);
+                // })
+
+                
             })
+        },
+        readFileData(file) {
+            const fileReader = new FileReader();
+
+            fileReader.onload = function(e){
+                const data = e.target.result;
+
+                const workbook = XLSX.read(data, {
+                    type: 'binary'
+                  });
+
+                /* get first worksheet */
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                let raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
+                
+                raw_data = raw_data.map(row=>{
+                    const new_arr = [];
+                    for(let i = 0; i < raw_data[0].length; i++) {
+                        if(!row[0]) break;
+                        if(!row[i]) new_arr.push("--");
+                        else new_arr.push(row[i]);
+                    }
+                    return new_arr;
+                });
+                delete raw_data[0];
+                let sql = JSON.stringify(raw_data);
+                const empty_spaces_pos = sql.indexOf("[]");
+                const header_pos = "[null,".length;
+                sql = sql.slice(0, empty_spaces_pos).slice(header_pos);
+                sql = sql.slice(0, sql.length - 1)
+                sql = sql.replaceAll("[","(").replaceAll("]",")");
+                
+
+                console.log(sql);
+            }
+
+            fileReader.readAsBinaryString(file);
         }
     },
 

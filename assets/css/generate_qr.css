@@ -6,3 +6,28 @@ main {
 main::-webkit-scrollbar{
     display: none;
 }
+.qr-container{
+    position: relative;
+}
+
+.qr-logo {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.qr-logo::before {
+    position: absolute;
+    content: "";
+    top: -50%;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 1000;
+    background-image: url(../images/rtu-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: .5;
+}
