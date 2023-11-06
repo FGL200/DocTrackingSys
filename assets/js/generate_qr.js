@@ -17,7 +17,7 @@ class QR {
                 let data_len = result.data.length;
                 let i = 0;
                 let delay = setInterval(()=>{
-                    if(i >= result.data.length) {clearInterval(delay); console.log("HEY"); console.log($(".qr-container").length);
+                    if(i >= result.data.length) {clearInterval(delay);
                         $("main").removeClass("loading");
                     }
                     for(i ; i < data_len; i++) {
@@ -25,11 +25,11 @@ class QR {
                        
                         let qr_cont = $("<div class='qr-container d-flex justify-content-center align-items-center flex-column'></div>");
                         let qr = $("<div class='qr'></div>");
-                        let qr_logo = $("<div class='qr-logo'></div>");
+                        // let qr_logo = $("<div class='qr-logo'></div>");
                         const qr_label = $("<p></p>");
                         const qr_data = JSON.stringify({"Record ID" : result.data[i]["Record ID"], "First Name" : result.data[i]['First Name'], "Last Name" : result.data[i]['Last Name'], "Middle Name" : result.data[i]['Middle Name']})
-                        // let qr_logo = $(`<img src='${base_url}assets/images/rtu-logo.png'>`);
-                        // console.log(`${base_url}assets/images/rtu-logo.png`)
+                        let qr_logo_ = document.getElementById(`qr-logo`);
+                    
                         qr.qrcode({
                             // 'canvas', 'image' or 'div'
                             render: 'canvas',
@@ -38,8 +38,8 @@ class QR {
                             // min/max versions
                             minVersion: 1,
                             maxVersion: 40,
-                            mode: 0,
-                            image:`${base_url}assets/images/rtu-logo.png`,
+                            mode: 4,
+                            image: qr_logo_,
                             
         
                             // error correction level
@@ -57,7 +57,7 @@ class QR {
                             fill: '#000',
                         
                             // background color or image element
-                            // background: qr_logo,
+                            // background: null,
                         
                             // border radius
                             radius: 0,
@@ -66,14 +66,14 @@ class QR {
                             quiet: 5, 
                         
                             // position options
-                            mSize: 0.1,
+                            mSize: .4,
                             mPosX: 0.5,
                             mPosY: 0.5
                         
                         });
                         
                         qr_label.text(`(${result.data[i]["Record ID"]}) ${result.data[i]["Last Name"]} ${result.data[i]["First Name"]} ${result.data[i]["Middle Name"]}`);
-                        qr.append(qr_logo);
+                        // qr.append(qr_logo);
                         qr_cont.append(qr);
                         qr_cont.append(qr_label);
 
