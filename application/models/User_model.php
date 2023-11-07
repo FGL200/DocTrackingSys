@@ -135,7 +135,6 @@ class User_model extends CI_Model
 
     /**
      * User total encoded data in current day
-     * @param int $user 
      */
     public function get_Total_Encoded_By_Users() {
         $current_day = date("Y-m-d");
@@ -156,6 +155,26 @@ class User_model extends CI_Model
 
         return $fetch->result();
     }
+
+    /** 
+     * Encoded records by users every month
+     */
+    public function get_Monthly_Encoded_By_Users() {
+        $sql = "SELECT
+                    `u`.`uname`,
+                    MAX(DATE(`sr`.`created_date`)) as `date`,
+                    count(*) as `total`
+                FROM `stud_rec` as `sr`
+                INNER JOIN `user` as `u`
+                ON `u`.`id` = `sr`.`created_by_uid`
+                GROUP BY `sr`.`created_by_uid`, DATE_FORMAT(`sr`.`created_date`, '%M')";
+
+        // echo $sql;
+        $fetch = $this->db->query($sql);
+
+        return $fetch->result();
+    }
+
 
     /**
      * Get the all the password of the user
