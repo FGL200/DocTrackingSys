@@ -90,7 +90,9 @@ nav {
     100%{transform: translateX(0); opacity: 1;}
 }
 
-
+.no-scroll {
+    overflow: hidden !important;
+}
 
 .loading{
     position: relative;

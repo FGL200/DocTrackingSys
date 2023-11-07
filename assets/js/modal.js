@@ -43,6 +43,8 @@ const MODAL = {
      */
     close : function(callBack = MODAL.__onClose__){
         this.fade_out = true;
+        $("main").removeClass("no-scroll");
+        $("body").removeClass("no-scroll");
         $("#modal-holder").addClass("fade-out");
         $("#modal-container").off("submit");
         if(callBack) callBack(this);
@@ -55,6 +57,8 @@ const MODAL = {
      */
     open : function(callBack = null){
         this.fade_out = false;
+        $("main").addClass("no-scroll");
+        $("body").addClass("no-scroll");
         $("#modal-holder").removeClass("hide");
         $("#modal-holder").addClass("fade-in");
         if(callBack) callBack(this);
