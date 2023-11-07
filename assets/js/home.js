@@ -294,29 +294,34 @@ const HOME = {
                 
                 switch(selected_type) {
                     case "all" : 
-                        window.location.href = new URL(base_url + "generate-qr?get=all");
+                        window.open(new URL(base_url + "generate-qr?get=all"), "_blank");
                         break;
                     case "last-letter" : 
                         datas.append("from", $("#last-letter-from").val());
                         datas.append("to", $("#last-letter-to").val());
 
-                        window.location.href = new URL(base_url + `generate-qr?from=${$("#last-letter-from").val()}&to=${$("#last-letter-to").val()}`);
+                        window.open(new URL(base_url + `generate-qr?from=${$("#last-letter-from").val()}&to=${$("#last-letter-to").val()}`), "_blank");
                         break;
                     case "specific" : 
-                        // let students = [];
-                        // $(".generate-specific-student").each(function(e){
-                        //     students.push($(this).html());
-                        // });
+                        let students = [];
+                        $(".generate-specific-student").each(function(e){
+                            students.push("id[]=" + $(this).html());
+                        });
+                        students = students.join("&");
+                        console.log(students);
+
                         datas.append("students", JSON.stringify(qr_generate_selected_students));
+                        
+                        window.open(new URL(base_url + `generate-qr?${students}`),"_blank");
                         break;
                     default : 
                         break;
                 }
                 
                 //check passed values
-                datas.forEach((val, key)=>{
-                    console.log({key, val});
-                })
+                // datas.forEach((val, key)=>{
+                //     console.log({key, val});
+                // })
 
                 MAIN.addNotif("QR Generating!", "QR codes are being generated!", "g");
             })

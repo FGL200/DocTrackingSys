@@ -17,9 +17,6 @@ class Student extends CI_Controller{
     {
         
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
-        
-
-        // $this->load->library("async");
 
         $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
@@ -107,6 +104,7 @@ class Student extends CI_Controller{
 
         $stud_docs = [];
 
+        // Get all keys that has `doc_val`
         $doc_keys = array_filter($this->input->post(), function($key){
             return str_contains($key, "doc_val_");
         }, ARRAY_FILTER_USE_KEY);
@@ -354,6 +352,8 @@ class Student extends CI_Controller{
         //     }
             
         // }
+
+        // Get all keys that has `doc_val_`
         $doc_keys = array_filter($this->input->post(), function($key){
             return str_contains($key, "doc_val_");
         }, ARRAY_FILTER_USE_KEY);
@@ -478,66 +478,31 @@ class Student extends CI_Controller{
     }
 
 
-    public function async() {
-        $url = base_url() . "student/build_qr";
-        $params = array("from" => "P", "to"=>"P");
-
-
-        $this->async->do_in_background($url, $params);
-    }
     public function build_qr() {
         $path = str_replace('\\', '/', BASEPATH);
         
-        if (!class_exists('chillerlan\QRCode\QRCode')) {
-            $path = str_replace('system/', 'vendor/', $path);
-            require $path . 'autoload.php';
-        }
-        $cond = null;
-        $order = null;
-        if($this->input->post("get") && $this->input->post("get") == "all") {
-            
-        }
-        else if($this->input->post("from") && $this->input->post("to")) {
+        $cond = null; // condition for the query
+        $order = null; // order by 
+
+        
+        if($this->input->post("from") && $this->input->post("to")) { // for generating a qr based on first letter of the last name
             $from = $this->input->post("from") ;
             $to = $this->input->post("to");
 
             $cond = " AND (LEFT(`sr`.stud_lname, ".strlen($from).") >= '$from' AND LEFT(`sr`.stud_lname, ".strlen($to).") <= '$to')";
             $order = "ORDER BY `Last Name` ASC";
-        }
+        } else if($this->input->post("id")) { // generating a qr by specific id
+            $ids = [];
 
-        $text = "";
-        $qr_list = array();
+            foreach($this->input->post("id") as $id) array_push($ids, $id);
+
+            $ids = join(',', $ids); // make the ids[] as string seperated by comma
+            
+            $cond = " AND `sr`.id IN ({$ids})";
+        }
         
         $data = $this->stud->get_StudentRecords_With_Remarks($cond, $order);
         
-        // $path = str_replace('vendor/', 'assets/', $path);
-        // foreach($data as $k => $v) {   
-        //     $text = json_encode(['Record ID' => $v['Record ID'] ,'First Name' => $v['First Name'],'Last Name' => $v['Last Name'],'Middle Name' => $v['Middle Name']]);
-
-
-        //     $result =Builder::create()
-        //     ->writer(new PngWriter())
-        //     ->writerOptions([])
-        //     ->data($text)
-        //     ->encoding(new Encoding('UTF-8'))
-        //     ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-        //     ->size(300)
-        //     ->margin(10)
-        //     ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-        //     ->logoPath($path . 'images/rtu-logo.png')
-        //     ->logoResizeToWidth(100)
-        //     ->logoPunchoutBackground(false)
-        //     // ->labelText($v['First Name'] . " " . $v['Last Name'])
-        //     ->validateResult(false)
-        //     ->build();
-        
-        // // Generate a data URI to include image data inline (i.e. inside an <img> tag)
-        //     $dataUri = $result->getDataUri();
-        //     array_push($qr_list, ["<img src='$dataUri'>", $text]);
-        //     $text = "";
-            
-        // }
-
         echo json_encode(["data" => $data]);
 
     }
