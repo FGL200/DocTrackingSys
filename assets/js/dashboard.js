@@ -43,7 +43,7 @@ async function setupEncoded_monthly() {
 
     function generateData() {
         value = Math.round((Math.random() * 10 - 4.2) + value);
-        am5.time.add(date, "day", 1);
+        am5.time.add(date, "month", 1);
         return {
             date: date.getTime(),
             value: value
@@ -57,10 +57,33 @@ async function setupEncoded_monthly() {
         }
         return data;
     }
+    // Edit by patrick
+    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""});
+    users = await users.json();
 
+    const months = [] // months that has number of encodes.
+
+    const encoders = [];
+    const dates = []; // dates that encoded by user.
+   
+    for(let user of users){
+        if(!encoders.includes(user.uname)) encoders.push(user.uname);
+        const d = {date : new Date(user.date).getTime(), value : parseInt(user.total)};
+        if(!dates[encoders.indexOf(user.uname)]) dates[encoders.indexOf(user.uname)] = [d];
+        else dates[encoders.indexOf(user.uname)].push(d);
+        
+        if(!months.includes(new Date(user.date).getMonth())) months.push(new Date(user.date).getMonth());
+        if(dates[encoders.indexOf(user.uname)].length > 1) dates[encoders.indexOf(user.uname)].sort((a,b)=>a.date-b.date); // sort the dates encoded by user
+
+    }
+
+
+    // console.log(users);
+ 
     function setUpSeries(chart, name) {
+        // console.log(encoders[name])
         return chart.series.push(am5xy.LineSeries.new(root, {
-            name: "Series " + name,
+            name: encoders[name],
             xAxis: xAxis,
             yAxis: yAxis,
             valueYField: "value",
@@ -73,13 +96,12 @@ async function setupEncoded_monthly() {
         }));
     }
 
-
     // Create axes
     // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
     let xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
-        maxDeviation: 0.2,
+        maxDeviation: 0.1,
         baseInterval: {
-            timeUnit: "day",
+            timeUnit: "month",
             count: 1
         },
         renderer: am5xy.AxisRendererX.new(root, {}),
@@ -94,25 +116,21 @@ async function setupEncoded_monthly() {
 
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < encoders.length; i++) {
         series = setUpSeries(chart, i);        
 
-        date = new Date();
-        date.setHours(0, 0, 0, 0);
-        value = 0;
-
-        let data = generateDatas(10);
+        // date = new Date();
+        // date.setHours(0, 0, 0, 0);
+        // value = 0;
+        
+        let data = dates[i] //generateDatas(10);
+        // console.log(data);
         series.data.setAll(data);
         
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear();
     }
-
-    setTimeout(()=>{
-        
-    }, 3000)
-    
     
 
     // Add cursor
@@ -186,6 +204,8 @@ async function setupEncoded_monthly() {
     // It's is important to set legend data after all the events are set on template, otherwise events won't be copied
     legend.data.setAll(chart.series.values);
 
+
+    console.log(series.dataItems);
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -288,7 +308,7 @@ async function setupEncoded_live() {
 
 
     let data = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
-    data = await data.json();
+    data = await data.json(); 
     let temp = [];
 
     for(let d of data) {
@@ -482,15 +502,16 @@ async function setupRemarks_pie() {
     // Set data
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
     series.data.setAll([
-        { value: 10, category: "One" },
-        { value: 9, category: "Two" },
-        { value: 6, category: "Three" },
-        { value: 5, category: "Four" },
-        { value: 4, category: "Five" },
-        { value: 3, category: "Six" },
-        { value: 1, category: "Seven" },
+        { value: 10, category: "2020-2021" },
+        // { value: 9, category: "Two" },
+        // { value: 6, category: "Three" },
+        // { value: 5, category: "Four" },
+        // { value: 4, category: "Five" },
+        // { value: 3, category: "Six" },
+        // { value: 1, category: "Seven" },
     ]);
 
+    console.log(series.data)
 
     // Play initial series animation
     // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
@@ -529,21 +550,21 @@ function remove_logo(root) {
 }
 
 // Patrick
-function fetch_data(url, method = null, series) {
+function fetch_data(url, method = null, series = null) {
     return fetch(url, method);
 }
 
-$("#statistics-tab").on("click", ()=>{
-    am5WaterMarkRemover(["encoded-live", "remarks-pie", "encoded-monthly"]);
-})
+// $("#statistics-tab").on("click", ()=>{
+//     am5WaterMarkRemover(["encoded-live", "remarks-pie", "encoded-monthly"]);
+// })
 
-function am5WaterMarkRemover(ids = []) {
-    $("div.am5-html-container").remove();
-    $("div.am5-reader-container").remove();
-    $("div.am5-focus-container").remove();
-    $("div.am5-tooltip-container").remove();
+// function am5WaterMarkRemover(ids = []) {
+//     $("div.am5-html-container").remove();
+//     $("div.am5-reader-container").remove();
+//     $("div.am5-focus-container").remove();
+//     $("div.am5-tooltip-container").remove();
 
-    for(let id of ids) {
-        const tip = $(`#${id} > div > div > div`).children()[1].remove();
-    }
-}
+//     for(let id of ids) {
+//         const tip = $(`#${id} > div > div > div`).children()[1].remove();
+//     }
+// }

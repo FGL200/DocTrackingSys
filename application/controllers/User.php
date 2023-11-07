@@ -158,6 +158,12 @@ class User extends CI_Controller{
 
         echo json_encode($result);
     }
+
+    public function monthly_Encoded_By_Users() {
+        $result = $this->user->get_Monthly_Encoded_By_Users();
+        // echo "fdsfsdf";
+        echo json_encode($result);
+    }
     // PRIVATE FUNCTIONS 
 
     private function __change_User_To_Proper_Format_(Array $data) {
