@@ -1,6 +1,7 @@
 main {
-    overflow-y: scroll !important;
-    height: 100vh;
+    /* overflow-y: scroll !important; */
+    /* height: 100vh; */
+    background: rgba(225, 225, 225) !important;
 }
 
 main::-webkit-scrollbar{
@@ -16,7 +17,7 @@ main::-webkit-scrollbar{
     position: relative;
 }
 
-.qr-logo::before {
+/* .qr-logo::before {
     position: absolute;
     content: "";
     top: -50%;
@@ -30,4 +31,16 @@ main::-webkit-scrollbar{
     background-repeat: no-repeat;
     background-position: center;
     opacity: .5;
+} */
+
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    main,
+    body {
+        background: rgba(255, 255, 255) !important;
+    }
 }

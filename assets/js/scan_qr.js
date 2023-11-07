@@ -23,14 +23,13 @@ const DTS_QR = {
         if (DTS_QR.__scanner__ !== null) return DTS_QR.__scanner__;
         const args = {
             video: document.getElementById("qr-camera"),
-            //mirror: false, // prevents the video to be mirrored
+            mirror: false, // prevents the video to be mirrored
         };
         window.URL.createObjectURL = (stream) => {
             args.video.srcObject = stream;
             return stream;
         };
-        const _scanner = new Instascan.Scanner(args);
-        return DTS_QR.__scanner__ = _scanner;
+        return DTS_QR.__scanner__ = new Instascan.Scanner(args);
     },
 
     initialize: async function () {
@@ -48,9 +47,9 @@ const DTS_QR = {
             }
 
             DTS_QR.scanner().addListener("scan", DTS_QR.onScan);
-
         }).catch(function (e) {
-            console.error(e);
+            console.error("ERROR: " + e);
+            DTS_QR.scanner().stop();
         });
     },
 

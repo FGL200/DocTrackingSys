@@ -113,6 +113,8 @@
         const close = $(`<button style="width: 25px; height: 25px; border-radius: 100px; border: none; font-size: small;" class="d-flex justify-content-center align-items-center" ><i class="fa-solid fa-xmark"></i></button>`);
         close.on("click", function(e){
             item.remove();
+            const index = qr_generate_selected_students.indexOf(value);
+            if(index > -1) qr_generate_selected_students.splice(index, 1);
         });
         item.append(close);
         $("#search-container").append(item);

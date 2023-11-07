@@ -96,7 +96,7 @@ nav {
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    top: 50vh;
     overflow: hidden !important;
     opacity: 0.5;
 }

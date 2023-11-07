@@ -169,7 +169,8 @@ class Page extends CI_Controller {
         }
 
         $data['header'] = [
-            'css' => ['generate_qr']
+            'css' => ['generate_qr'],
+            'title' => "Generate QR"
         ];
 
         $data['footer'] = [
