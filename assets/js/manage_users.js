@@ -148,23 +148,50 @@ async function viewUser(id) {
 async function newUser() {
     MODAL.setTitle("New User");
     MODAL.setBody(`
-        <div class="d-flex flex-column gap-1 card p-3">
+        <div class="d-flex flex-column gap-1 p-3">
             <span>
                 <b>User Information</b>
             </span>
-            <span>
-                <select name="role" class="card p-2" style="width: 100%;">
+            <hr>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Firstname</span>
+                <input name="fname" type="text" class="form-control" placeholder="Enter Firstname" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Lastname</span>
+                <input name="lname" type="text" class="form-control" placeholder="Enter Lastname" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Birthday</span>
+                <input name="bday" type="date" class="form-control" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Gender</span>
+                <select name="gender" class="form-control" required>
+                    <option value="" selected>Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <hr>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Username</span>
+                <input name="uname" type="text" class="form-control" placeholder="Enter Username" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Role</span>
+                <select name="role" class="form-control" required>
+                    <option value="" selected>Select Role</option>
                     <option value="V">Viewer</option>
                     <option value="E">Encoder</option>
                     <option value="A">Admin</option>
                 </select>
-            </span>
-            <span>
-                <input type="text" name="uname" class="card p-2" placeholder="Username" style="width: 100%;" autofocus>
-            </span>
-            <span>
-                <p class="card p-2" style="width: 100%; color: grey; background-color: #E5E5E5;">Password is set to 'default'</p>
-            </span>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Password</span>
+                <input type="text" class="form-control" value="Password is set to 'default'" disabled />
+            </div>
+
         </div>
     `);
     MODAL.setFooter(`<button  id="btn-form-submit" class="btn btn-success">Add User</button>`);

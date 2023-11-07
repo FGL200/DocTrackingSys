@@ -31,24 +31,6 @@ const VIEW_RECORD = {
     
                 $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Saving...');
                 $("#update-record-btn").prop("disabled", true);
-                
-                // form.forEach((val, key)=>{
-                //     VIEW_RECORD.__old_DIRS__.forEach((v,k)=>{
-                //         // kapag walang laman yung input file iassign yung value na nasa 
-                //         // VIEW_RECORD.__old_DIRS__
-                //         if(form.get(key) instanceof File) {
-                //             if(!form.get(key).name && VIEW_RECORD.__old_DIRS__[k][key]) {
-                //                 const nKey = key.replace(/[\[\]]/g, "");
-    
-                //                 form.delete(key);
-    
-                //                 form.set(nKey, VIEW_RECORD.__old_DIRS__[k][key]);
-                //                 console.log(nKey)
-                //             }
-                //         }
-                        
-                //     })
-                // });
 
                 VIEW_RECORD.__old_DIRS__.forEach((data,index)=>{
                     const key = Object.keys(data)[0];
@@ -83,11 +65,7 @@ const VIEW_RECORD = {
                 $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
                 $("#delete-record-btn").prop("disabled", true);
             }
-
-            form.forEach((val, key)=>{
-                console.log(val, key)
-            })
-            // return;
+            
             fetch(base_url + 'student/record/' + action, {
                 method : 'post',
                 body :  form
@@ -290,24 +268,6 @@ const VIEW_RECORD = {
         value.forEach(remarks=>{
             this.addRemark(remarks);
         });
-
-        // // After fetching all the remarks, validate each remark if they belong to the remark categories,
-        // // otherwise, save the remark to `__remarkOther__` which is the other remarks.
-        // value.forEach(currValue => {
-        //     if(this.__remarksCategories__.includes(currValue)) this.__remarksValue__.push(currValue);
-        //     else this.__remarksOther__ = currValue;
-        // });
-        
-        // // The next line will then add all the fetched remarks to the remark holder
-        // for(v in this.__remarksValue__){
-        //     this.addRemark(value[v]);
-        // }
-
-        // // If other remarks has value, show the other remark field and put the appropriate value
-        // if(this.__remarksOther__ !== '') {
-        //     $("#_remarksValue_other").val(this.__remarksOther__);
-        //     $("#_remarksValue_other_holder").removeClass("hide");
-        // }
     },
 
     /** PRIVATES */
@@ -443,56 +403,6 @@ $(".cb-doc").on("change", function(e){
     // $(inFile).prop('disabled', !$(this).prop('checked'));
 });
 
-// $(".cb-doc").each(function(e){
-//     $(this).on("change", function(e){
-
-//         // Gets the corresponding button to the checkbox ticked
-//         const inFile = `#${$(this).attr('id')} ~ input[type='file']`;
-//         const btnFile = `#${$(this).attr('id')} ~ button.btnFile`;
-//         const btnView = `#${$(this).attr('id')} ~ button.viewScan`;
-//         const checked = $(this).prop('checked');
-
-//         // Prompts user and perform the correct action when checkbox is ticked
-//         $(btnFile).prop('disabled', !checked);
-//         if(!checked){ 
-//             if($(btnFile).hasClass('btn-danger')){
-//                 console.log("TOMES")
-//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
-//                     $(inFile).val('');
-//                     $(inFile).prop('disabled', true);
-//                     set_BtnView(btnView, true);
-//                     set_BtnFile(btnFile, true);
-//                     $(btnFile).prop('disabled', true);
-//                 }else{
-//                     $(this).prop('checked', true);
-//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
-//                 }
-//             }
-//         }
-//         $(inFile).prop('disabled', !$(this).prop('checked'));
-
-//         // Prompts user and perform the correct action when checkbox is ticked
-//         $(btnFile).prop('disabled', !checked);
-//         if(!checked){ 
-//             if($(btnFile).hasClass('btn-danger')){
-//                 if(confirm("Are you sure you want to replace/remove the scaned document?")){
-//                     $(inFile).val('');
-//                     $(inFile).prop('disabled', true);
-//                     set_BtnView(btnView, true);
-//                     set_BtnFile(btnFile, true);
-//                     $(btnFile).prop('disabled', true);
-//                 }else{
-//                     $(this).prop('checked', true);
-//                     $(btnFile).prop('disabled', !$(this).prop('checked'));
-//                 }
-//             }
-//         }
-//         $(inFile).prop('disabled', !$(this).prop('checked'));
-//     });
-// });
-
-
-
 // The btnView are the buttons for viewing images
 // Enable or disable btnViews through this function
 function set_BtnView(btnView, disabled){
@@ -607,7 +517,6 @@ function changeFileDir (inFile){
 }
 
 // This function is for closing the view modal (insides are the animation logic)
-// This function is for closing the view modal (insides are the animation logic)
 $("#close-image-viewer-container").on("click", function(){
     $("#image-viewer-container").addClass('fade-out');
     $("#image-viewer-holder").addClass('pop-out');
@@ -616,7 +525,6 @@ $("#close-image-viewer-container").on("click", function(){
     updateRotateOfImg();
 });
 
-// This function is for opening and closing of view modal (insides are the animation logic)
 // This function is for opening and closing of view modal (insides are the animation logic)
 $("#image-viewer-container").on("animationend", function(){
     if($(this).hasClass('fade-in')){

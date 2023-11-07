@@ -71,7 +71,7 @@ class Page extends CI_Controller {
             'css' => ["dashboard"]
         ];
         $data['footer'] = [
-            'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile']
+            'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile', 'termsAndCondition']
         ];
 
         $this->loadPage('dashboard', $data);
@@ -169,7 +169,8 @@ class Page extends CI_Controller {
         }
 
         $data['header'] = [
-            'css' => ['generate_qr']
+            'css' => ['generate_qr'],
+            'title' => "Generate QR"
         ];
 
         $data['footer'] = [

@@ -19,6 +19,7 @@
                     </ul>
 
                     <button class="btn btn-outline-primary" onclick="MAIN.goto('manage')"><i class="fa-solid fa-users"></i> Manage Users</button>
+                    <button class="btn btn-outline-primary" onclick="MAIN.goto('home')"><i class="fa-solid fa-users"></i> Users logs</button>
                 </span>
             <?php } ?>
         </div>

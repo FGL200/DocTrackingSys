@@ -23,22 +23,22 @@ const PROFILE = {
      */
     open : async function(){
 
-        const profile = await load_profile(); 
+        const profile = await load_profile();
 
         MODAL.setTitle("Profile");
         MODAL.setBody(`
         <div class="d-flex flex-column gap-2">
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-uname">Username</label>
-                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ profile.uname +`" name="profile-uname" id="profile-uname" disabled>
+                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ (profile.uname ? profile.uname : '') +`" name="profile-uname" id="profile-uname" disabled>
             </span>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-fname">Firstname</label>
-                <input class="rounded border p-2" type="text" placeholder="Firstname" value="`+ profile.fname +`" name="profile-fname" id="profile-fname">
+                <input class="rounded border p-2" type="text" placeholder="Firstname" value="`+ (profile.fname ? profile.fname : '') +`" name="profile-fname" id="profile-fname">
             </span>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-lname">Lastname</label>
-                <input class="rounded border p-2" type="text" placeholder="Lastname" value="`+ profile.lname +`" name="profile-lname" id="profile-lname">
+                <input class="rounded border p-2" type="text" placeholder="Lastname" value="`+ (profile.lname ? profile.lname : '') +`" name="profile-lname" id="profile-lname">
             </span>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2">
                 <label for="profile-bday">Birthday</label>
@@ -56,11 +56,11 @@ const PROFILE = {
             <hr>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
                 <label for="profile-old-pass">Old password</label>
-                <input class="rounded border p-2" type="password" name="profile-old-pass" id="profile-old-pass">
+                <input class="rounded border p-2" type="password" name="profile-old-pass" id="profile-old-pass" autocomplete>
             </span>
             <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
                 <label for="profile-new-pass">New password</label>
-                <input class="rounded border p-2" type="password" name="profile-new-pass" id="profile-new-pass">
+                <input class="rounded border p-2" type="password" name="profile-new-pass" id="profile-new-pass" autocomplete>
             </span>
         </div>
         `);

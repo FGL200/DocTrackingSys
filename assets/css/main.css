@@ -90,13 +90,15 @@ nav {
     100%{transform: translateX(0); opacity: 1;}
 }
 
-
+.no-scroll {
+    overflow: hidden !important;
+}
 
 .loading{
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    top: 50vh;
     overflow: hidden !important;
     opacity: 0.5;
 }
