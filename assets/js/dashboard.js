@@ -8,7 +8,7 @@ GRAPH = {
     }
 }
 
-async function setupEncoded_monthly() {
+async function setupEncoded_monthly() { 
 
     // Create root element
     // https://www.amcharts.com/docs/v5/getting-started/#Root_element 
@@ -44,6 +44,7 @@ async function setupEncoded_monthly() {
     function generateData() {
         value = Math.round((Math.random() * 10 - 4.2) + value);
         am5.time.add(date, "month", 1);
+        am5.time.add(date, "month", 1);
         return {
             date: date.getTime(),
             value: value
@@ -58,14 +59,14 @@ async function setupEncoded_monthly() {
         return data;
     }
     // Edit by patrick
-    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""});
-    users = await users.json();
 
     const months = [] // months that has number of encodes.
 
     const encoders = [];
     const dates = []; // dates that encoded by user.
    
+    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""}, addSeries);
+    
     for(let user of users){
         if(!encoders.includes(user.uname)) encoders.push(user.uname);
         const d = {date : new Date(user.date).getTime(), value : parseInt(user.total)};
@@ -102,6 +103,7 @@ async function setupEncoded_monthly() {
         maxDeviation: 0.1,
         baseInterval: {
             timeUnit: "month",
+            timeUnit: "month",
             count: 1
         },
         renderer: am5xy.AxisRendererX.new(root, {}),
@@ -119,18 +121,18 @@ async function setupEncoded_monthly() {
     for (let i = 0; i < encoders.length; i++) {
         series = setUpSeries(chart, i);        
 
-        // date = new Date();
-        // date.setHours(0, 0, 0, 0);
-        // value = 0;
-        
-        let data = dates[i] //generateDatas(10);
-        // console.log(data);
+        date = new Date();
+        date.setHours(0, 0, 0, 0);
+        value = 0;
+
+        let data =  dates[i] //generateDatas(10);
         series.data.setAll(data);
         
         // Make stuff animate on load
         // https://www.amcharts.com/docs/v5/concepts/animations/
         series.appear();
     }
+    
     
 
     // Add cursor
@@ -205,7 +207,7 @@ async function setupEncoded_monthly() {
     legend.data.setAll(chart.series.values);
 
 
-    console.log(series.dataItems);
+    // console.log(series.dataItems);
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -308,9 +310,9 @@ async function setupEncoded_live() {
 
 
     let data = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
-    data = await data.json(); 
+   
     let temp = [];
-
+    console.log(data);
     for(let d of data) {
         temp.push({uname : d.uname, total : parseInt(d.total)});
     }
@@ -321,8 +323,6 @@ async function setupEncoded_live() {
     // update data with random values each 1.5 sec
     setInterval(async function () {
         let users = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
-        users = await users.json();
-
 
         for(let user of users) {
             addNewData(user);
@@ -550,8 +550,11 @@ function remove_logo(root) {
 }
 
 // Patrick
-function fetch_data(url, method = null, series = null) {
-    return fetch(url, method);
+async function fetch_data(url, method = null, callback = null) {
+    let data = await fetch(url, method);
+    data = await data.json();
+    
+    return data;
 }
 
 // $("#statistics-tab").on("click", ()=>{

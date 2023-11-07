@@ -1,10 +1,10 @@
 // dapat na se-save to sa localStorage eeee,
 // pero as of now, every time na nasa dashboard sya lalabas to...
-let agree = false;
+let agree = window.localStorage.getItem("agree");
 
 // default value ng alert
 let showed = false;
-
+console.log(agree);
 // mga pwedeng events ni user
 $(window).on("load", showTermsAndCondition);
 $(window).on("mousemove", showTermsAndCondition);
@@ -28,9 +28,10 @@ function showTermsAndCondition() {
         buttons : ["Agree"]
     }, function(ans){
         if(!ans) return;
-
+        window.localStorage
         // gawing true ung agree
         agree = true;
+        window.localStorage.setItem("agree", true);
 
         // magiging false na si show once na pinindot ni user ang Agree
         showed = false;
