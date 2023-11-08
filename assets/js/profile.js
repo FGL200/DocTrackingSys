@@ -27,33 +27,39 @@ const PROFILE = {
 
         MODAL.setTitle("Profile");
         MODAL.setBody(`
-        <div class="d-flex flex-column gap-2">
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
-                <label for="profile-uname">Username</label>
-                <input class="rounded border p-2" type="text" placeholder="Username" value="`+ (profile.uname ? profile.uname : '') +`" name="profile-uname" id="profile-uname" disabled>
+        <div class="d-flex flex-column gap-2 p-3">
+            <span class="fw-bold">
+                User Information
             </span>
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
-                <label for="profile-fname">Firstname</label>
-                <input class="rounded border p-2" type="text" placeholder="Firstname" value="`+ (profile.fname ? profile.fname : '') +`" name="profile-fname" id="profile-fname">
-            </span>
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
-                <label for="profile-lname">Lastname</label>
-                <input class="rounded border p-2" type="text" placeholder="Lastname" value="`+ (profile.lname ? profile.lname : '') +`" name="profile-lname" id="profile-lname">
-            </span>
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
-                <label for="profile-bday">Birthday</label>
-                <input class="rounded border p-2" type="date" value="` + profile.bday + `" name="profile-bday" id="profile-bday">
-            </span>
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2">
-                <label for="profile-g">Gender</label>
-                <select class="rounded border p-2" name="profile-g" id="profile-g">
+            <hr>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Username</span>
+                <input  name="profile-uname" type="text" class="form-control" value="${profile.uname ? profile.uname : ''}" disabled>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Lastname</span>
+                <input name="profile-lname" type="text" class="form-control" value="${profile.lname ? profile.lname : ''}" disabled>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Firstname</span>
+                <input name="profile-fname" type="text" class="form-control" value="${profile.fname ? profile.fname : ''}" disabled>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Birthday</span>
+                <input name="profile-bday" type="date" class="form-control" value="${profile.bday ? profile.bday : '1886-06-19'}" disabled>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Gender</span>
+                <select class="form-control" name="profile-g" id="profile-g"  disabled>
                     <option value="N" disabled>Select Gender</option>
                     <option ` + (profile.g === "N" ? "Selected" : "") + ` value="N">Prefer not to say</option>
                     <option ` + (profile.g === "M" ? "Selected" : "") + ` value="M">Male</option>
                     <option ` + (profile.g === "F" ? "Selected" : "") + ` value="F">Female</option>
                 </select>
-            </span>
+            </div>
+
             <hr>
+
             <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
                 <label for="profile-old-pass">Old password</label>
                 <input class="rounded border p-2" type="password" name="profile-old-pass" id="profile-old-pass" autocomplete>

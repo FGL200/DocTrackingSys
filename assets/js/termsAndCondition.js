@@ -11,7 +11,7 @@ $(window).on("mousemove", showTermsAndCondition);
 $(window).on("keydown", showTermsAndCondition);
 
 
-function showTermsAndCondition() {
+async function showTermsAndCondition() {
     // check if nag agree na ba si user sa Terms and Condition
     if(agree) return;
 
@@ -21,19 +21,25 @@ function showTermsAndCondition() {
     // gawing true ung show
     showed = true;
 
-    // ipakita ung alert
-    dts_alert({
-        title : "Terms and Condition",
-        body : `Do you agree na tama sya at mali ka?`,
-        buttons : ["Agree"]
-    }, function(ans){
-        if(!ans) return;
-        window.localStorage
-        // gawing true ung agree
-        agree = true;
-        window.localStorage.setItem("agree", true);
+    await fetch(`${base_url}assets/templates/terms_and_condition.html`)
+    .then(response => response.text())
+    .then(response => {
+        // ipakita ung alert
+        dts_alert({
+            title : "Terms and Conditions (End-User License Agreement)",
+            body : response,
+            buttons : ["Agree"]
+        }, function(ans){
+            if(!ans) return;
+            window.localStorage
+            // gawing true ung agree
+            agree = true;
+            window.localStorage.setItem("agree", true);
+    
+            // magiging false na si show once na pinindot ni user ang Agree
+            showed = false;
+        });
+    })
+    .catch(err => console.error(err));
 
-        // magiging false na si show once na pinindot ni user ang Agree
-        showed = false;
-    });
 }

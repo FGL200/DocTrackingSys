@@ -33,7 +33,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
                     <input <?=($role==='E')?'':'disabled'?> id="stud_mname" name="stud_mname" type="text" autocomplete="off" class="p-2 card" placeholder="Middle Name">
                 </span>
                 <span class="d-flex justify-content-center align-items-center gap-1">
-                    <input <?=($role==='E')?'':'disabled'?> id="stud_sfx" name="stud_sfx" type="text" autocomplete="off" class="p-2 card" placeholder="SFX">
+                    <input <?=($role==='E')?'':'disabled'?> id="stud_sfx" name="stud_sfx" type="text" autocomplete="off" class="p-2 card" placeholder="Suffix">
                 </span>
                 <hr>
                 <span class="flex-grow-1">

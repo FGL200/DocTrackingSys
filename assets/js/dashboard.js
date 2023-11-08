@@ -65,7 +65,7 @@ async function setupEncoded_monthly() {
     const encoders = [];
     const dates = []; // dates that encoded by user.
    
-    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""}, addSeries);
+    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""});
     
     for(let user of users){
         if(!encoders.includes(user.uname)) encoders.push(user.uname);
