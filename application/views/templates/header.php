@@ -44,9 +44,9 @@
     
     <!-- SHEETJS -->
     <!-- add the shim first -->
-    <script type="text/javascript" src="<?=base_url('assets/third_party/sheetjs/dist/shim.min')?>.js"></script>
+    <script type="text/javascript" src="<?=base_url('assets/third_party/sheet_js/shim.min')?>.js"></script>
     <!-- after the shim is referenced, add the library -->
-    <script type="text/javascript"  src="<?=base_url('assets/third_party/sheetjs/dist/xlsx.full.min')?>.js"></script>
+    <script type="text/javascript"  src="<?=base_url('assets/third_party/sheet_js/xlsx.full.min')?>.js"></script>
 
     <!-- CUSTOM JS -->
     <script>
