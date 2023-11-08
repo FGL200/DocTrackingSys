@@ -176,11 +176,11 @@ async function newUser() {
             <hr>
             <div class="input-group mb-3">
                 <span class="input-group-text">Username</span>
-                <input name="uname" type="text" class="form-control" placeholder="Enter Username" required>
+                <input name="user-uname" type="text" class="form-control" placeholder="Enter Username" required>
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Role</span>
-                <select name="role" class="form-control" required>
+                <select name="user-role" class="form-control" required>
                     <option value="" selected>Select Role</option>
                     <option value="V">Viewer</option>
                     <option value="E">Encoder</option>
