@@ -16,7 +16,7 @@
         <div class="p-4 d-flex flex-column flex-grow-1 justify-content-center align-items-center" style="min-width: 300px;">
             <section class="fs-4" style="padding-left: .5rem;" id="welcome-text">
                 Welcome to SRAC DTS
-            </section> 
+            </section>
             <!-- <section class="m-2">
                 Login to get started!
             </section> -->
@@ -25,7 +25,7 @@
                 <div class="note-item">If you <b style="color: white;">do not have account</b>, contact admin <br /> to register new account.</div>
                 <div class="note-item">If you <b style="color: white;">forgot your password</b>, contact admin <br /> to reset your password.</div>
                 <div class="note-item"><b style="color: white;">Unauthorized use</b> of the system will result <br /> to disciplinary actions.</div>
-                <div class="note-item">View Terms and Conditions <a href="#" style="color: white; font-weight:bold; text-decoration:underline;">here</a>.</div>
+                <div class="note-item">Read <a href="#" style="color: white; font-weight:bold; text-decoration:underline;">Terms and Conditions</a> to learn more.</div>
             </section>
         </div>
         <div>

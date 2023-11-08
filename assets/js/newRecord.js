@@ -28,7 +28,7 @@ const RECORD = {
                         <input id="stud_mname" name="stud_mname" type="text" autocomplete="off" class="p-2 card" placeholder="Middle Name">
                     </span>
                     <span class="d-flex justify-content-center align-items-center gap-1">
-                        <input id="stud_sfx" name="stud_sfx" type="text" autocomplete="off" class="p-2 card" placeholder="SFX">
+                        <input id="stud_sfx" name="stud_sfx" type="text" autocomplete="off" class="p-2 card" placeholder="Suffix">
                     </span>
                     <hr>
                     <span class="flex-grow-1">
