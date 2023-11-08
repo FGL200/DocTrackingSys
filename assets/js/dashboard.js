@@ -65,7 +65,7 @@ async function setupEncoded_monthly() {
     const encoders = [];
     const dates = []; // dates that encoded by user.
    
-    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""}, addSeries);
+    let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""});
     
     for(let user of users){
         if(!encoders.includes(user.uname)) encoders.push(user.uname);
@@ -309,7 +309,7 @@ async function setupEncoded_live() {
     });
 
 
-    let data = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
+    let data = await fetch_data('user/all/encodes', {method : 'post', form : ""});
    
     let temp = [];
     console.log(data);
@@ -322,7 +322,7 @@ async function setupEncoded_live() {
 
     // update data with random values each 1.5 sec
     setInterval(async function () {
-        let users = await fetch_data('user/all/encodes', {method : 'post', form : ""}, series);
+        let users = await fetch_data('user/all/encodes', {method : 'post', form : ""});
 
         for(let user of users) {
             addNewData(user);
