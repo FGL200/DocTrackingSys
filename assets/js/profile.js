@@ -25,6 +25,11 @@ const PROFILE = {
 
         const profile = await load_profile();
 
+        if(!profile.uname) {
+            window.location.reload();
+            return;
+        }
+
         MODAL.setTitle("Profile");
         MODAL.setBody(`
         <div class="d-flex flex-column gap-2 p-3">
@@ -119,7 +124,10 @@ async function load_profile(){
     })
     .then(respose => respose.json())
     .then(respose => {
+
         const result = respose.result[0];
+        if(!result) return new Profile();
+
         return new Profile (
             result.uname,
             result.fname,

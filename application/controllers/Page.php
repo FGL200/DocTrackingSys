@@ -45,7 +45,7 @@ class Page extends CI_Controller {
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['login']
+            'js' => ['alert', 'login']
         ];
 
         // load page
