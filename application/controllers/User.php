@@ -37,12 +37,12 @@ class User extends CI_Controller{
                 foreach($this->input->post() as $key=>$val) {
                     
                     if(!empty(trim($val))) { 
-                        if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
-                        if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
-                        if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
-                        if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
-                        if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
-                        if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
+                        // if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
+                        // if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
+                        // if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
+                        // if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
+                        // if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
+                        // if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
                         if($key == "profile-new-pass") $data .= " `u`.`pword` = PASSWORD('".$val."') ";
                     }
                     
@@ -91,27 +91,39 @@ class User extends CI_Controller{
      */
     public function new() {
         // initialize data to be passed
-        $data = "";
+        $user_table_data = ""; $user_info_table_data = "";
 
         // get data from form
         $post = $this->input->post();
 
         // iterate each inuputs and save to data
-        foreach($post as $key => $val) $data .= "{$key}='".strtoupper($val)."',";
-        $data .= "`pword` = PASSWORD('default')";
+        foreach($post as $key => $val){
+            if(str_contains($key,'user-')){
+                $key = str_replace("user-", "", $key); // remove the 'user-' in the key
+                $user_table_data .= "`{$key}` = '".strtoupper($val)."',";
+            }
+            else {
+                if(!empty($user_info_table_data)) $user_info_table_data .= ",";
+                $user_info_table_data .= "`{$key}` = '".strtoupper($val)."'";
+            }
+            
+        }
+        
+        $user_table_data .= "`pword` = PASSWORD('default')";
 
         // -- begin transaction --
         $this->db->trans_begin();
 
         // insert to `user` table
-        $id = $this->user->insert_user($data);
+        $id = $this->user->insert_user($user_table_data);
 
-        // reinitialize data to be passed
-        $data = "`user_id`='$id'";
+        // concatenate the `user_id` to $user_info_table_data for reference
+        $user_info_table_data .= ",`user_id`='$id'";
         
         // insert to `user_info` table
-        $id = $this->user->insert_user_info($data);
+        $id = $this->user->insert_user_info($user_info_table_data);
 
+        
         // -- end of transaction --
         if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
