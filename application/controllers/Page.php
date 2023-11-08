@@ -174,7 +174,7 @@ class Page extends CI_Controller {
         ];
 
         $data['footer'] = [
-            'js' => ['generate_qr']
+            'js' => ['generate_qr', 'profile']
         ];
 
         $this->loadPage('generated_qr', $data);
