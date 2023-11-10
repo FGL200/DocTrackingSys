@@ -28,7 +28,7 @@ async function showTermsAndCondition() {
         dts_alert({
             title : "Terms and Conditions (End-User License Agreement)",
             body : response,
-            buttons : ["Agree"]
+            buttons : ["I Agree"]
         }, function(ans){
             if(!ans) return;
             window.localStorage
