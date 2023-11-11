@@ -450,7 +450,7 @@ class Student extends CI_Controller{
                 array_push($columns, "`sr`.$colname LIKE '%{$val}%'");
             }
 
-            if(strstr($k, "profile")) {
+            if(strstr($k, "encoder")) {
                 $arr = explode("_", $nKey);
                 $colname = $arr[count($arr) - 1];
 

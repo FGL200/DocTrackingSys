@@ -36,8 +36,11 @@
     height: 250px;
 }
 
-#encoded-live > div,
-#remarks-pie > div,
-#encoded-monthly > div {
-    /* margin: 1rem !important; */
+.dashboard-nav {
+    padding: 1rem !important;
+}
+
+@media print {
+    header { display: none !important; }
+    footer { display: none !important; }
 }

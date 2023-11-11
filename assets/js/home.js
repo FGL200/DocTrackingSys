@@ -91,7 +91,7 @@ const HOME = {
                     <select id="search-filter" class="form-control" onchange="HOME.SEARCH.addFilter(this)">
                         <option data-id="0" value="0_VALUE" selected disabled>--Select Filter--</option>
                         <option data-id="1" value="1_Student">Student</option>
-                        <option data-id="2" value="2_Profile">Profile</option>
+                        <option data-id="2" value="2_Enocoder">Enocoder</option>
                         <option data-id="3" value="3_Remarks">Remarks</option>
                     </select>
                 </div>
@@ -150,12 +150,12 @@ const HOME = {
                         <input id="filter-student-lname" type="text" class="form-control" placeholder="Last Name">
                         <input id="filter-student-sfx" type="text" class="form-control" placeholder="SFX">
                     `;
-                } else if (rawFilterName == "Profile") {
+                } else if (rawFilterName == "Enocoder") {
                     body.innerHTML = `
-                        <input id="filter-profile-id" type="text" class="form-control" placeholder="User ID">
-                        <input id="filter-profile-uname" type="text" class="form-control" placeholder="User Name">
-                        <input id="filter-profile-fname" type="text" class="form-control" placeholder="First Name">
-                        <input id="filter-profile-lname" type="text" class="form-control" placeholder="Last Name">
+                        <input id="filter-enocoder-id" type="text" class="form-control" placeholder="User ID">
+                        <input id="filter-enocoder-uname" type="text" class="form-control" placeholder="User Name">
+                        <input id="filter-enocoder-fname" type="text" class="form-control" placeholder="First Name">
+                        <input id="filter-enocoder-lname" type="text" class="form-control" placeholder="Last Name">
                     `;
                 } else if (rawFilterName == "Remarks") {
                     body.innerHTML = `

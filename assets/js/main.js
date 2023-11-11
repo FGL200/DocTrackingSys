@@ -9,9 +9,9 @@ const MAIN = {
         const holder = document.getElementById("notif-holder");
 
         let tColor = 
-            (flag == "g") ? "#2ECC71" :
-            (flag == "r") ? "#E74C3C" :
-            "#17202A";
+            (flag == "g") ? "#C8FEE0" :
+            (flag == "r") ? "#FFAFAA" :
+            "#ECECEC";
     
         let bColor = 
             (flag == "g") ? "#EAFAF1" :
@@ -19,20 +19,24 @@ const MAIN = {
             "#F8F9F9";
     
         const notif = document.createElement("section");
-        notif.setAttribute("class", "notif card shadow slide-in-out");
+        notif.setAttribute("class", "notif shadow slide-in-out");
         notif.addEventListener("animationend", ()=>{
             notif.remove();
         })
-        notif.style.border = "1px solid " + tColor;
+        // notif.style.border = "1px solid " + tColor;
         notif.style.backgroundColor = bColor;
-        notif.style.position = "relative";
+
+        const notif_logo = document.createElement("img");
+        notif_logo.src = `${base_url}assets/images/rtu-logo.png`;
+        notif_logo.width = "20";
+        notif_logo.height = "20";
 
         const notif_close = document.createElement("button");
-        notif_close.setAttribute("class", "notif_close_btn shadow");
+        notif_close.setAttribute("class", "notif_close_btn");
         notif_close.innerHTML = '<i class="fa-solid fa-xmark"></i>';
         notif_close.style.position = "absolute";
-        notif_close.style.top = "-15px";
-        notif_close.style.left = "-15px";
+        notif_close.style.top = "5px";
+        notif_close.style.right = "5px";
         // notif_close.style.border = `1px solid ${tColor}`;
         // notif_close.style.backgroundColor = bColor;
         notif_close.addEventListener("click", ()=>{
@@ -43,10 +47,13 @@ const MAIN = {
         });
         
         const notif_title = document.createElement("section");
-        notif_title.setAttribute("class", "notif-title font-b");
-        notif_title.innerHTML = title;
-        notif_title.style.color = tColor;
-        notif_title.style.fontWeight = "bold";
+        notif_title.setAttribute("class", "notif-title fw-bold d-flex align-items-center gap-2");
+        notif_title.appendChild(notif_logo);
+        notif_title.style.backgroundColor = tColor;
+
+        const title_content = document.createElement('spam');
+        title_content.innerHTML = title;
+        notif_title.appendChild(title_content);
     
         const notif_body = document.createElement("section");
         notif_body.setAttribute("class", "notif-body");

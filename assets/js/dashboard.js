@@ -502,7 +502,7 @@ async function setupRemarks_pie() {
     // Set data
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
     series.data.setAll([
-        { value: 10, category: "2020-2021" },
+        { value: 1, category: "2020-2021" },
         // { value: 9, category: "Two" },
         // { value: 6, category: "Three" },
         // { value: 5, category: "Four" },
@@ -546,6 +546,7 @@ function newShelf() {
 }
 
 function remove_logo(root) {
+    // console.log(root._logo)
     root._logo.dispose();
 }
 
@@ -555,6 +556,10 @@ async function fetch_data(url, method = null, callback = null) {
     data = await data.json();
     
     return data;
+}
+
+function generateReport() {
+    window.print()
 }
 
 // $("#statistics-tab").on("click", ()=>{
