@@ -91,7 +91,7 @@
     $("#student-record").on("change", function(e){
         // get the value from the selected option in select tag
         const value = JSON.parse($(this).val());
-
+        console.log(value);
         // reset the selected value
         $(this).children()[0].selected = true;
         

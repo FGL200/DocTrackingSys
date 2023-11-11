@@ -7,12 +7,17 @@ class Student_model extends CI_Model{
         parent::__construct();
     }
 
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     /**
      * Insert into `stud_rec`
      * @param String $data
      */
     public function add_student($data) {
         $query = "INSERT INTO `stud_rec` SET {$data}";
+    
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
     }
@@ -22,6 +27,7 @@ class Student_model extends CI_Model{
      */
     public function addStudentDoc($data) {
         $query = "INSERT INTO `doc` SET {$data}";
+ 
 
         // echo $query; die;
         $this->db->query($query);
@@ -441,9 +447,6 @@ class Student_model extends CI_Model{
         return $fetch->result_array();
     }
 
-    public function get_all_docs() {
-        
-    }
 
     // PRIVATE FUNCTIONS //
 
@@ -459,7 +462,7 @@ class Student_model extends CI_Model{
             return $fetch->result_array()[0]['role'] === 'A' ? true : false;
         }
         return false;
-    }
+    }   
 }
 
 ?>
