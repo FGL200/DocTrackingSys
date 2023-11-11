@@ -27,7 +27,7 @@ class Student_model extends CI_Model{
         $this->db->query($query);
     }
 
-    public function get_StudentRecords_With_Remarks($cond = null, $order = null) {
+    public function get_StudentRecords_With_Remarks($uid, $cond = null, $order = null) {
         $query = "SELECT 
                     LPAD(sr.id, 6, '0') `Record ID`,
                     CASE 
@@ -394,8 +394,71 @@ class Student_model extends CI_Model{
         return $fetch->result();
     }
 
-    public function get_all_docs() {
+    public function get_stud_rec_trashBin($uid) {
+        if(!$this->user_Is_Admin($uid)) return [[]];
 
+        $query = "SELECT 
+                LPAD(sr.id, 6, '0') `Record ID`,
+                CASE 
+                    WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
+                    ELSE sr.stud_id
+                END `Student ID`,
+                CASE 
+                    WHEN sr.stud_lname IS NULL OR COALESCE(sr.stud_lname, '') = '' THEN '--'
+                    ELSE sr.stud_lname 
+                END `Last Name`,
+                CASE 
+                    WHEN sr.stud_mname IS NULL OR COALESCE(sr.stud_mname, '') = '' THEN '--'
+                    ELSE sr.stud_mname 
+                END `Middle Name`,
+                CASE 
+                    WHEN sr.stud_fname IS NULL OR COALESCE(sr.stud_fname, '') = '' THEN '--'
+                    ELSE sr.stud_fname 
+                END `First Name`,
+                CASE 
+                    WHEN sr.stud_sfx IS NULL OR COALESCE(sr.stud_sfx, '') = '' THEN '--'
+                    ELSE sr.stud_sfx 
+                END `Suffix`,
+                CASE 
+                    WHEN rm.value = '[]' OR rm.value = '' THEN '--'
+                    ELSE rm.value
+                END `Remarks`,
+                sr.`updated_date` `udate`,
+                sr.`created_date` `cdate`,
+                u.`uname` `cby`,
+                u2.`uname` `uby`
+            FROM stud_rec sr
+            INNER JOIN remarks rm 
+                ON rm.stud_rec_id = sr.id
+            INNER JOIN `user` u
+                ON u.`id` = sr.`created_by_uid`
+            LEFT JOIN `user` u2
+                ON u2.`id` = sr.`updated_by_uid`
+            WHERE sr.deleted_flag = '1'
+        ";
+        $fetch = $this->db->query($query);
+
+        return $fetch->result_array();
+    }
+
+    public function get_all_docs() {
+        
+    }
+
+    // PRIVATE FUNCTIONS //
+
+    private function user_Is_Admin($uid) {
+        $query = "  SELECT 
+                        `role`
+                    FROM `user`
+                    WHERE `id` = '{$uid}'
+                    LIMIT 1
+        ";
+        $fetch = $this->db->query($query);
+        if($fetch->num_rows()){
+            return $fetch->result_array()[0]['role'] === 'A' ? true : false;
+        }
+        return false;
     }
 }
 

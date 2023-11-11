@@ -4,23 +4,26 @@
     margin: 0;
 }
 
-.shelf-container,
-.shelf-container-new {
+.shelf-container{
     height: 150px;
+    min-width: 240px;
+    border-left: 5px solid #FDBF00;
 }
 
-.shelf-container {
-    border-left: 5px solid #FDBF00 !important;
+.shelf-container.shelf-trash {
+    color: rgba(50, 50, 50, .6);
+    background-color: #FDEDEC;
+    border-left: 5px solid #EC7063;
 }
 
-.shelf-container-new {
-    background-color: rgba(0,0,0,0.025);
+.shelf-container.shelf-new {
     color: rgba(0,0,0,0.3);
-    width: 240px;
+    background-color: rgba(0,0,0,0.025);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.shelf-container-new:hover,
-.shelf-container-new:focus{
+.shelf-container.shelf-new:hover,
+.shelf-container.shelf-new:focus{
     background-color: rgba(0,0,0,0.075);
     color: rgba(0,0,0,0.3);
 }

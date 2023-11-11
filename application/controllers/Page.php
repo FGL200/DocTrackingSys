@@ -77,7 +77,7 @@ class Page extends CI_Controller {
         $this->loadPage('dashboard', $data);
     }
 
-    public function home() {
+    public function shelf($shelf_name) {
         if(!$this->session->has_userdata('uid')){
             redirect(''); // para yung url is http://localhost/DocTrackingSys' 
             // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
@@ -86,18 +86,21 @@ class Page extends CI_Controller {
 
         // HEADER VARIABLES
         $data['header'] = [
-            'title'=> 'Home',
-            'css' => ['home','viewRecord'],
-            'profile' => $this->session->userdata()
+            'title'=> ucfirst($shelf_name),
+            'css' => ['shelf'],
+            'profile' => $this->session->userdata(),
+            'constants' => [
+                'shelf_name' => $shelf_name
+            ]
         ];
 
         // FOOTER VAIRABLES
         $data['footer'] = [
-            'js' => ['alert', 'newRecord','profile', 'scan_qr', 'home']
+            'js' => ['alert', 'newRecord','profile', 'scan_qr', 'shelf']
         ];
 
         // load page
-        $this->loadPage("home", $data);
+        $this->loadPage("shelf", $data);
     }
 
     public function record($record_id){
@@ -112,7 +115,7 @@ class Page extends CI_Controller {
         $rec_id = intval($record_id);
 
         $studData = $this->stud->get_Student_all_Record($rec_id);
-        if(!$studData) redirect('home');
+        if(!$studData) redirect('');
         $role = $this->session->userdata('role');
 
         // HEADER VARIABLES
@@ -165,7 +168,7 @@ class Page extends CI_Controller {
     
     public function generate_qr() {
         if($this->session->userdata("role") == "A"){
-            redirect("home");
+            redirect("");
         }
 
         $data['header'] = [
@@ -178,5 +181,10 @@ class Page extends CI_Controller {
         ];
 
         $this->loadPage('generated_qr', $data);
+    }
+
+    public function user_logs() {
+
+        $this->loadPage('user_logs');
     }
 }

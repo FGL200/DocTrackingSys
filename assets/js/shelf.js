@@ -8,6 +8,8 @@ const HOME = {
     SEARCH: {
 
         scan : async function () {
+
+            MODAL.disableCloseButton();
             
             MODAL.setTitle(`Scan QR <i class="fa-solid fa-qrcode"></i>`);
             MODAL.setBody(`<div class="d-flex flex-column gap-2">
@@ -17,8 +19,13 @@ const HOME = {
             MODAL.open();
             
             await DTS_QR.initialize();
+
+            DELAY_FUNCTION(()=>{
+                MODAL.disableCloseButton(false);
+            }, 2);
             
             MODAL.onClose(()=>{ DTS_QR.stopScanner(); });
+
         },
 
         /**
@@ -333,22 +340,22 @@ const HOME = {
      */
     DASHBOARD: {
 
-        load_user_viewers : async function() {
-            const form = new FormData();
-            form.append('uid', CONST_UID);
-            await this.load_dashboard_table('user/viewers', form);
-        },
+        // load_user_viewers : async function() {
+        //     const form = new FormData();
+        //     form.append('uid', CONST_UID);
+        //     await this.load_dashboard_table('user/viewers', form);
+        // },
 
-        load_user_encoders : async function() {
-            const form = new FormData();
-            form.append('uid', CONST_UID);
-            await this.load_dashboard_table('user/encoders', form);
-        },
-        load_user_all : async function() {
-            const form = new FormData();
-            form.append('uid', CONST_UID);
-            await this.load_dashboard_table('user/all', form);
-        },
+        // load_user_encoders : async function() {
+        //     const form = new FormData();
+        //     form.append('uid', CONST_UID);
+        //     await this.load_dashboard_table('user/encoders', form);
+        // },
+        // load_user_all : async function() {
+        //     const form = new FormData();
+        //     form.append('uid', CONST_UID);
+        //     await this.load_dashboard_table('user/all', form);
+        // },
 
         /**
          * Load the dashboard table
@@ -416,8 +423,18 @@ const HOME = {
 
 }
 
+function loadTable() {
+    const form = new FormData();
+    form.append("uid", CONST_UID);
+
+    HOME.DASHBOARD.load_dashboard_table(
+        CONST_SHELF_NAME === 'trash' ? 'student/record/trash' :
+        'student/record/all'
+    , form); 
+}
+
 // on windows load, fetch all the student records
-$(window).on('load', ()=>{ HOME.DASHBOARD.load_dashboard_table('student/record/all'); });
+$(window).on('load', loadTable);
 
 const LOAD_REMARKS_ON_ID = async (element_id) => {
     await fetch(base_url + 'api/categories')
@@ -433,7 +450,7 @@ const ON_MODAL_CLOSE = () => {
     if (home_current_open_modal === 'SEARCH') {
         () => { /** SET EFFECT HERE */ }
     } else if (home_current_open_modal === 'NEW') {
-        HOME.DASHBOARD.load_dashboard_table('student/record/all');
+        loadTable();
     } else if (home_current_open_modal === 'IMPORT_EXCEL') {
         () => { /** SET EFFECT HERE */ }
     } else if (home_current_open_modal === 'GENERATE_QR') {

@@ -103,7 +103,7 @@ const VIEW_RECORD = {
 
                             console.log(VIEW_RECORD.__old_DIRS__);
                         })
-                    });
+                    }, 1);
                 } else {
                     const keys = Object.keys(message);
                     let html = "";

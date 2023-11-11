@@ -15,7 +15,7 @@
 
 <div id="modal-holder" class="d-flex flex-row justify-content-center align-items-center hide">
     <form id="modal-container" class="card m-3 p-2 d-flex flex-column gap-2" method="post" enctype="multipart/form-data">
-        <button type="button" class="btn btn-primary" onclick="(typeof ON_MODAL_CLOSE !== 'undefined') ? MODAL.close(ON_MODAL_CLOSE()) : MODAL.close();"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" id="modal-btn-close" class="btn btn-primary" onclick="(typeof ON_MODAL_CLOSE !== 'undefined') ? MODAL.close(ON_MODAL_CLOSE()) : MODAL.close();"><i class="fa-solid fa-xmark"></i></button>
         <div id="modal-title" class="fw-bold fs-6 p-1 text-center"></div>
         <div id="modal-body" class="p-1"></div>
         <div id="modal-footer" class="d-flex flex-row-reverse p-1 gap-2"></div>

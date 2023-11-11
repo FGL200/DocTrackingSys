@@ -312,7 +312,6 @@ async function setupEncoded_live() {
     let data = await fetch_data('user/all/encodes', {method : 'post', form : ""});
    
     let temp = [];
-    console.log(data);
     for(let d of data) {
         temp.push({uname : d.uname, total : parseInt(d.total)});
     }
@@ -510,8 +509,6 @@ async function setupRemarks_pie() {
         // { value: 3, category: "Six" },
         // { value: 1, category: "Seven" },
     ]);
-
-    console.log(series.data)
 
     // Play initial series animation
     // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series

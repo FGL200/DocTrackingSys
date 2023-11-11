@@ -96,11 +96,9 @@ nav {
 
 .loading{
     position: relative;
-    display: flex;
-    justify-content: center;
-    top: 50vh;
     overflow: hidden !important;
     opacity: 0.5;
+    z-index: 2000;
 }
 
 .loading::before{
@@ -110,8 +108,13 @@ nav {
     height: 15px;
     padding: 15px;
     position: absolute;
-    align-self: center;
+    background-color: #F8F9F9;
+
+    top: calc(50vh - 105px);
+    left: calc(50vw - 20px);;
+
     animation: loading 2s linear infinite;
+    z-index: 2001;
 }
 
 @keyframes loading {
