@@ -28,9 +28,9 @@ async function termsAndCondition() {
     .then(response => {
         // ipakita ung alert
         dts_alert({
-            title : "Terms and Conditions (End-User License Agreement)",
+            title : `<div class="fs-4">Terms and Conditions (End-User License Agreement)</div>`,
             body : response,
-            buttons : ["Agree"]
+            buttons : ["Close"]
         }, function(ans){
             if(!ans) return;
             window.localStorage

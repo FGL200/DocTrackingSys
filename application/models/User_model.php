@@ -167,6 +167,7 @@ class User_model extends CI_Model
                 FROM `stud_rec` as `sr`
                 INNER JOIN `user` as `u`
                 ON `u`.`id` = `sr`.`created_by_uid`
+                WHERE `u`.`role` = 'E'
                 GROUP BY `sr`.`created_by_uid`, DATE_FORMAT(`sr`.`created_date`, '%M')";
 
         // echo $sql;

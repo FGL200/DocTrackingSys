@@ -30,7 +30,7 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button onclick="MAIN.goto('home')" class="nav-link dashboard-nav" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#users-log" type="button" role="tab" aria-selected="false" style="white-space: nowrap;">
+                        <button onclick="MAIN.goto('logs')" class="nav-link dashboard-nav" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#users-log" type="button" role="tab" aria-selected="false" style="white-space: nowrap;">
                             <i class="fa-solid fa-book"></i> Users log
                         </button>
                     </li>
@@ -50,22 +50,35 @@
                 <div class="d-flex justify-content-center flex-wrap flex-grow-1 gap-3">
                     
                     <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
-                        <a href="<?= base_url('home') ?>" class="shelf-container card p-3 shadow-0">
+                        <a href="<?= base_url('shelf/2020-2021') ?>" class="shelf-container card p-3 shadow-0">
                             <!-- <section class="shelf-name">Shelf</section> -->
-                            <section class="shelf-title fs-4">2020-2021</section>
+                            <section class="shelf-title fs-4">
+                                <i class="fa-solid fa-bars-staggered"></i>
+                                2020-2021
+                            </section>
                             <section class="shelf-body d-flex flex-column">
-                                <span><b>Records: </b> 1006 </span>
-                                <span><b>Encoders:</b> 11</span>
-                                <span><b>Last update: </b> 10/20/2023</span>
+                                <span><b>Records: </b> <span>1006</span> </span>
+                                <span><b>Encoders:</b> <span>11</span></span>
+                                <span><b>Last update: </b> <span>10/20/2023</span></span>
                             </section>
                         </a>
 
 
                         <?php if ($role === 'A') { ?>
-                            <a href="#" onclick="newShelf()" class="shelf-container-new card p-3 shadow-0">
+                            <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
+                                <section class="shelf-title fs-4">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                    Trash bin
+                                </section>
+                                <section class="shelf-body d-flex flex-column">
+                                    <span><b>Records: </b><span>4</span></span>
+                                </section>
+                            </a>
+
+                            <a href="#" onclick="newShelf()" class="shelf-container shelf-new card p-3 shadow-0">
                                 <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
                                     <i class="fa-solid fa-plus"></i>
-                                    <span class="fs-4">Add Shelf</span>
+                                    <span class="fs-4"><span>Add Shelf</span></span>
                                 </section>
                             </a>
                         <?php } ?>

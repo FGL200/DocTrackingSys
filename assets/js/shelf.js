@@ -416,8 +416,18 @@ const HOME = {
 
 }
 
+function loadTable() {
+    const form = new FormData();
+    form.append("uid", CONST_UID);
+
+    HOME.DASHBOARD.load_dashboard_table(
+        CONST_SHELF_NAME === 'trash' ? 'student/record/trash' :
+        'student/record/all'
+    , form); 
+}
+
 // on windows load, fetch all the student records
-$(window).on('load', ()=>{ HOME.DASHBOARD.load_dashboard_table('student/record/all'); });
+$(window).on('load', loadTable);
 
 const LOAD_REMARKS_ON_ID = async (element_id) => {
     await fetch(base_url + 'api/categories')

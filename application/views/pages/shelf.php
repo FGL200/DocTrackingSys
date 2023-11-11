@@ -9,7 +9,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.scan()"> <i class="fa-solid fa-qrcode"></i> Scan QR </a></li>
                     <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.open()"> <i class="fa-solid fa-magnifying-glass-plus"></i> More search option... </a></li>
-                    <li><a class="dropdown-item" href="#" onclick="HOME.DASHBOARD.load_dashboard_table('student/record/all')"> <i class="fa-solid fa-list-ol"></i> All Records</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="loadTable()"> <i class="fa-solid fa-list-ol"></i> All Records</a></li>
                 </ul>
             </div>
         </div>

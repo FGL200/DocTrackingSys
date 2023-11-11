@@ -4,7 +4,6 @@ let agree = window.localStorage.getItem("agree");
 
 // default value ng alert
 let showed = false;
-console.log(agree);
 // mga pwedeng events ni user
 $(window).on("load", showTermsAndCondition);
 $(window).on("mousemove", showTermsAndCondition);
@@ -26,7 +25,7 @@ async function showTermsAndCondition() {
     .then(response => {
         // ipakita ung alert
         dts_alert({
-            title : `<div class="fs-3">Terms and Conditions (End-User License Agreement)</div>`,
+            title : `<div class="fs-4">Terms and Conditions (End-User License Agreement)</div>`,
             body : response,
             buttons : ["I Agree"]
         }, function(ans){

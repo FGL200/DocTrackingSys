@@ -199,7 +199,9 @@ class Student extends CI_Controller{
      * Get basic student record info along with their remarks
      */
     public function get_StudentRecords_With_Remarks() {
-        $result = $this->stud->get_StudentRecords_With_Remarks();
+        $uid = $this->input->post("uid");
+
+        $result = $this->stud->get_StudentRecords_With_Remarks($uid);
         $nData = $this->to_Id_Link_Student_Record($result);
         $nData = $this->count_remarks($nData);
         $nData = $this->to_grouped_style($nData);
@@ -516,6 +518,18 @@ class Student extends CI_Controller{
         $uid = $this->input->post("uid");
         
         echo json_encode(["result"=> $this->stud->get_all_stud_rec_as_select()]);
+    }
+
+    public function trashBin() {
+        $uid = $this->input->post("uid");
+    
+        $result = $this->stud->get_stud_rec_trashBin($uid);
+        $nData = $this->to_Id_Link_Student_Record($result);
+        $nData = $this->count_remarks($nData);
+        $nData = $this->to_grouped_style($nData);
+        echo json_encode(['result' => $nData]);
+
+        // echo json_encode(["result"=> $this->stud->get_stud_rec_trashBin($uid)]); 
     }
 
 
