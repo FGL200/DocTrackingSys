@@ -207,12 +207,25 @@ async function newUser() {
             method: 'post',
             body: form
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => {
-            if (result) {
-                MAIN.addNotif("Added new User!", "Successfully added new user", "g");
-                MODAL.close();
+            let notif = {
+                title : "",
+                message : "",
+                flag : ""
             }
+            if (result.status == "success") {
+                notif.title = "Added new User!";
+                notif.message = "Successfully added new user";
+                notif.flag = "g";
+            } else {
+                notif.title = "Error";
+                notif.message = result.message;
+                notif.flag = "r";
+            }
+
+            MAIN.addNotif(notif.title, notif.message, notif.flag);
+            MODAL.close();
         })
         .catch(err => {
             MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");

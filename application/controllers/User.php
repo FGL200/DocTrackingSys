@@ -14,6 +14,7 @@ class User extends CI_Controller{
      * UPDATE USER INFO
      */
     public function update() {
+
         switch($this->session->userdata("role")) {
             case "E":
             case "V":
@@ -90,6 +91,11 @@ class User extends CI_Controller{
      * NEW USER
      */
     public function new() {
+        if($this->session->userdata("role") != "A") {
+            echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
+            die;
+        }
+
         // initialize data to be passed
         $user_table_data = ""; $user_info_table_data = "";
 

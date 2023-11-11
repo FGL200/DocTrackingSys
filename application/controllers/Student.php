@@ -1,13 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
-use Endroid\QrCode\Label\Font\NotoSans;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
-use Endroid\QrCode\Writer\PngWriter;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 
 class Student extends CI_Controller{
 
@@ -31,6 +23,12 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
+        if($this->session->userdata("role") != "E") {
+            echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
+            die;
+        }
+        header("Content-Type: application/json; charset=UTF-8");
+        
         // echo "<pre>";
         // var_dump($this->input->post()); die;
         $stud_id = $this->input->post("stud_id");
@@ -240,6 +238,13 @@ class Student extends CI_Controller{
      * Update Student record
      */
     public function update_Student_Records() {
+
+        if($this->session->userdata("role") != "E") {
+            echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
+            die;
+        }
+        
+        header("Content-Type: application/json; charset=UTF-8");
         $stud_rec_id = intval($this->input->post("stud_rec_id"));
 
         $stud_id = $this->input->post("stud_id");
