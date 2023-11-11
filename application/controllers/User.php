@@ -48,13 +48,21 @@ class User extends CI_Controller{
                     }
                     
                 }
-                $data .= " WHERE `u`.`id` = '".$this->input->post("uid")."'";
+                $uid = $this->input->post("uid");
+                $data .= " WHERE `u`.`id` = '".$uid."'";
         
                 $result = $this->user->update_user_info($data);
         
                 // if($result) $this->get_user($this->input->post("uid"));
-                
-        
+
+                //Add to user_logs
+                add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
+                    UPDATE user_info `ui`
+                    INNER JOIN `user` `u`
+                        ON `u`.`id` = `ui`.`user_id`
+                    SET {$data}
+                ");
+
                 if($result)$this->get_user(); //FRED
                 else echo json_encode(['status' =>  "error", 'message' =>  "Error in saving profile"]); die;
             break;
@@ -67,6 +75,12 @@ class User extends CI_Controller{
                     $data = "`u`.`pword` = PASSWORD('default')";
                     $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
 
+                    //Add to user_logs
+                    add_To_User_Logs($this, $uid, "($uid) Reset password of {$uname}", "
+                        UPDATE `user` `u`
+                        SET {$data}
+                    ");
+
                     // echo $data; die;
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
@@ -78,6 +92,12 @@ class User extends CI_Controller{
 
                     $data = "`u`.`active` = '$active'";
                     $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
+
+                    //Add to user_logs
+                    add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
+                        UPDATE `user` `u`
+                        SET {$data}
+                    ");
 
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
@@ -129,6 +149,12 @@ class User extends CI_Controller{
         // insert to `user_info` table
         $id = $this->user->insert_user_info($user_info_table_data);
 
+        //Add to user_logs
+        // NEED FIX : Walang uid, hindi alam cno nag create
+        add_To_User_Logs($this, 1, "(1) Added new user {$id}", "
+            UPDATE `user` `u`
+            SET {$user_info_table_data}
+        ");
         
         // -- end of transaction --
         if($this->db->trans_status() === TRUE) {
@@ -143,20 +169,20 @@ class User extends CI_Controller{
     public function get_All_Viewers(){
         $my_user_id = $this->input->post()['uid'];
         // echo json_encode(['result' => $this->user->get_All_Viewers($my_user_id)]);  
-        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Viewers($my_user_id));
+        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Viewers($my_user_id));
         echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Encoders(){
         $my_user_id = $this->input->post()['uid'];
         // echo json_encode(['result' => $this->user->get_All_Encoders($my_user_id)]);  
-        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Encoders($my_user_id));
+        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Encoders($my_user_id));
         echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Users(){
         $my_user_id = $this->input->post()['uid'];
-        $nData = $this->__change_User_To_Proper_Format_($this->user->get_All_Users($my_user_id));
+        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Users($my_user_id));
         echo json_encode(['result' => $nData]);  
     }
 
@@ -182,9 +208,16 @@ class User extends CI_Controller{
         // echo "fdsfsdf";
         echo json_encode($result);
     }
+    
+    public function get_User_Logs() {
+        if(!$this->input->post('uid')) return;
+        echo json_encode($this->user->get_User_Logs());
+    }
+
+    
     // PRIVATE FUNCTIONS 
 
-    private function __change_User_To_Proper_Format_(Array $data) {
+    private function __change_User_To_Proper_Format__(Array $data) {
         $fixedData = [];
         foreach($data as $row){
             $nRow = $row;
@@ -214,6 +247,4 @@ class User extends CI_Controller{
         }
         return $fixedData;
     }
-
-
 }

@@ -185,6 +185,14 @@ class Page extends CI_Controller {
 
     public function user_logs() {
 
-        $this->loadPage('user_logs');
+        $data['header'] = [
+            'title' => "Generate QR"
+        ];
+
+        $data['footer'] = [
+            'js' => ['user_logs', 'profile']
+        ];
+
+        $this->loadPage('user_logs', $data);
     }
 }

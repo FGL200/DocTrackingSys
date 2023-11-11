@@ -431,6 +431,12 @@ function loadTable() {
         CONST_SHELF_NAME === 'trash' ? 'student/record/trash' :
         'student/record/all'
     , form); 
+
+
+
+    if(CONST_SHELF_NAME === 'trash') {
+        $("#nav-search-stud").remove();
+    }
 }
 
 // on windows load, fetch all the student records

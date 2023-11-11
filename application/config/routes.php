@@ -44,6 +44,7 @@ $route['user']['post'] = 'User/get_user';
 $route['user/update']['post'] = 'User/update';
 $route['user/all/encodes']['post'] = 'User/total_Encoded_By_Users';
 $route['user/monthly/encodes']['post'] = 'User/monthly_Encoded_By_Users';
+$route['user/logs'] = 'User/get_User_Logs';
 
 // DEFAULT
 $route['404_override'] = '';

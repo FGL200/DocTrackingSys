@@ -189,7 +189,7 @@ async function newUser() {
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Password</span>
-                <input type="text" class="form-control" value="Password is set to 'default'" disabled />
+                <input type="text" class="form-control" value="Password is set to 'default'" style="min-width: 230px;" disabled />
             </div>
 
         </div>

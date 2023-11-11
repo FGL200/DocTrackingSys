@@ -64,11 +64,11 @@ class Student extends CI_Controller{
             exit;
         }  
         
-        $this->insert_slashes($stud_id);
-        $this->insert_slashes($stud_fname);
-        $this->insert_slashes($stud_lname);
-        $this->insert_slashes($stud_mname);
-        $this->insert_slashes($stud_sfx);
+        insert_slashes($stud_id);
+        insert_slashes($stud_fname);
+        insert_slashes($stud_lname);
+        insert_slashes($stud_mname);
+        insert_slashes($stud_sfx);
 
         $student_info = ["stud_id"=>$stud_id, "stud_fname"=>$stud_fname,"stud_lname"=>$stud_lname, "stud_mname"=>$stud_mname, "stud_sfx"=>$stud_sfx];
         $student = $this->stud->get_Student_By($student_info);
@@ -282,11 +282,11 @@ class Student extends CI_Controller{
             exit;
         }  
         
-        $this->insert_slashes($stud_id);
-        $this->insert_slashes($stud_fname);
-        $this->insert_slashes($stud_lname);
-        $this->insert_slashes($stud_mname);
-        $this->insert_slashes($stud_sfx);
+        insert_slashes($stud_id);
+        insert_slashes($stud_fname);
+        insert_slashes($stud_lname);
+        insert_slashes($stud_mname);
+        insert_slashes($stud_sfx);
 
         /** Update the `stud_rec` table */
         $stud_set = "";
@@ -657,7 +657,6 @@ class Student extends CI_Controller{
     /**
      * Count the remarks of the student 
      * @param Array $data
-     * 
      */
     private function count_remarks(Array $data) {
         $fixed_data = [];
@@ -675,11 +674,5 @@ class Student extends CI_Controller{
         return $fixed_data;
     }
 
-    /**
-     * Insert slashes to the characters like ["/\'`]
-     * @param Array $inputs
-     */
-    private function insert_slashes(& $input, $pattern = "\/\"'`") {
-        $input = addcslashes($input, $pattern);
-    }
+    // Minove ko sa Helper ung insert_slashes na function
 }
