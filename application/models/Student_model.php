@@ -28,8 +28,6 @@ class Student_model extends CI_Model{
     }
 
     public function get_StudentRecords_With_Remarks($uid, $cond = null, $order = null) {
-        if(!$this->user_Is_Admin($uid)) return [[]];
-
         $query = "SELECT 
                     LPAD(sr.id, 6, '0') `Record ID`,
                     CASE 

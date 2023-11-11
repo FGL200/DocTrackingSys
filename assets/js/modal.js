@@ -14,6 +14,14 @@
  */
 const MODAL = {
 
+    /**
+     * Enable or disable close button of modal
+     * @param {Boolean} disable 
+     */
+    disableCloseButton : (disable = true) => {
+        $("#modal-btn-close").prop("disabled", disable);
+    },
+
     form : document.getElementById("modal-container"),
 
     /**
