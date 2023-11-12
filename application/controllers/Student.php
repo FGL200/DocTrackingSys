@@ -13,16 +13,64 @@ class Student extends CI_Controller{
         $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
-
+        $this->load->model("excel_model", 'excel');
         /** File uploder helper */
-        $this->load->helper(array("form", "url"));
+        // $this->load->helper(array("form", "url"));
 
     }
+    /**
+     * Add student/s via excel
+     */
+
+     public function addExcel() {
+        $students = json_decode($this->input->post("students")); 
+        $id = 0;
+        
+        $created_by_uid = $this->session->userdata('uid');
+        $filename = $this->input->post("filename");
+        
+        if(!$this->excel->isFileExisted($filename)) {
+            $this->db->trans_begin();
+
+            $excel_query = "`name` = '{$filename}', `uploaded_by` = '{$created_by_uid}'";
+            $excel_id = $this->excel->addFile($excel_query);
+            
+    
+            if(!$excel_id) {echo json_encode(['status'=>'error', 'message' => $this->db->error()['message']]); die;}
+    
+            for($i = 0; $i < count($students); $i++) {
+                
+                $studrec = " `x_file_id` = '{$excel_id}', `created_by_uid` = '{$created_by_uid}'," . $students[$i][0];
+    
+                $id = $this->stud->add_student($studrec);
+    
+                $student_id = "`stud_rec_id` = {$id}, ";
+    
+                $doc = $student_id . $students[$i][1];
+    
+                $this->stud->addStudentDoc($doc);
+                
+                $remarks = " `value`='[]', `stud_rec_id` = '{$id}'";
+                $this->rm->insertRemarks($remarks);
+            }
+    
+            
+    
+            if($this->db->error()['code'] > 0)  echo json_encode(['status'=>'error', 'message'=>$this->db->error()['message']]);
+            else { echo json_encode(['status'=>'success', 'message'=>'Records inserted successfully']); $this->db->trans_commit();}
+        } else {
+            echo json_encode(['status'=>'error', 'message'=>'File is already existed.. Please rename the file.']);
+        }
+
+        
+     }
 
     /**
      * Add student record
      */
     public function  addRecord() {
+        // $result = $this->db->query('INSERT INTO `stud_rec` (`stud_lname`,`stud_fname`,`stud_mname`,`stud_sfx`) VALUES ("DA","CARLO ","R.",""),("DAA","PERLA","S.",""),("DAA ","BARRY","M.",""),("DAACA","CHRIS JOHN ","M.",""),("DAACA","IAN SAM","M.",""),("DAAN","KRISTINA MAY ","C.",""),("DAAN","MARIANETTE J","P.",""),("DAANG","REMY JOY","E.",""),("DAANOY","ARNOLD","E.",""),("DAAPONG ","MELCHOR","J.",""),("DABALOS","ALLEN OLIVEVER","B.",""),("DABALOS","MARIA TERESSA","C.",""),("DABALOS","NICOLE","C.",""),("DABALUS","JOEFFREN","B.",""),("DABAN","PAUL JOHN","N.",""),("DABAN","PHILIP.","S.",""),("DABAN","PRIMO","E.",""),("DABANBAN","STEFFANIE JANE","A.",""),("DABANBAN","IVAN PHILLIP","C.",""),("DABAY","RICHARD","B.",""),("DABBAN","DIVINE GRACE","R.",""),("DABBAY","JOHN MICHAEL","R.",""),("DABELA","CELESTINO","N.",""),("DABELA","GLEN","T.",""),("DABELA","NERIE ","N.",""),("DABERTE","REGINALD","F.",""),("DABI","JOHN RAY","A.",""),("DABO","MARITES","G.",""),("DABO","SHERWIN","C.",""),("DABU ","BOGART","P.",""),("DABU ","CARLO ","L.","JR."),("DABU ","CARMELA ISABEL","G.",""),("DABU ","DARWIN ","A.",""),("DABU ","DENNIS ","H.",""),("DABU ","JAYMILL","D.",""),("DABU ","KAREEM","D.",""),("DABU ","KAYCEE","G.",""),("DABU ","KEVIN","D.",""),("DABU ","MICHELLE","D.",""),("DABU ","RAINIEL","M.",""),("DABU ","RENZO","M.",""),("DABU ","REY","B.",""),("DABUEL","JANREY","E.",""),("DABUET","EDGIE","P.",""),("DABUET ","MARIVIC","J.","")');
+        // var_dump($this->db->insert_id());die;
         if($this->session->userdata("role") != "E") {
             echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
             die;
@@ -31,17 +79,17 @@ class Student extends CI_Controller{
         
         // echo "<pre>";
         // var_dump($this->input->post()); die;
-        $stud_id = $this->input->post("stud_id");
-        $stud_fname = $this->input->post("stud_fname");
-        $stud_lname = $this->input->post("stud_lname");
-        $stud_mname = $this->input->post("stud_mname");
-        $stud_sfx = $this->input->post("stud_sfx");
+        $stud_id = trim($this->input->post("stud_id"));
+        $stud_fname = trim($this->input->post("stud_fname"));
+        $stud_lname = trim($this->input->post("stud_lname"));
+        $stud_mname = trim($this->input->post("stud_mname"));
+        $stud_sfx = trim($this->input->post("stud_sfx"));
 
         /** Student Information checking */
         $required_fields = array();
 
-        if(empty(trim($stud_fname))) array_push($required_fields, "First Name");
-        if(empty(trim($stud_lname))) array_push($required_fields, "Last Name");
+        if(empty($stud_fname)) array_push($required_fields, "First Name");
+        if(empty($stud_lname)) array_push($required_fields, "Last Name");
     
         $required_fields = implode(",", $required_fields);
 
@@ -118,13 +166,16 @@ class Student extends CI_Controller{
                 
                 // echo  $doc . PHP_EOL;
                 // var_dump($_FILES['doc_scan_' . $doc]['name']) . PHP_EOL;
-                for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                    if(!empty($_FILES["doc_scan_".$doc]['name'][$i]) && !empty($_FILES["doc_scan_".$doc]['tmp_name'][$i])) {
-                        $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
-                        // echo($_FILES["doc_scan_".$doc]['tmp_name'][$i]); continue;
-                        if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
-                    }    
+                if(isset($_FILES['doc_scan_' . $doc])) {
+                    for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
+                        if(!empty($_FILES["doc_scan_".$doc]['name'][$i]) && !empty($_FILES["doc_scan_".$doc]['tmp_name'][$i])) {
+                            $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+                            // echo($_FILES["doc_scan_".$doc]['tmp_name'][$i]); continue;
+                            if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
+                        }    
+                    }
                 }
+                
                 if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
             }    
         }
@@ -183,8 +234,8 @@ class Student extends CI_Controller{
                 "status" => "success"
             ));
         } else {
-            $this->db->trans_rollback()();
-            echo json_encode(array(
+            $this->db->trans_rollback();           
+             echo json_encode(array(
                 "status" => "error",
                 "message" => $this->db->error()
             ));
@@ -249,16 +300,16 @@ class Student extends CI_Controller{
         header("Content-Type: application/json; charset=UTF-8");
         $stud_rec_id = intval($this->input->post("stud_rec_id"));
 
-        $stud_id = $this->input->post("stud_id");
-        $stud_fname = $this->input->post("stud_fname");
-        $stud_lname = $this->input->post("stud_lname");
-        $stud_mname = $this->input->post("stud_mname");
-        $stud_sfx = $this->input->post("stud_sfx");
+        $stud_id = trim($this->input->post("stud_id"));
+        $stud_fname = trim($this->input->post("stud_fname"));
+        $stud_lname = trim($this->input->post("stud_lname"));
+        $stud_mname = trim($this->input->post("stud_mname"));
+        $stud_sfx = trim($this->input->post("stud_sfx"));
 
         $required_fields = array();
 
-        if(empty(trim($stud_fname))) array_push($required_fields, "First Name");
-        if(empty(trim($stud_lname))) array_push($required_fields, "Last Name");
+        if(empty($stud_fname)) array_push($required_fields, "First Name");
+        if(empty($stud_lname)) array_push($required_fields, "Last Name");
     
         $required_fields = implode(",", $required_fields);
 
@@ -418,7 +469,7 @@ class Student extends CI_Controller{
                 "status" => "success"
             ));
         } else {
-            $this->db->trans_rollback()();
+            $this->db->trans_rollback();
             echo json_encode(array(
                 "status" => "error",
                 "message" => $this->db->error()

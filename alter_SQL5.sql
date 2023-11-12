@@ -11,3 +11,6 @@ CREATE TABLE `user_logs` (
     `details` TEXT,
     FOREIGN KEY (`created_by`) REFERENCES `user`(`id`)
 )
+ALTER TABLE `x_file` CHANGE `dt` `dt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `x_file` CHANGE `dt` `uploaded_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `x_file` CHANGE `uploaded_b` `uploaded_by` INT(10) NULL DEFAULT NULL;

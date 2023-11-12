@@ -223,7 +223,7 @@ const HOME = {
             MODAL.onSubmit(function (e) {
                 e.preventDefault();
 
-                const form = new FormData(document.getElementById("modal-container"));
+                // const form = new FormData(document.getElementById("modal-container"));
 
                 HOME.IMPORT_EXCEL.readFileData(document.getElementById("file-upload").files[0]);
 
@@ -248,25 +248,104 @@ const HOME = {
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                 let raw_data = XLSX.utils.sheet_to_json(worksheet, {header:1});
                 
-                raw_data = raw_data.map(row=>{
-                    const new_arr = [];
-                    for(let i = 0; i < raw_data[0].length; i++) {
-                        if(!row[0]) break;
-                        if(!row[i]) new_arr.push("--");
-                        else new_arr.push(row[i]);
-                    }
-                    return new_arr;
-                });
-                delete raw_data[0];
-                let sql = JSON.stringify(raw_data);
-                const empty_spaces_pos = sql.indexOf("[]");
-                const header_pos = "[null,".length;
-                sql = sql.slice(0, empty_spaces_pos).slice(header_pos);
-                sql = sql.slice(0, sql.length - 1)
-                sql = sql.replaceAll("[","(").replaceAll("]",")");
-                
+                let queries = [];
 
-                console.log(sql);
+                const columns = raw_data[0];
+                
+                raw_data.forEach((row, index_)=>{
+                    if(index_ !== 0) { // avoid accessing the header
+                        if(row.length > 0) {
+                            let stud_rec_query = ["", ""];
+                            // stud_rec_query += "(";
+                            columns.forEach((data, index)=>{
+                                if(data.toLocaleUpperCase() === "Last Name".toLocaleUpperCase() || data.toLocaleUpperCase() === "First Name".toLocaleUpperCase() || data.toLocaleUpperCase() === "Middle Initial".toLocaleUpperCase() ||data.toLocaleUpperCase() === "Suffix".toLocaleUpperCase()) {
+                                    let colname = "";
+                                    switch(data.toLocaleUpperCase()) {
+                                        case "Last Name".toLocaleUpperCase():
+                                            colname = 'stud_lname';
+                                            break;
+                                        case "First Name".toLocaleUpperCase():
+                                            colname = 'stud_fname';
+                                            break;
+                                        case "Middle Initial".toLocaleUpperCase():
+                                            colname = "stud_mname";
+                                            break;
+                                        case "Suffix".toLocaleUpperCase():
+                                            colname = "stud_sfx";
+                                            break;
+                                    }
+                                    // console.log(colname);
+                                    stud_rec_query[0] += "`" + colname + "` = " + (row[index] ? `'${row[index]}'` : "''") + ",";
+                                    
+                                } else {
+                                    let colname = "";
+                                    switch(data.toLocaleUpperCase()) {
+                                        case "F137".toLocaleUpperCase():
+                                            colname = 'j_f137';
+                                            break;
+                                        case "BIRTH CERT".toLocaleUpperCase():
+                                            colname = 'birth_cert';
+                                            break;
+                                        case "TOR/HD".toLocaleUpperCase():
+                                            colname = "tor";
+                                            break;
+                                        case "F138".toLocaleUpperCase():
+                                            colname = "f138";
+                                            break;
+                                        case "REQ. CLEARANCE FORM".toLocaleUpperCase():
+                                            colname = 'req_clearance_form';
+                                            break;
+                                        case "APP FOR GRAD".toLocaleUpperCase():
+                                            colname = "app_grad";
+                                            break;
+                                        case "REQ FOR CREDENTIALS".toLocaleUpperCase():
+                                            colname = "req_credentials";
+                                            break;
+                                        case "REGI FORM".toLocaleUpperCase():
+                                            colname = 'regi_form';
+                                            break;
+                                        case "CERT OF TRANSFER".toLocaleUpperCase():
+                                            colname = "hd_or_cert_of_trans";
+                                            break;
+                                        case "COMPLETION FORM".toLocaleUpperCase():
+                                            colname = "cert_of_complete";
+                                            break;
+                                        case "GOOD MORAL".toLocaleUpperCase():
+                                            colname = 'good_moral';
+                                            break;
+                                    }   
+                                    if(colname.trim().length > 1) stud_rec_query[1] += "`" + colname + "` = " + (row[index] ? `'{"val" : "${row[index]}", "dir" : ""}'` : '\'{"val" : "0", "dir" : ""}\'') + ",";
+                                    
+                                }
+                                
+                                
+                            })
+                            stud_rec_query[0] = stud_rec_query[0].slice(0, -1);
+                            stud_rec_query[1] = stud_rec_query[1].slice(0, -1);
+                            // stud_rec_query = stud_rec_query.slice(0, stud_rec_query.length - 1);
+                            // stud_rec_query += ")";
+                            queries.push(stud_rec_query);
+                        }
+                    }
+                });
+
+                
+                let form = new FormData();
+                form.append("filename", file.name);
+                form.append("students", JSON.stringify(queries));
+
+                fetch(base_url + "student/record/insert/excel", {
+                    method : "post",
+                    body : form
+                })
+                .then(response=>response.json())
+                .then(response=>{
+
+                    MAIN.addNotif(response.status, response.message , response.status == "success" ? 'g' : 'r' );
+                })
+                .catch(err=>{
+                    MAIN.addNotif("Server Error!", "Error in importing the file" , 'r');
+                });
             }
 
             fileReader.readAsBinaryString(file);

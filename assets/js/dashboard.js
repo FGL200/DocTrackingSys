@@ -66,7 +66,7 @@ async function setupEncoded_monthly() {
     const dates = []; // dates that encoded by user.
    
     let users = await fetch_data('user/monthly/encodes', {method : 'post', form : ""});
-    
+    // console.log(users);
     for(let user of users){
         if(!encoders.includes(user.uname)) encoders.push(user.uname);
         const d = {date : new Date(user.date).getTime(), value : parseInt(user.total)};
@@ -134,7 +134,6 @@ async function setupEncoded_monthly() {
     }
     
     
-
     // Add cursor
     // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
     let cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
@@ -207,7 +206,8 @@ async function setupEncoded_monthly() {
     legend.data.setAll(chart.series.values);
 
 
-    // console.log(series.dataItems);
+    
+    console.log(chart.series);
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -535,8 +535,20 @@ function newShelf() {
     MODAL.setFooter("<button class='btn btn-success'>Add</button><button class='btn btn-danger' type='button' onClick='MODAL.close()'>Cancel</button>");
     MODAL.onSubmit((e)=>{
         const form = new FormData(MODAL.form);
+        console.log(MAIN.add);
+        fetch(base_url + "shelves/insert", {
+            method : "post",
+            body : form
+        })
+        .then(response=>response.json())
+        .then(function (result){
+            MAIN.addNotif(result.status, result.message, result.status == "success" ? "g" : "r");
+        })
+        .catch(err => {
+            MAIN.addNotif("Server Error", "Something went wrong while creating a new shelf.", "r");
+        })
         
-        // add new shelf here
+        
     });
     
     MODAL.open();
@@ -548,7 +560,7 @@ function remove_logo(root) {
 }
 
 // Patrick
-async function fetch_data(url, method = null, callback = null) {
+async function fetch_data(url, method = null) {
     let data = await fetch(url, method);
     data = await data.json();
     

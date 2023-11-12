@@ -16,6 +16,7 @@ $route['logs']= "Page/user_logs";
 
 
 // API
+$route['student/record/insert/excel']['post'] = 'Student/addExcel';
 $route['student/record/insert']['post'] = 'Student/addRecord';
 $route['student/record/update']['post'] = 'Student/update_Student_Records';
 $route['student/record/all']['post'] = 'Student/get_StudentRecords_With_Remarks';
@@ -45,6 +46,9 @@ $route['user/update']['post'] = 'User/update';
 $route['user/all/encodes']['post'] = 'User/total_Encoded_By_Users';
 $route['user/monthly/encodes']['post'] = 'User/monthly_Encoded_By_Users';
 $route['user/logs'] = 'User/get_User_Logs';
+
+// Shelf
+$route['shelves/insert']['post'] = 'Shelves/add_Shelf';
 
 // DEFAULT
 $route['404_override'] = '';
