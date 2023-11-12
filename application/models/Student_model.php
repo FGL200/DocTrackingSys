@@ -69,6 +69,10 @@ class Student_model extends CI_Model{
                     ON rm.stud_rec_id = sr.id
                 INNER JOIN `user` u
                     ON u.`id` = sr.`created_by_uid`
+                INNER JOIN `doc` d
+                    ON d.`stud_rec_id` = sr.`id`
+                INNER JOIN `shelves` sh
+                    ON sh.`id` = d.`shelf`
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
                 WHERE sr.deleted_flag = '0' {$cond}
@@ -330,6 +334,8 @@ class Student_model extends CI_Model{
         \r    ON `u`.id = `sr`.created_by_uid
         \rLEFT JOIN user `u2`
         \r    ON `u2`.id = `sr`.updated_by_uid
+        \rLEFT JOIN shelves `sh`
+        \r    ON `sh`.id = `d`.shelf
         \rWHERE $conditions AND `sr`.deleted_flag = '0'";
 
         $result = $this->db->query($sql);

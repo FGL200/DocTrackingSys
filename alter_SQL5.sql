@@ -7,8 +7,8 @@ SET
 CREATE TABLE `user_logs` (
     `created_by` INT(6),
     `created_date` DATETIME,
-    `activity` VARCHAR(100),
-    `detailed` VARCHAR(255),
+    `title` VARCHAR(100),
+    `details` TEXT,
     FOREIGN KEY (`created_by`) REFERENCES `user`(`id`)
 )
 ALTER TABLE `x_file` CHANGE `dt` `dt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;

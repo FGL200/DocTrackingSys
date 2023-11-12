@@ -4,11 +4,11 @@
         <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-1">
             <div class="dropdown">
                 <button class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-unlock"></i> Admin
+                    <i class="fa-solid fa-unlock"></i> Manage
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" onclick="loadTable('user/viewers')"><i class="fa-solid fa-user"></i> Viewers</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="loadTable('user/encoders')"><i class="fa-solid fa-user-pen"></i> Encoders</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="loadTable('user/viewers')"><i class="fa-solid fa-user"></i> Show Viewers</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="loadTable('user/encoders')"><i class="fa-solid fa-user-pen"></i> Show Encoders</a></li>
                     <li><a class="dropdown-item" href="#" onclick="loadTable('user/all')"><i class="fa-solid fa-users"></i> All Users</a></li>
                     <li class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" onclick="newUser()"><i class="fa-solid fa-user-plus"></i> New User</a></li>

@@ -15,6 +15,7 @@ class Page extends CI_Controller {
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
         $this->load->model("Student_model", "stud");
+        $this->load->model("Shelves_model", "shelves");
     }
 
     /**
@@ -62,13 +63,16 @@ class Page extends CI_Controller {
         $uid = $this->session->userdata('uid');
         $role = $this->session->userdata('role');
 
+        $shelves = $this->shelves->getShelvesAndInfo();
+        // var_dump($shelves); die;
         $data['header'] = [
             'title' => 'Dashboard',
             'uid' => $uid,
             'role' => $role,
             // 'hide_nav' => true,
             'constants' => ["role" => $role],
-            'css' => ["dashboard"]
+            'css' => ["dashboard"],
+            'shelves' => $shelves
         ];
         $data['footer'] = [
             'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile', 'termsAndCondition']
@@ -185,6 +189,14 @@ class Page extends CI_Controller {
 
     public function user_logs() {
 
-        $this->loadPage('user_logs');
+        $data['header'] = [
+            'title' => "Generate QR"
+        ];
+
+        $data['footer'] = [
+            'js' => ['user_logs', 'profile']
+        ];
+
+        $this->loadPage('user_logs', $data);
     }
 }

@@ -197,6 +197,9 @@ class User_model extends CI_Model
         return $result->row();
      }
 
+    public function get_User_Logs() {
+        return $this->db->query("SELECT * FROM `user_logs`")->result_array();
+    }
 
 
     /** PRIVATE FUNCTIONS */

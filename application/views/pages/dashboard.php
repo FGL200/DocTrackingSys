@@ -50,20 +50,21 @@
                 <div class="d-flex justify-content-center flex-wrap flex-grow-1 gap-3">
                     
                     <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
-                        <a href="<?= base_url('shelf/2020-2021') ?>" class="shelf-container card p-3 shadow-0">
-                            <!-- <section class="shelf-name">Shelf</section> -->
-                            <section class="shelf-title fs-4">
-                                <i class="fa-solid fa-bars-staggered"></i>
-                                2020-2021
-                            </section>
-                            <section class="shelf-body d-flex flex-column">
-                                <span><b>Records: </b> <span>1006</span> </span>
-                                <span><b>Encoders:</b> <span>11</span></span>
-                                <span><b>Last update: </b> <span>10/20/2023</span></span>
-                            </section>
-                        </a>
-
-
+                        <?php foreach($shelves as $shelf) {?>
+                            <a href="<?= base_url('shelf/'.$shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
+                                <!-- <section class="shelf-name">Shelf</section> -->
+                                <section class="shelf-title fs-4">
+                                    <i class="fa-solid fa-bars-staggered"></i>
+                                    <?=$shelf['name'];?>
+                                </section>
+                                <section class="shelf-body d-flex flex-column">
+                                    <span><b>Records: </b> <span><?=$shelf['total'] ?? '--';?></span> </span>
+                                    <span><b>Encoders:</b> <span><?=$shelf['users'] ?? '--'; ?></span></span>
+                                    <span><b>Last update: </b> <span><?=$shelf['last date'] ?? '--';?></span></span>
+                                </section>
+                            </a>
+                        <?php } ?>    
+    
                         <?php if ($role === 'A') { ?>
                             <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
                                 <section class="shelf-title fs-4">
