@@ -47,9 +47,9 @@
         </div>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="shelf" role="tabpanel" aria-labelledby="shelves-tab" tabindex="0">
-                <div class="d-flex justify-content-center flex-wrap flex-grow-1 gap-3">
+                <div id="shelf-tab-container" class="d-flex flex-wrap justify-content-center align-items-start flex-grow-1 gap-3">
                     
-                    <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
+                    <div id="shelf-holder" class="d-flex flex-wrap justify-content-center gap-3 flex-grow-1" style="max-width: 50vw;">
                         <?php foreach($shelves as $shelf) {?>
                             <a href="<?= base_url('shelf/'.$shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
                                 <!-- <section class="shelf-name">Shelf</section> -->
@@ -64,31 +64,35 @@
                                 </section>
                             </a>
                         <?php } ?>    
-    
-                        <?php if ($role === 'A') { ?>
-                            <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
-                                <section class="shelf-title fs-4">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                    Trash bin
-                                </section>
-                                <section class="shelf-body d-flex flex-column">
-                                    <span><b>Records: </b><span>4</span></span>
-                                </section>
-                            </a>
-
-                            <a href="#" onclick="newShelf()" class="shelf-container shelf-new card p-3 shadow-0">
-                                <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span class="fs-4"><span>Add Shelf</span></span>
-                                </section>
-                            </a>
-                        <?php } ?>
                     </div>
 
-                    <div class="flex-grow-1"></div>
+                    <div id="calendar-holder" class="d-flex flex-column gap-2" style="min-width: 300px;">
+                        <?php if ($role === 'A') { ?>
+                            <a href="#" onclick="newShelf()" class="shelf-container shelf-new card shadow-0">
+                                <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span class="fs-4">Add Shelf</span>
+                                </section>
+                            </a>
 
-                    <!-- jsCalendar -->
-                    <div class="auto-jsCalendar shadow-0 card align-self-start"></div>
+                            <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card shadow-0">
+                                <!-- <section class="shelf-title fs-4">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                    Trash bin
+                                </section> -->
+                                <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                    <span class="fs-4"> Trash bin</span>
+                                </section>
+                                <span id="trash-count">
+                                    11
+                                </span>
+                            </a>
+                        <?php } ?>
+                        <!-- jsCalendar -->
+                        <div class="auto-jsCalendar"></div>
+                    </div>
+
                 </div>
             </div>
             <?php if ($role === 'A') { ?>
@@ -98,17 +102,17 @@
                             <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                            <section id="bar-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Live update of encoders</span>
                                 <div id="encoded-live" style="min-width: 300px;"></div>
                             </section>
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                            <section id="pie-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Overall student records</span>
                                 <div id="remarks-pie" style="min-width: 300px;"></div>
                             </section>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                            <section id="line-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Monthly encoded</span>
                                 <div id="encoded-monthly" style="min-width: 300px; min-height: 450px;"></div>
                             </section>

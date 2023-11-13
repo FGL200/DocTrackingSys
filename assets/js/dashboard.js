@@ -37,30 +37,30 @@ async function setupEncoded_monthly() {
     
 
 
-    let date = new Date();
-    date.setHours(0, 0, 0, 0);
-    let value = 100;
+    // let date = new Date();
+    // date.setHours(0, 0, 0, 0);
+    // let value = 100;
 
-    function generateData() {
-        value = Math.round((Math.random() * 10 - 4.2) + value);
-        am5.time.add(date, "month", 1);
-        am5.time.add(date, "month", 1);
-        return {
-            date: date.getTime(),
-            value: value
-        };
-    }
+    // function generateData() {
+    //     value = Math.round((Math.random() * 10 - 4.2) + value);
+    //     am5.time.add(date, "month", 1);
+    //     am5.time.add(date, "month", 1);
+    //     return {
+    //         date: date.getTime(),
+    //         value: value
+    //     };
+    // }
 
-    function generateDatas(count) {
-        let data = [];
-        for (let i = 0; i < count; ++i) {
-            data.push(generateData());
-        }
-        return data;
-    }
+    // function generateDatas(count) {
+    //     let data = [];
+    //     for (let i = 0; i < count; ++i) {
+    //         data.push(generateData());
+    //     }
+    //     return data;
+    // }
     // Edit by patrick
 
-    const months = [] // months that has number of encodes.
+    // const months = [] // months that has number of encodes.
 
     const encoders = [];
     const dates = []; // dates that encoded by user.
@@ -73,7 +73,7 @@ async function setupEncoded_monthly() {
         if(!dates[encoders.indexOf(user.uname)]) dates[encoders.indexOf(user.uname)] = [d];
         else dates[encoders.indexOf(user.uname)].push(d);
         
-        if(!months.includes(new Date(user.date).getMonth())) months.push(new Date(user.date).getMonth());
+        // if(!months.includes(new Date(user.date).getMonth())) months.push(new Date(user.date).getMonth());
         if(dates[encoders.indexOf(user.uname)].length > 1) dates[encoders.indexOf(user.uname)].sort((a,b)=>a.date-b.date); // sort the dates encoded by user
 
     }
@@ -525,6 +525,7 @@ $(window).on("load", function (e) {
             await setupRemarks_pie();
         }
     });
+    
 });
 
 function newShelf() {
@@ -568,7 +569,44 @@ async function fetch_data(url, method = null) {
 }
 
 function generateReport() {
-    window.print()
+
+    function asOneImage(imgs, width = 100, height = 100, title = "", footer = "") {
+        if(imgs.length !== 2) return "INVALID";
+        const newImages = imgs.map(e => $(e).css({ "position":"absolute", "top":"0", "left":"0", "width":width, "height":height }) );
+        return  $(`<div class="card gap-2 p-3"></div>`)
+                .append(
+                    $(`<div>${title}</div>`), 
+                    $(`<div style="position: relative;"></div>`).append(newImages[0], newImages[1]).css({ "width":width, "height":height }), 
+                    $(`<div>${footer}</div>`)
+                );
+    }
+
+    const header = `<head> <link rel="stylesheet" href="${base_url}assets/third_party/bootstrap/css/bootstrap.min.css"> </head>`;
+    const footer = ` <script src="${base_url}assets/third_party/bootstrap/js/bootstrap.bundle.min.js"></script><script>window.print()</script>`;
+    const mainContainer = $(`<div class="d-flex flex-column align-items-center flex-grow-1 gap-2"></div>`).css("margin-top", "5rem");
+    
+    let imgBarGraph = [];
+    let imgPieGraph = [];
+    let imgLineGraph = [];
+    
+    const barGraph = document.querySelectorAll("#bar-graph-section canvas");
+    const pieGraph = document.querySelectorAll("#pie-graph-section canvas");
+    const lineGraph = document.querySelectorAll("#line-graph-section canvas");
+
+    barGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgBarGraph.push(img); });
+    pieGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgPieGraph.push(img); });
+    lineGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgLineGraph.push(img); });
+
+    mainContainer.append(asOneImage(imgBarGraph, 600 , 200, "Live update of encoders"));
+    mainContainer.append(asOneImage(imgPieGraph, 600, 200, "Overall student records"));
+    mainContainer.append(asOneImage(imgLineGraph, 600, 200, "Monthly encoded"));
+    
+    const reportTab = window.open('about:blank', '_blank');
+    reportTab.document.write(
+        header + 
+        $(`<div></div>`).append(mainContainer).html() + 
+        footer
+    );
 }
 
 // $("#statistics-tab").on("click", ()=>{
