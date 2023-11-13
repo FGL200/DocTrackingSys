@@ -215,6 +215,7 @@ class User extends CI_Controller{
     }
 
     
+
     // PRIVATE FUNCTIONS 
 
     private function __change_User_To_Proper_Format__(Array $data) {

@@ -1,10 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Student extends CI_Controller{
-
-    private $student_docs = array('regi_form', 'good_moral', 'j_f137','s_f137', 'f138', 'birth_cert', 'tor', 'app_grad', 'cert_of_complete', 'req_clearance_form', 'req_credentials', 'hd_or_cert_of_trans');
-    
+class Student extends CI_Controller{    
     public function __construct()
     {
         
@@ -14,6 +11,7 @@ class Student extends CI_Controller{
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
         $this->load->model("excel_model", 'excel');
+        $this->load->model("shelves_model", "shelves");
         /** File uploder helper */
         // $this->load->helper(array("form", "url"));
 
@@ -27,10 +25,14 @@ class Student extends CI_Controller{
         $id = 0;
         
         $created_by_uid = $this->session->userdata('uid');
+        $shelfid = $this->shelves->getShelfId($this->input->post('shelf'));
+
         $filename = $this->input->post("filename");
         
         if(!$this->excel->isFileExisted($filename)) {
             $this->db->trans_begin();
+
+            $total_inserted = 0; // will store how many data has been added  to database from the uploaded excel
 
             $excel_query = "`name` = '{$filename}', `uploaded_by` = '{$created_by_uid}'";
             $excel_id = $this->excel->addFile($excel_query);
@@ -46,20 +48,22 @@ class Student extends CI_Controller{
     
                 $student_id = "`stud_rec_id` = {$id}, ";
     
-                $doc = $student_id . $students[$i][1];
-    
+                $doc = $student_id . $students[$i][1] . ", `shelf` = '{$shelfid}'";
+                
                 $this->stud->addStudentDoc($doc);
                 
                 $remarks = " `value`='[]', `stud_rec_id` = '{$id}'";
                 $this->rm->insertRemarks($remarks);
+
+                $total_inserted+=1;
             }
     
             
     
             if($this->db->error()['code'] > 0)  echo json_encode(['status'=>'error', 'message'=>$this->db->error()['message']]);
-            else { echo json_encode(['status'=>'success', 'message'=>'Records inserted successfully']); $this->db->trans_commit();}
+            else { echo json_encode(['status'=>'success', 'message'=> "<b>{$total_inserted}</b> records inserted successfully"]); $this->db->trans_commit();}
         } else {
-            echo json_encode(['status'=>'error', 'message'=>'File is already existed.. Please rename the file.']);
+            echo json_encode(['status'=>'error', 'message'=>'<b>File is already existed..</b> Please rename the file.']);
         }
 
         
@@ -138,7 +142,7 @@ class Student extends CI_Controller{
         }
 
         $created_by_uid = $this->session->userdata('uid') ?? '1' ; //  user id for encoding
-
+        
         $data .=  ", `created_by_uid` = '{$created_by_uid}'";
 
         $this->db->trans_begin();
@@ -199,9 +203,11 @@ class Student extends CI_Controller{
 
         
         $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
-
-        $data .= "`stud_rec_id` = '{$student_id}'";
-    
+        
+        $shelfname = $this->input->post("shelf");
+        $shelfid = $this->shelves->getShelfId($shelfname);
+        
+        $data .= "`stud_rec_id` = '{$student_id}', `shelf` = '{$shelfid}'";
         $this->stud->addStudentDoc($data);
     
 
@@ -251,8 +257,9 @@ class Student extends CI_Controller{
      */
     public function get_StudentRecords_With_Remarks() {
         $uid = $this->input->post("uid");
+        $shelf = $this->input->post("shelf");
 
-        $result = $this->stud->get_StudentRecords_With_Remarks($uid);
+        $result = $this->stud->get_StudentRecords_With_Remarks($uid, " AND `sh`.name='{$shelf}'");
         $nData = $this->to_Id_Link_Student_Record($result);
         $nData = $this->count_remarks($nData);
         $nData = $this->to_grouped_style($nData);
@@ -503,7 +510,7 @@ class Student extends CI_Controller{
                 array_push($columns, "`sr`.$colname LIKE '%{$val}%'");
             }
 
-            if(strstr($k, "encoder")) {
+            if(strstr($k, "enocoder")) {
                 $arr = explode("_", $nKey);
                 $colname = $arr[count($arr) - 1];
 
@@ -524,7 +531,10 @@ class Student extends CI_Controller{
         $nColumns = count($columns) > 0 ?  implode(" AND \n", $columns) : null;
         $nRemarks = count($remarksColumns) > 0 ? implode(" OR \n", $remarksColumns) : null;
 
-        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks;
+        $shelfid = $this->shelves->getShelfId($this->input->post('shelf'));
+        if(!$shelfid) {echo json_encode(['result'=>["status" => "error", 'message' => "Error in searching..."]]); die; }
+
+        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks . " AND `sh`.id = '{$shelfid}'";
         
         $result = $this->stud->filter_student($conditions);
 
@@ -541,7 +551,7 @@ class Student extends CI_Controller{
         
         $cond = null; // condition for the query
         $order = null; // order by 
-
+        $uid = $this->session->userdata("uid");
         
         if($this->input->post("from") && $this->input->post("to")) { // for generating a qr based on first letter of the last name
             $from = $this->input->post("from") ;
@@ -559,7 +569,7 @@ class Student extends CI_Controller{
             $cond = " AND `sr`.id IN ({$ids})";
         }
         
-        $data = $this->stud->get_StudentRecords_With_Remarks($cond, $order);
+        $data = $this->stud->get_StudentRecords_With_Remarks($uid, $cond, $order);
         
         echo json_encode(["data" => $data]);
 

@@ -95,6 +95,7 @@ const RECORD = {
                 // get values
                 const form = new FormData(document.getElementById("modal-container"));
                 form.append("remarks", RECORD.NEW.__remarksValue__);
+                form.append("shelf", CONST_SHELF_NAME);
 
                 // insert data (invoke fetch)base_url + 
                 form.forEach((val, key)=>{

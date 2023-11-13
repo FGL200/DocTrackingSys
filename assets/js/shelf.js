@@ -55,6 +55,7 @@ const HOME = {
                 } else {
                     // ADD SEARCH METHOD HERE!
                     const form = new FormData();
+                    form.append("shelf", CONST_SHELF_NAME);
                     const inputs_values = $("#search-filter-holder > span > span:last-of-type");
 
                     for(let i = 0; i < inputs_values.length ; i++) {
@@ -98,7 +99,7 @@ const HOME = {
                     <select id="search-filter" class="form-control" onchange="HOME.SEARCH.addFilter(this)">
                         <option data-id="0" value="0_VALUE" selected disabled>--Select Filter--</option>
                         <option data-id="1" value="1_Student">Student</option>
-                        <option data-id="2" value="2_Enocoder">Enocoder</option>
+                        <option data-id="2" value="2_Encoder">Encoder</option>
                         <option data-id="3" value="3_Remarks">Remarks</option>
                     </select>
                 </div>
@@ -157,7 +158,7 @@ const HOME = {
                         <input id="filter-student-lname" type="text" class="form-control" placeholder="Last Name">
                         <input id="filter-student-sfx" type="text" class="form-control" placeholder="SFX">
                     `;
-                } else if (rawFilterName == "Enocoder") {
+                } else if (rawFilterName == "Encoder") {
                     body.innerHTML = `
                         <input id="filter-enocoder-id" type="text" class="form-control" placeholder="User ID">
                         <input id="filter-enocoder-uname" type="text" class="form-control" placeholder="User Name">
@@ -332,6 +333,7 @@ const HOME = {
                 
                 let form = new FormData();
                 form.append("filename", file.name);
+                form.append("shelf", CONST_SHELF_NAME);
                 form.append("students", JSON.stringify(queries));
 
                 fetch(base_url + "student/record/insert/excel", {
@@ -505,7 +507,7 @@ const HOME = {
 function loadTable() {
     const form = new FormData();
     form.append("uid", CONST_UID);
-
+    if(CONST_SHELF_NAME !== "trash") form.append("shelf", CONST_SHELF_NAME);
     HOME.DASHBOARD.load_dashboard_table(
         CONST_SHELF_NAME === 'trash' ? 'student/record/trash' :
         'student/record/all'
@@ -524,7 +526,7 @@ $(window).on('load', loadTable);
 const LOAD_REMARKS_ON_ID = async (element_id) => {
     await fetch(base_url + 'api/categories')
         .then(response => response.json())
-        .then(categories => {
+        .then(categories => {       
             let categs = `<option value="" disabled selected>--Select Remarks--</option>`;
             for (i in categories) categs += `<option value="${categories[i]}">${categories[i]}</option>`;
             $("#" + element_id).html(categs);
