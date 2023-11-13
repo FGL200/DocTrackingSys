@@ -72,7 +72,7 @@
                                     Trash bin
                                 </section>
                                 <section class="shelf-body d-flex flex-column">
-                                    <span><b>Records: </b><span>4</span></span>
+                                    <span><b>Records: </b><span><?= $bin_records ?></span></span>
                                 </section>
                             </a>
 

@@ -64,7 +64,8 @@ class Page extends CI_Controller {
         $role = $this->session->userdata('role');
 
         $shelves = $this->shelves->getShelvesAndInfo();
-        // var_dump($shelves); die;
+        $total_records_in_bin = count($this->stud->get_stud_rec_trashBin($uid)) ?? 0;
+        
         $data['header'] = [
             'title' => 'Dashboard',
             'uid' => $uid,
@@ -72,7 +73,8 @@ class Page extends CI_Controller {
             // 'hide_nav' => true,
             'constants' => ["role" => $role],
             'css' => ["dashboard"],
-            'shelves' => $shelves
+            'shelves' => $shelves,
+            'bin_records' => $total_records_in_bin
         ];
         $data['footer'] = [
             'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile', 'termsAndCondition']
