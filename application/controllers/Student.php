@@ -383,40 +383,6 @@ class Student extends CI_Controller{
         /** Update `doc` table  */
         $doc_set = ""; // sql statement
         $docs_set = []; // columns to be updated
-        
-        // foreach($this->student_docs as $doc) {
-
-        //     if($this->input->post("doc_val_" . $doc)) $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
-        //     else { 
-        //         $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"\"}'";
-        //         continue;
-        //     }
-
-        //     if($this->input->post("doc_scan_" . $doc)) $docs_set[$doc] .= $this->input->post("doc_scan_" . $doc)."\"}'";
-
-        //     if(isset($_FILES['doc_scan_' . $doc])) {
-
-        //         for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-        //             if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
-        //                 $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
-        //             }
-        //             if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
-                    
-        //         }
-        //         $docs_set[$doc] .= "\"}'";
-        //     }
-            
-
-        //     $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-        //     if($old_path) { 
-        //         /** convert the old_path to array */
-        //         $dirs = explode(",", $old_path);
-
-        //         /** delete each dir */
-        //         foreach($dirs as $dir) $this->delete_Image($dir); 
-        //     }
-            
-        // }
 
         // Get all keys that has `doc_val_`
         $doc_keys = array_filter($this->input->post(), function($key){
@@ -461,11 +427,11 @@ class Student extends CI_Controller{
         // die;
        if(count($docs_set) > 0) {
             $doc_set =  implode(",", array_values($docs_set)) ;
-            
             $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
-            $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
-        /** End Update `doc` table  */
-       }
+            /** End Update `doc` table  */
+        }
+        
+        $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
        
 
         
