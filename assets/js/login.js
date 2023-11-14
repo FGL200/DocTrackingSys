@@ -2,6 +2,21 @@ const LOGIN = {
     login : async function(e) {
         e.preventDefault();
         const form = new FormData(document.getElementById("login-form"));
+        const previousUsername = window.sessionStorage.getItem("username") ?? "";
+        const blocked = JSON.parse(window.sessionStorage.getItem("blocked") ?? "[]");
+
+        if(previousUsername !== form.get("username")) window.sessionStorage.removeItem("failedCount");
+
+        let failedCount = window.sessionStorage.getItem("failedCount") ?? '0';
+        console.log({failedCount, blocked});
+
+        if(failedCount >= 3 || blocked.includes(form.get("username"))) {
+            MAIN.addNotif("Account Blocked", "This account is blocked. Try again later.", "r");
+            if(!blocked.includes(form.get("username"))) blocked.push(form.get("username"));
+            window.sessionStorage.setItem("blocked", JSON.stringify(blocked));
+            return;
+        }
+
         await fetch(base_url + 'user/login', {
             method : 'post',
             body : form
@@ -9,10 +24,20 @@ const LOGIN = {
         .then(response => response.json())
         .then(result => {
             if(!result.result){
+
+                window.sessionStorage.setItem("failedCount", (previousUsername === form.get("username")) ? ++failedCount : '1');
+
+                window.sessionStorage.setItem("username", form.get("username"));
+
                 MAIN.addNotif("Login failed", "Incorrect username or password", "r");
                 return;
-            }else
+            }else{
+                window.sessionStorage.removeItem("failedCount");
+                window.sessionStorage.removeItem("username");
+
+                
                 window.location.href = base_url + 'dashboard';
+            }
         })
         .catch(err=>{
             console.log(err);
@@ -33,7 +58,6 @@ async function termsAndCondition() {
             buttons : ["Close"]
         }, function(ans){
             if(!ans) return;
-            window.localStorage
             // gawing true ung agree
             agree = true;
     

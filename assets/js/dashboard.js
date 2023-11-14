@@ -568,20 +568,91 @@ async function fetch_data(url, method = null) {
 }
 
 function generateReport() {
-    window.print()
+
+    function asOneImage(imgs, width = 100, height = 100, title = "", footer = "") {
+        if(imgs.length !== 2) return "INVALID";
+        const newImages = imgs.map(e => $(e).css({ "position":"absolute", "top":"0", "left":"0", "width":width, "height":height }) );
+        return  $(`<div class="card gap-2 p-3"></div>`)
+                .append(
+                    $(`<div>${title}</div>`), 
+                    $(`<div style="position: relative;"></div>`).append(newImages[0], newImages[1]).css({ "width":width, "height":height }), 
+                    $(`<div>${footer}</div>`)
+                );
+    }
+
+    const header = `<head> <link rel="stylesheet" href="${base_url}assets/third_party/bootstrap/css/bootstrap.min.css"> </head>`;
+    const footer = ` <script src="${base_url}assets/third_party/bootstrap/js/bootstrap.bundle.min.js"></script><script>window.print(); window.close()</script>`;
+    const mainContainer = $(`<div class="d-flex flex-column align-items-center flex-grow-1 gap-2"></div>`).css("margin-top", "5rem");
+    
+    let imgBarGraph = [];
+    let imgPieGraph = [];
+    let imgLineGraph = [];
+    
+    const barGraph = document.querySelectorAll("#bar-graph-section canvas");
+    const pieGraph = document.querySelectorAll("#pie-graph-section canvas");
+    const lineGraph = document.querySelectorAll("#line-graph-section canvas");
+
+    barGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgBarGraph.push(img); });
+    pieGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgPieGraph.push(img); });
+    lineGraph.forEach(e => { const img = new Image(); img.src = e.toDataURL(); imgLineGraph.push(img); });
+
+    mainContainer.append($(`<div>Report generated on ${(new Date()).toLocaleDateString()}</div>`));
+    mainContainer.append(asOneImage(imgBarGraph, 600 , 200, `Daily update`));
+    mainContainer.append(asOneImage(imgPieGraph, 600, 200, "Overall student records"));
+    mainContainer.append(asOneImage(imgLineGraph, 600, 200, "Monthly encoded"));
+    
+    const reportTab = window.open('about:blank', '_blank');
+    reportTab.document.write(
+        header + 
+        $(`<div></div>`).append(mainContainer).html() + 
+        footer
+    );
 }
 
-// $("#statistics-tab").on("click", ()=>{
-//     am5WaterMarkRemover(["encoded-live", "remarks-pie", "encoded-monthly"]);
-// })
+let settingSelectedShelf = "";
 
-// function am5WaterMarkRemover(ids = []) {
-//     $("div.am5-html-container").remove();
-//     $("div.am5-reader-container").remove();
-//     $("div.am5-focus-container").remove();
-//     $("div.am5-tooltip-container").remove();
+function openSettings(x, y, name) {
+    settingSelectedShelf = name.replace(/^\s+|\s+$/gm,'').trim();
+    if(x + 300 > $(window).width()) x -= 200;
+    $("#settings-shlef-name").text(name);
+    $("#settings").removeClass("hide");
+    $("#settings").css({top:y, left:x})
+}
 
-//     for(let id of ids) {
-//         const tip = $(`#${id} > div > div > div`).children()[1].remove();
-//     }
-// }
+function hideSettings(e) {
+    if(!document.getElementById("settings").contains(e.target)) $("#settings").addClass("hide");
+}
+
+$(".shelf-container ").on("contextmenu", function(e){
+    e.preventDefault();
+    if($(this).hasClass("shelf-trash") || $(this).hasClass("shelf-new")) return;
+    openSettings(e.clientX, e.clientY, $(this).find("span.shelf-name").text())
+});
+
+$(window).on("click", hideSettings);
+
+
+
+
+
+function s_Open(elem) {
+    window.location.href = `${base_url}/shelf/${settingSelectedShelf}`;
+    $("#settings").addClass("hide");
+}
+
+function s_NTab(elem) {
+    window.open(`${base_url}/shelf/${settingSelectedShelf}`, '_blank');
+    $("#settings").addClass("hide");
+}
+
+function s_RName(elem) {
+    $("#settings").addClass("hide");
+}
+
+function s_Tash(elem) {
+    $("#settings").addClass("hide");
+}
+
+function s_Del(elem) {
+    $("#settings").addClass("hide");
+}

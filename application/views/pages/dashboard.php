@@ -53,9 +53,16 @@
                         <?php foreach($shelves as $shelf) {?>
                             <a href="<?= base_url('shelf/'.$shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
                                 <!-- <section class="shelf-name">Shelf</section> -->
-                                <section class="shelf-title fs-4">
-                                    <i class="fa-solid fa-bars-staggered"></i>
-                                    <?=$shelf['name'];?>
+                                <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
+                                    <span>
+                                        <i class="fa-solid fa-bars-staggered"></i>
+                                    </span>
+                                    <span class="shelf-name flex-grow-1">
+                                        <?=strtoupper($shelf['name']);?>
+                                    </span>
+                                    <!-- <button onclick="newShelf()" class="shlef-opt">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button> -->
                                 </section>
                                 <section class="shelf-body d-flex flex-column">
                                     <span><b>Records: </b> <span><?=$shelf['total'] ?? '--';?></span> </span>
@@ -98,17 +105,17 @@
                             <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
-                                <span class="chart-title fw-bold">Live update of encoders</span>
+                            <section id="bar-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                                <span class="chart-title fw-bold">Daily update</span>
                                 <div id="encoded-live" style="min-width: 300px;"></div>
                             </section>
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                            <section id="pie-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Overall student records</span>
                                 <div id="remarks-pie" style="min-width: 300px;"></div>
                             </section>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <section class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
+                            <section id="line-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
                                 <span class="chart-title fw-bold">Monthly encoded</span>
                                 <div id="encoded-monthly" style="min-width: 300px; min-height: 450px;"></div>
                             </section>
@@ -124,6 +131,14 @@
 
             <?php } ?>
         </div>
+    </div>
+    <div id="settings" class="hide">
+        <section class="fw-bold mb-2" style="border-bottom: 1px solid rgba(0,0,0,0.05);"><span></span> <div id="settings-shlef-name" style="white-space: nowrap;">Name of Shelf</div></section>
+        <button onclick="s_Open(this)" class="text-primary"><span><i class="fa-solid fa-folder-open"></i></span> Open</button>
+        <button onclick="s_NTab(this)" class="text-primary"><span><i class="fa-solid fa-up-right-from-square"></i></span> Open in new tab</button>
+        <button onclick="s_RName(this)" class="text-warning"><span><i class="fa-solid fa-pen-to-square"></i></span> Rename shelf</button>
+        <button onclick="s_Tash(this)" class="text-danger"><span><i class="fa-solid fa-trash-can"></i></span> Move Records to Trash</button>
+        <button onclick="s_Del(this)" class="text-danger"><span><i class="fa-solid fa-square-minus"></i></span> Delete shelf</button>
     </div>
 </main>
 
