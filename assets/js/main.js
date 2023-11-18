@@ -128,3 +128,10 @@ const DELAY_FUNCTION = (callBack = null, seconds = 3) => {
     if(!callBack) return;
     const INTERVAL = setInterval(() => { callBack(); clearInterval(INTERVAL); }, seconds * 1000);
 }
+
+function getURLParams() {
+    const searchParams = new URLSearchParams(window.location.search);
+    let param = {};
+    searchParams.forEach((v, i)=>{ param[i] = v; });
+    return param;
+}

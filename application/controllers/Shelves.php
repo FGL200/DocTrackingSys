@@ -22,6 +22,9 @@ class Shelves extends CI_Controller {
         else echo json_encode(['status'=>'error', 'message'=>$this->db->error()['message']]);
     }
 
+    public function getAll() {
+        echo json_encode($this->shelves->getAll());
+    }
 
 }
 

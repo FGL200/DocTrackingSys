@@ -55,13 +55,13 @@ class User extends CI_Controller{
         
                 // if($result) $this->get_user($this->input->post("uid"));
 
-                //Add to user_logs
-                add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
-                    UPDATE user_info `ui`
-                    INNER JOIN `user` `u`
-                        ON `u`.`id` = `ui`.`user_id`
-                    SET {$data}
-                ");
+                //Add to user_logs  || OKAY NA TO
+                // add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
+                //     UPDATE user_info `ui`
+                //     INNER JOIN `user` `u`
+                //         ON `u`.`id` = `ui`.`user_id`
+                //     SET {$data}
+                // ");
 
                 if($result)$this->get_user(); //FRED
                 else echo json_encode(['status' =>  "error", 'message' =>  "Error in saving profile"]); die;
@@ -75,11 +75,11 @@ class User extends CI_Controller{
                     $data = "`u`.`pword` = PASSWORD('default')";
                     $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
 
-                    //Add to user_logs
-                    add_To_User_Logs($this, $uid, "($uid) Reset password of {$uname}", "
-                        UPDATE `user` `u`
-                        SET {$data}
-                    ");
+                    //Add to user_logs || OKAY NA TO
+                    // add_To_User_Logs($this, $uid, "($uid) Reset password of {$uname}", "
+                    //     UPDATE `user` `u`
+                    //     SET {$data}
+                    // ");
 
                     // echo $data; die;
                     echo json_encode(["response" => $this->user->update_user($data)]);
@@ -89,15 +89,18 @@ class User extends CI_Controller{
                     $uid = $this->input->post("uid");
                     $uname = $this->input->post("uname");
                     $active = $this->input->post("active") ? "1" : "0";
+                    $role = $this->input->post("role");
 
-                    $data = "`u`.`active` = '$active'";
+
+                    $data = "`u`.`active` = '$active',";
+                    $data .= "`u`.`role` = '$role'";
                     $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
 
-                    //Add to user_logs
-                    add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
-                        UPDATE `user` `u`
-                        SET {$data}
-                    ");
+                    //Add to user_logs || OKAY NA TO
+                    // add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
+                    //     UPDATE `user` `u`
+                    //     SET {$data}
+                    // ");
 
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
@@ -150,11 +153,11 @@ class User extends CI_Controller{
         $id = $this->user->insert_user_info($user_info_table_data);
 
         //Add to user_logs
-        // NEED FIX : Walang uid, hindi alam cno nag create
-        add_To_User_Logs($this, 1, "(1) Added new user {$id}", "
-            UPDATE `user` `u`
-            SET {$user_info_table_data}
-        ");
+        // NEED FIX : Walang uid, hindi alam cno nag create || OKAY NA TO
+        // add_To_User_Logs($this, 1, "(1) Added new user {$id}", "
+        //     UPDATE `user` `u`
+        //     SET {$user_info_table_data}
+        // ");
         
         // -- end of transaction --
         if($this->db->trans_status() === TRUE) {
@@ -234,7 +237,7 @@ class User extends CI_Controller{
                 if($key === "Status"){
                     switch(intval($val)){
                         case 1 : $nRow["Status"] = "<span class='user-status user-active'> Active </span>"; break;
-                        case 0 : $nRow["Status"] = "<span class='user-status user-inactive'> Inactive </span>"; break;
+                        case 0 : $nRow["Status"] = "<span class='user-status user-inactive'> Deactivated </span>"; break;
                         default : break;
                     }
                 }

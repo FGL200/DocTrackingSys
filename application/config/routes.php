@@ -31,6 +31,7 @@ $route['student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$
 $route['student/filter']['post'] = 'Student/filter_search';
 $route['student/record/delete']['post'] = "Student/delete_Student";
 $route['api/categories'] = 'RemarkCategory/getCategories';
+$route['api/shelves'] = 'Shelves/getAll';
 
 
 // USER

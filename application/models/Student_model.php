@@ -17,7 +17,8 @@ class Student_model extends CI_Model{
      */
     public function add_student($data) {
         $query = "INSERT INTO `stud_rec` SET {$data}";
-    
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Added new Student record.", $query);
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
     }
@@ -28,7 +29,8 @@ class Student_model extends CI_Model{
     public function addStudentDoc($data) {
         $query = "INSERT INTO `doc` SET {$data}";
  
-
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Added new Student document record.", $query);
         // echo $query; die;
         $this->db->query($query);
     }

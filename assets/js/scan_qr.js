@@ -6,10 +6,12 @@ const DTS_QR = {
         value = JSON.parse(value);
         record_id = value["Record ID"];
 
-        window.open(`${base_url}record/${record_id}`);
+        DELAY_FUNCTION(()=>{
+            window.location.href = `${base_url}record/${record_id}?from=${CONST_SHELF_NAME}`;
+            DTS_QR.stopScanner();
+            MODAL.close();
+        }, 1);
 
-        DTS_QR.stopScanner();
-        MODAL.close();
     },
 
     audio: function () {

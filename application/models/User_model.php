@@ -9,8 +9,12 @@ class User_model extends CI_Model
     }
 
     public function insert_user($data)
-    {
-        $query = "INSERT INTO `user` SET {$data}";
+    {        
+        $query = "INSERT INTO `user` SET {$data}, `created_by`='{$uid}'";
+        
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Insert new user", $query);
+
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
     }
@@ -18,6 +22,8 @@ class User_model extends CI_Model
     public function insert_user_info($data)
     {
         $query = "INSERT INTO `user_info` SET {$data}";
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Insert new user information.", $query);
         $result = $this->db->query($query);
         return $result ? $this->db->insert_id() : false;
     }
@@ -30,6 +36,8 @@ class User_model extends CI_Model
                     ON `u`.`id` = `ui`.`user_id`
                 SET {$data}";
         // echo $sql; die;
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Update a user information.", $sql);
         $fetch = $this->db->query($sql);
         return $fetch ? true : false;
     }
@@ -39,8 +47,10 @@ class User_model extends CI_Model
     {   
         $sql = "UPDATE `user` `u`
                 SET {$data}";
-
+                
         // echo $sql; die;
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Update a user profile.", $sql);
         $fetch = $this->db->query($sql);
         return $fetch ? true : false;
     }

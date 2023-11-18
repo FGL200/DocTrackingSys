@@ -5,15 +5,22 @@ const VIEW_RECORD = {
      * Update / Delete data
      */
     onSubmit: function (e) {
-        let alert_content = (e.id === "update-record-btn") ? 
+        const recordAction = e.id;
+
+        let alert_content = (recordAction === "update-record-btn") ? 
         {
             title :  "Save changes",
             body : `Are you sure you want to <b>overwrite  #${CONST_RECORD_ID}</b> record?`,
             buttons : ["yes", "no"]
-        } :
+        } : (recordAction === "delete-record-btn") ?
         {
             title :  "Delete record",
             body : `Are you sure you want to <b>remove  #${CONST_RECORD_ID}</b> record?`,
+            buttons : ["yes", "no"]
+        } :
+        {
+            title :  "Move record",
+            body : `Are you sure you want to <b>move  #${CONST_RECORD_ID}</b> to another shelf?`,
             buttons : ["yes", "no"]
         };
         
@@ -24,7 +31,7 @@ const VIEW_RECORD = {
     
             const form = new FormData(document.getElementById("update-record-form"));
             
-            if(e.id === "update-record-btn") {
+            if(recordAction === "update-record-btn") {
                 action = "update";
 
                 form.append("remarks", VIEW_RECORD.__remarksValue__);
@@ -59,11 +66,16 @@ const VIEW_RECORD = {
                 })
                 
 
-            } else {
+            } else if (recordAction === "delete-record-btn") {
                 action = "delete";
     
                 $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Deleting...');
                 $("#delete-record-btn").prop("disabled", true);
+            }else {
+
+                // move shelf
+                console.log("Move shelf");
+
             }
             
             fetch(base_url + 'student/record/' + action, {
@@ -669,3 +681,22 @@ $(window).on("load", async function (e) {
     await loadRemarksCategories();
     await prepareStudentRecords();
 });
+
+$("#btn-go-back").on("click", function(e){
+
+    const param = getURLParams();
+    
+    if(!param.from) window.close();
+
+    MAIN.goto(`shelf/${param.from}`);
+})
+
+$("#move-btn").on("click", async function(){
+    MODAL.setTitle("Move shelf");
+    MODAL.setBody(``);
+    MODAL.setFooter(`
+        <button type="button" id="move-record-btn" class="btn btn-primary" onclick="VIEW_RECORD.onSubmit(this)">Move</button> 
+        <button type="button" onclick="MODAL.close()" class="btn btn-danger">Cancel</button>
+        `);
+    MODAL.open();
+})

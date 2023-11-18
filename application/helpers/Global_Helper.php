@@ -24,10 +24,11 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
     if (!$activity) return false;
     insert_slashes($title);
     insert_slashes($activity);
-    return $controller->db->query("INSERT INTO `user_logs` SET 
+    $query = "INSERT INTO `user_logs` SET 
         `title`='{$title}', 
         `details`='{$activity}',
         `created_by`='{$uid}',
         `created_date`=CURRENT_TIMESTAMP
-    ");
+    ";
+    return $controller->db->query($query);
 }

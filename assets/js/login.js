@@ -11,7 +11,7 @@ const LOGIN = {
         console.log({failedCount, blocked});
 
         if(failedCount >= 3 || blocked.includes(form.get("username"))) {
-            MAIN.addNotif("Account Blocked", "This account is blocked. Try again later.", "r");
+            MAIN.addNotif("Account Deactivated", "Too many tries. Account <b>Deactivated</b>. Try again later.", "r");
             if(!blocked.includes(form.get("username"))) blocked.push(form.get("username"));
             window.sessionStorage.setItem("blocked", JSON.stringify(blocked));
             return;

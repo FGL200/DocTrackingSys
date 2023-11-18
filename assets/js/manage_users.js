@@ -7,10 +7,10 @@ function toGender(gender) {
 }
 
 function toRole(role) {
-    return `<select name="" class="form-control">
-        <option value="N" ${ role=="A" ? "selected" : "" }>Admin</option>
-        <option value="M" ${ role=="E" ? "selected" : "" }>Encoder</option>
-        <option value="F" ${ role=="V" ? "selected" : "" }>Viewer</option>
+    return `<select name="role" class="form-control">
+        <option value="A" ${ role=="A" ? "selected" : "" }>Admin</option>
+        <option value="E" ${ role=="E" ? "selected" : "" }>Encoder</option>
+        <option value="V" ${ role=="V" ? "selected" : "" }>Viewer</option>
     </select>`;
 }
 
@@ -79,6 +79,7 @@ function showUser(user) {
             .then(data => {
                 MODAL.close();
                 MAIN.addNotif("Updated Successfully!!", "Status updated!", "g");
+                loadTable('user/all');
             })
             .catch(err => {
                 MODAL.close();
@@ -109,6 +110,7 @@ async function resetPass(uid, uname) {
         .then(data=>{
             MODAL.close();
             MAIN.addNotif("Password reset!!", "Password has been reset!", "g");
+            loadTable('user/all');
         })
         .catch(err=>{
             MODAL.close();
@@ -226,6 +228,7 @@ async function newUser() {
 
             MAIN.addNotif(notif.title, notif.message, notif.flag);
             MODAL.close();
+            loadTable('user/all');
         })
         .catch(err => {
             MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");

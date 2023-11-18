@@ -9,6 +9,8 @@ class Shelves_model extends CI_Model {
 
     public function addShelf($data) {
         $sql = "INSERT INTO `shelves` SET {$data}";
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Added new Shelf.", $sql);
         return $this->db->query($sql);
     }
 
@@ -71,6 +73,10 @@ class Shelves_model extends CI_Model {
 
         $query = $this->db->query($sql);
         return $query->result_array();
+    }
+
+    public function getAll() {
+        return $this->db->query("SELECT `id`, `name` FROM `shelves`")->result_array();
     }
 }
 ?>
