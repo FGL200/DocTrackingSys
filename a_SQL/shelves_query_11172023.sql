@@ -42,3 +42,5 @@ SELECT
     FROM `stud_rec`
     ORDER BY `updated_date` DESC LIMIT 1
 ) `latest`
+
+FROM `shelves`

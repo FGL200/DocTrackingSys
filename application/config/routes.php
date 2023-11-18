@@ -24,7 +24,7 @@ $route['student/record/(:num)'] = 'Student/get_Student_Records/$1';
 $route['student/record/select']['post'] = 'Student/get_all_stud_rec_as_select';
 $route['student/build_qr']['post'] = 'Student/build_qr';
 $route['student/record/trash']['post'] = 'Student/trashBin';
-
+$route['student/record/move']['post'] = 'Student/moveRecord';
 
 $route['student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';

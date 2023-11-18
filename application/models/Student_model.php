@@ -455,6 +455,28 @@ class Student_model extends CI_Model{
         return $fetch->result_array();
     }
 
+    public function shelfHistory($stud_rec_id) {
+        $sql = "SELECT 
+                    d.`shelf`,
+            	    d.`shelf_histories`
+                FROM doc `d` 
+                WHERE `d`.stud_rec_id = '{$stud_rec_id}'";
+
+        $fetch = $this->db->query($sql);
+        
+        return $fetch->result();
+    }
+
+    public function moveShelf($stud_rec_id, $shelf_id, $shelf_histories) {
+        $sql = "UPDATE doc `d`
+                    SET 
+                        `d`.shelf = '{$shelf_id}',
+                        `d`.shelf_histories = '{$shelf_histories}'
+                WHERE `d`.stud_rec_id = '{$stud_rec_id}' 
+        ";
+
+        return $this->db->query($sql);
+    }
 
     // PRIVATE FUNCTIONS //
 

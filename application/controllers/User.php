@@ -82,19 +82,54 @@ class User extends CI_Controller{
                     // ");
 
                     echo json_encode(["response" => $this->user->update_user($data)]);
+                    return;
                 }
 
                 if($this->input->post("action") == "set-active") {
+                    $user = "";
+                    $user_info = "";
+
+
                     $uid = $this->input->post("uid");
                     $uname = $this->input->post("uname");
-                    $active = $this->input->post("active") ? "1" : "0";
-                    $role = $this->input->post("role");
+                    $_POST['active'] = $this->input->post("active") ? "1" : "0";
+                
+                    foreach($this->input->post() as $key=>$val) {
+                        if($key == "action" || $key == "uid" || $key == "uname") continue;
 
+                        if($key != "active" && $key != "role") {
+                            if(!empty($user_info)) $user_info .= ",";
+                            $user_info .=  "`{$key}` = '{$val}'";
+                        } else {
+                            if(!empty($user)) $user .= ",";
+                            $user .=  "`{$key}` = '{$val}'";
+                        }
+                    }
+                    
+                    $user_info .= " WHERE `u`.`id` = '$uid'";                    
+                    $user .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
+                    
+                    $this->db->trans_begin();
+                    
+                    $this->user->update_user($user);
+                    $this->user->update_user_info($user_info);
 
-                    $data = "`u`.`active` = '$active',";
-                    $data .= "`u`.`role` = '$role'";
-                    $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
+                    if($this->db->trans_status()==TRUE) {
+                        $this->db->trans_commit();
+                        //Add to user_logs || OKAY NA TO
+                        // add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) UPDATED {$uname}", "
+                        //     UPDATE `user` `u`
+                        //     SET {$data}
+                        // ");
 
+                        echo json_encode(["response" => ['']]);
+                    } else {
+                        $this->db->trans_rollback();
+                        echo json_encode(['response' => ['error']]);
+                    }
+                    die;
+                    // echo $data;
+                    // die;
                     //Add to user_logs || OKAY NA TO
                     // add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
                     //     UPDATE `user` `u`
@@ -102,7 +137,7 @@ class User extends CI_Controller{
                     // ");
 
                     // echo $data; 
-                    echo json_encode(["response" => $this->user->update_user($data)]);
+
                 }
             break;
         }

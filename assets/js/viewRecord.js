@@ -74,7 +74,12 @@ const VIEW_RECORD = {
             }else {
 
                 // move shelf
-                console.log("Move shelf");
+                form.append("shelf", $("select#shelf").val());
+                form.forEach((val, key)=>{
+                    console.log({key, val})
+                })
+                action = "move";
+                // return;
 
             }
             
@@ -83,17 +88,19 @@ const VIEW_RECORD = {
                 body :  form
             })
             .then(respose=>respose.json())
-            .then((message)=>{
-                if(message.status === "success") {
+            .then((result)=>{
+                if(result.status === "success") {
                     DELAY_FUNCTION(()=>{
                         if(action === "update") {
                             MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} updated!`, "g");
                             $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
                             $("#update-record-btn").prop("disabled", false);
-                        } else {
+                        } else if(action === "delete") {
                             MAIN.addNotif("Success", `Record ${CONST_RECORD_ID} deleted!`, "g");
                             $("#delete-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Delete');
                             $("#delete-record-btn").prop("disabled", false);
+                        } else {
+                            MAIN.addNotif("Success", result.message, "g");
                         }
 
                         fetch(base_url + "student/record/" + $("input[name='stud_rec_id']").val())
@@ -117,11 +124,11 @@ const VIEW_RECORD = {
                         })
                     }, 1);
                 } else {
-                    const keys = Object.keys(message);
+                    const keys = Object.keys(result);
                     let html = "";
                     for(const k of keys) {
                         if(html.length > 0) html += "<br>";
-                        html += `<b>${k}:</b> ${message[k]}`
+                        html += `<b>${k}:</b> ${result[k]}`
                     }
                     MAIN.addNotif("Error occured!", html, "r");
                     $("#update-record-btn").html('<i class="fa-solid fa-floppy-disk"></i> Save');
@@ -696,7 +703,7 @@ $("#move-btn").on("click", async function(){
     
     console.log({shelves});
 
-    let sBody = `<select name="name" class="form-control" required>
+    let sBody = `<select id="shelf" name="name" class="form-control" required>
         <option value="" selected>-- Select Shelf--</option>
         `;
     for(const s of shelves){ sBody += `<option value="${s.id}" >${s.name}</option>` };

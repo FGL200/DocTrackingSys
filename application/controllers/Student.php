@@ -604,6 +604,30 @@ class Student extends CI_Controller{
         return $nRecord;
     }
 
+    public function moveRecord() {
+        $shelf_id = trim($this->input->post("shelf"));
+        $stud_record_id = trim(intval($this->input->post("stud_rec_id")));
+
+        $doc_shelves_history = $this->stud->shelfHistory($stud_record_id)[0];
+        $current_shelf = "'$doc_shelves_history->shelf'";
+
+
+        $histories = trim(preg_replace('/[\[\]]/i', "", $doc_shelves_history->shelf_histories), " \n\r\t\v\0");
+        $histories .= ',' . $current_shelf;
+        $histories = "[" . $histories . "]";
+        $histories = preg_replace('/\'/i', "\"", $histories);
+
+
+        /** shelf movement */
+        if($this->stud->moveShelf($stud_record_id, $shelf_id, $histories)) {
+            echo json_encode(['status'=>'success', 'message' => 'Record has been moved successfully!']);
+        }
+
+    
+
+        // echo $shelf_id . " " . $record_id;
+    }
+
 
     /**
      * Change the `Record ID` column to a link in `stud_rec` table

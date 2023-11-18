@@ -10,9 +10,9 @@ class User_model extends CI_Model
 
     public function insert_user($data)
     {        
+        $uid = $this->session->userdata('uid');
         $query = "INSERT INTO `user` SET {$data}, `created_by`='{$uid}'";
         
-        $uid = $this->session->userdata('uid');
         add_To_User_Logs($this, $uid, "({$uid}) Insert new user", $query);
 
         $result = $this->db->query($query);
