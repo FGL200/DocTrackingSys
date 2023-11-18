@@ -7,7 +7,7 @@ function toGender(gender) {
 }
 
 function toRole(role) {
-    return `<select name="" class="form-control">
+    return `<select name="role" class="form-control">
         <option value="N" ${ role=="A" ? "selected" : "" }>Admin</option>
         <option value="M" ${ role=="E" ? "selected" : "" }>Encoder</option>
         <option value="F" ${ role=="V" ? "selected" : "" }>Viewer</option>

@@ -81,7 +81,6 @@ class User extends CI_Controller{
                         SET {$data}
                     ");
 
-                    // echo $data; die;
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
 
@@ -89,16 +88,29 @@ class User extends CI_Controller{
                     $uid = $this->input->post("uid");
                     $uname = $this->input->post("uname");
                     $active = $this->input->post("active") ? "1" : "0";
+                    $role = $this->input->post("role");
 
-                    $data = "`u`.`active` = '$active'";
+                    switch($role) {
+                        case "N":
+                            $role = "A";
+                            break;
+                        case "M":
+                            $role = "E";
+                            break;
+                        case "F":
+                            $role = "V";
+                            break;  
+                    }
+                    $data = "`u`.`active` = '$active', `u`.`role` = '$role'";
                     $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
 
                     //Add to user_logs
-                    add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
+                     add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) ".($active == "1" ? "'activate'" : "'deactivate'" )." {$uname}", "
                         UPDATE `user` `u`
                         SET {$data}
                     ");
 
+                    // echo $data; 
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
             break;

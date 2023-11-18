@@ -128,3 +128,16 @@ const DELAY_FUNCTION = (callBack = null, seconds = 3) => {
     if(!callBack) return;
     const INTERVAL = setInterval(() => { callBack(); clearInterval(INTERVAL); }, seconds * 1000);
 }
+
+
+async function fetch_data(url, options = null) {
+    try {
+        const response = await fetch(url, {
+            method : options.method,
+            body : options.form
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
