@@ -17,6 +17,7 @@ class Login extends CI_Controller {
         $result = $this->user_->login_user($username, $password);
 
         if($result) {
+            $this->session->set_userdata(['agree' => '0']);
             $this->session->set_userdata($result);
             echo json_encode(["result"=>true]);
         }else

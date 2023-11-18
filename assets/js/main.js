@@ -135,3 +135,15 @@ function getURLParams() {
     searchParams.forEach((v, i)=>{ param[i] = v; });
     return param;
 }
+
+async function fetch_data(url, options = null) {
+    try {
+        const response = await fetch(url, {
+            method : options?.method,
+            body : options?.form
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}

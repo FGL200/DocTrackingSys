@@ -692,8 +692,18 @@ $("#btn-go-back").on("click", function(e){
 })
 
 $("#move-btn").on("click", async function(){
+    const shelves = await fetch_data(`${base_url}api/shelves`);
+    
+    console.log({shelves});
+
+    let sBody = `<select name="name" class="form-control" required>
+        <option value="" selected>-- Select Shelf--</option>
+        <option value="trash">Archive</option>
+        `;
+    for(const s of shelves){ sBody += `<option value="${s.id}" >${s.name}</option>` };
+    sBody += "</select>";
     MODAL.setTitle("Move shelf");
-    MODAL.setBody(``);
+    MODAL.setBody(`${sBody}`);
     MODAL.setFooter(`
         <button type="button" id="move-record-btn" class="btn btn-primary" onclick="VIEW_RECORD.onSubmit(this)">Move</button> 
         <button type="button" onclick="MODAL.close()" class="btn btn-danger">Cancel</button>

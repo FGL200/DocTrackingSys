@@ -60,6 +60,7 @@ class Page extends CI_Controller {
             return;
         }
 
+
         $uid = $this->session->userdata('uid');
         $role = $this->session->userdata('role');
 
@@ -90,6 +91,10 @@ class Page extends CI_Controller {
             return;
         }
 
+        if($this->session->userdata("agree") == "0") {
+            redirect("dashboard");
+        } 
+
         // HEADER VARIABLES
         $data['header'] = [
             'title'=> ucfirst($shelf_name),
@@ -115,6 +120,10 @@ class Page extends CI_Controller {
             // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
             return;
         }
+
+        if($this->session->userdata("agree") == "0") {
+            redirect("dashboard");
+        } 
 
         // $rec_id - is the integer value
         // $record_id - is the string value
@@ -159,6 +168,10 @@ class Page extends CI_Controller {
             return;
         }
 
+        if($this->session->userdata("agree") == "0") {
+            redirect("dashboard");
+        } 
+
         $data['header'] = [
             'title' => 'Manage Users',
             'css' => ['manage_users']
@@ -173,9 +186,13 @@ class Page extends CI_Controller {
 
     
     public function generate_qr() {
-        if($this->session->userdata("role") == "A"){
+        if($this->session->userdata("role") != "A"){
             redirect("");
         }
+
+        // if($this->session->userdata("agree") == "0") {
+        //     redirect("dashboard");
+        // } 
 
         $data['header'] = [
             'css' => ['generate_qr'],
@@ -190,9 +207,18 @@ class Page extends CI_Controller {
     }
 
     public function user_logs() {
+        
+        if($this->session->userdata("role") != "A"){
+            redirect("");
+            return;
+        }
+
+        if($this->session->userdata("agree") == "0") {
+            redirect("dashboard");
+        } 
 
         $data['header'] = [
-            'title' => "Generate QR"
+            'title' => "User Logs"
         ];
 
         $data['footer'] = [

@@ -559,13 +559,6 @@ function remove_logo(root) {
     root._logo.dispose();
 }
 
-// Patrick
-async function fetch_data(url, method = null) {
-    let data = await fetch(url, method);
-    data = await data.json();
-    
-    return data;
-}
 
 function generateReport() {
 

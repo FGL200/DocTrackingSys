@@ -1,17 +1,30 @@
 // dapat na se-save to sa localStorage eeee,
 // pero as of now, every time na nasa dashboard sya lalabas to...
-let agree = window.localStorage.getItem("agree");
+let agree = "";
+
+
 
 // default value ng alert
 let showed = false;
 // mga pwedeng events ni user
-$(window).on("load", showTermsAndCondition);
-$(window).on("mousemove", showTermsAndCondition);
-$(window).on("keydown", showTermsAndCondition);
+$(window).on("load", async ()=>{
+    
+    const checkAgree = await fetch_data(`${base_url}get_agree`, {method : "post"});
+    agree = checkAgree['agree'] == '1' ? true : false;
+
+    console.log(agree);
+    showTermsAndCondition();
+
+    $(window).on("mousemove", showTermsAndCondition);
+    $(window).on("keydown", showTermsAndCondition);
+})
+
+
 
 
 async function showTermsAndCondition() {
     // check if nag agree na ba si user sa Terms and Condition
+    
     if(agree) return;
 
     // check if currently showing ung alert
@@ -19,6 +32,8 @@ async function showTermsAndCondition() {
     
     // gawing true ung show
     showed = true;
+
+    console.log(agree);
 
     await fetch(`${base_url}assets/templates/terms_and_condition.html`)
     .then(response => response.text())
@@ -28,15 +43,18 @@ async function showTermsAndCondition() {
             title : `<div class="fs-4">Terms and Conditions (End-User License Agreement)</div>`,
             body : response,
             buttons : ["I Agree"]
-        }, function(ans){
+        }, async function(ans){
             if(!ans) return;
-            window.localStorage
-            // gawing true ung agree
-            agree = true;
-            window.localStorage.setItem("agree", true);
+
+            
+            const result = await fetch_data(`${base_url}set_agree`, {method : "post"});
+          
+            
+            agree = result['agree']== '1' ? true : false;
+            showed = false;
     
             // magiging false na si show once na pinindot ni user ang Agree
-            showed = false;
+           
         });
     })
     .catch(err => console.error(err));

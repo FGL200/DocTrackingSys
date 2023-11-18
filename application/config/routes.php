@@ -51,6 +51,10 @@ $route['user/logs'] = 'User/get_User_Logs';
 // Shelf
 $route['shelves/insert']['post'] = 'Shelves/add_Shelf';
 
+// Agree
+$route['set_agree']['post'] = 'Agreement/set_agree';
+$route['get_agree']['post'] = 'Agreement/get_agree';
+
 // DEFAULT
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

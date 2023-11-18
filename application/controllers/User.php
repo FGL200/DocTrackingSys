@@ -81,7 +81,6 @@ class User extends CI_Controller{
                     //     SET {$data}
                     // ");
 
-                    // echo $data; die;
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
 
@@ -102,6 +101,7 @@ class User extends CI_Controller{
                     //     SET {$data}
                     // ");
 
+                    // echo $data; 
                     echo json_encode(["response" => $this->user->update_user($data)]);
                 }
             break;
