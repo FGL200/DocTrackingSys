@@ -9,7 +9,7 @@ ALTER TABLE `user`
     ADD `deleted_flag` INT(1) DEFAULT 0;
 
 UPDATE `user`
-    SET `created_by` = '1'
+    SET `created_by` = '1';
 
 -- `user_info`
 ALTER TABLE `user_info` 
@@ -17,36 +17,4 @@ ALTER TABLE `user_info`
     ADD `updated_date` DATETIME NULL DEFAULT NULL AFTER `updated_by`;
 
 
-SELECT 
-(SELECT
-	COUNT(*)
-FROM `stud_rec` r
-INNER JOIN `doc` d
-	ON `d`.`stud_rec_id` = r.id
-WHERE 
-	r.deleted_flag = 0 AND 
-    d.shelf = '1') 'users',
-(
-    SELECT 
-        COUNT(*)
-    FROM (
-        SELECT 
-            *
-        FROM (
-            SELECT 
-                `created_by_uid` `enc`
-            FROM `stud_rec`
-            INNER JOIN `doc`
-                on doc.stud_rec_id = stud_rec.id
-            WHERE stud_rec.deleted_flag = 0
-            UNION
-            SELECT 
-                `updated_by_uid` `enc`
-            FROM `stud_rec`
-            INNER JOIN `doc`
-                on doc.stud_rec_id = stud_rec.id
-            WHERE stud_rec.deleted_flag = 0
-        ) 
-        GROUP BY `enc`
-    )
-) 'encoders'
+ALTER TABLE `doc` ADD `shelf_histories` LONGTEXT NOT NULL DEFAULT '[]' AFTER `shelf`;
