@@ -1,9 +1,14 @@
 function toGender(gender) {
-    switch (gender) {
-        case "M" : return "Male"; break;
-        case "F" : return "Female"; break;
-        default : return "Prefer not to say"; break;
-    }
+    // switch (gender) {
+    //     case "M" : return "Male"; break;
+    //     case "F" : return "Female"; break;
+    //     default : return "Prefer not to say"; break;
+    // }
+    return `<select name="gender" class="form-control">
+        <option value="N" ${ gender=="N" ? "selected" : "" }>Prefer not to say</option>
+        <option value="M" ${ gender=="M" ? "selected" : "" }>Male</option>
+        <option value="F" ${ gender=="F" ? "selected" : "" }>Female</option>
+    </select>`;
 }
 
 function toRole(role) {
@@ -34,23 +39,24 @@ function showUser(user) {
         </div>
         <div class="input-group">
             <span class="input-group-text">Lastname</span>
-            <input name="lname" type="text" class="form-control" value="${user.lname ? user.lname : "--"}" disabled>
+            <input name="lname" type="text" class="form-control" value="${user.lname ? user.lname : "--"}">
         </div>
         <div class="input-group">
             <span class="input-group-text">Firstname</span>
-            <input name="fname" type="text" class="form-control" value="${user.fname ? user.fname : "--"}" disabled>
+            <input name="fname" type="text" class="form-control" value="${user.fname ? user.fname : "--"}">
         </div>
         <div class="input-group">
             <span class="input-group-text">Mname</span>
-            <input name="mname" type="text" class="form-control" value="${user.mname ? user.mname : "--"}" disabled>
+            <input name="mname" type="text" class="form-control" value="${user.mname ? user.mname : "--"}">
         </div>
         <div class="input-group">
             <span class="input-group-text">Gender</span>
-            <input name="gender" type="text" class="form-control" value="${gender}" disabled>
+            <!-- <input name="gender" type="text" class="form-control" value="${gender}"> -->
+            ${gender}
         </div>
         <div class="input-group">
             <span class="input-group-text">Birthday</span>
-            <input name="bday" type="date" class="form-control" value="${bday}" disabled>
+            <input name="bday" type="date" class="form-control" value="${bday}">
         </div>
         <div class="input-group">
             <span class="input-group-text">Role</span>

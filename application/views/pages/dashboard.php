@@ -70,13 +70,25 @@
                                     <span><b>Last update: </b> <span><?=$shelf['last date'] ?? '--';?></span></span>
                                 </section>
                             </a>
-                        <?php } ?>    
-    
+                        <?php } ?>   
+
+                        <!-- <?php if ($role === 'A' || $role === 'E') { ?>
+                            <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
+                                <section class="shelf-title fs-4">
+                                    <i class="fa-solid fa-box-archive"></i>
+                                    Archived
+                                </section>
+                                <section class="shelf-body d-flex flex-column">
+                                    <span><b>Records: </b><span><?= $bin_records ?></span></span>
+                                </section>
+                            </a>
+                        <?php } ?> -->
+
                         <?php if ($role === 'A') { ?>
                             <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
                                 <section class="shelf-title fs-4">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                    Trash bin
+                                    <i class="fa-solid fa-box-archive"></i>
+                                    Archived
                                 </section>
                                 <section class="shelf-body d-flex flex-column">
                                     <span><b>Records: </b><span><?= $bin_records ?></span></span>

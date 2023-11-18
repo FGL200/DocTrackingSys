@@ -14,8 +14,8 @@ const VIEW_RECORD = {
             buttons : ["yes", "no"]
         } : (recordAction === "delete-record-btn") ?
         {
-            title :  "Delete record",
-            body : `Are you sure you want to <b>remove  #${CONST_RECORD_ID}</b> record?`,
+            title :  "Archive record",
+            body : `Are you sure you want to <b>archive  #${CONST_RECORD_ID}</b> record?`,
             buttons : ["yes", "no"]
         } :
         {
@@ -698,7 +698,6 @@ $("#move-btn").on("click", async function(){
 
     let sBody = `<select name="name" class="form-control" required>
         <option value="" selected>-- Select Shelf--</option>
-        <option value="trash">Archive</option>
         `;
     for(const s of shelves){ sBody += `<option value="${s.id}" >${s.name}</option>` };
     sBody += "</select>";

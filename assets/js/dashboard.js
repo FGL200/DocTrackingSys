@@ -543,6 +543,7 @@ function newShelf() {
         .then(response=>response.json())
         .then(function (result){
             MAIN.addNotif(result.status, result.message, result.status == "success" ? "g" : "r");
+            DELAY_FUNCTION(() => { window.location.href = base_url }, 1);
         })
         .catch(err => {
             MAIN.addNotif("Server Error", "Something went wrong while creating a new shelf.", "r");

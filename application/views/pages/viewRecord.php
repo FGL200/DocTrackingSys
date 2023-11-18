@@ -11,7 +11,7 @@ function val(String $strJson){return intval(json_decode($strJson)->val);}
             <?php }?>
             <b class="card p-2 flex-grow-1">Record ID# <?=$record_id?></b>
             <?php if ($role === 'E') {?>
-            <button class="btn btn-danger" type="button" id="delete-record-btn" onclick="VIEW_RECORD.onSubmit(this);"><i class="fa-solid fa-trash"></i> Delete</button>
+            <button class="btn btn-outline-primary" type="button" id="delete-record-btn" onclick="VIEW_RECORD.onSubmit(this);"><i class="fa-solid fa-box-archive"></i> Archive</button>
             <?php }?>
             <?php if ($role === 'E') {?>
             <button class="btn btn-success" type="button" id="update-record-btn" onclick="VIEW_RECORD.onSubmit(this)"><i class="fa-solid fa-floppy-disk"></i> Save</button>

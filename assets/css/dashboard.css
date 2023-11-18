@@ -12,8 +12,8 @@
 
 .shelf-container.shelf-trash {
     color: rgba(50, 50, 50, .6);
-    background-color: #FDEDEC;
-    border-left: 5px solid #EC7063;
+    background-color: #EBF5FB;
+    border-left: 5px solid #3498DB;
 }
 
 .shelf-container.shelf-new {
