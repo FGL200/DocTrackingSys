@@ -15,7 +15,7 @@
         </div>
         <div class="p-4 d-flex flex-column flex-grow-1 justify-content-center align-items-center" style="min-width: 300px;">
             <section class="fs-4" style="padding-left: .5rem;" id="welcome-text">
-                Welcome to SRAC DTS
+                Welcome to SRAC DDS
             </section>
             <!-- <section class="m-2">
                 Login to get started!
