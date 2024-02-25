@@ -78,7 +78,7 @@ class Page extends CI_Controller {
             'bin_records' => $total_records_in_bin
         ];
         $data['footer'] = [
-            'js' => ['alert', ($role === 'A') ? 'dashboard' : null, 'profile', 'termsAndCondition']
+            'js' => ['alert', 'dashboard', 'profile', 'termsAndCondition']
         ];
 
         $this->loadPage('dashboard', $data);

@@ -650,3 +650,68 @@ function s_Tash(elem) {
 function s_Del(elem) {
     $("#settings").addClass("hide");
 }
+
+
+
+
+function newRequest() {
+  MODAL.setSize('lg')
+  MODAL.setTitle("New Request");
+  const layout = `
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group mb-3">
+            <label>Last Name <small class="text-danger">*</small></label>
+            <input type="text" name="lname" class="form-control">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group mb-3">
+            <label>First Name <small class="text-danger">*</small></label>
+            <input type="text" name="fname" class="form-control">
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group mb-3">
+            <label>Middle Name </label>
+            <input type="text" name="mname" class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group mb-3">
+            <label>File request <small class="text-danger">*</small></label>
+            <input type="text" name="request" class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group mb-3">
+            <label>Request Reason <small class="text-danger">*</small></label>
+            <textarea name="reason" class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <small class="error-msg text-danger"></small>
+        </div>
+      </div>
+    </div>
+  `;
+  MODAL.setBody(layout)
+
+  MODAL.setFooter(`<button class="btn btn-success">Save</button>`)
+  MODAL.open();
+
+  MODAL.onSubmit((e, form_data)=>{
+
+    if(Helper.formValidator(form_data, ["lname", "fname", "request", "reason"], v => v == '').length > 0) {
+      Helper.Promt_Error('* Required fields must be filled.')
+      return;
+    }
+
+    Helper.Promt_Clear();
+    MODAL.close();
+    console.log({data: Helper.getDataFromFormData(form_data)});
+  });
+}

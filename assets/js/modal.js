@@ -14,6 +14,26 @@
  */
 const MODAL = {
 
+    setSize: (size = 'lg')=>{
+      switch(size) {
+        case 'sm': {
+          $("#modal-container").css({"max-width": "300px"})
+        }; break;
+        case 'md': {
+          $("#modal-container").css({"max-width": "500px"})
+        }; break;
+        case 'lg': {
+          $("#modal-container").css({"max-width": "800px"})
+        }; break;
+        case 'xlg': {
+          $("#modal-container").css({"max-width": "1000px"})
+        }; break;
+        default: {
+          $("#modal-container").css({"max-width": "1300px"})
+        }
+      }
+    },
+
     /**
      * Enable or disable close button of modal
      * @param {Boolean} disable 
@@ -36,7 +56,7 @@ const MODAL = {
     onSubmit : async function(callback){
         $("#modal-container").on("submit",function (e){
             e.preventDefault();
-            if(callback) callback(e);
+            if(callback) callback(e, new FormData(document.getElementById("modal-container")));
         });
     },
 
