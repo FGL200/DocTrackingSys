@@ -30,110 +30,128 @@ const PROFILE = {
             return;
         }
 
+        MODAL.setSize('md');
         MODAL.setTitle("Profile");
-        MODAL.setBody(`
-        <div class="d-flex flex-column gap-2 p-3">
-            <span class="fw-bold">
-                User Information
-            </span>
-            <hr>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Username</span>
-                <input  name="profile-uname" type="text" class="form-control" value="${profile.uname ? profile.uname : ''}" disabled>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Lastname</span>
-                <input name="profile-lname" type="text" class="form-control" value="${profile.lname ? profile.lname : ''}" disabled>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Firstname</span>
-                <input name="profile-fname" type="text" class="form-control" value="${profile.fname ? profile.fname : ''}" disabled>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Birthday</span>
-                <input name="profile-bday" type="date" class="form-control" value="${profile.bday ? profile.bday : '1886-06-19'}" disabled>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Gender</span>
-                <select class="form-control" name="profile-g" id="profile-g"  disabled>
-                    <option value="N" disabled>Select Gender</option>
-                    <option ` + (profile.g === "N" ? "Selected" : "") + ` value="N">Prefer not to say</option>
-                    <option ` + (profile.g === "M" ? "Selected" : "") + ` value="M">Male</option>
-                    <option ` + (profile.g === "F" ? "Selected" : "") + ` value="F">Female</option>
-                </select>
-            </div>
 
-            <hr>
+        let layout = `
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group mb-3">
+                  <label>Username <small class="text-danger">*</small></label>
+                  <input type="text" name="profile-uname" class="form-control" value="{{uname}}">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group mb-3">
+                  <label>First name <small class="text-danger">*</small></label>
+                  <input type="text" name="profile-fname" class="form-control" value="{{fname}}">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group mb-3">
+                  <label>Middle name <small class="text-danger">*</small></label>
+                  <input type="text" name="profile-mname" class="form-control" value="{{mname}}">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group mb-3">
+                  <label>Last name <small class="text-danger">*</small></label>
+                  <input type="text" name="profile-lname" class="form-control" value="{{lname}}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group mb-3">
+                  <label>Birthday <small class="text-danger">*</small></label>
+                  <input type="date" name="profile-bday" class="form-control" id="profile-bday">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group mb-3">
+                  <label>Gender <small class="text-danger">*</small></label>
+                  <select name="profile-g" class="form-control" id="profile-g">
+                    <option value="">Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="N">Prefer not to say</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group mb-3">
+                  <label>Old password</label>
+                  <input type="text" name="profile-old-pass" class="form-control" id="profile-old-pass">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group mb-3">
+                  <label>New password</label>
+                  <input type="text" name="profile-new-pass" class="form-control" id="profile-new-pass">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <small class="error-msg text-danger"></small>
+              </div>
+            </div>
+          </div>
+        `;
 
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
-                <label for="profile-old-pass">Old password</label>
-                <input class="rounded border p-2" type="password" name="profile-old-pass" id="profile-old-pass" autocomplete>
-            </span>
-            <span class="d-flex flex-row justify-content-between align-items-center gap-2 text-nw">
-                <label for="profile-new-pass">New password</label>
-                <input class="rounded border p-2" type="password" name="profile-new-pass" id="profile-new-pass" autocomplete>
-            </span>
-        </div>
-        `);
+        layout = Helper.replaceLayout(layout, {
+          uname: profile.uname || '',
+          fname: profile.fname || '',
+          mname: profile.mname || '',
+          lname: profile.lname || '',
+        });
+
+        MODAL.setBody(layout);
+        if(profile.bday) Helper.f("#profile-bday").value = Helper.toInputDate(profile.bday);
+        if(profile.g) Helper.f("#profile-g").value = profile.g;
+
         MODAL.setFooter(`<button type="submit" class="btn btn-success">Save</button>`);
-        MODAL.setScript(`PROFILE.onSubmit()`);
+        
+        MODAL.onSubmit(async (e, form_data) =>{
+          e.preventDefault();
+
+          if(Helper.formValidator(form_data, ["profile-fname", "profile-mname", "profile-lname", "profile-uname", "profile-bday", "profile-g"], v => v == '').length > 0) {
+            Helper.Promt_Error('* Required fields must be filled.')
+            return;
+          }
+
+          if(Helper.formValidator(form_data, ["profile-bday"], v => Helper.getAge(v) < 18).length > 0) {
+            Helper.Promt_Error('* Birthdate is not valid. Age must be greater than 18.')
+            return;
+          }
+
+          if(Helper.f("#profile-old-pass").value || Helper.f("#profile-new-pass").value) {
+            if(Helper.formValidator(form_data, ["profile-old-pass", "profile-new-pass"], v => v == '').length > 0) {
+              Helper.Promt_Error('* Old and New password reuqired.')
+              return;
+            }
+          }
+
+          Helper.Promt_Clear();
+
+          const body = Helper.createFormData({ uid: CONST_UID, rid: CONST_UID }, form_data);
+          const resp = (await Helper.api('user/update', 'json', body)).status;
+
+          if(resp == "success") {
+            MAIN.addNotif("Profile Updated!", "Information saved!", "g");
+            MODAL.close();
+          } else {
+            MAIN.addNotif("Error", "Error occured. Try again later.", "r");
+          }
+
+        });
+
         MODAL.open();
     },
-    /**
-     * Save the profile
-     */
-    onSubmit : function(){
-        MODAL.onSubmit( async (e)=>{
-            e.preventDefault();
-            const profile = new FormData(document.getElementById("modal-container"));
-            profile.append("uid", CONST_UID);
-            profile.append("rid", CONST_UID);
-            
-            // UPDATE PROFILE 
-            console.log("save profile function is on main.js datas: ", profile);
-            
-            fetch(base_url + "user/update", {
-                method : "POST",
-                body : profile
-            })
-            .then(resp=>resp.json())
-            .then((resp)=>{
-                if(resp.status === "error")  MAIN.addNotif("Incomplete fields!", resp.message, "r");
-                else {
-                    MAIN.addNotif("Profile Updated!", "Information saved!", "g");
-                    MODAL.close();
-                }
-            })
-            .catch(err=>{
-                console.error("ERROR: " + err);
-            });
-        })
-    }
 }
 
 async function load_profile(){
-    const form = new FormData();
-    form.append("uid", CONST_UID);
-    form.append("rid", CONST_UID);
-    return await fetch(base_url + 'user', {
-        method : 'post',
-        body : form
-    })
-    .catch(err => {
-        console.error("ERROR: " + err); 
-    })
-    .then(respose => respose.json())
-    .then(respose => {
-
-        const result = respose.result[0];
-        if(!result) return new Profile();
-
-        return new Profile (
-            result.uname,
-            result.fname,
-            result.lname,
-            result.bday,
-            result.gender
-        );
-    });
+  return (await Helper.api('user', "json", Helper.createFormData({ uid: CONST_UID, rid: CONST_UID }))).result[0];
 }

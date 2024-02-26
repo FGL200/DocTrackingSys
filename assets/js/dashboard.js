@@ -529,27 +529,40 @@ $(window).on("load", function (e) {
 
 function newShelf() {
     MODAL.setTitle("<span class='fs-5'>New Shelf<span>");
-    MODAL.setBody(`<div>
-        <input type='text' class='form-control'name='name' placeholder='Shelf name'>
-    </div>`);
+    const layout = `
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <label>Shelf name <small class="text-danger">*</small></label>
+              <input type="text" name="name" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <small class="error-msg text-danger"></small>
+          </div>
+        </div>
+      </div>
+    `;
+    MODAL.setBody(layout);
     MODAL.setFooter("<button class='btn btn-success'>Add</button><button class='btn btn-danger' type='button' onClick='MODAL.close()'>Cancel</button>");
-    MODAL.onSubmit((e)=>{
-        const form = new FormData(MODAL.form);
-        console.log(MAIN.add);
-        fetch(base_url + "shelves/insert", {
-            method : "post",
-            body : form
-        })
-        .then(response=>response.json())
-        .then(function (result){
-            MAIN.addNotif(result.status, result.message, result.status == "success" ? "g" : "r");
-            DELAY_FUNCTION(() => { window.location.href = base_url }, 1);
-        })
-        .catch(err => {
-            MAIN.addNotif("Server Error", "Something went wrong while creating a new shelf.", "r");
-        })
-        
-        
+    MODAL.onSubmit(async (e, form_data)=>{
+
+        if(Helper.formValidator(form_data, ["name"], v => v == '').length > 0) {
+          Helper.Promt_Error('* Shelf name should not be empty.')
+          return;
+        }
+
+       const resp = (await Helper.api('/shelves/insert', "json", form_data));
+       if(resp.status == "success") {
+        MODAL.close();
+        MAIN.addNotif(resp.status, resp.message, "g");
+        location.href = base_url;
+       } else {
+        MAIN.addNotif(String(resp.status).toUpperCase(), resp.message, "r");
+       }
     });
     
     MODAL.open();

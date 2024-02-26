@@ -154,93 +154,105 @@ async function viewUser(id) {
 */
 
 async function newUser() {
+    MODAL.setSize('md')
     MODAL.setTitle("New User");
-    MODAL.setBody(`
-        <div class="d-flex flex-column gap-1 p-3">
-            <span>
-                <b>User Information</b>
-            </span>
-            <hr>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Firstname</span>
-                <input name="fname" type="text" class="form-control" placeholder="Enter Firstname" required>
+    const layout = `
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group mb-3">
+              <label>Username <small class="text-danger">*</small></label>
+              <input type="text" name="user-uname" class="form-control">
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Lastname</span>
-                <input name="lname" type="text" class="form-control" placeholder="Enter Lastname" required>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group mb-3">
+              <label>Role <small class="text-danger">*</small></label>
+              <select name="user-role" class="form-control">
+                <option value="">Select Gender</option>
+                <option value="V">Admin</option>
+                <option value="E">Encoder</option>
+                <option value="A">Admin</option>
+              </select>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Birthday</span>
-                <input name="bday" type="date" class="form-control" required>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group mb-3">
+              <label>First name <small class="text-danger">*</small></label>
+              <input type="text" name="fname" class="form-control">
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Gender</span>
-                <select name="gender" class="form-control" required>
-                    <option value="" selected>Select Gender</option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                </select>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group mb-3">
+              <label>Middle name <small class="text-danger">*</small></label>
+              <input type="text" name="mname" class="form-control">
             </div>
-            <hr>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Username</span>
-                <input name="user-uname" type="text" class="form-control" placeholder="Enter Username" required>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group mb-3">
+              <label>Last name <small class="text-danger">*</small></label>
+              <input type="text" name="lname" class="form-control">
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Role</span>
-                <select name="user-role" class="form-control" required>
-                    <option value="" selected>Select Role</option>
-                    <option value="V">Viewer</option>
-                    <option value="E">Encoder</option>
-                    <option value="A">Admin</option>
-                </select>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group mb-3">
+              <label>Birthday <small class="text-danger">*</small></label>
+              <input type="date" name="bday" class="form-control">
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Password</span>
-                <input type="text" class="form-control" value="Password is set to 'default'" style="min-width: 230px;" disabled />
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group mb-3">
+              <label>Gender <small class="text-danger">*</small></label>
+              <select name="gender" class="form-control">
+                <option value="">Select Gender</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="N">Prefer not to say</option>
+              </select>
             </div>
-
+          </div>
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <input type="text" class="form-control" value="Password is set to 'default'" disabled>
+            </div>
+          </div>
         </div>
-    `);
-    MODAL.setFooter(`<button  id="btn-form-submit" class="btn btn-success">Add User</button>`);
-    MODAL.setScript(`HOME.NEW_USER.onSubmit();`);
-    MODAL.open();
+        <div class="row">
+          <div class="col-lg-12">
+            <small class="error-msg text-danger"></small>
+          </div>
+        </div>
+      </div>
+    `;
 
-    MODAL.onSubmit(async function (e) {
-        e.preventDefault();
+    MODAL.setBody(layout);
+    MODAL.setFooter(`<button type="submit" class="btn btn-success">Add User</button>`);
 
-        // NEW_USER
-        const form = new FormData(MODAL.form);
-        await fetch(base_url + 'user/new', {
-            method: 'post',
-            body: form
-        })
-        .then(response => response.json())
-        .then(result => {
-            let notif = {
-                title : "",
-                message : "",
-                flag : ""
-            }
-            if (result.status == "success") {
-                notif.title = "Added new User!";
-                notif.message = "Successfully added new user";
-                notif.flag = "g";
-            } else {
-                notif.title = "Error";
-                notif.message = result.message;
-                notif.flag = "r";
-            }
+    MODAL.onSubmit(async function (e, form_data) {
+        if(Helper.formValidator(form_data, ["user-uname", "user-role", "fname", "mname", "lname", "bday", "gender"], v => v == '').length > 0) {
+          Helper.Promt_Error('* Required fields must be filled.')
+          return;
+        }
 
-            MAIN.addNotif(notif.title, notif.message, notif.flag);
-            MODAL.close();
-            loadTable('user/all');
-        })
-        .catch(err => {
-            MAIN.addNotif("Server error", "Something went wrong while adding new user", "r");
-            console.log(err);
-        });
+        if(Helper.formValidator(form_data, ["bday"], v => Helper.getAge(v) < 18).length > 0) {
+          Helper.Promt_Error('* Birthdate is not valid. Age must be greater than 18.')
+          return;
+        }
+
+        Helper.Promt_Clear();
+
+        const resp = (await Helper.api('user/new', "json", form_data)).status;
+
+        if(resp == "success") {
+          MAIN.addNotif("Success", "Successfully added new user", "g");
+          MODAL.close();
+          loadTable('user/all');
+        } else {
+          MAIN.addNotif("Error", "Error occurred. Try again later.", "r");
+        }
     });
+    
+    MODAL.open();
 };
 
 async function loadTable(route = null) {

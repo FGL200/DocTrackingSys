@@ -211,7 +211,7 @@ class Helper {
 
   static async api(url = '', type = "text", form = new FormData()) {
     const args = (form) ? { method: 'post', body: form } : null;
-    return await fetch(url, args).then(async response => {
+    return await fetch(base_url + url, args).then(async response => {
       if (type === "text") return await response.text();
       if (type === "json") return await response.json()
       return await response;
