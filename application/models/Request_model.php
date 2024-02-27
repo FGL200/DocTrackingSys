@@ -24,8 +24,7 @@ class Request_model extends CI_Model {
 
         $sql = "
                 select
-                    req.*,
-                    u. 
+                    req.* 
                 from requests req
                 ";
         
