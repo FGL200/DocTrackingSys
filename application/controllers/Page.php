@@ -227,4 +227,16 @@ class Page extends CI_Controller {
 
         $this->loadPage('user_logs', $data);
     }
+
+    public function requests() {
+      $data['header'] = [
+        'title' => 'Requests'
+      ];
+
+      $data['footer'] = [
+        'js' => ['requests', 'profile'],
+      ];
+
+      $this->loadPage('requests', $data);
+    }
 }

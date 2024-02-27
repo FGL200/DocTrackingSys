@@ -13,6 +13,7 @@ $route['manage'] = 'Page/manage_users';
 $route['generate-qr']= "Page/generate_qr";
 $route['async']["post"] = "Student/async";
 $route['logs']= "Page/user_logs";
+$route['requests']= "Page/requests";
 
 
 // API

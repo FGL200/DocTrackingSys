@@ -694,7 +694,15 @@ function newRequest() {
         <div class="col-lg-12">
           <div class="form-group mb-3">
             <label>File request <small class="text-danger">*</small></label>
-            <input type="text" name="request" class="form-control">
+            <div class="input-group mb-3">
+              <input type="text" name="file" class="form-control" aria-label="" aria-describedby="basic-addon2">
+              <span class="input-group-text bg-secondary" id="basic-addon2">
+                <div class="form-check form-switch m-0">
+                  <input class="form-check-input" name="priority" type="checkbox" id="high-priority">
+                  <label class="form-check-label text-white" for="high-priority">High Priority</label>
+                </div>
+              </span>
+            </div>
           </div>
         </div>
         <div class="col-lg-12">
@@ -716,7 +724,7 @@ function newRequest() {
   MODAL.setFooter(`<button class="btn btn-success">Save</button>`)
   MODAL.open();
 
-  MODAL.onSubmit((e, form_data)=>{
+  MODAL.onSubmit(async (e, form_data)=>{
 
     if(Helper.formValidator(form_data, ["lname", "fname", "request", "reason"], v => v == '').length > 0) {
       Helper.Promt_Error('* Required fields must be filled.')
@@ -726,5 +734,7 @@ function newRequest() {
     Helper.Promt_Clear();
     MODAL.close();
     console.log({data: Helper.getDataFromFormData(form_data)});
+    const resp = (await Helper.api('request/create', "json", form_data));
+    console.log({ resp });
   });
 }
