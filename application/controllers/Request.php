@@ -23,7 +23,10 @@ class Request extends CI_Controller {
     
                 $items .= "`{$key}` = '$val'";
             }
-    
+            $current_user = $this->session->userdata('uid');
+
+            $items .= ", `created_by` = {$current_user}";
+            
             $affected_rows = $this->request_model->create($items);
             
             $response["status"] = $affected_rows > 0 ? "success" : "error";
@@ -41,7 +44,7 @@ class Request extends CI_Controller {
      * fetch all requests
      */
     public function fetch_all() {
-        $user = $this->session->has_userdata('role') ? $this->session->userdata() : ['role' => 'V', 'uid' => 20];
+        $user = $this->session->has_userdata('role') ? $this->session->userdata() : ['role' => 'A', 'uid' => 20];
     
         $requests = $this->request_model->fetch_all($user);
 
