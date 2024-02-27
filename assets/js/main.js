@@ -58,10 +58,15 @@ const MAIN = {
         const notif_body = document.createElement("section");
         notif_body.setAttribute("class", "notif-body");
         notif_body.innerHTML = message;
+        
+        const notif_time = document.createElement('p')
+        notif_time.setAttribute("class", "text-end text-muted m-0 notif-time")
+        notif_time.innerHTML = new Date().toLocaleTimeString();
     
         notif.appendChild(notif_close);
         notif.appendChild(notif_title);
         notif.appendChild(notif_body);
+        notif.appendChild(notif_time);
     
         
         if(holder.children.length < 3){

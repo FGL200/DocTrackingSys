@@ -37,6 +37,7 @@ async function Load_RequestList() {
                 <i class="fa-solid fa-check"></i> Released
               </a>
             </li>
+            <hr class="m-1" />
             <li>
               <a 
                 class="dropdown-item text-primary btn-open-edit btn-open-edit" 
@@ -145,7 +146,7 @@ async function OpenModal_Edit() {
     const body = Helper.getDataFromFormData(form_data);
     const status = (await Helper.api(`request/${data.id}/update`, "json", Helper.createFormData({ ...body, priority: body.priority == "on" ? 1 : 0 }))).status;
     if (status == "success") {
-      MAIN.addNotif("Success", "New Request added.", "g");
+      MAIN.addNotif("Success", "Request is updated.", "g");
       MODAL.close();
       await Load_RequestList();
     } else {
@@ -170,7 +171,7 @@ async function OpenModal_Remove() {
   MODAL.onSubmit(async (e) => {
     const status = (await Helper.api(`request/${data.id}/delete`, "json")).status;
     if (status == "success") {
-      MAIN.addNotif("Success", "New Request added.", "g");
+      MAIN.addNotif("Success", "Request is added to archived.", "g");
       MODAL.close();
       await Load_RequestList();
     } else {

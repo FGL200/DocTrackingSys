@@ -702,7 +702,7 @@ class Student extends CI_Controller{
      */
     private function to_Hoverable(int $count, String $value) {
         return "<div class='stud_rec-status stud_rec-".($count===0?"success":"danger")."' title='{$value}' style='cursor: context-menu; text-align: center;'>"
-                .($count===0?"No Remarks":"With Remarks")."</div>";
+                .($count===0?"No Remarks":"{$count} Remarks")."</div>";
     }
 
     /**
