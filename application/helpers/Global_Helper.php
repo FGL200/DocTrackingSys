@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Expr\Cast\Array_;
-
 /**
  * Insert slashes to the characters like ["/\'`]
  * @param Array $inputs
@@ -32,3 +30,21 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
     ";
     return $controller->db->query($query);
 }
+
+
+/**
+ * get request body
+ * @param Controller $controllerr current controller
+ */
+
+ function get_Request_Body(& $controller) : mixed{
+    return ((array)json_decode($controller->input->raw_input_stream));
+ }
+
+ function to_JSON(array $val) : string | false{
+    return json_encode($val);
+ }
+
+ function to_ARRAY(string $val) : mixed {
+    return json_decode($val);
+ }
