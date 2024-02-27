@@ -38,6 +38,8 @@ class Request_model extends CI_Model {
                     ";
         }
 
+        $sql .= " order by req.priority, req.created_at DESC";
+       
         return $this->db->query($sql)->result();
     }
 

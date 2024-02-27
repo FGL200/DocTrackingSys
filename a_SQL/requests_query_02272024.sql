@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Generation Time: Feb 27, 2024 at 08:57 AM
+-- Generation Time: Feb 27, 2024 at 10:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,6 +38,7 @@ CREATE TABLE `requests` (
   `created_by` int(11) NOT NULL,
   `updated_at` datetime NOT NULL,
   `updated_by` int(11) NOT NULL,
+  `priority` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_flag` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -45,9 +46,10 @@ CREATE TABLE `requests` (
 -- Dumping data for table `requests`
 --
 
-INSERT INTO `requests` (`id`, `lname`, `fname`, `mname`, `file`, `reason`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_flag`) VALUES
-(1, 'penaranda', 'patrickyyy', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang po', '2024-02-27 14:29:20', 20, '0000-00-00 00:00:00', 0, 1),
-(2, 'penaranda', 'patrick', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang', '2024-02-27 14:45:57', 20, '0000-00-00 00:00:00', 0, 0);
+INSERT INTO `requests` (`id`, `lname`, `fname`, `mname`, `file`, `reason`, `created_at`, `created_by`, `updated_at`, `updated_by`, `priority`, `deleted_flag`) VALUES
+(1, 'penaranda', 'patrickyyy', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang po', '2024-02-27 14:29:20', 20, '0000-00-00 00:00:00', 0, 0, 1),
+(2, 'penaranda', 'patrick', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang', '2024-02-27 14:45:57', 20, '0000-00-00 00:00:00', 0, 0, 0),
+(3, 'penaranda', 'patrickyyy', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang po', '2024-02-27 16:55:07', 0, '0000-00-00 00:00:00', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -67,7 +69,7 @@ ALTER TABLE `requests`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
