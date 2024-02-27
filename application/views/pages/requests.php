@@ -1,39 +1,17 @@
-<main>
-  <div class="card m-3">
-    <div class="card-header">
-      Requests
+<main class="d-flex flex-column gap-3" style="width: 100%;">
+  <nav class="d-flex flex-row flex-wrap justify-content-around align-items-center gap-2 p-1 b-color-w shadow" style="width: 100%;">
+  </nav>
+  <div class="card p-3 m-3">
+    <div class="card-header border-0">
+      <div class="d-flex align-items-center justify-content-between">
+        <h4><i class="fa-solid fa-bars-staggered"></i> Request List</h4>
+        <small>
+          <a href="#" class="link link-primary">Show Archived</a>
+        </small>
+      </div>
     </div>
-    <div class="card-body">
-      <table id="table-request">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Student</th>
-            <th>Request</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="btn-group dropend shadow-none">
-                <a href="#" class="link link-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  000001
-                </a>
-                <ul class="dropdown-menu">
-                  <li><button class="dropdown-item" type="button">Action</button></li>
-                  <li><button class="dropdown-item" type="button">Another action</button></li>
-                  <li><button class="dropdown-item" type="button">Something else here</button></li>
-                </ul>
-              </div>
-
-            </td>
-            <td>Landicho, Frederic G.</td>
-            <td>{{Date}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-body p-0">
+      <table id="table-request" class="table table-hover"></table>
     </div>
   </div>
 </main>

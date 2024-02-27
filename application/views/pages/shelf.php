@@ -51,7 +51,7 @@
     </nav>
     <div class="card m-3">
       <div class="card-body p-0">
-        <table id="dataTable" class="table table-hover flex-grow-1 loading shadow-none mt-3" style="margin-bottom:0;"></table>
+        <table id="dataTable" class="table table-hover flex-grow-1 loading shadow-none" style="margin-bottom:0;"></table>
       </div>
     </div>
 </main>

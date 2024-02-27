@@ -667,63 +667,12 @@ function s_Del(elem) {
 
 
 
-function newRequest() {
+async function newRequest() {
   MODAL.setSize('lg')
   MODAL.setTitle("New Request");
-  const layout = `
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="form-group mb-3">
-            <label>Last Name <small class="text-danger">*</small></label>
-            <input type="text" name="lname" class="form-control">
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="form-group mb-3">
-            <label>First Name <small class="text-danger">*</small></label>
-            <input type="text" name="fname" class="form-control">
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="form-group mb-3">
-            <label>Middle Name </label>
-            <input type="text" name="mname" class="form-control">
-          </div>
-        </div>
-        <div class="col-lg-12">
-          <div class="form-group mb-3">
-            <label>File request <small class="text-danger">*</small></label>
-            <div class="input-group mb-3">
-              <input type="text" name="file" class="form-control" aria-label="" aria-describedby="basic-addon2">
-              <span class="input-group-text bg-secondary" id="basic-addon2">
-                <div class="form-check form-switch m-0">
-                  <input class="form-check-input" name="priority" type="checkbox" id="high-priority">
-                  <label class="form-check-label text-white" for="high-priority">High Priority</label>
-                </div>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-12">
-          <div class="form-group mb-3">
-            <label>Request Reason <small class="text-danger">*</small></label>
-            <textarea name="reason" class="form-control"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <small class="error-msg text-danger"></small>
-        </div>
-      </div>
-    </div>
-  `;
-  MODAL.setBody(layout)
-
+  MODAL.setBody(await Helper.template('request/new'));
   MODAL.setFooter(`<button class="btn btn-success">Save</button>`)
   MODAL.open();
-
   MODAL.onSubmit(async (e, form_data)=>{
 
     if(Helper.formValidator(form_data, ["lname", "fname", "request", "reason"], v => v == '').length > 0) {
@@ -732,8 +681,9 @@ function newRequest() {
     }
 
     Helper.Promt_Clear();
-    console.log({data: Helper.getDataFromFormData(form_data)});
-    const status = (await Helper.api('request/create', "json", form_data)).status;
+    
+    const body = Helper.getDataFromFormData(form_data);
+    const status = (await Helper.api('request/create', "json", Helper.createFormData({ ...body, priority: body.priority == "on" ? 1 : 0 }))).status;
     if(status == "success") {
       MAIN.addNotif("Success", "New Request added.", "g");
       MODAL.close();

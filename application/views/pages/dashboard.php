@@ -44,7 +44,7 @@
           <button class="btn btn-primary" onclick="newRequest()">
             <i class="fa-solid fa-plus"></i> New Request
           </button>
-          <a href="<?= base_url() ?>/requests" class="btn btn-secondary">
+          <a href="<?= base_url() ?>requests" class="btn btn-secondary">
             <i class="fa-regular fa-eye"></i> View Requests
           </a>
 
