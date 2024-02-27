@@ -55,6 +55,14 @@ $route['shelves/insert']['post'] = 'Shelves/add_Shelf';
 $route['set_agree']['post'] = 'Agreement/set_agree';
 $route['get_agree']['post'] = 'Agreement/get_agree';
 
+// Requests
+$route['request/create']['post'] = 'Request/create';    // creation of request
+$route['request/all']['post'] = 'Request/fetch_all';    // fetch all records
+$route['request/(:num)'] = 'Request/fetch/$1';          // fetch specific request by ID
+$route['request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
+$route['request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
+
+
 // DEFAULT
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
