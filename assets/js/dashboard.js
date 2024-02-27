@@ -694,7 +694,7 @@ function newRequest() {
         <div class="col-lg-12">
           <div class="form-group mb-3">
             <label>File request <small class="text-danger">*</small></label>
-            <input type="text" name="request" class="form-control">
+            <input type="text" name="file" class="form-control">
           </div>
         </div>
         <div class="col-lg-12">
