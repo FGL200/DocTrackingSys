@@ -38,12 +38,12 @@ class User extends CI_Controller{
                 foreach($this->input->post() as $key=>$val) {
                     
                     if(!empty(trim($val))) { 
-                        // if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
-                        // if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
-                        // if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
-                        // if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
-                        // if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
-                        // if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
+                        if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
+                        if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
+                        if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
+                        if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
+                        if($key == "profile-bday") $data .= " `ui`.`bday` = '".$val."' ";
+                        if($key == "profile-g") $data .= " `ui`.`gender` = '".strtoupper($val)."' ";
                         if($key == "profile-new-pass") $data .= " `u`.`pword` = PASSWORD('".$val."') ";
                     }
                     
@@ -52,18 +52,16 @@ class User extends CI_Controller{
                 $data .= " WHERE `u`.`id` = '".$uid."'";
         
                 $result = $this->user->update_user_info($data);
-        
-                // if($result) $this->get_user($this->input->post("uid"));
 
-                //Add to user_logs  || OKAY NA TO
-                // add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
-                //     UPDATE user_info `ui`
-                //     INNER JOIN `user` `u`
-                //         ON `u`.`id` = `ui`.`user_id`
-                //     SET {$data}
-                // ");
+                // Add to user_logs  || OKAY NA TO
+                add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
+                    UPDATE user_info `ui`
+                    INNER JOIN `user` `u`
+                        ON `u`.`id` = `ui`.`user_id`
+                    SET {$data}
+                ");
 
-                if($result)$this->get_user(); //FRED
+                if($result) echo json_encode(['status' => 'success']); //FRED
                 else echo json_encode(['status' =>  "error", 'message' =>  "Error in saving profile"]); die;
             break;
 
