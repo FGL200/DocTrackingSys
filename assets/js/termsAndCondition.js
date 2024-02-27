@@ -9,7 +9,7 @@ let showed = false;
 // mga pwedeng events ni user
 $(window).on("load", async ()=>{
     
-    const checkAgree = await fetch_data(`${base_url}get_agree`, {method : "post"});
+    const checkAgree = await fetch_data(`${base_url}agree/get`, {method : "post"});
     agree = checkAgree['agree'] == '1' ? true : false;
 
     console.log(agree);
@@ -47,7 +47,7 @@ async function showTermsAndCondition() {
             if(!ans) return;
 
             
-            const result = await fetch_data(`${base_url}set_agree`, {method : "post"});
+            const result = await fetch_data(`${base_url}agree/set`, {method : "post"});
           
             
             agree = result['agree']== '1' ? true : false;

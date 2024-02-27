@@ -53,8 +53,16 @@ $route['user/logs'] = 'User/get_User_Logs';
 $route['shelves/insert']['post'] = 'Shelves/add_Shelf';
 
 // Agree
-$route['set_agree']['post'] = 'Agreement/set_agree';
-$route['get_agree']['post'] = 'Agreement/get_agree';
+$route['agree/set']['post'] = 'Agreement/set'; // set agree status
+$route['agree/get']['post'] = 'Agreement/get'; // get agree status
+
+// Requests
+$route['request/create']['post'] = 'Request/create';    // creation of request
+$route['request/all']['post'] = 'Request/fetch_all';    // fetch all records
+$route['request/(:num)'] = 'Request/fetch/$1';          // fetch specific request by ID
+$route['request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
+$route['request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
+
 
 // DEFAULT
 $route['404_override'] = '';

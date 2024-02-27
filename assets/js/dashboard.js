@@ -732,9 +732,13 @@ function newRequest() {
     }
 
     Helper.Promt_Clear();
-    MODAL.close();
     console.log({data: Helper.getDataFromFormData(form_data)});
-    const resp = (await Helper.api('request/create', "json", form_data));
-    console.log({ resp });
+    const status = (await Helper.api('request/create', "json", form_data)).status;
+    if(status == "success") {
+      MAIN.addNotif("Success", "New Request added.", "g");
+      MODAL.close();
+    }else {
+      MAIN.addNotif("Error", "Error Occurred. Try again later.", "r");
+    } 
   });
 }
