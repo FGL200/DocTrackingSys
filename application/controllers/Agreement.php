@@ -7,13 +7,13 @@ class Agreement extends CI_Controller {
         parent::__construct();
     }
 
-    public function set_agree() {
+    public function set() {
         $this->session->set_userdata(['agree' => '1']);
 
         echo json_encode(['agree' => $this->session->userdata("agree")]);
     }
 
-    public function get_agree() {
+    public function get() {
         echo json_encode(['agree' => $this->session->userdata("agree")]);
     }
 }
