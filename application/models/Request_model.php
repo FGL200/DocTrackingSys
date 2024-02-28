@@ -27,8 +27,8 @@ class Request_model extends CI_Model {
                     req.* 
                 from requests req
                 ";
-                
-        $condition = " where req.deleted_flag = 0"; // het all the not deleted requests 
+
+        $condition = " where req.deleted_flag = 0 "; // het all the not deleted requests 
 
         if($user['role'] == "V") { // kapag hindi admin kukunin lang yung mga request na created ni Viewer
             $sql .= "
@@ -37,7 +37,7 @@ class Request_model extends CI_Model {
                     on 
                         req.created_by = u.id
                     ";
-            $condition .= " u.id = {$user['uid']} AND ";
+            $condition .= " AND u.id = {$user['uid']}";
         }
         $sql .= $condition;
         $sql .= " order by req.priority, req.created_at DESC";
