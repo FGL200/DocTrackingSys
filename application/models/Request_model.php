@@ -54,6 +54,10 @@ class Request_model extends CI_Model {
     }
 
     public function update(string $items, string $condition) {
+        $curr_Datetime = date("Y-m-d H:i:s"); 
+
+        $items .=  ", `updated_at`  = '{$curr_Datetime}'";
+        
         $sql = "
                 update requests 
                 set 

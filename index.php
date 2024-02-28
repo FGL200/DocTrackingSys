@@ -312,4 +312,12 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+
+ /**
+  * set timezone in Philippines
+  * dito ko na nilagay para sa buong application yung gamit nating datetime 
+  * ay yung sa Philippiines.
+  */
+date_default_timezone_set("Asia/Manila"); 
+
 require_once BASEPATH.'core/CodeIgniter.php';
