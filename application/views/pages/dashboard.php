@@ -1,12 +1,19 @@
 <main class="d-flex">
   <div id="dashBoard" class="card p-3 m-3 flex-grow-1 gap-2">
-    <div class="d-flex justify-content-between gap-2 mb-3">
+    <div class="d-flex flex-wrap aling-items-center justify-content-between gap-2 mb-3">
       <span class="fs-3 flex-grow-1 d-flex align-items-center" style="
                 background-color: rgba(0,0,0,0.02); 
                 padding: 0 1rem;
                 box-shadow: inset 0 .12rem .5rem rgba(0,0,0,.08);
-                border-radius: 5px;
-                ">Dashboard</span>
+                border-radius: 5px;"
+        >
+          Dashboard
+        </span>
+        <span class="d-flex align-items-center gap-2 border rounded" style="padding-left: 1rem; padding-right: .25rem;">
+          
+          <input type="text" placeholder="Quick Search" class="border-0" style="outline: none;">
+          <button class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </span>
 
       <?php if ($role === 'A') { ?>
 
@@ -56,67 +63,72 @@
     </div>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="shelf" role="tabpanel" aria-labelledby="shelves-tab" tabindex="0">
-        <div class="d-flex justify-content-center flex-wrap flex-grow-1 gap-3">
+        <div class="row">
 
-          <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
-            <?php foreach ($shelves as $shelf) { ?>
-              <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
-                <!-- <section class="shelf-name">Shelf</section> -->
-                <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
-                  <span>
-                    <i class="fa-solid fa-bars-staggered"></i>
-                  </span>
-                  <span class="shelf-name flex-grow-1">
-                    <?= strtoupper($shelf['name']); ?>
-                  </span>
-                  <!-- <button onclick="newShelf()" class="shlef-opt">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button> -->
-                </section>
-                <section class="shelf-body d-flex flex-column">
-                  <span><b>Records: </b> <span><?= $shelf['total'] ?? '--'; ?></span> </span>
-                  <span><b>Encoders:</b> <span><?= $shelf['users'] ?? '--'; ?></span></span>
-                  <span><b>Last update: </b> <span><?= $shelf['last date'] ?? '--'; ?></span></span>
-                </section>
-              </a>
-            <?php } ?>
-
-            <!-- <?php if ($role === 'A' || $role === 'E') { ?>
-                            <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
-                                <section class="shelf-title fs-4">
-                                    <i class="fa-solid fa-box-archive"></i>
-                                    Archived
-                                </section>
-                                <section class="shelf-body d-flex flex-column">
-                                    <span><b>Records: </b><span><?= $bin_records ?></span></span>
-                                </section>
-                            </a>
-                        <?php } ?> -->
-
-            <?php if ($role === 'A') { ?>
-              <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
-                <section class="shelf-title fs-4">
-                  <i class="fa-solid fa-box-archive"></i>
-                  Archived
-                </section>
-                <section class="shelf-body d-flex flex-column">
-                  <span><b>Records: </b><span><?= $bin_records ?></span></span>
-                </section>
-              </a>
-
-              <a href="#" onclick="newShelf()" class="shelf-container shelf-new card p-3 shadow-0">
-                <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
-                  <i class="fa-solid fa-plus"></i>
-                  <span class="fs-4"><span>Add Shelf</span></span>
-                </section>
-              </a>
-            <?php } ?>
+          <div class="col-lg-8 col-md-12 col-sm-12">
+            <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
+              <?php foreach ($shelves as $shelf) { ?>
+                <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
+                  <!-- <section class="shelf-name">Shelf</section> -->
+                  <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
+                    <span>
+                      <i class="fa-solid fa-bars-staggered"></i>
+                    </span>
+                    <span class="shelf-name flex-grow-1">
+                      <?= strtoupper($shelf['name']); ?>
+                    </span>
+                    <!-- <button onclick="newShelf()" class="shlef-opt">
+                                          <i class="fa-solid fa-ellipsis-vertical"></i>
+                                      </button> -->
+                  </section>
+                  <section class="shelf-body d-flex flex-column">
+                    <span><b>Records: </b> <span><?= $shelf['total'] ?? '--'; ?></span> </span>
+                    <span><b>Encoders:</b> <span><?= $shelf['users'] ?? '--'; ?></span></span>
+                    <span><b>Last update: </b> <span><?= $shelf['last date'] ?? '--'; ?></span></span>
+                  </section>
+                </a>
+              <?php } ?>
+  
+              <!-- <?php if ($role === 'A' || $role === 'E') { ?>
+                              <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
+                                  <section class="shelf-title fs-4">
+                                      <i class="fa-solid fa-box-archive"></i>
+                                      Archived
+                                  </section>
+                                  <section class="shelf-body d-flex flex-column">
+                                      <span><b>Records: </b><span><?= $bin_records ?></span></span>
+                                  </section>
+                              </a>
+                          <?php } ?> -->
+  
+              <?php if ($role === 'A') { ?>
+                <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
+                  <section class="shelf-title fs-4">
+                    <i class="fa-solid fa-box-archive"></i>
+                    Archived
+                  </section>
+                  <section class="shelf-body d-flex flex-column">
+                    <span><b>Records: </b><span><?= $bin_records ?></span></span>
+                  </section>
+                </a>
+  
+                <a href="#" onclick="newShelf()" class="shelf-container shelf-new card p-3 shadow-0 mb-3">
+                  <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="fs-4"><span>Add Shelf</span></span>
+                  </section>
+                </a>
+              <?php } ?>
+            </div>
+          </div>
+          
+          <div class="col-lg-4 col-md-12 col-sm-12">
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- jsCalendar -->
+              <div class="auto-jsCalendar shadow-0 card align-self-start"></div>
+            </div>
           </div>
 
-          <div class="flex-grow-1"></div>
-
-          <!-- jsCalendar -->
-          <div class="auto-jsCalendar shadow-0 card align-self-start"></div>
         </div>
       </div>
       <?php if ($role === 'A') { ?>

@@ -21,7 +21,7 @@ function dts_alert(content = {
     const b_BUTTON1 = $(`<button class='btn btn-primary'>${content.buttons[0] ? content.buttons[0] : "Okay"}</button>`);
     const b_BUTTON2 = content.buttons[1] ? $(`<button class='btn btn-danger'>${content.buttons[1]}</button>`) : null;
 
-    e_FOOTER.append(b_BUTTON1, b_BUTTON2);
+    e_FOOTER.append(b_BUTTON2, b_BUTTON1);
     e_CONTAINER.append(e_HEADER, e_BODY, e_FOOTER);
     e_HOLDER.append(e_CONTAINER);
     $("#root").append(e_HOLDER);

@@ -699,20 +699,41 @@ $("#btn-go-back").on("click", function(e){
 })
 
 $("#move-btn").on("click", async function(){
-    const shelves = await fetch_data(`${base_url}api/shelves`);
-    
+    // const shelves = await fetch_data(`${base_url}api/shelves`);
+    let options = ``;
+    const shelves = await Helper.api('api/shelves', "json");
+    shelves.forEach(v => options += `<option value="${v.id}" >${v.name}</option>`);
     console.log({shelves});
 
-    let sBody = `<select id="shelf" name="name" class="form-control" required>
-        <option value="" selected>-- Select Shelf--</option>
-        `;
-    for(const s of shelves){ sBody += `<option value="${s.id}" >${s.name}</option>` };
-    sBody += "</select>";
+    MODAL.setSize('lg')
     MODAL.setTitle("Move shelf");
-    MODAL.setBody(`${sBody}`);
+    MODAL.setBody(Helper.replaceLayout(await Helper.template('viewRecord/move') , { options: options }));
     MODAL.setFooter(`
         <button type="button" id="move-record-btn" class="btn btn-primary" onclick="VIEW_RECORD.onSubmit(this)">Move</button> 
         <button type="button" onclick="MODAL.close()" class="btn btn-danger">Cancel</button>
         `);
     MODAL.open();
-})
+});
+
+
+
+
+
+Helper.onClick("#merge-btn", async function() {
+  MODAL.setSize('md');
+  MODAL.setTitle('Merge Record');
+  MODAL.setBody(Helper.replaceLayout((await Helper.template('viewRecord/merge')), {
+    options: getMergeList()
+  })) 
+  MODAL.setFooter(`<button class="btn btn-primary">Merge</button>`)
+  MODAL.open();
+  MODAL.onSubmit(async (e, form_data) =>{
+
+  });
+});
+
+function getMergeList() {
+  const rec_id = Number(CONST_RECORD_ID);
+  console.log({rec_id})
+  return ''
+}

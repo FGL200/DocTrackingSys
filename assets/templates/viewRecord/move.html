@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-info" role="alert">
+      <p>
+        <b>Move Record to another shelf.</b>
+      </p>
+      <small class="text-muted">
+        <i class="fa-solid fa-circle-info"></i> Select new shelf for this record to be saved. 
+      </small>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="form-group p-3">
+      <label>Shelf Name <small class="text-danger">*</small></label>
+      <select id="shelf" name="name" class="form-control" required>
+        <option value="" selected>Select Shelf</option>
+        {{options}}
+      </select>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="form-group mb-3">
+        <label>Username <small class="text-danger">*</small></label>
+        <input type="text" name="profile-uname" class="form-control" value="{{uname}}">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group mb-3">
+        <label>First name <small class="text-danger">*</small></label>
+        <input type="text" name="profile-fname" class="form-control" value="{{fname}}">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group mb-3">
+        <label>Middle name <small class="text-danger">*</small></label>
+        <input type="text" name="profile-mname" class="form-control" value="{{mname}}">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group mb-3">
+        <label>Last name <small class="text-danger">*</small></label>
+        <input type="text" name="profile-lname" class="form-control" value="{{lname}}">
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label>Birthday <small class="text-danger">*</small></label>
+        <input type="date" name="profile-bday" class="form-control" id="profile-bday">
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label>Gender <small class="text-danger">*</small></label>
+        <select name="profile-g" class="form-control" id="profile-g">
+          <option value="">Select Gender</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="N">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label>Old password</label>
+        <input type="text" name="profile-old-pass" class="form-control" id="profile-old-pass">
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label>New password</label>
+        <input type="text" name="profile-new-pass" class="form-control" id="profile-new-pass">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <small class="error-msg text-danger"></small>
+    </div>
+  </div>
+</div>
