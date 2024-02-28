@@ -49,6 +49,8 @@
   <!-- after the shim is referenced, add the library -->
   <script type="text/javascript" src="<?= base_url('assets/third_party/sheetjs/dist/xlsx.full.min') ?>.js"></script>
 
+  <script src="<?=base_url('assets')?>/js/helper.js"></script>
+
   <!-- CUSTOM JS -->
   <script>
     // CONSTANTS IN JS

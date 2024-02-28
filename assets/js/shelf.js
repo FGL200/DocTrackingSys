@@ -486,6 +486,8 @@ const HOME = {
 
                         // For formality and avoid warnings (the next line is removable)
                         $('#dataTable_wrapper input[type="search"]').prop("name", "dataTable_quickSearch");
+                    }else {
+                      $('#dataTable').html(`<tr><td class="text-center p-2">No Data Found.</td></tr>`);
                     }
                 } else {
                     MAIN.addNotif("Table loaded", "No data found");

@@ -49,7 +49,11 @@
             <?php }?>
         </div>
     </nav>
-    <table id="dataTable" class="table table-hover flex-grow-1 loading" style="margin-bottom:0;"></table>
+    <div class="card m-3">
+      <div class="card-body p-0">
+        <table id="dataTable" class="table table-hover flex-grow-1 loading shadow-none" style="margin-bottom:0;"></table>
+      </div>
+    </div>
 </main>
 
 <!-- <script src="<?=base_url('assets/third_party/html5-qrcode/html5-qrcode.min.js')?>"></script> -->
