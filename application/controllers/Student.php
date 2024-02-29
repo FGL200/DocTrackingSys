@@ -188,23 +188,6 @@ class Student extends CI_Controller{
         }
 
         
-        // foreach($_FILES as $key => $val) {
-        //     $doc = str_replace("doc_scan_","", $key);
-            
-        //     $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
-                
-        //     for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-        //         $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
-
-        //         if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
-        //     }
-            
-
-        //     if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
-        // }
-       
-
-        
         $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
         
         $shelfname = $this->input->post("shelf");
@@ -515,35 +498,6 @@ class Student extends CI_Controller{
     }
 
 
-    public function build_qr() {
-        $path = str_replace('\\', '/', BASEPATH);
-        
-        $cond = null; // condition for the query
-        $order = null; // order by 
-        $uid = $this->session->userdata("uid");
-        
-        if($this->input->post("from") && $this->input->post("to")) { // for generating a qr based on first letter of the last name
-            $from = $this->input->post("from") ;
-            $to = $this->input->post("to");
-
-            $cond = " AND (LEFT(`sr`.stud_lname, ".strlen($from).") >= '$from' AND LEFT(`sr`.stud_lname, ".strlen($to).") <= '$to')";
-            $order = "ORDER BY `Last Name` ASC";
-        } else if($this->input->post("id")) { // generating a qr by specific id
-            $ids = [];
-
-            foreach($this->input->post("id") as $id) array_push($ids, $id);
-
-            $ids = join(',', $ids); // make the ids[] as string seperated by comma
-            
-            $cond = " AND `sr`.id IN ({$ids})";
-        }
-        
-        $data = $this->stud->get_StudentRecords_With_Remarks($uid, $cond, $order);
-        
-        echo json_encode(["data" => $data]);
-
-    }
-
     public function get_all_stud_rec_as_select() {
         $uid = $this->input->post("uid");
         
@@ -571,6 +525,24 @@ class Student extends CI_Controller{
                     'stud_lname' => $stud_lname];
 
         echo to_JSON($this->stud->get_same_records_shelf($student, $current_shelf));
+
+    }
+
+    public function quick_search() {
+        $value = $this->input->post("value"); // search value
+
+
+        $conditions = "
+                        sr.stud_fname LIKE '%{$value}%' OR
+                        sr.stud_lname = '%{$value}%' OR 
+                        sr.stud_mname = '%{$value}%' OR 
+                        sr.stud_id = '{$value}'
+                    ";
+
+
+        $student = $this->stud->filter_student($conditions);
+
+        echo to_JSON($student);
 
     }
 

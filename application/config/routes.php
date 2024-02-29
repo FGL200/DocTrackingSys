@@ -33,6 +33,14 @@ $route['student/filter']['post'] = 'Student/filter_search';
 $route['student/record/delete']['post'] = "Student/delete_Student";
 
 /**
+ * METHOD : POST
+ * 
+ * BODY 
+ * value string 
+ */
+$route['student/search']['post'] = 'Student/quick_search';
+
+/**
  * METHOD => POST
  * 
  * BODY 
