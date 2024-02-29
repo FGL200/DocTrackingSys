@@ -356,13 +356,24 @@ class Student_model extends CI_Model{
 
     public function get_Student_By($student_info) {
         $sql = "SELECT 
-                    stud_fname,
-                    stud_mname,
-                    stud_lname
-                FROM stud_rec 
-                WHERE (stud_fname LIKE '%".$student_info['stud_fname']."%' AND stud_lname LIKE '%".$student_info['stud_lname']."%' AND deleted_flag = '0')
+                    sr.stud_fname,
+                    sr.stud_mname,
+                    sr.stud_lname
+                FROM stud_rec sr 
+                JOIN
+                    doc as d
+                on 
+                    sr.id = d.stud_rec_id 
+                JOIN 
+                    shelves as sh
+                on 
+                    d.shelf = sh.id
+                WHERE (sr.stud_fname LIKE '%".$student_info['stud_fname']."%' AND 
+                        sr.stud_lname LIKE '%".$student_info['stud_lname']."%' AND 
+                        sh.name = '{$student_info['shelf']}' AND 
+                        sr.deleted_flag = '0')
                 ";
-
+        // echo $sql; return;
         $fetch = $this->db->query($sql);
         return $fetch->result();
     }
@@ -478,6 +489,36 @@ class Student_model extends CI_Model{
         return $this->db->query($sql);
     }
 
+    /**
+     * get the shelfs of same records for merging
+     */
+    public function get_same_records_shelf($student, $current_shelf) {
+
+        $query = "
+                select 
+                    CONCAT('{\"Name\" : \"',  sh.name, '\",\"ID\" : \"', sh.id, '\"}') as shelf
+                from 
+                    stud_rec as sr
+                join 
+                    doc as d
+                on 
+                    sr.id = d.stud_rec_id
+                join 
+                    shelves as sh
+                on 
+                    d.shelf = sh.id
+                
+                where 
+                    (   sr.stud_lname = '{$student['stud_lname']}' AND 
+                    sr.stud_fname = '{$student['stud_fname']}' OR 
+                    sr.stud_mname = '{$student['stud_mname']}' ) AND 
+                    sh.name != '{$current_shelf}'
+                ";
+
+        $fetch = $this->db->query($query);
+
+        return $fetch->result();
+    }
     // PRIVATE FUNCTIONS //
 
     private function user_Is_Admin($uid) {

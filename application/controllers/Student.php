@@ -88,6 +88,7 @@ class Student extends CI_Controller{
         $stud_lname = trim($this->input->post("stud_lname"));
         $stud_mname = trim($this->input->post("stud_mname"));
         $stud_sfx = trim($this->input->post("stud_sfx"));
+        $shelf = trim($this->input->post("shelf"));
 
         /** Student Information checking */
         $required_fields = array();
@@ -122,13 +123,15 @@ class Student extends CI_Controller{
         insert_slashes($stud_mname);
         insert_slashes($stud_sfx);
 
-        $student_info = ["stud_id"=>$stud_id, "stud_fname"=>$stud_fname,"stud_lname"=>$stud_lname, "stud_mname"=>$stud_mname, "stud_sfx"=>$stud_sfx];
+        $student_info = ["stud_id"=>$stud_id, "stud_fname"=>$stud_fname,"stud_lname"=>$stud_lname, "stud_mname"=>$stud_mname, "stud_sfx"=>$stud_sfx, "shelf" => $shelf];
         $student = $this->stud->get_Student_By($student_info);
         if($student) {
             echo json_encode(array('status'=>'error', 'message'=>'Record already exist'));
             exit; 
         }
         
+        unset($student_info['shelf']); // remove shelf key in $student_info to 
+
         /** END Student Information checking */
         
         $data = "";
@@ -559,6 +562,17 @@ class Student extends CI_Controller{
         // echo json_encode(["result"=> $this->stud->get_stud_rec_trashBin($uid)]); 
     }
 
+    
+    public function get_same_records_shelf() {
+        extract($this->input->post());
+
+        $student = ['stud_fname' => $stud_fname, 
+                    'stud_mname' => $stud_mname, 
+                    'stud_lname' => $stud_lname];
+
+        echo to_JSON($this->stud->get_same_records_shelf($student, $current_shelf));
+
+    }
 
     /** PRIVATE FUNCTIONS */
 

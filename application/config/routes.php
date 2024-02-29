@@ -31,6 +31,17 @@ $route['student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
 $route['student/filter']['post'] = 'Student/filter_search';
 $route['student/record/delete']['post'] = "Student/delete_Student";
+
+/**
+ * METHOD => POST
+ * 
+ * BODY 
+ * stud_fname string
+ * stud_lname string
+ * stud_mname string
+ */
+$route['student/record/shelf']['post'] = "Student/get_same_records_shelf";
+
 $route['api/categories'] = 'RemarkCategory/getCategories';
 $route['api/shelves'] = 'Shelves/getAll';
 
