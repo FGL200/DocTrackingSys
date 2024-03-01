@@ -127,7 +127,7 @@ class Student_model extends CI_Model{
                 
         //         WHERE sr.id = "'.$id.'"
         // ';
-        $query = ' SELECT 
+        $query = ' SELECT
                     `sr`.stud_id,
                     `sr`.stud_lname,
                     `sr`.stud_mname,
@@ -145,6 +145,9 @@ class Student_model extends CI_Model{
                     `d`.req_clearance_form,
                     `d`.req_credentials,
                     `d`.hd_or_cert_of_trans,
+                    `d`.shelf,
+                    `d`.shelf_histories,
+                    `d`.merged_shelves,
                     `rm`.value
                 FROM `stud_rec` sr
                 LEFT JOIN `remarks` rm  
@@ -293,9 +296,8 @@ class Student_model extends CI_Model{
     }
 
 
-    public function filter_student($conditions) {
-        $sql = "
-        \rSELECT 
+    public function filter_student($conditions, $other_columns = "") {
+        $columns = "
         \r    LPAD(sr.id, 6, '0') `Record ID`,
         \r    CASE 
         \r        WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
@@ -324,7 +326,13 @@ class Student_model extends CI_Model{
         \r    sr.`updated_date` `udate`,
         \r    sr.`created_date` `cdate`,
         \r    u.`uname` `cby`,
-        \r    u2.`uname` `uby`
+        \r    u2.`uname` `uby`";
+
+        $columns .= $other_columns;
+
+        $sql = "
+        \rSELECT 
+            {$columns}
         \rFROM  stud_rec as `sr`
         \rJOIN remarks `rm`
         \r    ON `rm`.stud_rec_id = `sr`.id
@@ -490,9 +498,10 @@ class Student_model extends CI_Model{
     }
 
     /**
-     * get the shelfs of same records for merging
+     * get the shelfs of same records for get_Student_all_Record
      */
     public function get_same_records_shelf($student, $current_shelf) {
+        $shelf_id = $this->get_Shelf_ID($current_shelf); // $current_shelf => shelf name
 
         $query = "
                 select 
@@ -509,16 +518,63 @@ class Student_model extends CI_Model{
                     d.shelf = sh.id
                 
                 where 
-                    (   sr.stud_lname = '{$student['stud_lname']}' AND 
-                    sr.stud_fname = '{$student['stud_fname']}' OR 
-                    sr.stud_mname = '{$student['stud_mname']}' ) AND 
-                    sh.name != '{$current_shelf}'
+                    (   sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
+                    sr.stud_fname LIKE '%{$student['stud_fname']}%' OR 
+                    sr.stud_mname LIKE '%{$student['stud_mname']}%' ) AND 
+                    sh.id != '{$shelf_id}' AND 
+                    ( not locate('\"{$shelf_id}\"', d.merged_shelves) )
                 ";
-
+    
         $fetch = $this->db->query($query);
 
         return $fetch->result();
     }
+
+
+    public function get_Merged_Records($student, $shelf_name) {
+        $shelf_id = $this->get_Shelf_ID($shelf_name);
+
+        $query = " SELECT
+                    `sr`.id,
+                    `sr`.stud_id,
+                    `sr`.stud_lname,
+                    `sr`.stud_mname,
+                    `sr`.stud_fname,
+                    `sr`.stud_sfx,
+                    `d`.regi_form,
+                    `d`.good_moral,
+                    `d`.j_f137,
+                    `d`.s_f137,
+                    `d`.f138,
+                    `d`.birth_cert,
+                    `d`.tor,
+                    `d`.app_grad,
+                    `d`.cert_of_complete,
+                    `d`.req_clearance_form,
+                    `d`.req_credentials,
+                    `d`.hd_or_cert_of_trans,
+                    `d`.shelf,
+                    `d`.shelf_histories,
+                    `d`.merged_shelves,
+                    `rm`.value
+                FROM `stud_rec` sr
+                LEFT JOIN `remarks` rm  
+                    ON rm.stud_rec_id = sr.id
+                LEFT JOIN `doc` d
+                    ON  d.stud_rec_id = sr.id
+                
+                WHERE (   sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
+                    sr.stud_fname LIKE '%{$student['stud_fname']}%' OR 
+                    sr.stud_mname LIKE '%{$student['stud_mname']}%' ) AND 
+                    (locate('\"{$shelf_id}\"', d.merged_shelves) )
+        ";
+
+        $fetch = $this->db->query($query);
+
+        return $fetch->result();
+
+    }
+
     // PRIVATE FUNCTIONS //
 
     private function user_Is_Admin($uid) {
@@ -534,6 +590,20 @@ class Student_model extends CI_Model{
         }
         return false;
     }   
+
+    private function get_Shelf_ID($name) {
+        $query = "
+                select 
+                    id
+                from 
+                    shelves 
+                where 
+                    name = '{$name}'
+                limit 1
+                ";
+        $fetch = $this->db->query($query);
+        return $fetch->result_array()[0]['id'];
+    }
 }
 
 ?>

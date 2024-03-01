@@ -1,0 +1,1 @@
+ALTER TABLE `doc` ADD `merged_shelves` JSON NULL DEFAULT '[]' AFTER `shelf_histories`;

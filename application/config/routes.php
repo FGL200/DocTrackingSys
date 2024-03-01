@@ -50,6 +50,24 @@ $route['student/search']['post'] = 'Student/quick_search';
  */
 $route['student/record/shelf']['post'] = "Student/get_same_records_shelf";
 
+/**
+ * METHOD => POST
+ * 
+ * BODY 
+ * stud_rec_id int => student record
+ * shelf string => name ng shelf nung record
+ */
+$route['student/merged-records']['post'] = "Student/get_Merged_Records";
+
+/**
+ * METHOD => POST
+ * (:num) => record id
+ * 
+ * BODY 
+ * to int => id ng shelf kung san immerge
+ */
+$route['student/record/(:num)/merge'] = "Student/student_record_merge/$1";
+
 $route['api/categories'] = 'RemarkCategory/getCategories';
 $route['api/shelves'] = 'Shelves/getAll';
 

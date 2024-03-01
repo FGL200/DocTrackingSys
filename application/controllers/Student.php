@@ -520,7 +520,7 @@ class Student extends CI_Controller{
     public function get_same_records_shelf() {
         extract($this->input->post());
 
-        $student = ['stud_fname' => $stud_fname, 
+        $student = ['stud_fname' => $stud_fname,
                     'stud_mname' => $stud_mname, 
                     'stud_lname' => $stud_lname];
 
@@ -534,8 +534,8 @@ class Student extends CI_Controller{
 
         $conditions = "
                         sr.stud_fname LIKE '%{$value}%' OR
-                        sr.stud_lname = '%{$value}%' OR 
-                        sr.stud_mname = '%{$value}%' OR 
+                        sr.stud_lname LIKE '%{$value}%' OR 
+                        sr.stud_mname LIKE '%{$value}%' OR 
                         sr.stud_id = '{$value}'
                     ";
 
@@ -543,7 +543,66 @@ class Student extends CI_Controller{
         $student = $this->stud->filter_student($conditions);
 
         echo to_JSON($student);
+    }
+    public function student_record_merge($stud_rec_id) {
+        
+        $to = $this->input->post('to'); // shlef id to be merged
 
+        $student = $this->stud->get_Student_all_Record($stud_rec_id); // record of the student to be merged
+
+        $conditions = "
+                        sr.stud_fname LIKE '%{$student['stud_fname']}%' AND
+                        sr.stud_lname LIKE '%{$student['stud_lname']}%' AND
+                        sr.id != {$stud_rec_id} AND 
+                        `d`.shelf = {$to}
+                    ";
+
+        $other_columns = ", `d`.shelf, `d`.merged_shelves";
+
+        $other_records = $this->stud->filter_student($conditions, $other_columns)['data']; // studetn records from other shelves
+
+        $this->db->trans_begin();
+
+        /******* update the other records to merged *******/
+        foreach($other_records as $o) {
+            
+            $rec_id = (int)$o['Record ID'];
+            $merged_shelves = to_ARRAY($o['merged_shelves']);
+
+            array_push($merged_shelves, "{$student['shelf']}");
+
+            $merged_shelves = to_JSON($merged_shelves);
+            
+            $data = "merged_shelves = '"  . $merged_shelves . "'";
+            $conditions = " where stud_rec_id =  " . $rec_id;
+
+            $this->stud->update_table('doc', $data, $conditions);
+
+        }
+        /***********************************************/
+
+        $csMergedShleves = to_ARRAY($student['merged_shelves']);
+        array_push($csMergedShleves, "{$to}");
+        $csMergedShleves = to_JSON($csMergedShleves);
+        $data = "merged_shelves = '"  . $csMergedShleves . "'";
+        $conditions = " where stud_rec_id =  " . $stud_rec_id;
+        $this->stud->update_table('doc', $data, $conditions);
+
+        $this->db->trans_commit();
+
+        echo to_JSON(['status' => 1, 'message' => 'Record merged.']);
+
+
+    }
+
+    public function get_Merged_Records() {
+        extract($this->input->post());
+
+        $student = $this->stud->get_Student_all_Record($stud_rec_id);
+
+        $student['id'] = $stud_rec_id;
+        
+        echo to_JSON($this->stud->get_Merged_Records($student, $shelf));
     }
 
     /** PRIVATE FUNCTIONS */
