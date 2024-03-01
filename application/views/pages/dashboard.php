@@ -11,8 +11,8 @@
         </span>
         <span class="d-flex align-items-center gap-2 border rounded" style="padding-left: 1rem; padding-right: .25rem;">
           
-          <input type="text" placeholder="Quick Search" class="border-0" style="outline: none;">
-          <button class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <input type="text" placeholder="Quick Search" id="quick_serach" class="border-0" style="outline: none;">
+          <button class="btn btn-primary" onclick="Submit_QuickSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
         </span>
 
       <?php if ($role === 'A') { ?>
