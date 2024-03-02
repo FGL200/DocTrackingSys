@@ -34,7 +34,7 @@ class Shelves extends CI_Controller {
 
         addcslashes($name, " \t\n\r\0\x0B\-\`\"\'");
 
-        $items = " name = {$name}', updated_date = '{$curr_date}', updated_by = '{$cuid}'";
+        $items = " name = '{$name}', updated_date = '{$curr_date}', updated_by = '{$cuid}'";
         $condition = "id = '{$id}'";
        
         $result = $this->shelves->updateShelf($items, $condition);
