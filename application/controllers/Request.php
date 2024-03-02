@@ -6,7 +6,9 @@ class Request extends CI_Controller {
     {
         parent::__construct();
 
-        $this->load->model('Request_model', 'request_model');
+        $this->load->model('Request_model', 'request_model');   
+
+        disable_db_debugging($this);
     }
 
     /**
@@ -25,7 +27,7 @@ class Request extends CI_Controller {
             }
             $current_user = $this->session->userdata('uid');
 
-            $items .= ", `created_by` = {$current_user}";
+            $items .= ", `status` = '{\"value\":\"Pending\"}', `created_by` = {$current_user}";
             
             $affected_rows = $this->request_model->create($items);
             
@@ -47,8 +49,34 @@ class Request extends CI_Controller {
         $user = $this->session->has_userdata('role') ? $this->session->userdata() : ['role' => 'A', 'uid' => 20];
     
         $requests = $this->request_model->fetch_all($user);
+        try {
+            $this->db->trans_begin();
 
-        echo to_JSON($requests);
+            foreach($requests as $req) {
+          
+                if($req->due_date) {
+                    if(date('Y-m-d') > $req->due_date) {
+                        $item = "`status` = '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}'";
+                        $condition = "`id` = {$req->id}";
+
+                        $this->request_model->update($item, $condition);
+
+                        if($this->db->error()['message']) throw new Exception('Error');
+                    }
+                }
+            }
+
+
+            $this->db->trans_commit();
+
+            $requests = $this->request_model->fetch_all($user);
+
+            echo to_JSON($requests);
+        } catch(Exception $e){
+            $this->db->trans_rollback()();
+            echo to_JSON(["error_messge" => $this->db->error()]);
+        }
+        
     }
 
     /**
