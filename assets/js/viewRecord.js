@@ -191,6 +191,11 @@ const VIEW_RECORD = {
      * @param {Object} data the object data of the strudent records
      */
     loadStudentRecords : function (data) {
+
+        VIEW_RECORD.student_info.fname = data.stud_fname;
+        VIEW_RECORD.student_info.mname = data.stud_mname;
+        VIEW_RECORD.student_info.lname = data.stud_lname;
+
         // Get all the keys in the json data
         let keys = Object.keys(data);
 
@@ -215,6 +220,21 @@ const VIEW_RECORD = {
             if(keys[i].includes('stud_')){
                 $("#" + keys[i]).val(data[keys[i]]);
                 continue;
+            }
+
+            if(keys[i] == 'shelf') {
+              VIEW_RECORD.shelf.id = data[keys[i]];
+              continue;
+            }
+            
+            if(keys[i] == 'shelf_histories') {
+              VIEW_RECORD.shelf.history = JSON.parse(data[keys[i]]);
+              continue;
+            }
+
+            if(keys[i] == 'merged_shelves') {
+              VIEW_RECORD.shelf.merged = JSON.parse(data[keys[i]]);
+              continue;
             }
 
             // If the above validation is does not satisfy the current key,
@@ -280,8 +300,8 @@ const VIEW_RECORD = {
             // and save is as an object to' __old_DIRS__' variable
             let index = "doc_scan_" + keys[i];
             let docDir = doc.dir;
-            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val)}}`));
-            VIEW_RECORD.__new_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val)}}`));
+            VIEW_RECORD.__old_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val ?? 0)}}`));
+            VIEW_RECORD.__new_DIRS__.push(JSON.parse(`{"${index}[]" : "${docDir}" , "val" : ${parseInt(doc.val ?? 0)}}`));
         }
 
         value.forEach(remarks=>{
@@ -311,7 +331,19 @@ const VIEW_RECORD = {
         $("#remarks-holder").find('span').each(function (e) {
             VIEW_RECORD.__remarksValue__.push($(this).text());
         });
-    }
+    },
+
+    student_info: {
+      fname: '',
+      mname: '',
+      lname: '',
+    },
+
+    shelf: {
+      id: -1,
+      history: [],
+      merged: [],
+    },
 }
 
 
@@ -732,7 +764,14 @@ Helper.onClick("#merge-btn", async function() {
   });
 });
 
-function getMergeList() {
+async function getMergeList() {
+  const body = { 
+    stud_fname: VIEW_RECORD.student_info.fname,
+    stud_mname: VIEW_RECORD.student_info.mname, 
+    stud_lname: VIEW_RECORD.student_info.lname,
+    current_shelf: VIEW_RECORD.shelf.id,
+  };
+  const list = (await Helper.api('student/record/shelf', "json", Helper.createFormData(body)));
   const rec_id = Number(CONST_RECORD_ID);
   console.log({rec_id})
   return ''

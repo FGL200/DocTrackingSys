@@ -39,6 +39,7 @@ class Shelves_model extends CI_Model {
     public function getShelvesAndInfo() {
         $sql = '
         SELECT 
+        `sh_`.`id`,
         `sh_`.name,
            CASE WHEN DATE(MAX(`sr`.`created_date`)) IS NULL THEN 0
         ELSE count(*) 

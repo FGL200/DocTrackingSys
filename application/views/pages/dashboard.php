@@ -68,7 +68,7 @@
           <div class="col-lg-8 col-md-12 col-sm-12">
             <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
               <?php foreach ($shelves as $shelf) { ?>
-                <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0">
+                <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0" data-binder-id="<?=$shelf['id']?>" data-binder-name="<?=$shelf['name']?>">
                   <!-- <section class="shelf-name">Shelf</section> -->
                   <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
                     <span>

@@ -630,13 +630,17 @@ function generateReport() {
 }
 
 let settingSelectedShelf = "";
+let selected_shelf_id = -1;
+let selected_shelf_name = '';
 
-function openSettings(x, y, name) {
+function openSettings(x, y, name, id, actualName) {
   settingSelectedShelf = name.replace(/^\s+|\s+$/gm, '').trim();
   if (x + 300 > $(window).width()) x -= 200;
   $("#settings-shlef-name").text(name);
   $("#settings").removeClass("hide");
   $("#settings").css({ top: y, left: x })
+  selected_shelf_id = id;
+  selected_shelf_name = actualName;
 }
 
 function hideSettings(e) {
@@ -646,7 +650,7 @@ function hideSettings(e) {
 $(".shelf-container ").on("contextmenu", function (e) {
   e.preventDefault();
   if ($(this).hasClass("shelf-trash") || $(this).hasClass("shelf-new")) return;
-  openSettings(e.clientX, e.clientY, $(this).find("span.shelf-name").text())
+  openSettings(e.clientX, e.clientY, $(this).find("span.shelf-name").text(), $(this).data('binder-id'), $(this).data('binder-name'))
 });
 
 $(window).on("click", hideSettings);
@@ -665,8 +669,29 @@ function s_NTab(elem) {
   $("#settings").addClass("hide");
 }
 
-function s_RName(elem) {
+async function s_RName(elem) {
   $("#settings").addClass("hide");
+  MODAL.setSize('sm');
+  MODAL.setTitle('Rename Shelf');
+  MODAL.setBody(Helper.replaceLayout(await Helper.template('dashboard/renameShelf'), { id: selected_shelf_id, name: selected_shelf_name }));
+  MODAL.setFooter(`<button class="btn btn-success" type="submit">Save</button>`);
+  MODAL.onSubmit(async (e, form_data) => {
+
+    // const err = Helper.formValidator(form_data, ["name"], v => v == '').length;
+    const data = Helper.getDataFromFormData(form_data);
+
+    if (Helper.formValidator(form_data, ["name"], v => v == '').length > 0) {
+      Helper.Promt_Error('* Required fields must be filled.')
+      return;
+    }
+
+    Helper.Promt_Clear();
+
+    const resp = (await Helper.api(`shelves/${data.id}/update`, "json", Helper.createFormData({ name: data.name })));
+    console.log({ resp });
+    
+  });
+  MODAL.open();
 }
 
 function s_Tash(elem) {
