@@ -50,24 +50,25 @@ class Request extends CI_Controller {
     
         $requests = $this->request_model->fetch_all($user);
         try {
-            $this->db->trans_begin();
+            // $this->db->trans_begin();
 
-            foreach($requests as $req) {
+            // foreach($requests as $req) {
           
-                if($req->due_date) {
-                    if(date('Y-m-d') > $req->due_date) {
-                        $item = "`status` = '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}'";
-                        $condition = "`id` = {$req->id}";
+            //     if($req->due_date) {
+            //         if(date('Y-m-d') > $req->due_date && str_contains($req->status, 'Pending')) {
+            //             echo "fdsfd";
+            //             $item = "`status` = '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}'";
+            //             $condition = "`id` = {$req->id}";
 
-                        $this->request_model->update($item, $condition);
+            //             $this->request_model->update($item, $condition);
 
-                        if($this->db->error()['message']) throw new Exception('Error');
-                    }
-                }
-            }
+            //             if($this->db->error()['message']) throw new Exception('Error');
+            //         }
+            //     }
+            // }
 
 
-            $this->db->trans_commit();
+            // $this->db->trans_commit();
 
             $requests = $this->request_model->fetch_all($user);
 
@@ -114,6 +115,8 @@ class Request extends CI_Controller {
     
                 $items .= "`{$key}` = '$val'";
             }
+
+            $items .= ", updated_by = {$this->session->userdata('uid')}";
     
             $condition = "`id` = {$id} and deleted_flag = 0";
     
