@@ -5,9 +5,9 @@
     <div class="card-header border-0">
       <div class="d-flex align-items-center justify-content-between">
         <h4><i class="fa-solid fa-bars-staggered"></i> Request List</h4>
-        <small>
+        <!-- <small>
           <a href="#" class="link link-primary">Show Archived</a>
-        </small>
+        </small> -->
       </div>
     </div>
     <div class="card-body p-0">

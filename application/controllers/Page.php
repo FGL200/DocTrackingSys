@@ -229,8 +229,13 @@ class Page extends CI_Controller {
     }
 
     public function requests() {
+
+      $role = $this->session->userdata('role');
       $data['header'] = [
-        'title' => 'Requests'
+        'title' => 'Requests',
+        'constants' => [
+            'role' => $role
+        ]
       ];
 
       $data['footer'] = [

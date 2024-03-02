@@ -5,6 +5,22 @@ class Helper {
   // *          SIMPLE          *
   // ****************************
 
+  static dateDiff(dateString_1, dateString_2) {
+    const d1 = new Date(dateString_1);
+    const d2 = new Date(dateString_2);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    return d1.getTime() - d2.getTime();
+  }
+
+  static isFutureDate(dateString) {
+    const today = new Date();
+    const givenDate = new Date(dateString);
+    today.setHours(0, 0, 0, 0);
+    givenDate.setHours(0, 0, 0, 0);
+    return givenDate.getTime() > today.getTime();
+  }
+
   static toDetailedDate(string_date = '') {
     return new Date(string_date).toDateString();
   }

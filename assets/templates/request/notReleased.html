@@ -1,0 +1,24 @@
+<input type="hidden" name="id" value="{{id}}">
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-danger" role="alert">
+      <p  class="text-center">
+        The file request of <b>{{lname}}, {{fname}} {{mname}}</b> will be marked  <b class="text-danger">Not Released</b>.
+      </p>
+      <p class="text-center">
+        <small class="text-danger">Are you sure?</small>
+      </p>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="form-group mb-3">
+      <label>Reason for not releasing. <small class="text-danger">*</small></label>
+      <textarea name="reason" class="form-control"></textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <small class="error-msg text-danger"></small>
+    </div>
+  </div>
+</div>
