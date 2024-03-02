@@ -40,7 +40,7 @@ class Shelves extends CI_Controller {
         $result = $this->shelves->updateShelf($items, $condition);
         $result = $result ? 1 : 0;
         $err = $this->db->error();
-        if($err) {
+        if($err['message']) {
             echo to_JSON(['status' => 0, 'error_message' => $err['message']]);
             return;
         }
