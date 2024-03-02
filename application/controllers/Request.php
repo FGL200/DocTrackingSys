@@ -93,10 +93,23 @@ class Request extends CI_Controller {
         $response = ['status' => ""];
         try {
             $items = "";
+            
+            if($this->input->post('status') && !in_array($this->input->post('status'), ['Released', 'Not Released', 'Pending']))
+                throw new Error('Invalid status value.');
+
+            if(in_array($this->input->post('status'), ["Released", "Pending"]) &&  $this->input->post('reason')) 
+                throw new Error('Released and Pending request doesnt have reason.');
+
+            if($this->input->post('status') && $this->input->post('reason')) {
+                $_POST['status'] = "{\"value\" : \"{$this->input->post('status')}\", \"reason\" : \"{$this->input->post('reason')}\"}";
+                unset($_POST['reason']);
+            } else if($this->input->post('status') && !$this->input->post('reason')) {
+                $_POST['status'] = "{\"value\" : \"{$this->input->post('status')}\"}";
+            }
 
             foreach($this->input->post() as $key => $val) {
                 if(strlen($items) > 0) $items .= ",";
-    
+                if($key)
                 insert_slashes($val);
     
                 $items .= "`{$key}` = '$val'";
@@ -107,7 +120,7 @@ class Request extends CI_Controller {
     
             $affected_rows = $this->request_model->update($items, $condition);
             $response["status"] = $affected_rows > 0 ? "success" : "error"; 
-        } catch (Exception $e) {
+        } catch (Error $e) {
             $response['status'] = "error";
             $response['message'] = $e->getMessage();
         } finally {
