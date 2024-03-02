@@ -3,13 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 # CUSTOM CONSTANTS
 
-defined('DOC_TRACK_BASE_URL')  OR define('DOC_TRACK_BASE_URL', 'http://localhost/DocTrackingSys');
-defined('DOC_TRACK_DATABASE_SERVER')  OR define('DOC_TRACK_DATABASE_SERVER', 'localhost');
+defined('PRODUCTION')  OR define('PRODUCTION', false);
 
-defined('DOC_TRACK_DATABASE_NAME')  OR define('DOC_TRACK_DATABASE_NAME', 'dds_db');
 
-defined('DOC_TRACK_DATABASE_USERNAME')  OR define('DOC_TRACK_DATABASE_USERNAME', 'root');
-defined('DOC_TRACK_DATABASE_PASSWORD')  OR define('DOC_TRACK_DATABASE_PASSWORD', '');
+defined('DOC_TRACK_BASE_URL')  OR define('DOC_TRACK_BASE_URL', PRODUCTION ? 'http://rtu-dds.free.nf' : 'http://localhost/DocTrackingSys');
+defined('DOC_TRACK_DATABASE_SERVER')  OR define('DOC_TRACK_DATABASE_SERVER', PRODUCTION ? 'sql312.infinityfree.com' : 'localhost');
+
+defined('DOC_TRACK_DATABASE_NAME')  OR define('DOC_TRACK_DATABASE_NAME', PRODUCTION ? 'if0_36051859_dds_db' : 'dds_db');
+
+defined('DOC_TRACK_DATABASE_USERNAME')  OR define('DOC_TRACK_DATABASE_USERNAME', PRODUCTION ? 'if0_36051859' : 'root');
+defined('DOC_TRACK_DATABASE_PASSWORD')  OR define('DOC_TRACK_DATABASE_PASSWORD', PRODUCTION ? 'CCfaT5He92' : '');
 /*
 |--------------------------------------------------------------------------
 | Display Debug backtrace

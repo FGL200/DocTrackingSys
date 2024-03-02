@@ -1,12 +1,5 @@
-MAIN.addNotif("Welcome!", CONST_UNAME);
-GRAPH = {
-  bar: {
-    data: []
-  },
-  pie: {
-    data: []
-  }
-}
+// MAIN.addNotif("Welcome!", CONST_UNAME);
+let graph_started = false;
 
 async function setupEncoded_monthly() {
 
@@ -528,6 +521,7 @@ async function setupRemarks_pie() {
 // });
 
 Helper.onClick("#statistics-tab", () => {
+  if(graph_started) return;
   if (CONST_ROLE === 'A') {
     am5.ready(async function () {
       await setupEncoded_live();
@@ -535,6 +529,7 @@ Helper.onClick("#statistics-tab", () => {
       await setupRemarks_pie();
     });
   }
+  graph_started = true;
 });
 
 
@@ -688,8 +683,15 @@ async function s_RName(elem) {
     Helper.Promt_Clear();
 
     const resp = (await Helper.api(`shelves/${data.id}/update`, "json", Helper.createFormData({ name: data.name })));
-    console.log({ resp });
-    
+    if(resp.status == 1) {
+      MAIN.addNotif("Success", "Shelf renamed.", "g");
+      MODAL.close();
+      setTimeout(() => {
+        location.reload();
+      }, 1);
+    }else{
+      MAIN.addNotif("Error", "Error Occurred. Try again later.", "r");
+    }
   });
   MODAL.open();
 }
@@ -721,8 +723,13 @@ async function newRequest() {
   MODAL.open();
   MODAL.onSubmit(async (e, form_data) => {
 
-    if (Helper.formValidator(form_data, ["lname", "fname", "request", "reason"], v => v == '').length > 0) {
+    if (Helper.formValidator(form_data, ["lname", "fname", "request", "reason", "file", "due_date"], v => v == '').length > 0) {
       Helper.Promt_Error('* Required fields must be filled.')
+      return;
+    }
+
+    if (Helper.formValidator(form_data, ["due_date"], v => !Helper.isFutureDate(v)).length > 0) {
+      Helper.Promt_Error('* Invalid Date.')
       return;
     }
 

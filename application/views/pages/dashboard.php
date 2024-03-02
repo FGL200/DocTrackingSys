@@ -5,18 +5,35 @@
                 background-color: rgba(0,0,0,0.02); 
                 padding: 0 1rem;
                 box-shadow: inset 0 .12rem .5rem rgba(0,0,0,.08);
-                border-radius: 5px;"
-        >
-          Dashboard
+                border-radius: 5px;">
+        Dashboard
+      </span>
+      <span class="d-flex align-items-center gap-2 border rounded" style="padding-left: 1rem; padding-right: .25rem;">
+
+        <input type="text" placeholder="Quick Search" id="quick_serach" class="border-0" style="outline: none;">
+        <button class="btn btn-primary" onclick="Submit_QuickSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </span>
+
+      <?php if ($role === 'V') { ?>
+        <span class="d-flex align-items-center flex-wrap gap-2">
+          <button class="btn btn-primary" onclick="newRequest()">
+            <i class="fa-solid fa-plus"></i> New Request
+          </button>
+          <a href="<?= base_url() ?>requests" class="btn btn-secondary">
+            <i class="fa-regular fa-eye"></i> View Requests
+          </a>
         </span>
-        <span class="d-flex align-items-center gap-2 border rounded" style="padding-left: 1rem; padding-right: .25rem;">
-          
-          <input type="text" placeholder="Quick Search" id="quick_serach" class="border-0" style="outline: none;">
-          <button class="btn btn-primary" onclick="Submit_QuickSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </span>
+      <?php } ?>
 
       <?php if ($role === 'A') { ?>
+        <span class="d-flex align-items-center flex-wrap gap-2">
+          <a href="<?= base_url() ?>requests" class="btn btn-secondary">
+            <i class="fa-regular fa-eye"></i> View Requests
+          </a>
+        </span>
+      <?php } ?>
 
+      <?php if ($role === 'A') { ?>
         <span class="d-flex justify-content-end flex-wrap gap-2">
           <ul class="nav nav-tabs justify-content-start" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -41,23 +58,6 @@
             </li>
           </ul>
         </span>
-
-      <?php } ?>
-
-      <?php if ($role === 'V') { ?>
-
-        <span class="d-flex align-items-center flex-wrap gap-2">
-
-          <button class="btn btn-primary" onclick="newRequest()">
-            <i class="fa-solid fa-plus"></i> New Request
-          </button>
-          
-          <a href="<?= base_url() ?>requests" class="btn btn-secondary">
-            <i class="fa-regular fa-eye"></i> View Requests
-          </a>
-
-        </span>
-
       <?php } ?>
 
     </div>
@@ -65,10 +65,10 @@
       <div class="tab-pane fade show active" id="shelf" role="tabpanel" aria-labelledby="shelves-tab" tabindex="0">
         <div class="row">
 
-          <div class="col-lg-8 col-md-12 col-sm-12">
+          <div class="col-lg-7 col-md-12 col-sm-12">
             <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
               <?php foreach ($shelves as $shelf) { ?>
-                <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0" data-binder-id="<?=$shelf['id']?>" data-binder-name="<?=$shelf['name']?>">
+                <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0" data-binder-id="<?= $shelf['id'] ?>" data-binder-name="<?= $shelf['name'] ?>">
                   <!-- <section class="shelf-name">Shelf</section> -->
                   <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
                     <span>
@@ -88,7 +88,7 @@
                   </section>
                 </a>
               <?php } ?>
-  
+
               <!-- <?php if ($role === 'A' || $role === 'E') { ?>
                               <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
                                   <section class="shelf-title fs-4">
@@ -100,7 +100,7 @@
                                   </section>
                               </a>
                           <?php } ?> -->
-  
+
               <?php if ($role === 'A') { ?>
                 <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
                   <section class="shelf-title fs-4">
@@ -111,7 +111,7 @@
                     <span><b>Records: </b><span><?= $bin_records ?></span></span>
                   </section>
                 </a>
-  
+
                 <a href="#" onclick="newShelf()" class="shelf-container shelf-new card p-3 shadow-0 mb-3">
                   <section class="shelf-body d-flex flex-grow-1 justify-content-center align-items-center gap-2">
                     <i class="fa-solid fa-plus"></i>
@@ -121,17 +121,18 @@
               <?php } ?>
             </div>
           </div>
-          
-          <div class="col-lg-4 col-md-12 col-sm-12">
+
+          <div class="col-lg-5 col-md-12 col-sm-12">
             <div class="d-flex justify-content-center align-items-center">
               <!-- jsCalendar -->
-              <div class="auto-jsCalendar shadow-0 card align-self-start"></div>
+              <div class="auto-jsCalendar shadow-0 card align-self-start mt-3"></div>
             </div>
           </div>
 
         </div>
       </div>
       <?php if ($role === 'A') { ?>
+
         <div class="tab-pane fade" id="visual-analytics" role="tabpanel" aria-labelledby="statistics-tab" tabindex="1" style="overflow-y: auto;">
           <div class="d-flex flex-column flex-grow-1 gap-2">
             <div class="d-flex flex-row-reverse">
