@@ -48,3 +48,7 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
  function to_ARRAY(string $val) : mixed {
     return json_decode($val);
  }
+
+ function disable_db_debugging(& $controller) : void {
+    $controller->db->db_debug = false;
+ }

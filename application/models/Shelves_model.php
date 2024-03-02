@@ -17,7 +17,7 @@ class Shelves_model extends CI_Model {
     public function updateShelf($items, $conditions) {
         $query = "update shelves set {$items} where {$conditions}";
         $uid = $this->session->userdata('uid');
-        add_To_User_Logs($this, $uid, "({$uid}) Added new Shelf.", $query);
+        add_To_User_Logs($this, $uid, "({$uid}) Updated a Shelf.", $query);
         return $this->db->query($query);
     }
 

@@ -501,7 +501,7 @@ class Student_model extends CI_Model{
      * get the shelfs of same records for get_Student_all_Record
      */
     public function get_same_records_shelf($student, $current_shelf) {
-        $shelf_id = $this->get_Shelf_ID($current_shelf); // $current_shelf => shelf name
+        // $shelf_id = $this->get_Shelf_ID($current_shelf); // $current_shelf => shelf name
 
         $query = "
                 select 
@@ -521,8 +521,8 @@ class Student_model extends CI_Model{
                     (   sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
                     sr.stud_fname LIKE '%{$student['stud_fname']}%' OR 
                     sr.stud_mname LIKE '%{$student['stud_mname']}%' ) AND 
-                    sh.id != '{$shelf_id}' AND 
-                    ( not locate('\"{$shelf_id}\"', d.merged_shelves) )
+                    sh.id != '{$current_shelf}' AND 
+                    ( not locate('\"{$current_shelf}\"', d.merged_shelves) )
                 ";
     
         $fetch = $this->db->query($query);
@@ -531,8 +531,8 @@ class Student_model extends CI_Model{
     }
 
 
-    public function get_Merged_Records($student, $shelf_name) {
-        $shelf_id = $this->get_Shelf_ID($shelf_name);
+    public function get_Merged_Records($student, $shelf_id) {
+        // $shelf_id = $this->get_Shelf_ID($shelf_name);
 
         $query = " SELECT
                     `sr`.id,
