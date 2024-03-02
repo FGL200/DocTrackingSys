@@ -334,6 +334,7 @@ const VIEW_RECORD = {
     },
 
     student_info: {
+      id: CONST_RECORD_ID,
       fname: '',
       mname: '',
       lname: '',
@@ -716,10 +717,13 @@ async function prepareStudentRecords() {
 
 // When the window has loaded,
 // Load the remarks categories and prepare the values of student records
-$(window).on("load", async function (e) {
-    await loadRemarksCategories();
-    await prepareStudentRecords();
-});
+$(window).on("load", LOAD_Everything);
+
+async function LOAD_Everything(e) {
+  await loadRemarksCategories();
+  await prepareStudentRecords();
+}
+
 
 $("#btn-go-back").on("click", function(e){
 
@@ -755,12 +759,27 @@ Helper.onClick("#merge-btn", async function() {
   MODAL.setSize('md');
   MODAL.setTitle('Merge Record');
   MODAL.setBody(Helper.replaceLayout((await Helper.template('viewRecord/merge')), {
-    options: getMergeList()
+    options: await getMergeList()
   })) 
   MODAL.setFooter(`<button class="btn btn-primary">Merge</button>`)
   MODAL.open();
   MODAL.onSubmit(async (e, form_data) =>{
+    if(Helper.formValidator(form_data, ["id"], v => v == '').length) {
+      Helper.Promt_Error('* Required fields must be filled.')
+      return;
+    }
 
+    const id = Helper.getDataFromFormData(form_data).id;
+
+    Helper.Promt_Clear();
+    const resp = (await Helper.api(`student/record/${VIEW_RECORD.student_info.id}/merge`, "json", Helper.createFormData({ to: id })))
+    if(resp.status == 1) {
+      MAIN.addNotif("Successful", "Merge was successful!", "g");
+      await LOAD_Everything();
+      MODAL.close();
+    }else {
+      MAIN.addNotif("Error", "Error Occurred. Try again later.", "r");
+    }
   });
 });
 
@@ -772,7 +791,7 @@ async function getMergeList() {
     current_shelf: VIEW_RECORD.shelf.id,
   };
   const list = (await Helper.api('student/record/shelf', "json", Helper.createFormData(body)));
-  const rec_id = Number(CONST_RECORD_ID);
-  console.log({rec_id})
-  return ''
+  let options = ''
+  list.map(v => JSON.parse(v.shelf)).forEach(v => options += `<option value="${v.ID}">${v.Name}</option>`);
+  return options;
 }
