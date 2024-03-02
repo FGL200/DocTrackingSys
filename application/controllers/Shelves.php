@@ -6,6 +6,7 @@ class Shelves extends CI_Controller {
     {
         parent::__construct();
         $this->load->model("shelves_model", "shelves");
+        disable_db_debugging($this);
     }
 
     public function add_Shelf() {
@@ -33,11 +34,18 @@ class Shelves extends CI_Controller {
 
         addcslashes($name, " \t\n\r\0\x0B\-\`\"\'");
 
-        $items = " name = '{$name}', updated_date = '{$curr_date}', updated_by = '{$cuid}'";
+        $items = " name = {$name}', updated_date = '{$curr_date}', updated_by = '{$cuid}'";
         $condition = "id = '{$id}'";
+       
         $result = $this->shelves->updateShelf($items, $condition);
         $result = $result ? 1 : 0;
+        $err = $this->db->error();
+        if($err) {
+            echo to_JSON(['status' => 0, 'error_message' => $err['message']]);
+            return;
+        }
         echo to_JSON(['status' => $result]);
+        
     }
 
 }
