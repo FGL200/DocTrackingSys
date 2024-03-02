@@ -26,6 +26,20 @@ class Shelves extends CI_Controller {
         echo json_encode($this->shelves->getAll());
     }
 
+    public function update_Shelf($id) {
+        extract($this->input->post());
+        $curr_date = date('Y-m-d H:i:s');
+        $cuid = $this->session->userdata("uid");
+
+        addcslashes($name, " \t\n\r\0\x0B\-\`\"\'");
+
+        $items = " name = {$name}, updated_date = '{$curr_date}', updated_by = '{$cuid}'";
+        $condition = "id = '{$id}'";
+        $result = $this->shelves->updateShelf($items, $condition);
+        $result = $result ? 1 : 0;
+        echo to_JSON(['status' => $result]);
+    }
+
 }
 
 ?>

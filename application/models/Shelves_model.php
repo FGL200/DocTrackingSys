@@ -14,6 +14,13 @@ class Shelves_model extends CI_Model {
         return $this->db->query($sql);
     }
 
+    public function updateShelf($items, $conditions) {
+        $query = "update shelves set {$items} where {$conditions}";
+        $uid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $uid, "({$uid}) Added new Shelf.", $query);
+        return $this->db->query($query);
+    }
+
 
     public function isShelfExisted($shelfname) {
         $sql = "SELECT * FROM `shelves` WHERE `name` = '{$shelfname}'";

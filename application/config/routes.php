@@ -88,7 +88,7 @@ $route['user/logs'] = 'User/get_User_Logs';
 
 // Shelf
 $route['shelves/insert']['post'] = 'Shelves/add_Shelf';
-
+$route['shelves/(:num)/update']['post'] = 'Shelves/update_Shelf/$1';
 // Agree
 $route['agree/set']['post'] = 'Agreement/set'; // set agree status
 $route['agree/get']['post'] = 'Agreement/get'; // get agree status
