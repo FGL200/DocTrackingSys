@@ -176,7 +176,7 @@ class Student extends CI_Controller{
                 if(isset($_FILES['doc_scan_' . $doc])) {
                     for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
                         if(!empty($_FILES["doc_scan_".$doc]['name'][$i]) && !empty($_FILES["doc_scan_".$doc]['tmp_name'][$i])) {
-                            $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i]));
+                            $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i], $_FILES["doc_scan_".$doc]['size'][$i]));
                             // echo($_FILES["doc_scan_".$doc]['tmp_name'][$i]); continue;
                             if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
                         }    
@@ -389,7 +389,7 @@ class Student extends CI_Controller{
                 if(isset($_FILES['doc_scan_' . $doc])) {
                     for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
                         if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
-                            $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i]));
+                            $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i], $_FILES['doc_scan_' . $doc]['size'][$i]));
                         }
                         if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
                     }
@@ -699,23 +699,20 @@ class Student extends CI_Controller{
      * @param Array $file
      * @param Integer $stud_rec_id
      */
-    private function upload_file($tmp_name, $file_name) {
+    private function upload_file($tmp, $name, $size) {
+        echo $size;
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', 'uploads/', $path);
 
-        $f = file_get_contents($tmp_name);
+        $f = file_get_contents($tmp);
 
         if(!is_dir($path)) mkdir($path,DIR_WRITE_MODE, true);
 
-        $new_file_name = date("Y_m_d_H_i_s") . bin2hex(random_bytes(5));
+        $datetime = date("Y_m_d_H_i_s") . bin2hex(random_bytes(5));
 
-        $file_name = $new_file_name . '.' . basename($file_name);
+        $file_name = $datetime . '.' . basename($name);
 
-        $new_file_path =  'uploads/' . $file_name;
-        $data = $new_file_path;
-        // echo $new_file_name;
-        return move_uploaded_file($tmp_name, $new_file_path) ? $data : '';
-
+        return optimize_image($tmp, $path, $file_name, $size) ? "uploads/" . $file_name : '';
     }
     
     /**

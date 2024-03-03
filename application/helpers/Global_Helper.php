@@ -52,3 +52,30 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
  function disable_db_debugging(& $controller) : void {
     $controller->db->db_debug = false;
  }
+
+
+ function optimize_image($uploadTmp, $uploadPath, $uploadName, $uploadSize) {
+    $sizeLimit = 500000; // 100000 = 1KB
+    $restrainedQuality = 5; // quality of the image.
+
+   if($uploadSize > $sizeLimit) {
+      //open a stream for the uploaded image
+      $streamHandle = @fopen($uploadTmp, 'r');
+      //create a image resource from the contents of the uploaded image
+      $resource = imagecreatefromstring(stream_get_contents($streamHandle));
+  
+      if(!$resource)
+          die('Something wrong with the upload!');
+  
+      //close our file stream
+      @fclose($streamHandle);
+  
+      //delete the temporary upload
+      @unlink($uploadTmp);
+      //move the uploaded file with a lesser quality
+      return imagejpeg($resource, $uploadPath . $uploadName, $restrainedQuality); 
+  } else {
+      //the file size is less than the limit, just move the temp file into its appropriate directory
+      return move_uploaded_file($uploadTmp, $uploadPath . $uploadName);
+  }
+ }
