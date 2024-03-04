@@ -440,8 +440,7 @@ class Student extends CI_Controller{
 
     }
 
-    public function delete_Student() {
-        $stud_rec_id = $this->input->post("stud_rec_id");
+    public function delete_Student($stud_rec_id) {
 
         $result = $this->stud->delete_student($stud_rec_id);
 
@@ -649,9 +648,9 @@ class Student extends CI_Controller{
         return $nRecord;
     }
 
-    public function moveRecord() {
+    public function moveRecord($stud_record_id) {
         $shelf_id = trim($this->input->post("shelf"));
-        $stud_record_id = trim(intval($this->input->post("stud_rec_id")));
+        $stud_record_id = trim(intval($stud_record_id));
 
         $doc_shelves_history = $this->stud->shelfHistory($stud_record_id)[0];
         $current_shelf = "'$doc_shelves_history->shelf'";
