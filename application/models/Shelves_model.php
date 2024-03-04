@@ -41,7 +41,7 @@ class Shelves_model extends CI_Model {
         SELECT 
                 sh_.id,
                 sh_.name,
-                COUNT(*) AS total,
+                COUNT(sr.id) AS total,
                 COUNT(DISTINCT u.id) AS users,
                 MAX(sr.created_date) AS last_date
             FROM shelves sh_
