@@ -99,7 +99,7 @@ $route['request/all'] = 'Request/fetch_all';                   // fetch all reco
 $route['request/(:num)'] = 'Request/fetch/$1';                 // fetch specific request by ID
 $route['request/(:num)/update']['post'] = 'Request/update/$1'; // update request by ID 
 $route['request/(:num)/delete']['post'] = 'Request/delete/$1'; // delete request by ID
-$route['request/status'] = 'Request/get_Requests_Status';
+$route['requests/report'] = 'Request/get_Requests_Report';
 
 // DEFAULT
 $route['404_override'] = '';

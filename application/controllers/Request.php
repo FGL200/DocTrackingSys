@@ -154,7 +154,7 @@ class Request extends CI_Controller {
     }
 
 
-    public function get_Requests_Status() {
+    public function get_Requests_Report() {
         $curr_month = [];
         $prev_month = [];
         $curr_year = [];
