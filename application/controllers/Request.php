@@ -91,7 +91,7 @@ class Request extends CI_Controller {
     }
 
     public function update(int $id) {
-        $response = ['status' => ""];
+        $response = ['status' => "", 'message' => ''];
         try {
             $items = "";
             
@@ -116,13 +116,17 @@ class Request extends CI_Controller {
                 $items .= "`{$key}` = '$val'";
             }
 
-            $items .= ", updated_by = {$this->session->userdata('uid')}";
+            $dateUpdated = date("Y-m-d H:i:s");
+
+            $items .= ", updated_by = {$this->session->userdata('uid')},updated_at = '{$dateUpdated}' 
+                      ";
     
             $condition = "`id` = {$id} and deleted_flag = 0";
     
     
             $affected_rows = $this->request_model->update($items, $condition);
-            $response["status"] = $affected_rows > 0 ? "success" : "error"; 
+            $response["status"] = !$this->db->error()['message'] ? "success" : "error"; 
+            $response['message'] = $this->db->error()['message'];
         } catch (Error $e) {
             $response['status'] = "error";
             $response['message'] = $e->getMessage();
@@ -147,6 +151,35 @@ class Request extends CI_Controller {
         } finally {
             echo to_JSON($response);
         }
+    }
+
+
+    public function get_Requests_Status() {
+        $curr_month = [];
+        $prev_month = [];
+        $curr_year = [];
+
+        foreach($this->request_model->get_Current_Month_Status() as $row) {
+            if(!isset($curr_month['month']))  $curr_month['month'] = $row->month;
+            if(!isset($curr_month['released']) && $row->value == "released") $curr_month['released'] = $row->total;
+            if(!isset($curr_month['not_released']) && $row->value == "not_released") $curr_month['not_released'] = $row->total;
+        }
+        
+        foreach($this->request_model->get_Prev_Month_Status() as $row) {
+            if(!isset($prev_month['month']))  $prev_month['month'] = $row->month;
+            if(!isset($prev_month['released']) && $row->value == "released") $prev_month['released'] = $row->total;
+            if(!isset($prev_month['not_released']) && $row->value == "not_released") $prev_month['not_released'] = $row->total;
+        }
+
+        foreach($this->request_model->get_Current_Year_Status() as $row) {
+            if(!isset($curr_year['released']) && $row->value == "released") $curr_year['released'] = $row->total;
+            if(!isset($curr_year['not_released']) && $row->value == "not_released") $curr_year['not_released'] = $row->total;
+        }
+        echo to_JSON([
+                      'curr_month' => $curr_month, 
+                      'prev_month' => $prev_month,
+                      'yearly' => $curr_year
+                    ]);
     }
 }
 

@@ -72,6 +72,98 @@ class Request_model extends CI_Model {
 
         return $this->db->affected_rows();
     }
+
+
+    public function get_Current_Month_Status() {
+        $curr_date = date("Y-m-d");
+        $query = "select 	
+                    case 
+                        when 
+                            locate('Not Released', status)
+                        then 
+                            'not_released'
+                        when 
+                            locate('Released', status)
+                        then 
+                            'released'
+                    end as value,
+                    count(*) as total,
+                    MONTHNAME(updated_at) as month
+                from requests
+                where 
+                    (locate('Not Released', status) or 
+                    locate('Released', status)) AND 
+                    (MONTH(updated_at) = MONTH('{$curr_date}') AND 
+                    YEAR(updated_at) = YEAR('{$curr_date}'))
+                group by
+                    value, MONTH(updated_at), YEAR(updated_at)";
+        $fetch = $this->db->query($query);
+
+        return $fetch->result();
+
+
+    }
+
+    public function get_Prev_Month_Status() {
+        $curr_date = date("Y-m-d");
+        $query = "
+                select 	
+                    case 
+                        when 
+                            locate('Not Released', status)
+                        then 
+                            'not_released'
+                        when 
+                            locate('Released', status)
+                        then 
+                            'released'
+                    end as value,
+                    count(*) as total,
+                    MONTHNAME(updated_at) as month
+                from 
+                    requests
+                where 
+                    (locate('Not Released', status) or 
+                    locate('Released', status)) AND 
+                    (MONTH(updated_at) = MONTH('{$curr_date}') - 1 AND 
+                            YEAR(updated_at) = YEAR('{$curr_date}'))
+                group by
+                    value, 
+                    MONTH(updated_at), 
+                    YEAR(updated_at)";
+        $fetch = $this->db->query($query);
+
+        return $fetch->result();
+    }
+
+    public function get_Current_Year_Status() {
+        $curr_date = date("Y-m-d");
+        $query = "SELECT 
+                    case 
+                        when 
+                            locate('Not Released', status)
+                        then 
+                            'not_released'
+                        when 
+                            locate('Released', status)
+                        then 
+                            'released'
+                        end as value,
+                        count(*) as total
+                FROM 
+                    `requests` 
+                WHERE 
+                    (locate('Not Released', status) or 
+                    locate('Released', status)) AND 
+                    YEAR(created_at) = YEAR('{$curr_date}')
+                group by
+                    value, 
+                    YEAR(updated_at)";
+        
+        $fetch = $this->db->query($query);
+
+        return $fetch->result();
+    }
 }
 
 ?>

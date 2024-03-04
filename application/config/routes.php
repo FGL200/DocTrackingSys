@@ -94,12 +94,12 @@ $route['agree/set']['post'] = 'Agreement/set'; // set agree status
 $route['agree/get']['post'] = 'Agreement/get'; // get agree status
 
 // Requests
-$route['request/create']['post'] = 'Request/create';    // creation of request
-$route['request/all']['post'] = 'Request/fetch_all';    // fetch all records
-$route['request/(:num)'] = 'Request/fetch/$1';          // fetch specific request by ID
-$route['request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
-$route['request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
-
+$route['request/create']['post'] = 'Request/create';           // creation of request
+$route['request/all'] = 'Request/fetch_all';                   // fetch all records
+$route['request/(:num)'] = 'Request/fetch/$1';                 // fetch specific request by ID
+$route['request/(:num)/update']['post'] = 'Request/update/$1'; // update request by ID 
+$route['request/(:num)/delete']['post'] = 'Request/delete/$1'; // delete request by ID
+$route['request/status'] = 'Request/get_Requests_Status';
 
 // DEFAULT
 $route['404_override'] = '';
