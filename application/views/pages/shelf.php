@@ -7,7 +7,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i> Search Options
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.scan()"> <i class="fa-solid fa-qrcode"></i> Scan QR </a></li>
+                    <!-- <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.scan()"> <i class="fa-solid fa-qrcode"></i> Scan QR </a></li> -->
                     <li><a class="dropdown-item" href="#" onclick="HOME.SEARCH.open()"> <i class="fa-solid fa-magnifying-glass-plus"></i> More search option... </a></li>
                     <li><a class="dropdown-item" href="#" onclick="loadTable()"> <i class="fa-solid fa-list-ol"></i> All Records</a></li>
                 </ul>
@@ -39,7 +39,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" onclick="RECORD.NEW.open()"><i class="fa-solid fa-plus"></i> New Record</a></li>
                     <li><a class="dropdown-item" href="#" onclick="HOME.IMPORT_EXCEL.open()"><i class="fa-solid fa-file-excel"></i> Import Excel</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="HOME.GENERATE_QR.open()"><i class="fa-solid fa-qrcode"></i> Generate QR</a></li>
+                    <!-- <li><a class="dropdown-item" href="#" onclick="HOME.GENERATE_QR.open()"><i class="fa-solid fa-qrcode"></i> Generate QR</a></li> -->
                     <li>
                         <hr class="dropdown-divider">
                     </li>

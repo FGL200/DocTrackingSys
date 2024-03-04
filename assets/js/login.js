@@ -1,69 +1,43 @@
-const LOGIN = {
-    login : async function(e) {
-        e.preventDefault();
-        const form = new FormData(document.getElementById("login-form"));
-        const previousUsername = window.sessionStorage.getItem("username") ?? "";
-        const blocked = JSON.parse(window.sessionStorage.getItem("blocked") ?? "[]");
+import { CustomNotification } from "../shared/custom-notification.js";
+import { Helper } from "../shared/helper.js";
+import { Modal } from "../shared/modal.js";
 
-        if(previousUsername !== form.get("username")) window.sessionStorage.removeItem("failedCount");
+Helper.onClick("#terms_and_condition", async () => {
+  Modal.setTitle('Terms and Conditions')
+  Modal.setSize("lg")
+  Modal.setBody(await Helper.template('terms_and_condition'));
+  Modal.hideFooter();
+  Modal.open();
+});
 
-        let failedCount = window.sessionStorage.getItem("failedCount") ?? '0';
-        console.log({failedCount, blocked});
+Helper.onSubmit("#form_login", async (e) => {
+  e.preventDefault();
+  const form_data = new FormData(Helper.f("#form_login"));
 
-        if(failedCount >= 3 || blocked.includes(form.get("username"))) {
-            MAIN.addNotif("Account Deactivated", "Too many tries. Account <b>Deactivated</b>. Try again later.", "r");
-            if(!blocked.includes(form.get("username"))) blocked.push(form.get("username"));
-            window.sessionStorage.setItem("blocked", JSON.stringify(blocked));
-            return;
-        }
+  // Account Deactivation
+  const username = Helper.getDataFromFormData(form_data).username;
+  const prevUsername = sessionStorage?.username ?? "";
+  const blocked = JSON.parse(sessionStorage?.blocked ?? "[]");
 
-        await fetch(base_url + 'user/login', {
-            method : 'post',
-            body : form
-        }) 
-        .then(response => response.json())
-        .then(result => {
-            if(!result.result){
+  if (prevUsername != username) sessionStorage.removeItem('failedCount');
+  let failedCount = Number(sessionStorage?.failedCount ?? 0);
 
-                window.sessionStorage.setItem("failedCount", (previousUsername === form.get("username")) ? ++failedCount : '1');
+  if (failedCount >= 3 || blocked.includes(username)) {
+    CustomNotification.clear();
+    CustomNotification.add("Error", "Account is decativated. Try again Later", "danger");
+    if (!blocked.includes(username)) blocked.push(username);
+    sessionStorage.setItem("blocked", JSON.stringify(blocked));
+    return;
+  }
+  // 
 
-                window.sessionStorage.setItem("username", form.get("username"));
-
-                MAIN.addNotif("Login failed", "Incorrect username or password", "r");
-                return;
-            }else{
-                window.sessionStorage.removeItem("failedCount");
-                window.sessionStorage.removeItem("username");
-
-                
-                window.location.href = base_url + 'dashboard';
-            }
-        })
-        .catch(err=>{
-            console.log(err);
-            MAIN.addNotif('Server error', "Something went wrong while logging-in", "r");
-        })
-    }
-}
-$("#btn-login").on("click", LOGIN.login);   
-
-async function termsAndCondition() {
-    await fetch(`${base_url}assets/templates/terms_and_condition.html`)
-    .then(response => response.text())
-    .then(response => {
-        // ipakita ung alert
-        dts_alert({
-            title : `<div class="fs-4">Terms and Conditions (End-User License Agreement)</div>`,
-            body : response,
-            buttons : ["Close"]
-        }, function(ans){
-            if(!ans) return;
-            // gawing true ung agree
-            agree = true;
-    
-            // magiging false na si show once na pinindot ni user ang Agree
-            showed = false;
-        });
-    })
-    .catch(err => console.error(err));
-}
+  const resp = (await Helper.api('user/login', "json", form_data))
+  if (resp.result) {
+    sessionStorage.clear();
+    location.href = base_url + 'dashboard';
+  } else {
+    sessionStorage.setItem('failedCount', prevUsername == username ? String(++failedCount) : '1');
+    sessionStorage.setItem('username', username);
+    CustomNotification.add("Error", "Invalid Username or Password.", "danger");
+  }
+});

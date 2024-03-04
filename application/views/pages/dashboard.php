@@ -1,4 +1,93 @@
-<main class="d-flex">
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section dashboard">
+    <div class="row">
+
+      <div class="col-lg-7">
+        <div class="row">
+
+          <!-- File Request -->
+          <div class="col-12">
+            <div class="card" id="request_container">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item" href="#">Today</a></li>
+                  <li><a class="dropdown-item" href="#">This Month</a></li>
+                  <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+              </div>
+
+              <div class="card-body pb-0">
+                <h5 class="card-title">File Request <span>| Today</span></h5>
+                <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+              </div>
+            </div>
+          </div>
+          <!-- End File Request -->
+
+          <!-- File Request -->
+          <div class="col-12">
+
+            <div class="card">
+              <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                  <li class="dropdown-header text-start">
+                    <h6>Filter</h6>
+                  </li>
+
+                  <li><a class="dropdown-item">2024</a></li>
+                  <li><a class="dropdown-item">2023</a></li>
+
+                </ul>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Encoder's Iduuno the term <span>| 2024</span></h5>
+                <div id="reportsChart"></div>
+              </div>
+
+            </div>
+          </div>
+          <!-- End File Request -->
+
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-md-12 col-sm-12">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="card card-info">
+            <div class="auto-jsCalendar"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script src="<?= base_url('assets/third_party/amChart/amChart.js') ?>"></script>
+<script src="<?= base_url('assets/third_party/amChart/xy.js') ?>"></script>
+<script src="<?= base_url('assets/third_party/amChart/percent.js') ?>"></script>
+<script src="<?= base_url('assets/third_party/amChart/Animated.js') ?>"></script>
+
+<script type="module" src="<?= base_url() ?>assets/js/dashboard.js"></script>
+
+
+<!-- <main class="d-flex">
   <div id="dashBoard" class="card p-3 m-3 flex-grow-1 gap-2">
     <div class="d-flex flex-wrap aling-items-center justify-content-between gap-2 mb-3">
       <span class="fs-3 flex-grow-1 d-flex align-items-center" style="
@@ -69,7 +158,7 @@
             <div id="shelf-holder" class="d-flex justify-content-center flex-wrap align-items-start gap-3">
               <?php foreach ($shelves as $shelf) { ?>
                 <a href="<?= base_url('shelf/' . $shelf['name']) ?>" class="shelf-container card p-3 shadow-0" data-binder-id="<?= $shelf['id'] ?>" data-binder-name="<?= $shelf['name'] ?>">
-                  <!-- <section class="shelf-name">Shelf</section> -->
+
                   <section class="shelf-title d-flex justify-content-between align-items-center gap-2 fs-4">
                     <span>
                       <i class="fa-solid fa-bars-staggered"></i>
@@ -77,9 +166,6 @@
                     <span class="shelf-name flex-grow-1">
                       <?= strtoupper($shelf['name']); ?>
                     </span>
-                    <!-- <button onclick="newShelf()" class="shlef-opt">
-                                          <i class="fa-solid fa-ellipsis-vertical"></i>
-                                      </button> -->
                   </section>
                   <section class="shelf-body d-flex flex-column">
                     <span><b>Records: </b> <span><?= $shelf['total'] ?? '--'; ?></span> </span>
@@ -88,18 +174,6 @@
                   </section>
                 </a>
               <?php } ?>
-
-              <!-- <?php if ($role === 'A' || $role === 'E') { ?>
-                              <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
-                                  <section class="shelf-title fs-4">
-                                      <i class="fa-solid fa-box-archive"></i>
-                                      Archived
-                                  </section>
-                                  <section class="shelf-body d-flex flex-column">
-                                      <span><b>Records: </b><span><?= $bin_records ?></span></span>
-                                  </section>
-                              </a>
-                          <?php } ?> -->
 
               <?php if ($role === 'A') { ?>
                 <a href="<?= base_url('shelf/trash') ?>" class="shelf-container shelf-trash card p-3 shadow-0">
@@ -124,7 +198,6 @@
 
           <div class="col-lg-5 col-md-12 col-sm-12">
             <div class="d-flex justify-content-center align-items-center">
-              <!-- jsCalendar -->
               <div class="auto-jsCalendar shadow-0 card align-self-start mt-3"></div>
             </div>
           </div>
@@ -144,7 +217,7 @@
                 <div id="encoded-live" style="min-width: 300px;"></div>
               </section>
               <section id="pie-graph-section" class="chart-container flex-grow-1 card shadow f-flex flex-column p-3">
-                <span class="chart-title fw-bold">Overall student records</span>
+                <span class="chart-title fw-bold">Request record</span>
                 <div id="remarks-pie" style="min-width: 300px;"></div>
               </section>
             </div>
@@ -177,9 +250,4 @@
     <button onclick="s_Del(this)" class="text-danger"><span><i class="fa-solid fa-square-minus"></i></span> Delete shelf</button>
   </div>
 </main>
-
-<!-- amChart -->
-<script src="<?= base_url('assets/third_party/amChart/amChart.js') ?>"></script>
-<script src="<?= base_url('assets/third_party/amChart/xy.js') ?>"></script>
-<script src="<?= base_url('assets/third_party/amChart/percent.js') ?>"></script>
-<script src="<?= base_url('assets/third_party/amChart/Animated.js') ?>"></script>
+-->

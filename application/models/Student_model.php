@@ -503,7 +503,7 @@ class Student_model extends CI_Model{
     public function get_same_records_shelf($student, $current_shelf) {
         // $shelf_id = $this->get_Shelf_ID($current_shelf); // $current_shelf => shelf name
 
-        $student['stud_mname'] = trim($student['stud_mname']) ? $student['stud_mname'] : '--';
+        $student['stud_mname'] = trim($student['stud_mname']) != "null" ? $student['stud_mname'] : '--';
         $query = "
                 select 
                     CONCAT('{\"Name\" : \"',  sh.name, '\",\"ID\" : \"', sh.id, '\"}') as shelf

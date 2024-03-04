@@ -15,7 +15,8 @@ class Request_model extends CI_Model {
                 ";
         
         $this->db->query($sql);
-
+        $cuid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $cuid, "({$cuid}) Created a Request.", trim($sql));
         return $this->db->affected_rows();
     }
 
@@ -66,6 +67,8 @@ class Request_model extends CI_Model {
                     {$condition}
                 ";
         $this->db->query($sql);
+        $cuid = $this->session->userdata('uid');
+        add_To_User_Logs($this, $cuid, "({$cuid}) Updated a Request.", trim($sql));
 
         return $this->db->affected_rows();
     }

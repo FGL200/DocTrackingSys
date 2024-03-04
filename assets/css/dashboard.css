@@ -1,8 +1,8 @@
-/* .shelf-name{
-    font-size: small;
-    padding: 0;
-    margin: 0;
-} */
+.jsCalendar table {
+  background-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
 
 .shelf-container{
     min-height: 150px;
