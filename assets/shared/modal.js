@@ -33,9 +33,9 @@ export class Modal {
     Helper.f("#dds_modal_dialog").classList.remove("modal-lg");
     Helper.f("#dds_modal_dialog").classList.remove("modal-xl");
     switch (size) {
-      case "sm":Helper.f("#dds_modal_dialog").classList.add("modal-sm"); break;
-      case "lg":Helper.f("#dds_modal_dialog").classList.add("modal-lg"); break;
-      case "xl":Helper.f("#dds_modal_dialog").classList.add("modal-xl"); break;
+      case "sm": Helper.f("#dds_modal_dialog").classList.add("modal-sm"); break;
+      case "lg": Helper.f("#dds_modal_dialog").classList.add("modal-lg"); break;
+      case "xl": Helper.f("#dds_modal_dialog").classList.add("modal-xl"); break;
       default: break;
     }
   }
@@ -43,7 +43,7 @@ export class Modal {
   static async submit(callback = undefined) {
     Helper.onSubmit("#dds_modal_form", async (e) => {
       e.preventDefault();
-      await callback(new FormData(Helper.f("#dds_modal_form")));
+      await callback(e, new FormData(Helper.f("#dds_modal_form")));
     });
   }
 
@@ -54,12 +54,24 @@ export class Modal {
 
   static async hideHeader(callback = undefined) {
     if (callback) await callback();
-    Helper.f("#dds_modal_header").remove();
+    Helper.f("#dds_modal_header").classList.add('d-none');
   }
 
   static async hideFooter(callback = undefined) {
     if (callback) await callback();
-    Helper.f("#dds_modal_footer").remove();
+    Helper.f("#dds_modal_footer").classList.add('d-none');
+  }
+
+  static async hideCloseButton() {
+    Helper.f("#dds_modal_close").classList.add('d-none');
+  }
+
+  static get form() {
+    return new FormData(Helper.f("#dds_modal_form"));
+  }
+
+  static get id() {
+    return '#dds_modal_form';
   }
 
 }

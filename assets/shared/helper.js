@@ -6,12 +6,12 @@ export class Helper {
   // *          SIMPLE          *
   // ****************************
 
-  static getURL() {
-    return location.href;
+  static preventDefault(event_refernce) {
+    event_refernce.preventDefault();
   }
 
-  static setPageActive(page_name) {
-    Helper.f(page_name).classList.add("active");
+  static getURL() {
+    return location.href;
   }
 
   static setupFor(role) {
@@ -59,15 +59,15 @@ export class Helper {
     return Object.entries(obj).map(([name, value]) => ({ name, value }));
   }
 
-  static DataTable_Reset(tableElemenet = '') {
-    if ($.fn.DataTable.isDataTable(tableElemenet)) $(tableElemenet).DataTable().destroy();
-    $(tableElemenet).html("");
+  static DataTable_Reset(tableID = '') {
+    if ($.fn.DataTable.isDataTable(tableID)) $(tableID).DataTable().destroy();
+    $(tableID).html("");
   }
 
-  static DataTable_Init(tableElemenet = '', body = '', bindCallBackBeforeInitOfDataTable = () => { }, bindCallBackAfterInitOfDataTable = () => { }) {
-    $(tableElemenet).append(body);
+  static DataTable_Init(tableID = '', body = '', bindCallBackBeforeInitOfDataTable = () => { }, bindCallBackAfterInitOfDataTable = () => { }) {
+    $(tableID).append(body);
     bindCallBackBeforeInitOfDataTable();
-    $(tableElemenet).DataTable({ bAutoWidth: false, autoWidth: false });
+    $(tableID).DataTable({ bAutoWidth: false, autoWidth: false });
     bindCallBackAfterInitOfDataTable();
   }
 
@@ -106,20 +106,18 @@ export class Helper {
 
 
   static async template(directory) {
-    console.log({ base_url })
-    return await fetch(`${base_url}/assets/templates${directory}.html`).then(async r => r.text())
-      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later."));
+    return await fetch(`${base_url}assets/templates/${directory}.html`).then(async r => r.text())
+      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later.", "danger"));
   }
 
-  static async api(url = '', type = "text", form = new FormData()) {
-    console.log({ base_url })
-    const args = (form) ? { method: 'post', body: form } : undefined;
-    return await fetch(base_url + 'api' + url, args ?? undefined).then(async response => {
+  static async api(url = '', type = "text", form = undefined) {
+    const args = (form) ? { method: 'post', body: form } : { method: 'get' };
+    return await fetch(base_url + 'api/' + url, args ?? undefined).then(async response => {
       if (type === "text") return await response.text();
       if (type === "json") return await response.json()
       return await response;
     })
-      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later."));
+      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later.", "danger"));
   }
 
   static getDataBind(elementNode, data_name) {
@@ -127,7 +125,7 @@ export class Helper {
   }
 
   static replaceLayout(html_layout = '', replaces = {}) {
-    for (const key in replaces) html_layout = html_layout.replaceAll(`{{${key}}}`, replaces[key]);
+    for (const key in replaces) html_layout = html_layout.replaceAll(`{{${key}}}`, replaces[key] ?? '');
     return html_layout;
   }
 
@@ -178,15 +176,20 @@ export class Helper {
   static formValidator(form = new FormData(), fields = [''], condition = () => false) {
     let invalids = [];
     form.forEach((val, key) => {
-      if (Helper.f(`.form-control[name="${key}"]`))
-        Helper.fm(`.form-control[name="${key}"]`, e => e.style.border = "1px solid #CED4DA");
-      if (fields.includes(key)) {
-        if (condition(val, key)) invalids.push(key);
-      }
+      if (Helper.f(`.form-control[name="${key}"]`)) Helper.fm(`.form-control[name="${key}"]`, e => e.style.border = "1px solid #CED4DA");
+      if (Helper.f(`.form-select[name="${key}"]`)) Helper.fm(`.form-select[name="${key}"]`, e => e.style.border = "1px solid #CED4DA");
+
+      if (fields.includes(key) && condition(val, key)) invalids.push(key);
     });
-    invalids.map(v => Helper.f(`.form-control[name="${v}"]`)).forEach(v => {
-      if (v) v.style.border = "1px solid #DC3545";
-    });
+
+    invalids.forEach(v => {
+      if (Helper.f(`.form-control[name="${v}"]`)) Helper.f(`.form-control[name="${v}"]`).style.border = "1px solid #DC3545";
+      if (Helper.f(`.form-select[name="${v}"]`)) Helper.f(`.form-select[name="${v}"]`).style.border = "1px solid #DC3545";
+    })
+
+    // invalids.map(v => Helper.f(`.form-control[name="${v}"]`)).forEach(v => {
+    //   if (v) v.style.border = "1px solid #DC3545";
+    // });
     return invalids
   }
 

@@ -41,6 +41,37 @@
   <link href="<?= base_url() ?>assets/css/template-style.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/css/header.css" rel="stylesheet">
 
+  <!-- JQuery JS-->
+  <script src="<?= base_url() ?>assets/third_party/jquery/jquery.min.js"></script>
+
+  <!-- DataTable CSS -->
+  <link rel="stylesheet" href="<?= base_url() ?>assets/third_party/datatables/datatables.min.css">
+
+  <!-- DataTable JS -->
+  <script src="<?= base_url() ?>assets/third_party/datatables/datatables.min.js"></script>
+
+
+
+
+  <!-- Vendor JS Files -->
+  <script src="<?= base_url() ?>assets/vendor/apexcharts/apexcharts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/chart.js/chart.umd.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/echarts/echarts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/quill/quill.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/simple-datatables/simple-datatables.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/php-email-form/validate.js" defer></script>
+
+  <!-- Template Main JS File -->
+  <script src="<?= base_url() ?>assets/js/main.js" defer></script>
+
+  <!-- jsCalendar JS -->
+  <script src="<?= base_url() ?>assets/third_party/jsCalendar/jsCalendar.min.js" defer></script>
+
+
+  <script type="module" src="<?= base_url() ?>assets/js/core.js"></script>
+
 </head>
 
 <body>
@@ -58,7 +89,7 @@
 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" id="form_quickSearch">
-        <input type="text" name="query" placeholder="Quick Search" title="Enter search record">
+        <input type="text" name="value" placeholder="Quick Search" title="Enter search record">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
@@ -88,7 +119,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#edit-profile">
+              <a class="dropdown-item d-flex align-items-center" href="#edit-profile" id="user_edit_profile">
                 <i class="bi bi-person"></i>
                 <span>Edit Profile</span>
               </a>
@@ -119,7 +150,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link" href="<?= base_url() ?>dashboard">
+        <a id="link-dashboard" class="nav-link collapsed" href="<?= base_url() ?>dashboard">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -128,7 +159,7 @@
       <li class="nav-heading">Records</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="<?= base_url() ?>shelf/all">
+        <a id="link-all_shelves" class="nav-link collapsed" href="<?= base_url() ?>shelf/all">
           <i class="bi bi-list-nested"></i><span>All Shelves</span>
         </a>
       </li><!-- End Student Records Page Nav -->
@@ -136,7 +167,7 @@
       <li class="nav-heading remove-when-E remove-when-V">Admin</li>
 
       <li class="nav-item remove-when-E remove-when-V">
-        <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
+        <a id="link-manage_users" class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-people"></i><span>Manage Users</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="users-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -160,7 +191,7 @@
 
 
       <li class="nav-item remove-when-E remove-when-V">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+        <a id="link-manage_shelves" class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-bookshelf"></i><span>Manage Shelves</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -178,7 +209,7 @@
       </li><!-- End Shelves Nav -->
 
       <li class="nav-item remove-when-E remove-when-V">
-        <a class="nav-link collapsed" data-bs-target="#manage-request-nav" data-bs-toggle="collapse" href="#">
+        <a id="link-manage_requests" class="nav-link collapsed" data-bs-target="#manage-request-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-wallet2"></i><span>Manage Request</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="manage-request-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -187,13 +218,18 @@
               <i class="bi bi-diagram-3"></i><span>File Categories</span>
             </a>
           </li>
+          <li>
+            <a id="page-all_users" href="<?= base_url() ?>request/archived">
+              <i class="bi bi-box-seam"></i><span>Archived Requests</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Users Nav -->
 
       <li class="nav-heading remove-when-A remove-when-V">Encoder</li>
 
       <li class="nav-item remove-when-A remove-when-V">
-        <a class="nav-link collapsed" data-bs-target="#records-nav" data-bs-toggle="collapse" href="#">
+        <a id="link-student_records" class="nav-link collapsed" data-bs-target="#records-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-file-earmark-person"></i><span>Student Records</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="records-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -202,7 +238,7 @@
               <i class="bi bi-plus"></i><span>Add New Record</span>
             </a>
           </li>
-          <li>
+          <li class="remove-when-E">
             <a id="page-all_users" href="<?= base_url() ?>record/archived">
               <i class="bi bi-box-seam"></i><span>Archived Records</span>
             </a>
@@ -210,14 +246,14 @@
         </ul>
       </li><!-- End Users Nav -->
 
-      <li class="nav-heading remove-when-E remove-when-A">Checker</li>
+      <li class="nav-heading remove-when-E">Checker</li>
 
-      <li class="nav-item remove-when-E remove-when-A">
-        <a class="nav-link collapsed" data-bs-target="#request-nav" data-bs-toggle="collapse" href="#">
+      <li class="nav-item remove-when-E">
+        <a id="link-requests" class="nav-link collapsed" data-bs-target="#request-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-person-lines-fill"></i> <span>Requests</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="request-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
+          <li class="remove-when-A">
             <a id="page-add_user" href="<?= base_url() ?>request/new">
               <i class="bi bi-plus"></i><span>Add New Request</span>
             </a>
@@ -227,11 +263,6 @@
               <i class="bi bi-hourglass-split"></i>All Requests</span>
             </a>
           </li>
-      </li>
-      <li>
-        <a id="page-all_users" href="<?= base_url() ?>request/archived">
-          <i class="bi bi-box-seam"></i><span>Archived Requests</span>
-        </a>
       </li>
     </ul>
     </li><!-- End Users Nav -->

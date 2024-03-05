@@ -12,12 +12,18 @@ use Endroid\QrCode\Writer\PngWriter;
 class Page extends CI_Controller
 {
 
+  private $m_role = '';
+  private $m_hasUID = false;
+
   public function __construct()
   {
     parent::__construct(); // inherit all the methods, attributes  and etc. from parent
 
     $this->load->model("Student_model", "stud");
     $this->load->model("Shelves_model", "shelves");
+
+    $this->m_role = $this->session->userdata('role');
+    $this->m_hasUID = $this->session->has_userdata('uid');
   }
 
   private function loadPage($page, $data = [])
@@ -25,9 +31,11 @@ class Page extends CI_Controller
     extract($data);
     $fname = $this->session->userdata('fname');
     $lname = $this->session->userdata('lname');
-    $lname = $this->session->userdata('mname');
-    $fullname = $lname . (!empty($fname) || !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
+    $mname = $this->session->userdata('mname');
+    $fullname = $lname . (!empty($fname) && !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
     $username = $this->session->userdata('uname');
+
+    // echo json_encode($this->session->userdata());
 
     $header['constants'] = [
       'page_url' => $page,
@@ -46,7 +54,7 @@ class Page extends CI_Controller
   // Login
   public function index()
   {
-    if ($this->session->has_userdata('uid')) {
+    if ($this->m_hasUID) {
       redirect('dashboard');
       return;
     }
@@ -58,7 +66,7 @@ class Page extends CI_Controller
   // Dashboard
   public function dashboard()
   {
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
       redirect('');
       return;
     }
@@ -72,7 +80,11 @@ class Page extends CI_Controller
   public function users_all()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -83,7 +95,11 @@ class Page extends CI_Controller
   public function users_new()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -94,7 +110,11 @@ class Page extends CI_Controller
   public function users_logs()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -108,7 +128,7 @@ class Page extends CI_Controller
   public function shelf_all()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
       redirect('');
       return;
     }
@@ -119,7 +139,11 @@ class Page extends CI_Controller
   public function shelf_new()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -130,7 +154,11 @@ class Page extends CI_Controller
   public function shef_archived()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -140,13 +168,14 @@ class Page extends CI_Controller
 
   public function shelf_entry($id)
   {
-
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
       redirect('');
       return;
     }
 
-    $this->loadPage('shelf/shelf-entry');
+    $data['main'] = ['name' => $id];
+
+    $this->loadPage('shelf/shelf-entry', $data);
   }
 
 
@@ -155,7 +184,11 @@ class Page extends CI_Controller
   public function request_fileCateg()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -166,7 +199,11 @@ class Page extends CI_Controller
   public function request_new()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'V') {
       redirect('');
       return;
     }
@@ -177,7 +214,11 @@ class Page extends CI_Controller
   public function request_all()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role == 'E') {
       redirect('');
       return;
     }
@@ -188,7 +229,11 @@ class Page extends CI_Controller
   public function request_archived()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -202,7 +247,11 @@ class Page extends CI_Controller
   public function records_new()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'E') {
       redirect('');
       return;
     }
@@ -213,7 +262,11 @@ class Page extends CI_Controller
   public function records_archived()
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -224,7 +277,7 @@ class Page extends CI_Controller
   public function record_entry($id)
   {
 
-    if (!$this->session->has_userdata('uid')) {
+    if (!$this->m_hasUID) {
       redirect('');
       return;
     }
@@ -241,7 +294,7 @@ class Page extends CI_Controller
 
   // public function shelf($shelf_name)
   // {
-  //   if (!$this->session->has_userdata('uid')) {
+  //   if (!$this->m_hasUID) {
   //     redirect(''); // para yung url is http://localhost/DocTrackingSys' 
   //     // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
   //     return;
@@ -272,7 +325,7 @@ class Page extends CI_Controller
 
   // public function record($record_id)
   // {
-  //   if (!$this->session->has_userdata('uid')) {
+  //   if (!$this->m_hasUID) {
   //     redirect(''); // para yung url is http://localhost/DocTrackingSys' 
   //     // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
   //     return;
@@ -314,7 +367,7 @@ class Page extends CI_Controller
 
   // public function manage_users()
   // {
-  //   if (!$this->session->has_userdata('uid')) {
+  //   if (!$this->m_hasUID) {
   //     redirect('');
   //     return;
   //   }
