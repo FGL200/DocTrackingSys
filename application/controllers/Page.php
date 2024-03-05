@@ -32,7 +32,7 @@ class Page extends CI_Controller
     $fname = $this->session->userdata('fname');
     $lname = $this->session->userdata('lname');
     $mname = $this->session->userdata('mname');
-    $fullname = $lname . (!empty($fname) && !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
+    $fullname = $lname . ((!empty($fname) || !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '');
     $username = $this->session->userdata('uname');
 
     // echo json_encode($this->session->userdata());

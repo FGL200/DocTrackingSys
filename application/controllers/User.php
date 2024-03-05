@@ -85,18 +85,18 @@ class User extends CI_Controller{
 
         } else {
             if(!empty(trim($this->input->post("profile-old-pass"))) && empty(trim($this->input->post("profile-new-pass")))) {
-                echo json_encode(['status'=>'error', 'message'=>'New Password must not be empty']);
+                echo json_encode(['status'=>0, 'message'=>'New Password must not be empty']);
                 die;
             }
             if(empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
-                echo json_encode(['status'=>'error', 'message'=>'Old Password must not be empty']);
+                echo json_encode(['status'=>0, 'message'=>'Old Password must not be empty']);
                 die;
             }
     
             if(!empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
                 $isMatch = $this->user->get_Old_Password($this->input->post("uid"), $this->input->post("profile-old-pass"));
                 
-                if(!$isMatch) { echo json_encode(['status' =>  "error", 'message' =>  "Password did not match."]); die; }
+                if(!$isMatch) { echo json_encode(['status' =>  0, 'message' =>  "Password did not match."]); die; }
             }
             
             $data = "";
@@ -127,8 +127,8 @@ class User extends CI_Controller{
                 SET {$data}
             ");
 
-            if($result) echo json_encode(['status' => 'success']); //FRED
-            else echo json_encode(['status' =>  "error", 'message' =>  "Error in saving profile"]); die;
+            if($result) echo json_encode(['status' => 1]); //FRED
+            else echo json_encode(['status' =>  0, 'message' =>  "Error in saving profile"]); die;
         }
         
     }
