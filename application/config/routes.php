@@ -94,8 +94,6 @@ $route['api/student/merged-records']['post'] = "Student/get_Merged_Records";
 $route['api/student/record/(:num)/merge'] = "Student/student_record_merge/$1";
 
 $route['api/categories'] = 'RemarkCategory/getCategories';
-$route['api/shelves'] = 'Shelves/getAll';
-
 
 // USER
 $route['api/user/new']['post'] = 'User/new';
@@ -109,11 +107,15 @@ $route['api/user']['post'] = 'User/get_user';
 $route['api/user/update']['post'] = 'User/update';
 $route['api/user/all/encodes']['post'] = 'User/total_Encoded_By_Users';
 $route['api/user/monthly/encodes']['post'] = 'User/monthly_Encoded_By_Users';
-$route['api/user/logs'] = 'User/get_User_Logs';
+$route['api/user/logs']['post'] = 'User/get_User_Logs';
 
 // Shelf
-$route['api/shelves/insert']['post'] = 'Shelves/add_Shelf';
-$route['api/shelves/(:num)/update']['post'] = 'Shelves/update_Shelf/$1';
+$route['api/shelf/insert']['post'] = 'Shelf/add';
+$route['api/shelf/(:num)/update']['post'] = 'Shelf/update/$1';
+$route['api/shelf/(:num)/delete']['post'] = 'Shelf/delete/$1';
+$route['api/shelf/name'] = 'Shelf/getAllNames';
+$route['api/shelf/all-info'] = 'Shelf/getShelvesAndInfo';
+
 // Agree
 $route['api/agree/set']['post'] = 'Agreement/set'; // set agree status
 $route['api/agree/get']['post'] = 'Agreement/get'; // get agree status

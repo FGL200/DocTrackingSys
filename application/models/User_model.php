@@ -207,8 +207,21 @@ class User_model extends CI_Model
         return $result->row();
      }
 
-    public function get_User_Logs() {
-        return $this->db->query("SELECT * FROM `user_logs`")->result_array();
+    public function get_User_Logs($user_id) {
+        $query = "
+                SELECT 
+                    ul.title,
+                    ul.details,
+                    ul.created_date,
+                    u.uname as username
+                FROM 
+                    `user_logs` ul
+                join 
+                    `user` u
+                on 
+                    ul.created_by = u.id 
+                ";
+        return $this->db->query($query)->result();
     }
 
 

@@ -127,6 +127,12 @@ class User extends CI_Controller{
                 SET {$data}
             ");
 
+            $this->session->set_userdata('fname', $this->input->post('profile-fname'));
+            $this->session->set_userdata('lname', $this->input->post('profile-lname'));
+            $this->session->set_userdata('mname', $this->input->post('profile-mname'));
+            $this->session->set_userdata('bday', $this->input->post('profile-bday'));
+            $this->session->set_userdata('g', $this->input->post('profile-g'));
+
             if($result) echo json_encode(['status' => 1]); //FRED
             else echo json_encode(['status' =>  0, 'message' =>  "Error in saving profile"]); die;
         }
@@ -186,30 +192,30 @@ class User extends CI_Controller{
         // -- end of transaction --
         if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
-            echo json_encode(["status" => "success"]);
+            echo json_encode(["status" => 1]);
         } else {
             $this->db->trans_rollback()();
-            echo json_encode(["status" => "error"]);
+            echo json_encode(["status" => 0]);
         }
     }
 
     public function get_All_Viewers(){
         $my_user_id = $this->input->post()['uid'];
         // echo json_encode(['result' => $this->user->get_All_Viewers($my_user_id)]);  
-        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Viewers($my_user_id));
+        $nData = $this->user->get_All_Viewers($my_user_id);
         echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Encoders(){
         $my_user_id = $this->input->post()['uid'];
         // echo json_encode(['result' => $this->user->get_All_Encoders($my_user_id)]);  
-        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Encoders($my_user_id));
+        $nData = $this->user->get_All_Encoders($my_user_id);
         echo json_encode(['result' => $nData]); 
     }
 
     public function get_All_Users(){
         $my_user_id = $this->input->post()['uid'];
-        $nData = $this->__change_User_To_Proper_Format__($this->user->get_All_Users($my_user_id));
+        $nData = $this->user->get_All_Users($my_user_id);
         echo json_encode(['result' => $nData]);  
     }
 
@@ -237,8 +243,8 @@ class User extends CI_Controller{
     }
     
     public function get_User_Logs() {
-        if(!$this->input->post('uid')) return;
-        echo json_encode($this->user->get_User_Logs());
+        $user_id = $this->input->post('uid');
+        echo json_encode($this->user->get_User_Logs($user_id));
     }
 
     

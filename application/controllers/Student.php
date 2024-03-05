@@ -11,7 +11,7 @@ class Student extends CI_Controller{
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
         $this->load->model("excel_model", 'excel');
-        $this->load->model("shelves_model", "shelves");
+        $this->load->model("shelf_model", "shelf");
         /** File uploder helper */
         // $this->load->helper(array("form", "url"));
 
@@ -25,7 +25,7 @@ class Student extends CI_Controller{
         $id = 0;
         
         $created_by_uid = $this->session->userdata('uid');
-        $shelfid = $this->shelves->getShelfId($this->input->post('shelf'));
+        $shelfid = $this->shelf->getShelfId($this->input->post('shelf'));
 
         $filename = $this->input->post("filename");
         
@@ -191,7 +191,7 @@ class Student extends CI_Controller{
         $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
         
         $shelfname = $this->input->post("shelf");
-        $shelfid = $this->shelves->getShelfId($shelfname);
+        $shelfid = $this->shelf->getShelfId($shelfname);
         
         $data .= "`stud_rec_id` = '{$student_id}', `shelf` = '{$shelfid}'";
         $this->stud->addStudentDoc($data);
@@ -246,10 +246,10 @@ class Student extends CI_Controller{
         $shelf = $this->input->post("shelf");
 
         $result = $this->stud->get_StudentRecords_With_Remarks($uid, " AND `sh`.name='{$shelf}'");
-        $nData = $this->to_Id_Link_Student_Record($result);
-        $nData = $this->count_remarks($nData);
-        $nData = $this->to_grouped_style($nData);
-        echo json_encode(['result' => $nData]);
+        // $nData = $this->to_Id_Link_Student_Record($result);
+        // $nData = $this->count_remarks($nData);
+        // $nData = $this->to_grouped_style($nData);
+        echo to_JSON(['result' => $result]);
     }
 
     /**
@@ -257,7 +257,7 @@ class Student extends CI_Controller{
      * @param Integer $id The `stud_rec`.`id`
      */
     public function get_Student_Records(int $id) {
-        echo json_encode(['result' => $this->stud->get_Student_all_Record($id)]);
+        echo to_JSON(['result' => $this->stud->get_Student_all_Record($id)]);
     }
 
     /**
@@ -266,10 +266,10 @@ class Student extends CI_Controller{
      */
     public function get_Student_Records_By(int $user_id) {
         $result = $this->stud->get_Student_Records_By($user_id);
-        $nData = $this->to_Id_Link_Student_Record($result);
-        $nData = $this->count_remarks($nData);
-        $nData = $this->to_grouped_style($nData);
-        echo json_encode(['result' => $nData]);
+        // $nData = $this->to_Id_Link_Student_Record($result);
+        // $nData = $this->count_remarks($nData);
+        // $nData = $this->to_grouped_style($nData);
+        echo to_JSON(['result' => $result]);
     }
 
     /**
@@ -482,7 +482,7 @@ class Student extends CI_Controller{
         $nColumns = count($columns) > 0 ?  implode(" AND \n", $columns) : null;
         $nRemarks = count($remarksColumns) > 0 ? implode(" OR \n", $remarksColumns) : null;
 
-        $shelfid = $this->shelves->getShelfId($this->input->post('shelf'));
+        $shelfid = $this->shelf->getShelfId($this->input->post('shelf'));
         if(!$shelfid) {echo json_encode(['result'=>["status" => "error", 'message' => "Error in searching..."]]); die; }
 
         $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks . " AND `sh`.id = '{$shelfid}'";
