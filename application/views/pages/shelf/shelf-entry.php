@@ -12,7 +12,15 @@
 
   <section class="section">
     <div class="row">
-
+      <div class="col-12">
+        <table id="table_content" class="table table-hover"></table>
+      </div>
     </div>
   </section>
 </main>
+
+<script>
+  const const_shelf_name = '<?= $name ?>';
+</script>
+
+<script type="module" src="<?= base_url()?>assets/js/shelf/shelf-entry.js"></script>

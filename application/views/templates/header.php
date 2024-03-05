@@ -41,6 +41,37 @@
   <link href="<?= base_url() ?>assets/css/template-style.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/css/header.css" rel="stylesheet">
 
+  <!-- JQuery JS-->
+  <script src="<?= base_url() ?>assets/third_party/jquery/jquery.min.js"></script>
+
+  <!-- DataTable CSS -->
+  <link rel="stylesheet" href="<?= base_url() ?>assets/third_party/datatables/datatables.min.css">
+
+  <!-- DataTable JS -->
+  <script src="<?= base_url() ?>assets/third_party/datatables/datatables.min.js"></script>
+
+
+
+
+  <!-- Vendor JS Files -->
+  <script src="<?= base_url() ?>assets/vendor/apexcharts/apexcharts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/chart.js/chart.umd.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/echarts/echarts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/quill/quill.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/simple-datatables/simple-datatables.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/php-email-form/validate.js" defer></script>
+
+  <!-- Template Main JS File -->
+  <script src="<?= base_url() ?>assets/js/main.js" defer></script>
+
+  <!-- jsCalendar JS -->
+  <script src="<?= base_url() ?>assets/third_party/jsCalendar/jsCalendar.min.js" defer></script>
+
+
+  <script type="module" src="<?= base_url() ?>assets/js/core.js"></script>
+
 </head>
 
 <body>
@@ -88,7 +119,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#edit-profile">
+              <a class="dropdown-item d-flex align-items-center" href="#edit-profile" id="user_edit_profile">
                 <i class="bi bi-person"></i>
                 <span>Edit Profile</span>
               </a>

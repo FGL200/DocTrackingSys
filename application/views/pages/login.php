@@ -44,7 +44,7 @@
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-9 col-md-8 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
@@ -56,7 +56,7 @@
               <div class="card card-info mb-3 login-container">
                 <div class="row">
 
-                  <div class="col-xl-6 col-lg-6 col-md-6">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <div class="p-3">
                       <div class="pt-4 pb-2">
                         <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
@@ -86,17 +86,11 @@
                           <button class="btn btn-primary w-100" type="submit">Login</button>
                         </div>
 
-                        <div class="col-12">
-                          <p>
-                            Check our <a id="terms_and_condition" class="link " href="#terms_and_contition">Terms and condition</a>
-                          </p>
-                        </div>
-
                       </form>
                     </div>
                   </div>
 
-                  <div class="col-xl-6 col-lg-6 col-md-6 d-flex flex-columns">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 d-flex flex-columns">
                     <div class="p-5 w-100 introduction-container">
 
                       <div class="text-white">
@@ -107,6 +101,9 @@
                         <p class="m-2">* If you <b>do not have account</b>, contact admin <br /> to register new account.</p>
                         <p class="m-2">* If you <b>forgot your password</b>, contact admin <br /> to reset your password.</p>
                         <p class="m-2"><b>* Unauthorized use</b> of the system will result <br /> to disciplinary actions.</p>
+                      </div>
+                      <div class="text-white">
+                        Read <a id="terms_and_condition" class="link text-decoration-underline text-white" href="#terms_and_contition">Terms and condition</a> to learn more.
                       </div>
 
                     </div>

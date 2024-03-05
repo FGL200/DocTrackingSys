@@ -3,7 +3,7 @@
     <h1>All Shelves</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= base_url() ?>l">Home</a></li>
+        <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
         <li class="breadcrumb-item active">All Shelves</li>
       </ol>
     </nav>

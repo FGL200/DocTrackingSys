@@ -33,9 +33,9 @@ export class Modal {
     Helper.f("#dds_modal_dialog").classList.remove("modal-lg");
     Helper.f("#dds_modal_dialog").classList.remove("modal-xl");
     switch (size) {
-      case "sm":Helper.f("#dds_modal_dialog").classList.add("modal-sm"); break;
-      case "lg":Helper.f("#dds_modal_dialog").classList.add("modal-lg"); break;
-      case "xl":Helper.f("#dds_modal_dialog").classList.add("modal-xl"); break;
+      case "sm": Helper.f("#dds_modal_dialog").classList.add("modal-sm"); break;
+      case "lg": Helper.f("#dds_modal_dialog").classList.add("modal-lg"); break;
+      case "xl": Helper.f("#dds_modal_dialog").classList.add("modal-xl"); break;
       default: break;
     }
   }
@@ -64,6 +64,14 @@ export class Modal {
 
   static async hideCloseButton() {
     Helper.f("#dds_modal_close").classList.add('d-none');
+  }
+
+  static get form() {
+    return new FormData(Helper.f("#dds_modal_form"));
+  }
+
+  static get id() {
+    return '#dds_modal_form';
   }
 
 }

@@ -31,9 +31,11 @@ class Page extends CI_Controller
     extract($data);
     $fname = $this->session->userdata('fname');
     $lname = $this->session->userdata('lname');
-    $lname = $this->session->userdata('mname');
-    $fullname = $lname . (!empty($fname) || !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
+    $mname = $this->session->userdata('mname');
+    $fullname = $lname . (!empty($fname) && !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
     $username = $this->session->userdata('uname');
+
+    // echo json_encode($this->session->userdata());
 
     $header['constants'] = [
       'page_url' => $page,
@@ -82,7 +84,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -97,7 +99,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -112,7 +114,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -141,7 +143,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -156,7 +158,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -186,7 +188,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -201,7 +203,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'V') {
+    if ($this->m_role != 'V') {
       redirect('');
       return;
     }
@@ -216,7 +218,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role == 'E') {
+    if ($this->m_role == 'E') {
       redirect('');
       return;
     }
@@ -231,7 +233,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }
@@ -249,7 +251,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'E') {
+    if ($this->m_role != 'E') {
       redirect('');
       return;
     }
@@ -264,7 +266,7 @@ class Page extends CI_Controller
       redirect('');
       return;
     }
-    if($this->m_role != 'A') {
+    if ($this->m_role != 'A') {
       redirect('');
       return;
     }

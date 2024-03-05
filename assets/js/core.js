@@ -1,3 +1,4 @@
+import { CustomNotification } from "../shared/custom-notification.js";
 import { Helper } from "../shared/helper.js";
 import { Modal } from "../shared/modal.js";
 import { TermsAndCondition } from "../shared/terms-and-condition.js";
@@ -33,6 +34,53 @@ Helper.onSubmit("#form_quickSearch", async function (e) {
   Modal.open(() => {
     Helper.f("#form_quickSearch").reset();
   })
+});
+
+Helper.onClick("#user_edit_profile", async () => {
+  const resp = (await Helper.api('user', 'json', Helper.createFormData({ uid: const_uid, rid: const_uid }))).result[0];
+  Modal.setSize('md');
+  Modal.setBody(await Helper.template('profile/profile'));
+  Modal.setTitle('<i class="bi bi-person-circle"></i> My Information')
+  Helper.formBindValues(Modal.id, {
+    'profile-uname': resp.uname,
+    'profile-fname': resp.fname,
+    'profile-mname': resp.mname,
+    'profile-lname': resp.lname,
+    'profile-bday': resp.bday,
+    'profile-g': resp.gender,
+  });
+  Modal.setFooter(await Modal.button('Save', 'success'));
+  Modal.open();
+  Modal.submit(async (e, form_data) => {
+    if (Helper.formValidator(form_data, ["profile-fname", "profile-mname", "profile-lname", "profile-uname", "profile-bday", "profile-g"], v => v == '').length > 0) {
+      Helper.Promt_Error('* Required fields must be filled.')
+      return;
+    }
+
+    if (Helper.formValidator(form_data, ["profile-bday"], v => Helper.getAge(v) < 18).length > 0) {
+      Helper.Promt_Error('* Birthdate is not valid. Age must be greater than 18.')
+      return;
+    }
+
+    if (Helper.f("#profile-old-pass").value || Helper.f("#profile-new-pass").value) {
+      if (Helper.formValidator(form_data, ["profile-old-pass", "profile-new-pass"], v => v == '').length > 0) {
+        Helper.Promt_Error('* Old and New password reuqired.')
+        return;
+      }
+    }
+
+    Helper.Promt_Clear();
+    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: const_uid, rid: const_uid }, form_data))).status;
+
+    if (resp == "success") {
+      CustomNotification.add("Profile Updated!", "Information saved!", "success");
+      Modal.close();
+      setTimeout(() => { location.reload(); }, 1000);
+    } else {
+      CustomNotification.add("Error", "Error occured. Try again later.", "danger");
+    }
+
+  });
 });
 
 function Navigator() {
