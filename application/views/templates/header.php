@@ -4,8 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <script>
+    <?php if (isset($constants)) foreach ($constants as $c => $v) { ?>
+      const const_<?= $c ?> = '<?= $v ?>';
+    <?php } ?>
+    const base_url = '<?= base_url() ?>';
+  </script>
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>SRAC: DDS</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -67,14 +73,14 @@
               <i class="bi bi-person"></i>
             </span>
             <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-            <span class="d-none d-md-block dropdown-toggle ps-2 header-white"><?= 'USERNAME' ?></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2 header-white"><?= $constants['username'] ?></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
 
             <li class="dropdown-header">
-              <h6><?= 'FullName' ?></h6>
-              <span><?= 'Role' ?></span>
+              <h6><?= $constants['fullname'] ?></h6>
+              <span><?= getRoleByRoleID($constants['role']) ?></span>
             </li>
 
             <li>
@@ -93,7 +99,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="<?= base_url() ?>user/logout">
+              <a class="dropdown-item d-flex align-items-center" href="<?= base_url() ?>api/user/logout">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
@@ -119,9 +125,17 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-heading">Admin</li>
+      <li class="nav-heading">Records</li>
 
       <li class="nav-item">
+        <a class="nav-link collapsed" href="<?= base_url() ?>shelf/all">
+          <i class="bi bi-list-nested"></i><span>All Shelves</span>
+        </a>
+      </li><!-- End Student Records Page Nav -->
+
+      <li class="nav-heading remove-when-E remove-when-V">Admin</li>
+
+      <li class="nav-item remove-when-E remove-when-V">
         <a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-people"></i><span>Manage Users</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -145,7 +159,7 @@
       </li><!-- End Users Nav -->
 
 
-      <li class="nav-item">
+      <li class="nav-item remove-when-E remove-when-V">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-bookshelf"></i><span>Manage Shelves</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -163,7 +177,7 @@
         </ul>
       </li><!-- End Shelves Nav -->
 
-      <li class="nav-item">
+      <li class="nav-item remove-when-E remove-when-V">
         <a class="nav-link collapsed" data-bs-target="#manage-request-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-wallet2"></i><span>Manage Request</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -176,9 +190,9 @@
         </ul>
       </li><!-- End Users Nav -->
 
-      <li class="nav-heading">Encoder</li>
+      <li class="nav-heading remove-when-A remove-when-V">Encoder</li>
 
-      <li class="nav-item">
+      <li class="nav-item remove-when-A remove-when-V">
         <a class="nav-link collapsed" data-bs-target="#records-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-file-earmark-person"></i><span>Student Records</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -188,12 +202,17 @@
               <i class="bi bi-plus"></i><span>Add New Record</span>
             </a>
           </li>
+          <li>
+            <a id="page-all_users" href="<?= base_url() ?>record/archived">
+              <i class="bi bi-box-seam"></i><span>Archived Records</span>
+            </a>
+          </li>
         </ul>
       </li><!-- End Users Nav -->
 
-      <li class="nav-heading">Checker</li>
+      <li class="nav-heading remove-when-E remove-when-A">Checker</li>
 
-      <li class="nav-item">
+      <li class="nav-item remove-when-E remove-when-A">
         <a class="nav-link collapsed" data-bs-target="#request-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-person-lines-fill"></i> <span>Requests</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -216,14 +235,6 @@
       </li>
     </ul>
     </li><!-- End Users Nav -->
-
-    <li class="nav-heading">Records</li>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="<?= base_url() ?>shelf/all">
-        <i class="bi bi-list-nested"></i><span>All Shelves</span>
-      </a>
-    </li><!-- End Student Records Page Nav -->
 
     </ul>
 

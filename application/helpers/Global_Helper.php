@@ -52,3 +52,12 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
  function disable_db_debugging(& $controller) : void {
     $controller->db->db_debug = false;
  }
+
+ function getRoleByRoleID($roleID) {
+  switch ($roleID) {
+    case 'A': return 'Admin'; break;
+    case 'V': return 'Checker'; break;
+    case 'E': return 'Encoder'; break;
+    default: return '';break;
+  }
+ }

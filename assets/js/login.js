@@ -5,7 +5,7 @@ import { Modal } from "../shared/modal.js";
 Helper.onClick("#terms_and_condition", async () => {
   Modal.setTitle('Terms and Conditions')
   Modal.setSize("lg")
-  Modal.setBody(await Helper.template('terms_and_condition'));
+  Modal.setBody(await Helper.template('/terms_and_condition'));
   Modal.hideFooter();
   Modal.open();
 });
@@ -31,7 +31,7 @@ Helper.onSubmit("#form_login", async (e) => {
   }
   // 
 
-  const resp = (await Helper.api('user/login', "json", form_data))
+  const resp = (await Helper.api('/user/login', "json", form_data))
   if (resp.result) {
     sessionStorage.clear();
     location.href = base_url + 'dashboard';

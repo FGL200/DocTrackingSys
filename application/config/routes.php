@@ -35,6 +35,7 @@ $route['request/archived'] = 'Page/request_archived';
 // Student Records
 $route['record/new'] = 'Page/records_new';
 $route['record/entry/(:num)'] = 'Page/record_entry/$1';
+$route['record/archived'] = 'Page/records_archived';
 
 // ------------------ /End Pages ------------------
 
@@ -98,8 +99,8 @@ $route['api/shelves'] = 'Shelves/getAll';
 
 // USER
 $route['api/user/new']['post'] = 'User/new';
-$route['user/login']['post'] = 'Login';
-$route['user/logout'] = 'Login/logout';
+$route['api/user/login']['post'] = 'Login';
+$route['api/user/logout'] = 'Login/logout';
 
 $route['api/user/viewers']['post'] = 'User/get_All_Viewers';
 $route['api/user/encoders']['post'] = 'User/get_All_Encoders';

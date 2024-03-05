@@ -1,3 +1,30 @@
+.login-container {
+  border-radius: 0;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.introduction-container {
+  background-color: #265699;
+  border-bottom-right-radius: 30px;
+}
+
+.introduction {
+  position: relative;
+  white-space: nowrap;
+}
+
+.introduction::before {
+  content: "";
+  width: 5px;
+  height: 30px;
+  position: absolute;
+  background-color: #FEC101;
+  left: -10px;
+}
+
+
+
 main {
   background-size: cover;
   background-position: center center;

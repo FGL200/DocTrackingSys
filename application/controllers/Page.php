@@ -23,7 +23,21 @@ class Page extends CI_Controller
   private function loadPage($page, $data = [])
   {
     extract($data);
-    if ($page != "login") $this->load->view("templates/header", isset($header) ? $header : []);
+    $fname = $this->session->userdata('fname');
+    $lname = $this->session->userdata('lname');
+    $lname = $this->session->userdata('mname');
+    $fullname = $lname . (!empty($fname) || !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '';
+    $username = $this->session->userdata('uname');
+
+    $header['constants'] = [
+      'page_url' => $page,
+      'role' => $this->session->userdata('role'),
+      'username' => $username,
+      'fullname' => empty($fullname) ? $username : $fullname,
+      'uid' => $this->session->userdata('uid'),
+    ];
+
+    if ($page != "login") $this->load->view("templates/header", $header);
     if ($page) $this->load->view("pages/$page", isset($main) ? $main : []);
     if ($page != "login") $this->load->view("templates/footer", isset($footer) ? $footer : []);
   }
@@ -37,7 +51,7 @@ class Page extends CI_Controller
       return;
     }
 
-    $this->loadPage("login", []);
+    $this->loadPage("login");
   }
 
 
@@ -45,33 +59,11 @@ class Page extends CI_Controller
   public function dashboard()
   {
     if (!$this->session->has_userdata('uid')) {
-      redirect(''); // para yung url is http://localhost/DocTrackingSys' 
-      // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
+      redirect('');
       return;
     }
 
-
-    $uid = $this->session->userdata('uid');
-    $role = $this->session->userdata('role');
-
-    $shelves = $this->shelves->getShelvesAndInfo();
-    $total_records_in_bin = count($this->stud->get_stud_rec_trashBin($uid)) ?? 0;
-
-    $data['header'] = [
-      'title' => 'Dashboard',
-      'uid' => $uid,
-      'role' => $role,
-      // 'hide_nav' => true,
-      'constants' => ["role" => $role],
-      'css' => ["dashboard"],
-      'shelves' => $shelves,
-      'bin_records' => $total_records_in_bin
-    ];
-    $data['footer'] = [
-      'js' => ['alert', 'dashboard', 'profile', 'termsAndCondition']
-    ];
-
-    $this->loadPage('dashboard', $data);
+    $this->loadPage('dashboard');
   }
 
 
@@ -80,26 +72,46 @@ class Page extends CI_Controller
   public function users_all()
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('users/user-all');
   }
-  
+
   public function users_new()
   {
-    
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('users/user-new');
   }
-  
+
   public function users_logs()
   {
-    
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('users/user-logs');
   }
 
-  
-  
+
+
   // Manage Shleves
   public function shelf_all()
   {
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
 
     $this->loadPage('shelf/shelf-all');
   }
@@ -107,11 +119,21 @@ class Page extends CI_Controller
   public function shelf_new()
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('shelf/shelf-new');
   }
 
   public function shef_archived()
   {
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
 
     $this->loadPage('shelf/shelf-archived');
   }
@@ -119,14 +141,24 @@ class Page extends CI_Controller
   public function shelf_entry($id)
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('shelf/shelf-entry');
   }
 
 
-  
+
   // Manage Requests
   public function request_fileCateg()
   {
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
 
     $this->loadPage('request/request-file-category');
   }
@@ -134,11 +166,21 @@ class Page extends CI_Controller
   public function request_new()
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('request/request-new');
   }
 
   public function request_all()
   {
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
 
     $this->loadPage('request/request-all');
   }
@@ -146,24 +188,49 @@ class Page extends CI_Controller
   public function request_archived()
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('request/request-archived');
   }
 
 
-  
+
   // Manage Records
   public function records_new()
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('record/record-new');
+  }
+
+  public function records_archived()
+  {
+
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
+    $this->loadPage('record/record-archived');
   }
 
   public function record_entry($id)
   {
 
+    if (!$this->session->has_userdata('uid')) {
+      redirect('');
+      return;
+    }
+
     $this->loadPage('record/record-entry');
   }
-  
 
 
 
@@ -171,170 +238,171 @@ class Page extends CI_Controller
 
 
 
-  public function shelf($shelf_name)
-  {
-    if (!$this->session->has_userdata('uid')) {
-      redirect(''); // para yung url is http://localhost/DocTrackingSys' 
-      // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
-      return;
-    }
 
-    if ($this->session->userdata("agree") == "0") {
-      redirect("dashboard");
-    }
+  // public function shelf($shelf_name)
+  // {
+  //   if (!$this->session->has_userdata('uid')) {
+  //     redirect(''); // para yung url is http://localhost/DocTrackingSys' 
+  //     // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
+  //     return;
+  //   }
 
-    // HEADER VARIABLES
-    $data['header'] = [
-      'title' => ucfirst($shelf_name),
-      'css' => ['shelf'],
-      'profile' => $this->session->userdata(),
-      'constants' => [
-        'shelf_name' => $shelf_name
-      ]
-    ];
+  //   if ($this->session->userdata("agree") == "0") {
+  //     redirect("dashboard");
+  //   }
 
-    // FOOTER VAIRABLES
-    $data['footer'] = [
-      'js' => ['alert', 'newRecord', 'profile', 'scan_qr', 'shelf']
-    ];
+  //   // HEADER VARIABLES
+  //   $data['header'] = [
+  //     'title' => ucfirst($shelf_name),
+  //     'css' => ['shelf'],
+  //     'profile' => $this->session->userdata(),
+  //     'constants' => [
+  //       'shelf_name' => $shelf_name
+  //     ]
+  //   ];
 
-    // load page
-    $this->loadPage("shelf", $data);
-  }
+  //   // FOOTER VAIRABLES
+  //   $data['footer'] = [
+  //     'js' => ['alert', 'newRecord', 'profile', 'scan_qr', 'shelf']
+  //   ];
 
-  public function record($record_id)
-  {
-    if (!$this->session->has_userdata('uid')) {
-      redirect(''); // para yung url is http://localhost/DocTrackingSys' 
-      // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
-      return;
-    }
+  //   // load page
+  //   $this->loadPage("shelf", $data);
+  // }
 
-    if ($this->session->userdata("agree") == "0") {
-      redirect("dashboard");
-    }
+  // public function record($record_id)
+  // {
+  //   if (!$this->session->has_userdata('uid')) {
+  //     redirect(''); // para yung url is http://localhost/DocTrackingSys' 
+  //     // $this->index(); //pag eto kasi, yung url is for home page  'http://localhost/DocTrackingSys/home#'
+  //     return;
+  //   }
 
-    // $rec_id - is the integer value
-    // $record_id - is the string value
-    $rec_id = intval($record_id);
+  //   if ($this->session->userdata("agree") == "0") {
+  //     redirect("dashboard");
+  //   }
 
-    $studData = $this->stud->get_Student_all_Record($rec_id);
-    if (!$studData) redirect('');
-    $role = $this->session->userdata('role');
+  //   // $rec_id - is the integer value
+  //   // $record_id - is the string value
+  //   $rec_id = intval($record_id);
 
-    // HEADER VARIABLES
-    $data['header'] = [
-      'title' => "#{$record_id}",
-      'record_id' => $record_id,
-      'role' => $role,
-      'studData' => $studData,
-      'css' => ['viewRecord'],
-      'constants' => [
-        'record_id' => $record_id,
-        'role' => $role
-      ]
-    ];
+  //   $studData = $this->stud->get_Student_all_Record($rec_id);
+  //   if (!$studData) redirect('');
+  //   $role = $this->session->userdata('role');
 
-    // FOOTER VAIRABLES
-    $data['footer'] = [
-      'js' => ['viewRecord', 'alert', 'profile']
-    ];
+  //   // HEADER VARIABLES
+  //   $data['header'] = [
+  //     'title' => "#{$record_id}",
+  //     'record_id' => $record_id,
+  //     'role' => $role,
+  //     'studData' => $studData,
+  //     'css' => ['viewRecord'],
+  //     'constants' => [
+  //       'record_id' => $record_id,
+  //       'role' => $role
+  //     ]
+  //   ];
 
-    // load page
-    $this->loadPage("viewRecord", $data);
-  }
+  //   // FOOTER VAIRABLES
+  //   $data['footer'] = [
+  //     'js' => ['viewRecord', 'alert', 'profile']
+  //   ];
 
-  public function manage_users()
-  {
-    if (!$this->session->has_userdata('uid')) {
-      redirect('');
-      return;
-    }
+  //   // load page
+  //   $this->loadPage("viewRecord", $data);
+  // }
 
-    $role = $this->session->userdata('role');
+  // public function manage_users()
+  // {
+  //   if (!$this->session->has_userdata('uid')) {
+  //     redirect('');
+  //     return;
+  //   }
 
-    if ($role != 'A') {
-      redirect('');
-      return;
-    }
+  //   $role = $this->session->userdata('role');
 
-    if ($this->session->userdata("agree") == "0") {
-      redirect("dashboard");
-    }
+  //   if ($role != 'A') {
+  //     redirect('');
+  //     return;
+  //   }
 
-    $data['header'] = [
-      'title' => 'Manage Users',
-      'css' => ['manage_users']
-    ];
+  //   if ($this->session->userdata("agree") == "0") {
+  //     redirect("dashboard");
+  //   }
 
-    $data['footer'] = [
-      'js' => ['alert', 'manage_users', 'profile']
-    ];
+  //   $data['header'] = [
+  //     'title' => 'Manage Users',
+  //     'css' => ['manage_users']
+  //   ];
 
-    $this->loadPage("manage_users", $data);
-  }
+  //   $data['footer'] = [
+  //     'js' => ['alert', 'manage_users', 'profile']
+  //   ];
+
+  //   $this->loadPage("manage_users", $data);
+  // }
 
 
-  public function generate_qr()
-  {
-    if ($this->session->userdata("role") != "A") {
-      redirect("");
-    }
+  // public function generate_qr()
+  // {
+  //   if ($this->session->userdata("role") != "A") {
+  //     redirect("");
+  //   }
 
-    // if($this->session->userdata("agree") == "0") {
-    //     redirect("dashboard");
-    // } 
+  //   // if($this->session->userdata("agree") == "0") {
+  //   //     redirect("dashboard");
+  //   // } 
 
-    $data['header'] = [
-      'css' => ['generate_qr'],
-      'title' => "Generate QR"
-    ];
+  //   $data['header'] = [
+  //     'css' => ['generate_qr'],
+  //     'title' => "Generate QR"
+  //   ];
 
-    $data['footer'] = [
-      'js' => ['generate_qr', 'profile']
-    ];
+  //   $data['footer'] = [
+  //     'js' => ['generate_qr', 'profile']
+  //   ];
 
-    $this->loadPage('generated_qr', $data);
-  }
+  //   $this->loadPage('generated_qr', $data);
+  // }
 
-  public function user_logs()
-  {
+  // public function user_logs()
+  // {
 
-    if ($this->session->userdata("role") != "A") {
-      redirect("");
-      return;
-    }
+  //   if ($this->session->userdata("role") != "A") {
+  //     redirect("");
+  //     return;
+  //   }
 
-    if ($this->session->userdata("agree") == "0") {
-      redirect("dashboard");
-    }
+  //   if ($this->session->userdata("agree") == "0") {
+  //     redirect("dashboard");
+  //   }
 
-    $data['header'] = [
-      'title' => "User Logs"
-    ];
+  //   $data['header'] = [
+  //     'title' => "User Logs"
+  //   ];
 
-    $data['footer'] = [
-      'js' => ['user_logs', 'profile']
-    ];
+  //   $data['footer'] = [
+  //     'js' => ['user_logs', 'profile']
+  //   ];
 
-    $this->loadPage('user_logs', $data);
-  }
+  //   $this->loadPage('user_logs', $data);
+  // }
 
-  public function requests()
-  {
+  // public function requests()
+  // {
 
-    $role = $this->session->userdata('role');
-    $data['header'] = [
-      'title' => 'Requests',
-      'constants' => [
-        'role' => $role
-      ]
-    ];
+  //   $role = $this->session->userdata('role');
+  //   $data['header'] = [
+  //     'title' => 'Requests',
+  //     'constants' => [
+  //       'role' => $role
+  //     ]
+  //   ];
 
-    $data['footer'] = [
-      'js' => ['requests', 'profile'],
-    ];
+  //   $data['footer'] = [
+  //     'js' => ['requests', 'profile'],
+  //   ];
 
-    $this->loadPage('requests', $data);
-  }
+  //   $this->loadPage('requests', $data);
+  // }
 }
