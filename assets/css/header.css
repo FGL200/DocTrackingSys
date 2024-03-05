@@ -1,51 +1,37 @@
-
-header {
-    /* background-color: var(--color_blue); */
-    /* border-bottom: 2px solid var(--color_yellow); */
-    background: linear-gradient(90deg, #265798ef, #4c78b3ef, #265798ef)
-    
-      
+#header {
+  background-color: #265699 !important;
 }
 
-header > * {
-    margin: 0 1rem;
+.header-white {
+  color: #F6F9FF !important;
 }
 
-header a {
-    text-decoration: none;
-}
-
-header button {
-    border: none;
-    background: transparent;
-    transition: 0.3s;
-}
-
-.sys-title{
-    white-space: nowrap;
-    font-weight: bold;
-}
-
-.phone {
-    display: none;
-}
-
-/* header nav.pc{
-    display: flex;
-} */
-
-header nav a:hover,
-header nav a:focus{
-    background-color: rgba(255, 255, 255, 0.3);
+.profile-picture {
+  min-height: 36px;
+  min-width: 36px;
+  max-height: 36px;
+  max-width: 36px;
+  font-size: large !important;
+  color: #265699;
+  font-weight: bold;
 }
 
 
 
-@media (max-width: 650px) {
-    .pc{
-        display: none;
-    }
-    .phone{
-        display: flex;
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

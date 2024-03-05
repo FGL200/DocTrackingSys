@@ -1,154 +1,337 @@
-const MAIN = {
-    /**
-     * Add new notification to side
-     * @param {string} title 
-     * @param {string} message 
-     * @param {*} flag 
-     */
-    addNotif : function(title, message, flag){
-        const holder = document.getElementById("notif-holder");
-
-        let tColor = 
-            (flag == "g") ? "#C8FEE0" :
-            (flag == "r") ? "#FFAFAA" :
-            "#ECECEC";
-    
-        let bColor = 
-            (flag == "g") ? "#EAFAF1" :
-            (flag == "r") ? "#FDEDEC" :
-            "#F8F9F9";
-    
-        const notif = document.createElement("section");
-        notif.setAttribute("class", "notif shadow slide-in-out");
-        notif.addEventListener("animationend", ()=>{
-            notif.remove();
-        })
-        // notif.style.border = "1px solid " + tColor;
-        notif.style.backgroundColor = bColor;
-
-        const notif_logo = document.createElement("img");
-        notif_logo.src = `${base_url}assets/images/rtu-logo.png`;
-        notif_logo.width = "20";
-        notif_logo.height = "20";
-
-        const notif_close = document.createElement("button");
-        notif_close.setAttribute("class", "notif_close_btn");
-        notif_close.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-        notif_close.style.position = "absolute";
-        notif_close.style.top = "5px";
-        notif_close.style.right = "5px";
-        // notif_close.style.border = `1px solid ${tColor}`;
-        // notif_close.style.backgroundColor = bColor;
-        notif_close.addEventListener("click", ()=>{
-            notif.remove();
-            if(holder.children.length == 0){
-                holder.classList.add("hide");
-            }
-        });
-        
-        const notif_title = document.createElement("section");
-        notif_title.setAttribute("class", "notif-title fw-bold d-flex align-items-center gap-2");
-        notif_title.appendChild(notif_logo);
-        notif_title.style.backgroundColor = tColor;
-
-        const title_content = document.createElement('spam');
-        title_content.innerHTML = title;
-        notif_title.appendChild(title_content);
-    
-        const notif_body = document.createElement("section");
-        notif_body.setAttribute("class", "notif-body");
-        notif_body.innerHTML = message;
-        
-        const notif_time = document.createElement('p')
-        notif_time.setAttribute("class", "text-end text-muted m-0 notif-time")
-        notif_time.innerHTML = new Date().toLocaleTimeString();
-    
-        notif.appendChild(notif_close);
-        notif.appendChild(notif_title);
-        notif.appendChild(notif_body);
-        notif.appendChild(notif_time);
-    
-        
-        if(holder.children.length < 3){
-            holder.classList.remove("hide");
-            holder.appendChild(notif);
-        }
-        else{
-            holder.children[0].remove()
-            holder.appendChild(notif);
-        }
-    },
-
-    /**
-     * Return a string that can be set as value to an input[type='date']
-     * @param {Date} date 
-     * @returns 
-     */
-    dateToInputDate : function(date){
-        if(!date) return '1234-01-01';
-        let today = new Date(date);
-        let day = (today.getDate() < 10) ? "0" + today.getDate() : today.getDate() ;
-        let month = (today.getMonth() + 1 < 10) ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);    
-        let year = today.getFullYear();
-        return `${year}-${month}-${day}`;
-    },
-
-    /**
-     * Go to another page
-     * @param {string} page 
-     */
-    goto : function(page){
-        window.location.href = base_url + page;
-    }
-}
-
-const ABOUT = {
-    open : function(){
-        MODAL.setTitle("About the System");
-        MODAL.setBody(`<div class="d-flex flex-column gap-2 p-3" style="max-width: 700px;">
-        <section style="text-align: justify;">
-            Welcome to the <b>Student Records and Admission Center Document Tracking System</b>, a powerful tracker system that allows RTU SRAC to store and manage vast amounts of information in a simple, secure, and efficient way.
-        </section>
-        <section style="text-align: justify;">
-            <b>Our goal is to give RTU SRAC the tools they need to get insight from their data.</b> Although RTU SRAC's administration is rather small, it can benefit from this platform because of its ability to help it streamline operations, improve decision-making, and provide a better experience for clients.
-        </section>
-        <section style="text-align: justify;">
-            <b>The system allows RTU SRAC to store massive volumes of data in a compact format.</b> Our user-friendly interface makes it simple to store, retrieve, and examine data from RTU customers in real time, making it easy for RTU SRAC to manage your data. In addition, RTU SRAC's customers' data will be safe and secured because this system is built to be secure and comply with industry standards.
-        </section>
-        </div>`);
-        MODAL.setFooter(`
-            <section>Checkout the <a href="#">System's Manual</a> to learn more!</section>
-        `);
-        MODAL.open();
-    }
-}
-
 /**
- * Run function after seconds of delay
- * @param {Function} callBack 
- * @param {number} seconds default 3 seconds
- * @returns 
- */
-const DELAY_FUNCTION = (callBack = null, seconds = 3) => {
-    if(!callBack) return;
-    const INTERVAL = setInterval(() => { callBack(); clearInterval(INTERVAL); }, seconds * 1000);
-}
+* Template Name: NiceAdmin
+* Updated: Jan 29 2024 with Bootstrap v5.3.2
+* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+(function() {
+  "use strict";
 
-function getURLParams() {
-    const searchParams = new URLSearchParams(window.location.search);
-    let param = {};
-    searchParams.forEach((v, i)=>{ param[i] = v; });
-    return param;
-}
-
-async function fetch_data(url, options = null) {
-    try {
-        const response = await fetch(url, {
-            method : options?.method,
-            body : options?.form
-        });
-        return await response.json();
-    } catch (err) {
-        console.log(err);
+  /**
+   * Easy selector helper function
+   */
+  const select = (el, all = false) => {
+    el = el.trim()
+    if (all) {
+      return [...document.querySelectorAll(el)]
+    } else {
+      return document.querySelector(el)
     }
-}
+  }
+
+  /**
+   * Easy event listener function
+   */
+  const on = (type, el, listener, all = false) => {
+    if (all) {
+      select(el, all).forEach(e => e.addEventListener(type, listener))
+    } else {
+      select(el, all).addEventListener(type, listener)
+    }
+  }
+
+  /**
+   * Easy on scroll event listener 
+   */
+  const onscroll = (el, listener) => {
+    el.addEventListener('scroll', listener)
+  }
+
+  /**
+   * Sidebar toggle
+   */
+  if (select('.toggle-sidebar-btn')) {
+    on('click', '.toggle-sidebar-btn', function(e) {
+      select('body').classList.toggle('toggle-sidebar')
+    })
+  }
+
+  /**
+   * Search bar toggle
+   */
+  if (select('.search-bar-toggle')) {
+    on('click', '.search-bar-toggle', function(e) {
+      select('.search-bar').classList.toggle('search-bar-show')
+    })
+  }
+
+  /**
+   * Navbar links active state on scroll
+   */
+  let navbarlinks = select('#navbar .scrollto', true)
+  const navbarlinksActive = () => {
+    let position = window.scrollY + 200
+    navbarlinks.forEach(navbarlink => {
+      if (!navbarlink.hash) return
+      let section = select(navbarlink.hash)
+      if (!section) return
+      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+        navbarlink.classList.add('active')
+      } else {
+        navbarlink.classList.remove('active')
+      }
+    })
+  }
+  window.addEventListener('load', navbarlinksActive)
+  onscroll(document, navbarlinksActive)
+
+  /**
+   * Toggle .header-scrolled class to #header when page is scrolled
+   */
+  let selectHeader = select('#header')
+  if (selectHeader) {
+    const headerScrolled = () => {
+      if (window.scrollY > 100) {
+        selectHeader.classList.add('header-scrolled')
+      } else {
+        selectHeader.classList.remove('header-scrolled')
+      }
+    }
+    window.addEventListener('load', headerScrolled)
+    onscroll(document, headerScrolled)
+  }
+
+  /**
+   * Back to top button
+   */
+  let backtotop = select('.back-to-top')
+  if (backtotop) {
+    const toggleBacktotop = () => {
+      if (window.scrollY > 100) {
+        backtotop.classList.add('active')
+      } else {
+        backtotop.classList.remove('active')
+      }
+    }
+    window.addEventListener('load', toggleBacktotop)
+    onscroll(document, toggleBacktotop)
+  }
+
+  /**
+   * Initiate tooltips
+   */
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+
+  /**
+   * Initiate quill editors
+   */
+  if (select('.quill-editor-default')) {
+    new Quill('.quill-editor-default', {
+      theme: 'snow'
+    });
+  }
+
+  if (select('.quill-editor-bubble')) {
+    new Quill('.quill-editor-bubble', {
+      theme: 'bubble'
+    });
+  }
+
+  if (select('.quill-editor-full')) {
+    new Quill(".quill-editor-full", {
+      modules: {
+        toolbar: [
+          [{
+            font: []
+          }, {
+            size: []
+          }],
+          ["bold", "italic", "underline", "strike"],
+          [{
+              color: []
+            },
+            {
+              background: []
+            }
+          ],
+          [{
+              script: "super"
+            },
+            {
+              script: "sub"
+            }
+          ],
+          [{
+              list: "ordered"
+            },
+            {
+              list: "bullet"
+            },
+            {
+              indent: "-1"
+            },
+            {
+              indent: "+1"
+            }
+          ],
+          ["direction", {
+            align: []
+          }],
+          ["link", "image", "video"],
+          ["clean"]
+        ]
+      },
+      theme: "snow"
+    });
+  }
+
+  /**
+   * Initiate TinyMCE Editor
+   */
+  const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
+
+  tinymce.init({
+    selector: 'textarea.tinymce-editor',
+    plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+    editimage_cors_hosts: ['picsum.photos'],
+    menubar: 'file edit view insert format tools table help',
+    toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+    toolbar_sticky: true,
+    toolbar_sticky_offset: isSmallScreen ? 102 : 108,
+    autosave_ask_before_unload: true,
+    autosave_interval: '30s',
+    autosave_prefix: '{path}{query}-{id}-',
+    autosave_restore_when_empty: false,
+    autosave_retention: '2m',
+    image_advtab: true,
+    link_list: [{
+        title: 'My page 1',
+        value: 'https://www.tiny.cloud'
+      },
+      {
+        title: 'My page 2',
+        value: 'http://www.moxiecode.com'
+      }
+    ],
+    image_list: [{
+        title: 'My page 1',
+        value: 'https://www.tiny.cloud'
+      },
+      {
+        title: 'My page 2',
+        value: 'http://www.moxiecode.com'
+      }
+    ],
+    image_class_list: [{
+        title: 'None',
+        value: ''
+      },
+      {
+        title: 'Some class',
+        value: 'class-name'
+      }
+    ],
+    importcss_append: true,
+    file_picker_callback: (callback, value, meta) => {
+      /* Provide file and text for the link dialog */
+      if (meta.filetype === 'file') {
+        callback('https://www.google.com/logos/google.jpg', {
+          text: 'My text'
+        });
+      }
+
+      /* Provide image and alt text for the image dialog */
+      if (meta.filetype === 'image') {
+        callback('https://www.google.com/logos/google.jpg', {
+          alt: 'My alt text'
+        });
+      }
+
+      /* Provide alternative source and posted for the media dialog */
+      if (meta.filetype === 'media') {
+        callback('movie.mp4', {
+          source2: 'alt.ogg',
+          poster: 'https://www.google.com/logos/google.jpg'
+        });
+      }
+    },
+    templates: [{
+        title: 'New Table',
+        description: 'creates a new table',
+        content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>'
+      },
+      {
+        title: 'Starting my story',
+        description: 'A cure for writers block',
+        content: 'Once upon a time...'
+      },
+      {
+        title: 'New list with dates',
+        description: 'New List with dates',
+        content: '<div class="mceTmpl"><span class="cdate">cdate</span><br><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
+      }
+    ],
+    template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+    template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+    height: 600,
+    image_caption: true,
+    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+    noneditable_class: 'mceNonEditable',
+    toolbar_mode: 'sliding',
+    contextmenu: 'link image table',
+    skin: useDarkMode ? 'oxide-dark' : 'oxide',
+    content_css: useDarkMode ? 'dark' : 'default',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+  });
+
+  /**
+   * Initiate Bootstrap validation check
+   */
+  var needsValidation = document.querySelectorAll('.needs-validation')
+
+  Array.prototype.slice.call(needsValidation)
+    .forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+
+  /**
+   * Initiate Datatables
+   */
+  const datatables = select('.datatable', true)
+  datatables.forEach(datatable => {
+    new simpleDatatables.DataTable(datatable, {
+      perPageSelect: [5, 10, 15, ["All", -1]],
+      columns: [{
+          select: 2,
+          sortSequence: ["desc", "asc"]
+        },
+        {
+          select: 3,
+          sortSequence: ["desc"]
+        },
+        {
+          select: 4,
+          cellClass: "green",
+          headerClass: "red"
+        }
+      ]
+    });
+  })
+
+  /**
+   * Autoresize echart charts
+   */
+  const mainContainer = select('#main');
+  if (mainContainer) {
+    setTimeout(() => {
+      new ResizeObserver(function() {
+        select('.echart', true).forEach(getEchart => {
+          echarts.getInstanceByDom(getEchart).resize();
+        })
+      }).observe(mainContainer);
+    }, 200);
+  }
+
+})();

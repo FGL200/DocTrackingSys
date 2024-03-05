@@ -1,54 +1,48 @@
-</div> <!-- END OF ROOT -->
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>SRAC: DDS</span></strong>. All Rights Reserved
+  </div>
+  <div class="credits">
+    Student Records and Admission Center: Document Digitization System for Rizal Technological University
+  </div>
+</footer><!-- End Footer -->
 
-<footer class="d-flex flex-column align-iitems-center gap-1 b-color-b color-w p-1">
-  <span class="fs-6 text-center">
-    Student Records and Admission Center
-    Document Digitization System for
-    Rizal Technological University
-  </span>
-  <!-- <p>Copyright © 2023</p>
-    <p>All Rights Reserved</p>
-    <p>Student Records and Admission Center</p>
-    <p>Document Tracking System for</p>
-    <p>Rizal Technological University</p> -->
-</footer>
-
-<div id="modal-holder" class="d-flex flex-row justify-content-center align-items-center hide">
-  <form id="modal-container" class="card m-3 p-2 d-flex flex-column gap-2" method="post" enctype="multipart/form-data">
-    <button type="button" id="modal-btn-close" class="btn btn-primary" onclick="(typeof ON_MODAL_CLOSE !== 'undefined') ? MODAL.close(ON_MODAL_CLOSE()) : MODAL.close();"><i class="fa-solid fa-xmark"></i></button>
-    <div id="modal-title" class="fw-bold fs-6 p-1 text-center"></div>
-    <div id="modal-body" class="p-1"></div>
-    <div id="modal-footer" class="d-flex flex-row-reverse p-1 gap-2"></div>
-    <div id="modal-script"></div>
-  </form>
+<button id="dds_modal_open" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#dds_modal"></button>
+<div class="modal fade" id="dds_modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" id="dds_modal_dialog">
+    <form id="dds_modal_form" class="modal-content">
+      <div id="dds_modal_header" class="modal-header">
+        <h5 id="dds_modal_title" class="modal-title fs-5 fw-bold"></h5>
+        <button id="dds_modal_close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="dds_modal_body" class="modal-body"></div>
+      <div id="dds_modal_footer" class="modal-footer"></div>
+    </form>
+  </div>
 </div>
 
-<!-- BOOTSTRAP JS -->
-<script src="<?= base_url('assets/third_party/bootstrap/js/bootstrap.bundle.min') ?>.js"></script>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<!-- DATATABLES JS -->
-<script src="<?= base_url('assets/third_party/datatables/datatables.min') ?>.js"></script>
+<!-- Vendor JS Files -->
+<script src="<?= base_url() ?>assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="<?= base_url() ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url() ?>assets/vendor/chart.js/chart.umd.js"></script>
+<script src="<?= base_url() ?>assets/vendor/echarts/echarts.min.js"></script>
+<script src="<?= base_url() ?>assets/vendor/quill/quill.min.js"></script>
+<script src="<?= base_url() ?>assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="<?= base_url() ?>assets/vendor/php-email-form/validate.js"></script>
 
-<!-- FONTAWESOME JS -->
-<script src="<?= base_url('assets/third_party/fontawesome/js/all.min') ?>.js"></script>
+<!-- Template Main JS File -->
+<script src="<?= base_url() ?>assets/js/main.js"></script>
 
 <!-- jsCalendar JS -->
 <script src="<?= base_url('assets/third_party/jsCalendar/jsCalendar.min') ?>.js"></script>
 
-<!-- Jquery qrcode -->
-<script src="<?= base_url('assets/third_party/jquery-qrcode/dist/jquery-qrcode') ?>.js"></script>
-
-<!-- CUSTOM JS -->
-<script src="<?= base_url('assets/js/modal') ?>.js"></script>
-<script src="<?= base_url('assets/js/main') ?>.js"></script>
-<?php if (isset($js)) foreach ($js as $j) {
-  if ($j != null) { ?>
-    <script src="<?= base_url("assets/js/$j") ?>.js"></script>
-<?php }
-} ?>
+<script type="module" src="<?= base_url() ?>assets/js/core.js"></script>
 
 
-<!-- END OF HTML -->
 </body>
 
 </html>

@@ -78,4 +78,12 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
       //the file size is less than the limit, just move the temp file into its appropriate directory
       return move_uploaded_file($uploadTmp, $uploadPath . $uploadName);
   }
- }
+}
+ function getRoleByRoleID($roleID) {
+  switch ($roleID) {
+    case 'A': return 'Admin'; break;
+    case 'V': return 'Checker'; break;
+    case 'E': return 'Encoder'; break;
+    default: return '';break;
+  }
+}

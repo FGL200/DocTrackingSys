@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 defined('PRODUCTION')  OR define('PRODUCTION', false);
 
 
-defined('DOC_TRACK_BASE_URL')  OR define('DOC_TRACK_BASE_URL', PRODUCTION ? 'http://rtu-dds.free.nf' : 'http://localhost/DocTrackingSys');
+defined('DOC_TRACK_BASE_URL')  OR define('DOC_TRACK_BASE_URL', PRODUCTION ? 'http://rtu-dds.free.nf' : 'http://localhost/DDS_orig');
 defined('DOC_TRACK_DATABASE_SERVER')  OR define('DOC_TRACK_DATABASE_SERVER', PRODUCTION ? 'sql312.infinityfree.com' : 'localhost');
 
 defined('DOC_TRACK_DATABASE_NAME')  OR define('DOC_TRACK_DATABASE_NAME', PRODUCTION ? 'if0_36051859_dds_db' : 'dds_db');
