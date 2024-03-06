@@ -145,15 +145,20 @@ class Student_model extends CI_Model{
                     `d`.req_clearance_form,
                     `d`.req_credentials,
                     `d`.hd_or_cert_of_trans,
-                    `d`.shelf,
+                    concat("{\"ID\" : ", "\"", `d`.id, "\",\"Name\" : ", "\"", sh.name, "\"}") as shelf,
                     `d`.shelf_histories,
                     `d`.merged_shelves,
                     `rm`.value
-                FROM `stud_rec` sr
+                FROM 
+                    `stud_rec` sr
                 LEFT JOIN `remarks` rm  
                     ON rm.stud_rec_id = sr.id
                 LEFT JOIN `doc` d
                     ON  d.stud_rec_id = sr.id
+                JOIN 
+                    `shelves` sh
+                ON
+                    d.shelf = sh.id
                 
                 WHERE sr.id = ? AND sr.deleted_flag = "0"
         ';
