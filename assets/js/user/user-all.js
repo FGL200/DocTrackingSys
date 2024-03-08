@@ -50,11 +50,12 @@ function getRoleById(roleInitial) {
   }
 }
 
-async function openModal(id) {
-  const resp = (await Helper.api('user', 'json', Helper.createFormData({ uid: id, rid: const_uid }))).result[0];
-  console.log({ resp })
+async function openModal(selected_id) {
+  const resp = (await Helper.api('user', 'json', Helper.createFormData({ uid: selected_id, rid: const_uid }))).result[0];
+  console.log({ selected_id })
   Modal.setTitle('Update User');
   Modal.setBody(Helper.replaceLayout(await Helper.template('profile/edit-profile'), {
+    uid: selected_id,
     button_for_activation: resp.active == '1' ?
       `
       <button id="deactive" type="button" class="btn btn-danger w-100">
@@ -83,32 +84,36 @@ async function openModal(id) {
     let body = {};
     Helper.ObjectToArray(Helper.getDataFromFormData(form_data)).forEach(v => {
       if (v.name == "gender") v.name = "g";
-      if (v.name == "role") {
+      if (["role", "uid"].includes(v.name)) {
         body[v.name] = v.value;
         return;
       };
       body[`profile-${v.name}`] = v.value;
     });
-    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ ...body, uid: id })));
-    CustomNotification.add("Success", "Successfully updated user.", "success");
-    Modal.close();
+    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ ...body }))).status;
+    if (resp == 1) {
+      CustomNotification.add("Success", "Successfully updated user.", "success");
+      Modal.close();
+    } else {
+      CustomNotification.add("Error", "Error Occurred. Try again later.", "danger");
+    }
   });
 
   Helper.onClick("#reset_password", (e) => {
     e.preventDefault();
-    Helper.api('user/update', 'json', Helper.createFormData({ uid: id, action: 'reset-password' }))
+    Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, action: 'reset-password' }))
   });
 
   if (resp.active == '1') {
     Helper.onClick("#deactive", (e) => {
       e.preventDefault();
-      Helper.api('user/update', 'json', Helper.createFormData({ uid: id, active: '0', uname: resp.uname, action: 'set-active' }))
+      Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '0', uname: resp.uname, action: 'set-active' }))
     });
 
   } else {
     Helper.onClick("#reactive", (e) => {
       e.preventDefault();
-      Helper.api('user/update', 'json', Helper.createFormData({ uid: id, active: '1', uname: resp.uname, action: 'set-active' }))
+      Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '1', uname: resp.uname, action: 'set-active' }))
     });
   }
 }

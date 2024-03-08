@@ -6,6 +6,10 @@ export class Helper {
   // *          SIMPLE          *
   // ****************************
 
+  static removeWhiteSpaces(str) {
+    return str.replace(/\s+/g, "");
+  }
+
   static preventDefault(event_refernce) {
     event_refernce.preventDefault();
   }
@@ -104,6 +108,12 @@ export class Helper {
   // *          COMPLEX          *
   // *****************************
 
+  static async importCSS(directory, callBack) {
+    const css = document.createElement("link");
+    css.setAttribute("href", `${base_url}assets/css/${directory}.css`);
+    css.setAttribute("rel", "stylesheet");
+    Helper.f("head").appendChild(css);
+  }
 
   static async template(directory) {
     return await fetch(`${base_url}assets/templates/${directory}.html`).then(async r => r.text())
@@ -113,8 +123,8 @@ export class Helper {
   static async api(url = '', type = "text", form = undefined) {
     const args = (form) ? { method: 'post', body: form } : { method: 'get' };
     return await fetch(base_url + 'api/' + url, args ?? undefined).then(async response => {
-      if (type === "text") return await response.text();
-      if (type === "json") return await response.json()
+      if ((type).toLocaleLowerCase() === "text") return await response.text();
+      if ((type).toLocaleLowerCase() === "json") return await response.json()
       return await response;
     })
       .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later.", "danger"));
@@ -129,14 +139,12 @@ export class Helper {
     return html_layout;
   }
 
-  static onChange(element, callback) {
-    if (Helper.f(element)) Helper.f(element).addEventListener("change", callback);
-    else { console.warn(`${element} not found or did not have minimum requirements.`); }
-  }
-
-  static onSubmit(element, callback) {
+  static onChange(element, callback, mulitple = false) {
     if (Helper.f(element)) {
-      Helper.f(element).addEventListener("submit", callback);
+      if (mulitple) Helper.fm(element, e => { if (!e.onchange) e.onchange = callback });
+      else {
+        if (!Helper.f(element).onchange) Helper.f(element).onchange = callback;
+      }
     }
     else { console.warn(`${element} not found or did not have minimum requirements.`); }
   }
