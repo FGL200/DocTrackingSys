@@ -33,7 +33,6 @@ class User extends CI_Controller{
         }
         else if($this->input->post("action") == "set-active") {
             $user = "";
-            $user_info = "";
 
 
             $uid = $this->input->post("uid");
@@ -42,62 +41,40 @@ class User extends CI_Controller{
         
             foreach($this->input->post() as $key=>$val) {
                 if($key == "action" || $key == "uid" || $key == "uname") continue;
-
-                if($key != "active" && $key != "role") {
-                    if(!empty($user_info)) $user_info .= ",";
-                    $user_info .=  "`{$key}` = '{$val}'";
-                } else {
-                    if(!empty($user)) $user .= ",";
-                    $user .=  "`{$key}` = '{$val}'";
-                }
-            }
-            
-            $user_info .= " WHERE `u`.`id` = '$uid'";                    
+                if(!empty($user)) $user .= ",";
+                $user .=  "`{$key}` = '{$val}'";
+                
+            }        
             $user .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
             
             $this->db->trans_begin();
             
             $this->user->update_user($user);
-            $this->user->update_user_info($user_info);
 
             if($this->db->trans_status()==TRUE) {
                 $this->db->trans_commit();
-                //Add to user_logs || OKAY NA TO
-                // add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) UPDATED {$uname}", "
-                //     UPDATE `user` `u`
-                //     SET {$data}
-                // ");
-
-                echo json_encode(["response" => ['']]);
+                echo json_encode(['status' => 1]);
             } else {
                 $this->db->trans_rollback();
-                echo json_encode(['response' => ['error']]);
+                echo json_encode(['status' => 0, 'message' => $this->db->error()['message']]);
             }
             die;
-            // echo $data;
-            // die;
-            //Add to user_logs || OKAY NA TO
-            // add_To_User_Logs($this, $this->input->post('uid'), "({$uid}) deactivate {$uname}", "
-            //     UPDATE `user` `u`
-            //     SET {$data}
-            // ");
-
-            // echo $data; 
-
         } else {
-            if(!empty(trim($this->input->post("profile-old-pass"))) && empty(trim($this->input->post("profile-new-pass")))) {
-                echo json_encode(['status'=>0, 'message'=>'New Password must not be empty']);
-                die;
-            }
-            if(empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
-                echo json_encode(['status'=>0, 'message'=>'Old Password must not be empty']);
-                die;
-            }
-    
-            if(!empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
-                $isMatch = $this->user->get_Old_Password($this->input->post("uid"), $this->input->post("profile-old-pass"));
-                
-                if(!$isMatch) { echo json_encode(['status' =>  0, 'message' =>  "Password did not match."]); die; }
+            if($this->input->post("profile-old-pass") || $this->input->post("profile-new-pass")) { 
+                if(!empty(trim($this->input->post("profile-old-pass"))) && empty(trim($this->input->post("profile-new-pass")))) {
+                    echo json_encode(['status'=>0, 'message'=>'New Password must not be empty']);
+                    die;
+                }
+                if(empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
+                    echo json_encode(['status'=>0, 'message'=>'Old Password must not be empty']);
+                    die;
+                }
+        
+                if(!empty(trim($this->input->post("profile-old-pass"))) && !empty(trim($this->input->post("profile-new-pass")))) {
+                    $isMatch = $this->user->get_Old_Password($this->input->post("uid"), $this->input->post("profile-old-pass"));
+                    
+                    if(!$isMatch) { echo json_encode(['status' =>  0, 'message' =>  "Password did not match."]); die; }
+                }
             }
             
             $data = "";
@@ -105,7 +82,7 @@ class User extends CI_Controller{
             foreach($this->input->post() as $key=>$val) {
                 
                 if(!empty(trim($val))) { 
-                    if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid") $data .= ",";
+                    if(!empty($data) && $key != "profile-old-pass" && $key != "uid" && $key != "rid" && $key != "action") $data .= ",";
                     if($key == "profile-fname") $data .= " `ui`.`fname` = '".strtoupper($val)."' ";
                     if($key == "profile-mname") $data .= " `ui`.`mname` = '".strtoupper($val)."' ";
                     if($key == "profile-lname") $data .= " `ui`.`lname` = '".strtoupper($val)."' ";
@@ -119,21 +96,15 @@ class User extends CI_Controller{
             $data .= " WHERE `u`.`id` = '".$uid."'";
     
             $result = $this->user->update_user_info($data);
+            if($this->input->post("action") == "update-profile") {
+                $this->session->set_userdata('fname', $this->input->post('profile-fname'));
+                $this->session->set_userdata('lname', $this->input->post('profile-lname'));
+                $this->session->set_userdata('mname', $this->input->post('profile-mname'));
+                $this->session->set_userdata('bday', $this->input->post('profile-bday'));
+                $this->session->set_userdata('g', $this->input->post('profile-g'));
+            }
 
-            // Add to user_logs  || OKAY NA TO
-            add_To_User_Logs($this, $uid, "({$uid}) Updated their user information", "
-                UPDATE user_info `ui`
-                INNER JOIN `user` `u`
-                    ON `u`.`id` = `ui`.`user_id`
-                SET {$data}
-            ");
-
-            $this->session->set_userdata('fname', $this->input->post('profile-fname'));
-            $this->session->set_userdata('lname', $this->input->post('profile-lname'));
-            $this->session->set_userdata('mname', $this->input->post('profile-mname'));
-            $this->session->set_userdata('bday', $this->input->post('profile-bday'));
-            $this->session->set_userdata('g', $this->input->post('profile-g'));
-
+            echo $this->db->error()['message'];
             if($result) echo json_encode(['status' => 1]); //FRED
             else echo json_encode(['status' =>  0, 'message' =>  "Error in saving profile"]); die;
         }

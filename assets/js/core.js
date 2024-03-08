@@ -70,7 +70,7 @@ Helper.onClick("#user_edit_profile", async () => {
     }
 
     Helper.Promt_Clear();
-    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: const_uid, rid: const_uid }, form_data))).status;
+    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: const_uid, rid: const_uid, action : "update-profile" }, form_data))).status;
 
     if (resp == "1") {
       CustomNotification.add("Profile Updated!", "Information saved!", "success");
