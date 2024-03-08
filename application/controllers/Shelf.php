@@ -79,6 +79,10 @@ class Shelf extends CI_Controller {
         
     }
 
+    public function archives() {
+        echo to_JSON($this->shelf->archives());
+    }
+
 }
 
 ?>

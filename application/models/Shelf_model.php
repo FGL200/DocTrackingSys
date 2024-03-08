@@ -57,7 +57,10 @@ class Shelf_model extends CI_Model {
         LEFT JOIN user u ON u.id = sr.created_by_uid
         LEFT JOIN user u2 ON u2.id = sr.updated_by_uid
         LEFT JOIN remarks rm ON rm.stud_rec_id = sr.id
-        WHERE sr.deleted_flag != '1' OR sr.deleted_flag IS NULL
+        WHERE 
+                (sr.deleted_flag != 1 OR 
+                sr.deleted_flag IS NULL) AND 
+                sh_.deleted_flag = 0
         GROUP BY sh_.id, sh_.name";
 
        
@@ -69,6 +72,14 @@ class Shelf_model extends CI_Model {
 
     public function getAllNames() {
         return $this->db->query("SELECT `id`, `name` FROM `shelves`")->result_array();
+    }
+
+    public function archives() {
+        $query = "SELECT id, name, deleted_flag FROM shelves where deleted_flag = 1";
+
+        $fetch = $this->db->query($query);
+        return $fetch->result();
+
     }
 }
 ?>
