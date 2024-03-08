@@ -115,6 +115,7 @@ $route['api/shelf/(:num)/update']['post'] = 'Shelf/update/$1';
 $route['api/shelf/(:num)/delete']['post'] = 'Shelf/delete/$1';
 $route['api/shelf/name'] = 'Shelf/getAllNames';
 $route['api/shelf/all-info'] = 'Shelf/getShelvesAndInfo';
+$route['api/shelf/archives'] = 'Shelf/archives';
 
 // Agree
 $route['api/agree/set']['post'] = 'Agreement/set'; // set agree status
@@ -126,6 +127,7 @@ $route['api/request/all']['post'] = 'Request/fetch_all';    // fetch all records
 $route['api/request/(:num)'] = 'Request/fetch/$1';          // fetch specific request by ID
 $route['api/request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
 $route['api/request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
+$route['api/request/archives'] = 'Request/archives';        // requests in archives
 
 // ------------------ /End API ------------------ 
 

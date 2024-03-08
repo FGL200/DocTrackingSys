@@ -164,6 +164,26 @@ class Request_model extends CI_Model {
 
         return $fetch->result();
     }
+
+    public function archives() {
+        $query = "SELECT 
+                    id, 
+                    lname, 
+                    fname,
+                    mname,
+                    file,
+                    reason,
+                    status,
+                    due_date, 
+                    deleted_flag 
+                  FROM 
+                    requests 
+                  where 
+                    deleted_flag = 1";
+
+        $fetch = $this->db->query($query);
+        return $fetch->result();
+    }
 }
 
 ?>

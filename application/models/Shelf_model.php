@@ -73,5 +73,13 @@ class Shelf_model extends CI_Model {
     public function getAllNames() {
         return $this->db->query("SELECT `id`, `name` FROM `shelves`")->result_array();
     }
+
+    public function archives() {
+        $query = "SELECT id, name, deleted_flag FROM shelves where deleted_flag = 1";
+
+        $fetch = $this->db->query($query);
+        return $fetch->result();
+
+    }
 }
 ?>

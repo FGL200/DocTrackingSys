@@ -181,6 +181,10 @@ class Request extends CI_Controller {
                       'yearly' => $curr_year
                     ]);
     }
+
+    public function archives() {
+        echo to_JSON($this->request_model->archives());
+    }
 }
 
 ?>
