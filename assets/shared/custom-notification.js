@@ -24,8 +24,7 @@ export class CustomNotification {
     notif.setAttribute("class", "notif shadow slide-in-out");
     notif.addEventListener("animationend", () => {
       notif.remove();
-    })
-    // notif.style.border = "1px solid " + tColor;
+    });
     notif.style.backgroundColor = bColor;
 
     const notif_logo = document.createElement("img");
@@ -35,12 +34,10 @@ export class CustomNotification {
 
     const notif_close = document.createElement("button");
     notif_close.setAttribute("class", "notif_close_btn");
-    notif_close.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    notif_close.innerHTML = '<i class="bi bi-x-lg"></i>';
     notif_close.style.position = "absolute";
     notif_close.style.top = "5px";
     notif_close.style.right = "5px";
-    // notif_close.style.border = `1px solid ${tColor}`;
-    // notif_close.style.backgroundColor = bColor;
     notif_close.addEventListener("click", () => {
       notif.remove();
       if (holder.children.length == 0) {

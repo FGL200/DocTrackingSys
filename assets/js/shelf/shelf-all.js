@@ -12,11 +12,18 @@ import { Modal } from "../../shared/modal.js";
 async function Load_Shelves() {
   Helper.fm(".shelf-item", e => e.remove());
 
-  const resp = (await Helper.api('shelves', "json"));
+  const resp = (await Helper.api('shelf/all-info', "json", new FormData()));
   const shelf_template = (await Helper.template('shelf/shelf-component'));
   let shelf_layout = '';
   resp
-    .map(v => ({ ...v, count_records: 100, count_encoders: 12, base_url: base_url }))
+    .map(v => ({
+      id: v.id ?? '',
+      name: v.name ?? '',
+      count_records: v.total ?? '',
+      count_encoders: v.users ?? '',
+      last_date: v.last_date ? Helper.toDetailedDate(v.last_date) : 'No update',
+      base_url: base_url,
+    }))
     .forEach(v => shelf_layout += Helper.replaceLayout(shelf_template, v));
   Helper.f("#shelves_container").innerHTML += shelf_layout;
 
@@ -25,6 +32,7 @@ async function Load_Shelves() {
       id: Helper.getDataBind(this, 'id'),
       name: Helper.getDataBind(this, 'name'),
     };
+    console.log({ data })
     Modal.setSize('sm');
     Modal.setTitle('Rename Shelf');
     Modal.setBody(Helper.replaceLayout(await Helper.template('shelf/shelf-rename'), data));
@@ -37,7 +45,7 @@ async function Load_Shelves() {
         return;
       }
       Helper.Promt_Clear();
-      const resp = (await Helper.api(`shelves/${data.id}/update`, "json", Helper.createFormData({ name: body.name })));
+      const resp = (await Helper.api(`shelf/${data.id}/update`, "json", Helper.createFormData({ name: body.name })));
       if (resp.status == 1) {
         CustomNotification.add("Success", "Shelf renamed.", "success");
         await Load_Shelves();
@@ -53,13 +61,21 @@ async function Load_Shelves() {
       id: Helper.getDataBind(this, 'id'),
       name: Helper.getDataBind(this, 'name'),
     };
+    console.log({ data })
     Modal.setSize('sm');
     Modal.setTitle('Hide Shelf');
     Modal.setBody(Helper.replaceLayout(await Helper.template('shelf/shelf-hide'), data));
     Modal.setFooter(await Modal.button('Hide', 'danger'));
     Modal.open();
     Modal.submit(async (e, form_data) => {
-
+      const resp = (await Helper.api(`shelf/${data.id}/delete`, "json", new FormData()));
+      if (resp.status == 1) {
+        CustomNotification.add("Success", "Shelf archived.", "success");
+        await Load_Shelves();
+        Modal.close();
+      } else {
+        CustomNotification.addNotif("Error", "Error Occurred. Try again later.", "danger");
+      }
     });
   }));
 }

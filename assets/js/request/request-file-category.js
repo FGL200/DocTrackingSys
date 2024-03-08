@@ -1,5 +1,5 @@
-import { Helper } from "../../shared/helper";
-import { Modal } from "../../shared/modal";
+import { Helper } from "../../shared/helper.js";
+import { Modal } from "../../shared/modal.js";
 
 Helper.onClick("#btn_new_category", async () => {
   Modal.setSize('sm');

@@ -9,7 +9,7 @@
 </footer><!-- End Footer -->
 
 <button id="dds_modal_open" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#dds_modal"></button>
-<div class="modal fade" id="dds_modal" tabindex="-1">
+<div class="modal fade" id="dds_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered" id="dds_modal_dialog">
     <form id="dds_modal_form" class="modal-content">
       <div id="dds_modal_header" class="modal-header">

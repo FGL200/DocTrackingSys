@@ -40,6 +40,7 @@
 
   <link href="<?= base_url() ?>assets/css/template-style.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/css/header.css" rel="stylesheet">
+  <link href="<?= base_url() ?>assets/css/core.css" rel="stylesheet">
 
   <!-- JQuery JS-->
   <script src="<?= base_url() ?>assets/third_party/jquery/jquery.min.js"></script>

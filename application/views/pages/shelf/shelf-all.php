@@ -10,7 +10,7 @@
   </div>
 
   <section class="section dashboard">
-    <div id="shelves_container" class="row">
+    <div id="shelves_container" class="row align-items-center">
 
       <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 remove-when-E remove-when-V">
         <a class="card info-card sales-card" href="<?= base_url() ?>shelf/new">

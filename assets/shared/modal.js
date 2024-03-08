@@ -9,6 +9,13 @@ export class Modal {
 
   static async close(callback = undefined) {
     if (callback) await callback();
+    Modal.setTitle('');
+    Modal.setBody('');
+    Modal.setFooter('');
+    Helper.f("#dds_modal_header").classList.remove('d-none');
+    Helper.f("#dds_modal_footer").classList.remove('d-none');
+    Modal.setSize();
+    
     Helper.f("#dds_modal_close").click();
   }
 

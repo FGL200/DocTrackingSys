@@ -98,6 +98,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
   /* border: 1px solid rgba(0, 0, 0, 0.1); */
   background: none;
   border: none;
@@ -108,7 +109,7 @@
   width: 300px;
   bottom: 5px;
   right: 0;
-  z-index: 100;
+  z-index: 2000;
   display: flex;
   flex-direction: column-reverse;
 }
@@ -117,7 +118,7 @@
   margin: .5rem;
   background-color: white;
   position: relative;
-  ;
+  z-index: 2000;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
 }

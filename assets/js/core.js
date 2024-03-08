@@ -72,12 +72,12 @@ Helper.onClick("#user_edit_profile", async () => {
     Helper.Promt_Clear();
     const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: const_uid, rid: const_uid }, form_data))).status;
 
-    if (resp == "success") {
+    if (resp == "1") {
       CustomNotification.add("Profile Updated!", "Information saved!", "success");
       Modal.close();
       setTimeout(() => { location.reload(); }, 1000);
     } else {
-      CustomNotification.add("Error", "Error occured. Try again later.", "danger");
+      CustomNotification.add("Error", "Current password did not matched. Try again.", "danger");
     }
 
   });
@@ -95,17 +95,3 @@ function Navigator() {
   if (url.includes("request/archived")) Helper.f("#link-manage_requests").click();
   if (url.includes("record/new")) Helper.f("#link-student_records").click();
 }
-
-
-// {
-//   "__ci_last_regenerate": 1709588414,
-//   "fname": null,
-//   "lname": null,
-//   "mname": null,
-//   "bday": null,
-//   "g": "N",
-//   "uid": "1",
-//   "role": "A",
-//   "uname": "ADMIN",
-//   "agree": "0"
-// }

@@ -98,9 +98,9 @@
                       </div>
                       <div class="small text-white">
                         <p class="fw-bold fs-6">Note:</p>
-                        <p class="m-2">* If you <b>do not have account</b>, contact admin <br /> to register new account.</p>
-                        <p class="m-2">* If you <b>forgot your password</b>, contact admin <br /> to reset your password.</p>
-                        <p class="m-2"><b>* Unauthorized use</b> of the system will result <br /> to disciplinary actions.</p>
+                        <p class="m-2">* If you <b>do not have account</b>, contact admin to register new account.</p>
+                        <p class="m-2">* If you <b>forgot your password</b>, contact admin to reset your password.</p>
+                        <p class="m-2"><b>* Unauthorized use</b> of the system will result to disciplinary actions.</p>
                       </div>
                       <div class="text-white">
                         Read <a id="terms_and_condition" class="link text-decoration-underline text-white" href="#terms_and_contition">Terms and condition</a> to learn more.

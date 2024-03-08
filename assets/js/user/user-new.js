@@ -20,7 +20,7 @@ Helper.onSubmit("#user_form", async function (e) {
   Helper.Promt_Clear();
   const resp = (await Helper.api('user/new', "json", form_data)).status;
 
-  if (resp == "success") {
+  if (resp == "1") {
     CustomNotification.add("Success", "Successfully added new user", "success");
     this.reset();
   } else {

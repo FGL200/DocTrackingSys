@@ -132,7 +132,8 @@ class User_model extends CI_Model
                     i.`mname`,
                     i.`lname`,
                     i.`bday`,
-                    i.`gender`
+                    i.`gender`,
+                    u.`active`
                 FROM `user` u
                 INNER JOIN `user_info` i
                     ON i.`user_id` = u.`id`

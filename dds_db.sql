@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: sql312.infinityfree.com
--- Generation Time: Mar 02, 2024 at 11:25 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.2.22
+-- Host: localhost:3307
+-- Generation Time: Mar 07, 2024 at 10:14 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `if0_36051859_dds_db`
+-- Database: `dds_db`
 --
 
 -- --------------------------------------------------------
@@ -31,8 +30,22 @@ SET time_zone = "+00:00";
 CREATE TABLE `doc` (
   `id` int(10) NOT NULL,
   `stud_rec_id` int(10) NOT NULL,
-  `regi_form` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}'
-) ;
+  `regi_form` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`regi_form`)),
+  `good_moral` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`good_moral`)),
+  `j_f137` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`j_f137`)),
+  `s_f137` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`s_f137`)),
+  `f138` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`f138`)),
+  `birth_cert` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`birth_cert`)),
+  `tor` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`tor`)),
+  `app_grad` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`app_grad`)),
+  `cert_of_complete` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`cert_of_complete`)),
+  `req_clearance_form` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`req_clearance_form`)),
+  `req_credentials` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`req_credentials`)),
+  `hd_or_cert_of_trans` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '{"val": 0, "dir":""}' CHECK (json_valid(`hd_or_cert_of_trans`)),
+  `shelf` int(10) DEFAULT NULL,
+  `shelf_histories` longtext NOT NULL DEFAULT '[]',
+  `merged_shelves` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '[]'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doc`
@@ -1482,7 +1495,21 @@ INSERT INTO `doc` (`id`, `stud_rec_id`, `regi_form`, `good_moral`, `j_f137`, `s_
 (1429, 1452, '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
 (1430, 1453, '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
 (1431, 1454, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
-(1432, 1455, '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]');
+(1432, 1455, '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
+(1433, 1456, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
+(1434, 1457, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[\"2\"]'),
+(1435, 1458, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 2, '[]', '[\"1\"]'),
+(1436, 1459, '{\"val\" : \"0\", \"dir\" : \"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 3, '[]', '[]'),
+(1437, 1460, '{\"val\": 0, \"dir\":\"\"}', '{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_03_13_26_240bd9ef9569.429889307_1831413947284308_3274312003703337207_n.jpg,uploads/2024_03_03_13_26_24fb5d3eda46.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1438, 1466, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1439, 1467, '{\"val\" : \"1\", \"dir\" :\"C:/xampp/htdocs/DocTrackingSys/uploads/2024_03_03_13_44_59f7e3c2c486.429889307_1831413947284308_3274312003703337207_n.jpg\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1440, 1468, '{\"val\" : \"1\", \"dir\" :\"C:/xampp/htdocs/DocTrackingSys/uploads/2024_03_03_13_46_2372071eade4.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1441, 1469, '{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_03_13_50_072a5f6d22da.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1442, 1470, '{\"val\" : \"1\", \"dir\" : \"uploads/2024_03_03_14_04_41c58362c066.429889307_1831413947284308_3274312003703337207_n.jpg\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 4, '[]', '[]'),
+(1443, 1471, '{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_26751e9378e1.population_dynamics.jpg\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
+(1444, 1472, '{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_44785422b3fa.population_dynamics.jpg\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
+(1445, 1473, '{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_53ae3eab17a5.population_dynamics.jpg\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]'),
+(1446, 1474, '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\" : \"1\", \"dir\" :\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', '{\"val\": 0, \"dir\":\"\"}', 1, '[]', '[]');
 
 -- --------------------------------------------------------
 
@@ -1495,7 +1522,7 @@ CREATE TABLE `remarks` (
   `stud_rec_id` int(10) NOT NULL,
   `value` longtext DEFAULT '[]',
   `category` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `remarks`
@@ -2936,7 +2963,18 @@ INSERT INTO `remarks` (`id`, `stud_rec_id`, `value`, `category`) VALUES
 (1431, 1455, '[\"NOT ORIG. - BIRTH CERTIFICATE\"]', NULL),
 (1432, 1456, '[]', NULL),
 (1433, 1457, '[]', NULL),
-(1434, 1458, '[]', NULL);
+(1434, 1458, '[]', NULL),
+(1435, 1459, '[]', NULL),
+(1436, 1460, '[]', NULL),
+(1437, 1466, '[]', NULL),
+(1438, 1467, '[]', NULL),
+(1439, 1468, '[]', NULL),
+(1440, 1469, '[]', NULL),
+(1441, 1470, '[]', NULL),
+(1442, 1471, '[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]', NULL),
+(1443, 1472, '[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]', NULL),
+(1444, 1473, '[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]', NULL),
+(1445, 1474, '[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]', NULL);
 
 -- --------------------------------------------------------
 
@@ -2947,7 +2985,7 @@ INSERT INTO `remarks` (`id`, `stud_rec_id`, `value`, `category`) VALUES
 CREATE TABLE `remark_categories` (
   `id` int(10) NOT NULL,
   `category` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `remark_categories`
@@ -2989,8 +3027,24 @@ CREATE TABLE `requests` (
   `updated_at` datetime NOT NULL,
   `updated_by` int(11) NOT NULL,
   `priority` tinyint(1) NOT NULL DEFAULT 0,
+  `status` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
   `deleted_flag` tinyint(4) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `requests`
+--
+
+INSERT INTO `requests` (`id`, `lname`, `fname`, `mname`, `file`, `reason`, `created_at`, `created_by`, `updated_at`, `updated_by`, `priority`, `status`, `due_date`, `deleted_flag`) VALUES
+(1, 'penaranda', 'patrickyyy', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang po', '2024-02-27 14:29:20', 20, '2024-03-03 02:39:36', 20, 0, '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}', '2024-03-01', 0),
+(2, 'penaranda', 'patrick', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang', '2024-02-27 14:45:57', 20, '2024-03-04 02:39:36', 0, 0, '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}', NULL, 0),
+(3, 'penaranda', 'patrickyyy', 'jabonillo\'\'', 'TOR, Cert of Grad', 'eme lang po', '2024-02-27 16:55:07', 0, '0000-00-00 00:00:00', 0, 0, '', NULL, 0),
+(4, 'penarandagygyugyu', 'patrickyyyp', 'jabonillo\'\'', 'form 137', 'Jabonillofsdfsdfdsf', '2024-02-28 08:26:00', 20, '2024-03-04 08:29:45', 20, 0, '', NULL, 0),
+(5, 'fsdhf', 'hfhsdui', 'uhufhsd', 'huhui', 'fgsfu', '2024-03-03 01:03:55', 14, '2024-02-03 02:39:36', 0, 1, '{\"value\":\"Released\"}', NULL, 0),
+(6, 'fsdhfuh', 'hsuhfuh', 'uhfuhsdufh', 'uhfusdhf', 'hushfsudfh', '2024-03-03 01:09:52', 14, '2024-03-04 02:39:36', 0, 1, '{\"value\":\"Released\"}', NULL, 0),
+(7, 'penarandagygyugyu', 'patrickyyyp', 'jabonillo\'\'', 'TOR, Cert of Grad', '', '2024-03-03 02:42:30', 20, '2024-03-04 08:35:46', 20, 0, '{\"value\" : \"Not Released\", \"reason\" : \"fjdsifjdsifsd\"}', NULL, 0),
+(8, 'sample', 'sample', 'sample', 'TOR', 'sample', '2024-03-05 10:55:55', 14, '2024-03-05 10:57:37', 14, 1, '{\"value\" : \"Not Released\", \"reason\" : \"sample\"}', '2024-03-15', 0);
 
 -- --------------------------------------------------------
 
@@ -3006,14 +3060,19 @@ CREATE TABLE `shelves` (
   `updated_by` int(10) DEFAULT NULL,
   `updated_date` datetime DEFAULT NULL,
   `deleted_flag` int(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `shelves`
 --
 
 INSERT INTO `shelves` (`id`, `name`, `created_by`, `created_date`, `updated_by`, `updated_date`, `deleted_flag`) VALUES
-(1, '2020-2021', 1, '2024-02-26 16:58:59', NULL, NULL, 0);
+(1, '2020-2021', 1, '2024-02-26 16:58:59', 20, '2024-03-06 00:17:43', 1),
+(2, '2023-20255', 1, '2024-02-29 07:51:52', 1, '2024-03-03 00:43:46', 0),
+(3, '2025-2026', 1, '2024-03-01 06:32:01', NULL, NULL, 0),
+(4, 'A-Z (2020-2021)', 1, '2024-03-03 11:48:28', 1, '2024-03-05 08:36:22', 0),
+(5, '90', 1, '2024-03-03 11:55:02', NULL, NULL, 0),
+(6, 'shwlf-1', 1, '2024-03-05 11:03:41', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -3034,7 +3093,7 @@ CREATE TABLE `stud_rec` (
   `updated_by_uid` int(10) DEFAULT NULL,
   `deleted_flag` int(1) DEFAULT 0,
   `x_file_id` int(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stud_rec`
@@ -4476,8 +4535,19 @@ INSERT INTO `stud_rec` (`id`, `stud_fname`, `stud_mname`, `stud_lname`, `stud_sf
 (1454, 'ANGEL JENN', 'ESPINA', 'BALUYOT', NULL, '2020-102633', '2023-11-10 16:41:59', NULL, 7, NULL, 0, NULL),
 (1455, 'KIM AMALTHEA', 'CANILLO', 'BANAAG', NULL, NULL, '2023-11-10 16:44:05', NULL, 7, NULL, 0, NULL),
 (1456, 'ALLINEA NICOLE', 'ROMERA', 'BANCOD', NULL, '2020-108032', '2023-11-10 16:44:46', NULL, 7, NULL, 0, NULL),
-(1457, 'SAMPLE', 'SAMPLE', 'SAMPLE', NULL, '1234', '2024-03-02 12:12:09', '2024-03-03 00:12:49', 5, 7, 0, NULL),
-(1458, 'SAMPLE', 'SAMPLE', 'SAMPLE', NULL, '123456789', '2024-03-02 12:12:51', NULL, 5, NULL, 0, NULL);
+(1457, 'CARDO', NULL, 'DALISAY', NULL, '2020-898989', '2024-02-29 07:50:07', NULL, 7, NULL, 0, NULL),
+(1458, 'CARDO', NULL, 'DALISAY', NULL, NULL, '2024-02-29 08:07:03', NULL, 7, NULL, 0, NULL),
+(1459, 'CARDO', NULL, 'DALISAY', NULL, NULL, '2024-03-01 06:32:40', '2024-03-02 09:41:34', 7, 7, 0, NULL),
+(1460, 'HUIHUF', 'HIFHSDUF', 'FDS', NULL, NULL, '2024-03-03 13:26:24', NULL, 2, NULL, 0, NULL),
+(1466, 'FSSDFSD', NULL, 'FSFDS', NULL, NULL, '2024-03-03 13:44:25', NULL, 2, NULL, 0, NULL),
+(1467, 'FJDSIFJDSIO', NULL, 'FJSDIFJIOIOFDISJFIDS', NULL, NULL, '2024-03-03 13:44:59', NULL, 2, NULL, 0, NULL),
+(1468, 'JFIJDIOFJ', 'JIFJSDIOFJ', 'FJGOFDJ', NULL, NULL, '2024-03-03 13:46:23', NULL, 2, NULL, 0, NULL),
+(1469, 'JFJSDIOJ', NULL, 'FSDF', NULL, NULL, '2024-03-03 13:50:07', NULL, 2, NULL, 0, NULL),
+(1470, 'JIJIDSFOJFIO', 'JFIOSJF', 'GJFIGJDFI', NULL, NULL, '2024-03-03 13:55:29', '2024-03-03 14:04:41', 2, 2, 0, NULL),
+(1471, 'TRY', NULL, 'TRY', NULL, NULL, '2024-03-05 10:49:26', NULL, 4, NULL, 0, NULL),
+(1472, 'TRY', NULL, 'KENNETH', NULL, NULL, '2024-03-05 10:49:44', NULL, 4, NULL, 0, NULL),
+(1473, 'GGGH', 'GHGH', 'KENNETH', NULL, NULL, '2024-03-05 10:49:53', NULL, 4, NULL, 0, NULL),
+(1474, 'GGGHHH', 'GHGH', 'KENNETH', NULL, NULL, '2024-03-05 10:50:07', NULL, 4, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -4496,7 +4566,7 @@ CREATE TABLE `user` (
   `created_date` datetime DEFAULT current_timestamp(),
   `updated_date` datetime DEFAULT NULL,
   `deleted_flag` int(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -4505,7 +4575,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `uname`, `pword`, `active`, `role`, `created_by`, `updated_by`, `created_date`, `updated_date`, `deleted_flag`) VALUES
 (1, 'ADMIN', '*23AE809DDACAF96AF0FD78ED04B6A265E05AA257', 1, 'A', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (2, 'ARJAY', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
-(3, 'PATRICK', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
+(3, 'PATRICK', '*D474D52CD76836B3F51C037CF1C720738433E039', 1, 'V', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (4, 'CEDRIC', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (5, 'FREDERIC', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (6, 'FATIMA', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
@@ -4514,9 +4584,11 @@ INSERT INTO `user` (`id`, `uname`, `pword`, `active`, `role`, `created_by`, `upd
 (9, 'ANGEL', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (10, 'KATRINA', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (11, 'WILEN', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
-(12, 'ALLIAH', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
+(12, 'ALLIAH', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 0, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
 (14, 'CHECKER', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'V', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
-(15, 'ROWIN', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0);
+(15, 'ROWIN', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-26 16:59:10', NULL, 0),
+(20, 'PATTY', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'V', 1, NULL, '2024-02-27 10:47:14', NULL, 0),
+(21, 'GENTO', '*69156C3775BC63A03BDF56AD0B48E2BE5DF601DD', 1, 'E', 1, NULL, '2024-02-29 07:44:04', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -4534,27 +4606,29 @@ CREATE TABLE `user_info` (
   `gender` enum('M','F','N') DEFAULT 'N',
   `updated_by` int(10) DEFAULT NULL,
   `updated_date` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_info`
 --
 
 INSERT INTO `user_info` (`id`, `user_id`, `fname`, `mname`, `lname`, `bday`, `gender`, `updated_by`, `updated_date`) VALUES
-(1, 1, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(2, 2, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(3, 3, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
+(1, 1, 'PATRIFK', 'JABONILLO', 'PENARANDA', '1994-03-29', 'M', NULL, NULL),
+(2, 2, '--', '--', '--', '1234-01-01', 'N', NULL, NULL),
+(3, 3, 'PATRICK', 'JABONILLOO88O', 'PENARANDA', '1998-02-05', 'M', NULL, NULL),
 (4, 4, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (5, 5, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (6, 6, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(7, 7, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
+(7, 7, '423', 'ERWR', 'RWERRRRFSDFDS', '2002-03-02', 'F', NULL, NULL),
 (8, 8, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (9, 9, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (10, 10, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (11, 11, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(12, 12, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
+(12, 12, '--', '--', '--', '1234-01-01', 'N', NULL, NULL),
 (14, 14, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(15, 15, NULL, NULL, NULL, NULL, 'N', NULL, NULL);
+(15, 15, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
+(20, 20, 'PATRICK', 'JABONILLO', 'PENARANDA', '2002-03-26', 'M', NULL, NULL),
+(21, 21, 'GENTO', 'GENTO', 'GENTO', '2002-02-14', 'M', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4568,27 +4642,158 @@ CREATE TABLE `user_logs` (
   `created_date` datetime DEFAULT NULL,
   `title` varchar(100) DEFAULT NULL,
   `details` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_logs`
 --
 
 INSERT INTO `user_logs` (`id`, `created_by`, `created_date`, `title`, `details`) VALUES
-(1, 1, '2024-03-02 12:09:48', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'shef1\', `created_by` = \'1\''),
-(2, 1, '2024-03-02 12:09:56', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'shef2\', `created_by` = \'1\''),
-(3, 5, '2024-03-02 12:12:09', '(5) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_id` = UPPER(\'123456789\'),`stud_fname` = UPPER(\'SAMPLE\'),`stud_lname` = UPPER(\'SAMPLE\'),`stud_mname` = UPPER(\'SAMPLE\'), `created_by_uid` = \'5\''),
-(4, 5, '2024-03-02 12:12:09', '(5) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1457\', `shelf` = \'2\''),
-(5, 5, '2024-03-02 12:12:09', '(5) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1457\''),
-(6, 5, '2024-03-02 12:12:51', '(5) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_id` = UPPER(\'123456789\'),`stud_fname` = UPPER(\'SAMPLE\'),`stud_lname` = UPPER(\'SAMPLE\'),`stud_mname` = UPPER(\'SAMPLE\'), `created_by_uid` = \'5\''),
-(7, 5, '2024-03-02 12:12:51', '(5) Added new Student document record.', 'INSERT INTO `doc` SET `f138` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `birth_cert` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1458\', `shelf` = \'3\''),
-(8, 5, '2024-03-02 12:12:51', '(5) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1458\''),
-(9, 5, '2024-03-02 14:20:54', '(5) Added new Shelf.', 'update shelves set  name = shef1123, updated_date = \'2024-03-02 14:20:54\', updated_by = \'5\' where id = \'2\''),
-(10, 5, '2024-03-02 10:51:39', '(5) Updated a Shelf.', 'update shelves set  name = 2021-2022\', updated_date = \'2024-03-02 23:51:39\', updated_by = \'5\' where id = \'2\''),
-(11, 5, '2024-03-02 10:51:44', '(5) Updated a Shelf.', 'update shelves set  name = 2021-2022\', updated_date = \'2024-03-02 23:51:44\', updated_by = \'5\' where id = \'2\''),
-(12, 5, '2024-03-02 10:51:49', '(5) Updated a Shelf.', 'update shelves set  name = 2021-2022\', updated_date = \'2024-03-02 23:51:50\', updated_by = \'5\' where id = \'2\''),
-(13, 1, '2024-03-02 11:35:16', '(1) Updated a Shelf.', 'update shelves set  name = 2020-20211\', updated_date = \'2024-03-03 00:35:16\', updated_by = \'1\' where id = \'1\''),
-(14, 1, '2024-03-02 11:36:25', '(1) Updated a Shelf.', 'update shelves set  name = shef-2\', updated_date = \'2024-03-03 00:36:25\', updated_by = \'1\' where id = \'2\'');
+(1, 1, '2024-02-27 10:47:14', '(1) Insert new user', 'INSERT INTO `user` SET `uname` = \'PATTY\',`role` = \'V\',`pword` = PASSWORD(\'default\'), `created_by`=\'1\''),
+(2, 1, '2024-02-27 10:47:14', '(1) Insert new user information.', 'INSERT INTO `user_info` SET `fname` = \'PATRICK\',`mname` = \'JABONILLO\',`lname` = \'PENARANDA\',`bday` = \'2002-03-26\',`gender` = \'M\',`user_id`=\'20\''),
+(3, 20, '2024-02-27 11:00:11', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  WHERE `u`.`id` = \'20\''),
+(4, 20, '2024-02-27 11:01:10', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  WHERE `u`.`id` = \'20\''),
+(5, 20, '2024-02-27 11:02:55', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  WHERE `u`.`id` = \'20\''),
+(6, 20, '2024-02-27 11:08:01', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'20\''),
+(7, 20, '2024-02-27 11:08:17', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'20\''),
+(8, 20, '2024-02-27 11:08:46', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'20\''),
+(9, 20, '2024-02-27 11:09:12', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'20\''),
+(10, 20, '2024-02-27 11:09:23', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'20\''),
+(11, 20, '2024-02-27 11:10:45', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'20\''),
+(12, 7, '2024-02-27 13:14:52', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(13, 7, '2024-02-27 13:17:24', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(14, 7, '2024-02-27 13:17:36', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(15, 7, '2024-02-27 13:18:30', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(16, 7, '2024-02-27 13:18:45', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(17, 7, '2024-02-27 13:19:03', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-21\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(18, 7, '2024-02-27 13:20:20', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\''),
+(19, 7, '2024-02-27 13:20:20', '(7) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWER\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\'\r\n                '),
+(20, 7, '2024-02-27 13:29:00', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\''),
+(21, 7, '2024-02-27 13:29:00', '(7) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'7\'\r\n                '),
+(22, 7, '2024-02-27 13:30:32', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\''),
+(23, 7, '2024-02-27 13:30:32', '(7) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\'\r\n                '),
+(24, 7, '2024-02-27 13:31:36', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\''),
+(25, 7, '2024-02-27 13:31:36', '(7) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRR\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\'\r\n                '),
+(26, 7, '2024-02-27 13:35:27', '(7) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRRFSDFDS\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\''),
+(27, 7, '2024-02-27 13:35:27', '(7) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'423\' , `ui`.`mname` = \'ERWR\' , `ui`.`lname` = \'RWERRRRFSDFDS\' , `ui`.`bday` = \'2002-03-02\' , `ui`.`gender` = \'F\'  WHERE `u`.`id` = \'7\'\r\n                '),
+(28, 20, '2024-02-28 08:33:45', '(20) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'20\''),
+(29, 20, '2024-02-28 08:33:45', '(20) Updated their user information', '\r\n                    UPDATE user_info `ui`\r\n                    INNER JOIN `user` `u`\r\n                        ON `u`.`id` = `ui`.`user_id`\r\n                    SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'2002-03-26\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'20\'\r\n                '),
+(30, 1, '2024-02-29 07:40:24', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRIFK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1994-03-29\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'1\''),
+(31, 1, '2024-02-29 07:40:24', '(1) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRIFK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1994-03-29\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'1\'\r\n            '),
+(32, 1, '2024-02-29 07:41:31', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `role` = \'E\',`active` = \'0\' WHERE `u`.`id` = \'2\' AND `u`.`uname` = \'ARJAY\''),
+(33, 1, '2024-02-29 07:41:31', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET `lname` = \'--\',`fname` = \'--\',`mname` = \'--\',`gender` = \'N\',`bday` = \'1234-01-01\' WHERE `u`.`id` = \'2\''),
+(34, 1, '2024-02-29 07:42:04', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `active` = \'1\',`role` = \'E\' WHERE `u`.`id` = \'3\' AND `u`.`uname` = \'PATRICK\''),
+(35, 1, '2024-02-29 07:42:04', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET `lname` = \'Penaranda\',`fname` = \'Patrick\',`mname` = \'Jabonillo\',`gender` = \'M\',`bday` = \'1234-01-18\' WHERE `u`.`id` = \'3\''),
+(36, 1, '2024-02-29 07:42:54', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `active` = \'1\',`role` = \'E\' WHERE `u`.`id` = \'3\' AND `u`.`uname` = \'PATRICK\''),
+(37, 1, '2024-02-29 07:42:54', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET `lname` = \'Penaranda\',`fname` = \'Patrick\',`mname` = \'Jabonillo\',`gender` = \'M\',`bday` = \'2020-01-18\' WHERE `u`.`id` = \'3\''),
+(38, 1, '2024-02-29 07:43:10', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `active` = \'1\',`role` = \'V\' WHERE `u`.`id` = \'3\' AND `u`.`uname` = \'PATRICK\''),
+(39, 1, '2024-02-29 07:43:10', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET `lname` = \'Penaranda\',`fname` = \'Patrick\',`mname` = \'Jabonillo\',`gender` = \'M\',`bday` = \'2020-01-18\' WHERE `u`.`id` = \'3\''),
+(40, 1, '2024-02-29 07:44:04', '(1) Insert new user', 'INSERT INTO `user` SET `uname` = \'GENTO\',`role` = \'E\',`pword` = PASSWORD(\'default\'), `created_by`=\'1\''),
+(41, 1, '2024-02-29 07:44:04', '(1) Insert new user information.', 'INSERT INTO `user_info` SET `fname` = \'GENTO\',`mname` = \'GENTO\',`lname` = \'GENTO\',`bday` = \'2002-02-14\',`gender` = \'M\',`user_id`=\'21\''),
+(42, 7, '2024-02-29 07:50:07', '(7) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_id` = UPPER(\'2020-898989\'),`stud_fname` = UPPER(\'Cardo\'),`stud_lname` = UPPER(\'Dalisay\'), `created_by_uid` = \'7\''),
+(43, 7, '2024-02-29 07:50:07', '(7) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `j_f137` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `s_f137` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `f138` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1457\', `shelf` = \'1\''),
+(44, 7, '2024-02-29 07:50:07', '(7) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1457\''),
+(45, 1, '2024-02-29 07:51:52', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'2023\\-2024\', `created_by` = \'1\''),
+(51, 7, '2024-02-29 08:07:03', '(7) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'Cardo\'),`stud_lname` = UPPER(\'DalisaY\'), `created_by_uid` = \'7\''),
+(52, 7, '2024-02-29 08:07:03', '(7) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `j_f137` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `s_f137` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1458\', `shelf` = \'2\''),
+(53, 7, '2024-02-29 08:07:03', '(7) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1458\''),
+(54, 1, '2024-03-01 06:32:01', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'2025\\-2026\', `created_by` = \'1\''),
+(55, 7, '2024-03-01 06:32:40', '(7) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'DALISAY\'),`stud_lname` = UPPER(\'CARDO\'), `created_by_uid` = \'7\''),
+(56, 7, '2024-03-01 06:32:40', '(7) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1459\', `shelf` = \'3\''),
+(57, 7, '2024-03-01 06:32:40', '(7) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[\"NOT ORIG. TOR\",\"INV. REMARKS - SENIOR F137\"]\', `stud_rec_id` = \'1459\''),
+(58, 7, '2024-03-02 13:51:26', '(7) Added new Shelf.', 'update shelves set  name = 2020, updated_date = \'2024-03-02 13:51:26\', updated_by = \'7\' where id = \'1\''),
+(59, 7, '2024-03-02 14:23:08', '(7) Added new Shelf.', 'update shelves set  name = fdsfdsfsd, updated_date = \'2024-03-02 14:23:08\', updated_by = \'7\' where id = \'1\''),
+(60, 7, '2024-03-02 14:23:37', '(7) Added new Shelf.', 'update shelves set  name = \'fdsfdsfsd\', updated_date = \'2024-03-02 14:23:37\', updated_by = \'7\' where id = \'1\''),
+(61, 7, '2024-03-02 14:28:18', '(7) Added new Shelf.', 'update shelves set  name = \'fdsfdsfsd----\', updated_date = \'2024-03-02 14:28:18\', updated_by = \'7\' where id = \'1\''),
+(62, 7, '2024-03-02 14:28:33', '(7) Added new Shelf.', 'update shelves set  name = \'-dfdf-d--\', updated_date = \'2024-03-02 14:28:33\', updated_by = \'7\' where id = \'1\''),
+(63, 7, '2024-03-02 14:29:33', '(7) Added new Shelf.', 'update shelves set  name = \'-dfdf-d--\', updated_date = \'2024-03-02 14:29:33\', updated_by = \'7\' where id = \'1\''),
+(64, 7, '2024-03-02 14:29:50', '(7) Added new Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 14:29:50\', updated_by = \'7\' where id = \'1\''),
+(65, 7, '2024-03-02 14:40:32', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 14:40:32\', updated_by = \'7\' where id = \'1\''),
+(66, 7, '2024-03-02 14:41:19', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 14:41:19\', updated_by = \'7\' where id = \'1\''),
+(67, 7, '2024-03-02 15:05:18', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 15:05:18\', updated_by = \'7\' where id = \'1\''),
+(68, 7, '2024-03-02 15:05:51', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 15:05:51\', updated_by = \'7\' where id = \'1\''),
+(69, 7, '2024-03-02 15:07:40', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 15:07:40\', updated_by = \'7\' where id = \'1\''),
+(70, 7, '2024-03-02 15:07:56', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 15:07:56\', updated_by = \'7\' where id = \'1\''),
+(71, 7, '2024-03-02 15:09:25', '(7) Updated a Shelf.', 'update shelves set  name = -dfdf-d--\', updated_date = \'2024-03-02 15:09:25\', updated_by = \'7\' where id = \'1\''),
+(72, 1, '2024-03-03 00:38:08', '(1) Updated a Shelf.', 'update shelves set  name = 2023-2028\', updated_date = \'2024-03-03 00:38:08\', updated_by = \'1\' where id = \'2\''),
+(73, 1, '2024-03-03 00:38:09', '(1) Updated a Shelf.', 'update shelves set  name = 2023-2028\', updated_date = \'2024-03-03 00:38:09\', updated_by = \'1\' where id = \'2\''),
+(74, 1, '2024-03-03 00:39:23', '(1) Updated a Shelf.', 'update shelves set  name = \'2023-2025\', updated_date = \'2024-03-03 00:39:23\', updated_by = \'1\' where id = \'2\''),
+(75, 1, '2024-03-03 00:39:26', '(1) Updated a Shelf.', 'update shelves set  name = \'2023-2025\', updated_date = \'2024-03-03 00:39:26\', updated_by = \'1\' where id = \'2\''),
+(76, 1, '2024-03-03 00:43:46', '(1) Updated a Shelf.', 'update shelves set  name = \'2023-20255\', updated_date = \'2024-03-03 00:43:46\', updated_by = \'1\' where id = \'2\''),
+(77, 20, '2024-03-03 02:38:52', '(20) Update a Request.', '\r\n                update requests \r\n                set \r\n                    `fname` = \'patrickyyy\',`lname` = \'penaranda\',`mname` = \'jabonillo\\\'\\\'\',`file` = \'TOR, Cert of Grad\', updated_by = 20, `updated_at`  = \'2024-03-03 02:38:52\'\r\n                where \r\n                    `id` = 1 and deleted_flag = 0\r\n                '),
+(78, 20, '2024-03-03 02:39:36', '(20) Updated a Request.', 'update requests \n                set \n                    `fname` = \'patrickyyy\',`lname` = \'penaranda\',`mname` = \'jabonillo\\\'\\\'\',`file` = \'TOR, Cert of Grad\', updated_by = 20, `updated_at`  = \'2024-03-03 02:39:36\'\n                where \n                    `id` = 1 and deleted_flag = 0'),
+(79, 20, '2024-03-03 02:42:30', '(20) Created a Request.', 'insert into requests \r\n                set \r\n                `fname` = \'patrickyyy\',`lname` = \'penaranda\',`mname` = \'jabonillo\\\'\\\'\',`file` = \'TOR, Cert of Grad\', `status` = \'{\"value\":\"Pending\"}\', `created_by` = 20'),
+(82, 1, '2024-03-03 11:48:28', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'3030\\-4021\', `created_by` = \'1\''),
+(83, 1, '2024-03-03 11:55:02', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'90\', `created_by` = \'1\''),
+(84, 2, '2024-03-03 13:26:24', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'huihuf\'),`stud_lname` = UPPER(\'fds\'),`stud_mname` = UPPER(\'hifhsduf\'), `created_by_uid` = \'2\''),
+(85, 2, '2024-03-03 13:26:24', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_03_13_26_240bd9ef9569.429889307_1831413947284308_3274312003703337207_n.jpg,uploads/2024_03_03_13_26_24fb5d3eda46.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}\', `j_f137` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1460\', `shelf` = \'4\''),
+(86, 2, '2024-03-03 13:26:24', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1460\''),
+(92, 2, '2024-03-03 13:44:25', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'fssdfsd\'),`stud_lname` = UPPER(\'fsfds\'), `created_by_uid` = \'2\''),
+(93, 2, '2024-03-03 13:44:25', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1466\', `shelf` = \'4\''),
+(94, 2, '2024-03-03 13:44:25', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1466\''),
+(95, 2, '2024-03-03 13:44:59', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'fjdsifjdsio\'),`stud_lname` = UPPER(\'fjsdifjioiofdisjfids\'), `created_by_uid` = \'2\''),
+(96, 2, '2024-03-03 13:44:59', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"C:/xampp/htdocs/DocTrackingSys/uploads/2024_03_03_13_44_59f7e3c2c486.429889307_1831413947284308_3274312003703337207_n.jpg\"}\',`stud_rec_id` = \'1467\', `shelf` = \'4\''),
+(97, 2, '2024-03-03 13:44:59', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1467\''),
+(98, 2, '2024-03-03 13:46:23', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'jfijdiofj\'),`stud_lname` = UPPER(\'fjgofdj\'),`stud_mname` = UPPER(\'jifjsdiofj\'), `created_by_uid` = \'2\''),
+(99, 2, '2024-03-03 13:46:23', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"C:/xampp/htdocs/DocTrackingSys/uploads/2024_03_03_13_46_2372071eade4.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}\',`stud_rec_id` = \'1468\', `shelf` = \'4\''),
+(100, 2, '2024-03-03 13:46:23', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1468\''),
+(101, 2, '2024-03-03 13:50:07', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'jfjsdioj\'),`stud_lname` = UPPER(\'fsdf\'), `created_by_uid` = \'2\''),
+(102, 2, '2024-03-03 13:50:07', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_03_13_50_072a5f6d22da.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}\',`stud_rec_id` = \'1469\', `shelf` = \'4\''),
+(103, 2, '2024-03-03 13:50:07', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1469\''),
+(104, 2, '2024-03-03 13:55:29', '(2) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'jijidsfojfio\'),`stud_lname` = UPPER(\'gjfigjdfi\'),`stud_mname` = UPPER(\'jfiosjf\'), `created_by_uid` = \'2\''),
+(105, 2, '2024-03-03 13:55:29', '(2) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_03_13_55_29ba3a7f6602.429889307_1831413947284308_3274312003703337207_n.jpg,uploads/2024_03_03_13_55_2983b0efa313.memorandum-of-agreement-sample-1-320 (1)_11zon.jpeg\"}\',`stud_rec_id` = \'1470\', `shelf` = \'4\''),
+(106, 2, '2024-03-03 13:55:29', '(2) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[]\', `stud_rec_id` = \'1470\''),
+(107, 20, '2024-03-04 08:25:54', '(20) Updated a Request.', 'update requests \r\n                set \r\n                    , updated_by = 20,updated_at = \'2024-03-04 08:25:54\' \r\n                      , `updated_at`  = \'2024-03-04 08:25:54\'\r\n                where \r\n                    `id` = 4 and deleted_flag = 0'),
+(108, 20, '2024-03-04 08:26:42', '(20) Updated a Request.', 'update requests \r\n                set \r\n                    , updated_by = 20,updated_at = \'2024-03-04 08:26:42\' \r\n                      , `updated_at`  = \'2024-03-04 08:26:42\'\r\n                where \r\n                    `id` = 4 and deleted_flag = 0'),
+(109, 20, '2024-03-04 08:27:21', '(20) Updated a Request.', 'update requests \r\n                set \r\n                    , updated_by = 20,updated_at = \'2024-03-04 08:27:21\' \r\n                      , `updated_at`  = \'2024-03-04 08:27:21\'\r\n                where \r\n                    `id` = 4 and deleted_flag = 0'),
+(110, 20, '2024-03-04 08:29:45', '(20) Updated a Request.', 'update requests \r\n                set \r\n                    `fname` = \'patrickyyyp\',`lname` = \'penarandagygyugyu\',`mname` = \'jabonillo\\\'\\\'\', updated_by = 20,updated_at = \'2024-03-04 08:29:45\' \r\n                      , `updated_at`  = \'2024-03-04 08:29:45\'\r\n                where \r\n                    `id` = 4 and deleted_flag = 0'),
+(111, 20, '2024-03-04 08:33:37', '(20) Created a Request.', 'insert into requests \r\n                set \r\n                , `status` = \'{\"value\":\"Pending\"}\', `created_by` = 20'),
+(112, 20, '2024-03-04 08:35:46', '(20) Updated a Request.', 'update requests \r\n                set \r\n                    `fname` = \'patrickyyyp\',`lname` = \'penarandagygyugyu\',`mname` = \'jabonillo\\\'\\\'\',`status` = \'{\\\"value\\\" : \\\"Not Released\\\", \\\"reason\\\" : \\\"fjdsifjdsifsd\\\"}\', updated_by = 20,updated_at = \'2024-03-04 08:35:46\' \r\n                      , `updated_at`  = \'2024-03-04 08:35:46\'\r\n                where \r\n                    `id` = 7 and deleted_flag = 0'),
+(113, 1, '2024-03-05 08:36:05', '(1) Updated a Shelf.', 'update shelves set  name = \'A-Z\', updated_date = \'2024-03-05 08:36:05\', updated_by = \'1\' where id = \'4\''),
+(114, 1, '2024-03-05 08:36:22', '(1) Updated a Shelf.', 'update shelves set  name = \'A-Z (2020-2021)\', updated_date = \'2024-03-05 08:36:22\', updated_by = \'1\' where id = \'4\''),
+(115, 1, '2024-03-05 08:36:39', '(1) Updated a Shelf.', 'update shelves set  name = \'2020-2021\', updated_date = \'2024-03-05 08:36:39\', updated_by = \'1\' where id = \'1\''),
+(116, 4, '2024-03-05 10:49:26', '(4) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'try\'),`stud_lname` = UPPER(\'try\'), `created_by_uid` = \'4\''),
+(117, 4, '2024-03-05 10:49:26', '(4) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_26751e9378e1.population_dynamics.jpg\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1471\', `shelf` = \'1\''),
+(118, 4, '2024-03-05 10:49:26', '(4) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]\', `stud_rec_id` = \'1471\''),
+(119, 4, '2024-03-05 10:49:44', '(4) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'try\'),`stud_lname` = UPPER(\'kenneth\'), `created_by_uid` = \'4\''),
+(120, 4, '2024-03-05 10:49:44', '(4) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_44785422b3fa.population_dynamics.jpg\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1472\', `shelf` = \'1\''),
+(121, 4, '2024-03-05 10:49:44', '(4) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]\', `stud_rec_id` = \'1472\''),
+(122, 4, '2024-03-05 10:49:53', '(4) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'gggh\'),`stud_lname` = UPPER(\'kenneth\'),`stud_mname` = UPPER(\'ghgh\'), `created_by_uid` = \'4\''),
+(123, 4, '2024-03-05 10:49:53', '(4) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"uploads/2024_03_05_10_49_53ae3eab17a5.population_dynamics.jpg\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1473\', `shelf` = \'1\''),
+(124, 4, '2024-03-05 10:49:53', '(4) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]\', `stud_rec_id` = \'1473\''),
+(125, 4, '2024-03-05 10:50:07', '(4) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_fname` = UPPER(\'ggghhh\'),`stud_lname` = UPPER(\'kenneth\'),`stud_mname` = UPPER(\'ghgh\'), `created_by_uid` = \'4\''),
+(126, 4, '2024-03-05 10:50:07', '(4) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\" : \"1\", \"dir\" :\"\"}\', `good_moral` = \'{\"val\" : \"1\", \"dir\" :\"\"}\',`stud_rec_id` = \'1474\', `shelf` = \'1\''),
+(127, 4, '2024-03-05 10:50:07', '(4) Added new Remarks to a record.', 'INSERT INTO `remarks` SET `value` = \'[\"NOT ORIG. TOR\",\"NOT ORIG. - F138\",\"FEFREFE\"]\', `stud_rec_id` = \'1474\''),
+(128, 14, '2024-03-05 10:55:55', '(14) Created a Request.', 'insert into requests \r\n                set \r\n                `lname` = \'sample\',`fname` = \'sample\',`mname` = \'sample\',`file` = \'TOR\',`priority` = \'1\',`due_date` = \'2024-03-15\',`reason` = \'sample\', `status` = \'{\"value\":\"Pending\"}\', `created_by` = 14'),
+(129, 14, '2024-03-05 10:57:37', '(14) Updated a Request.', 'update requests \r\n                set \r\n                    `status` = \'{\\\"value\\\" : \\\"Not Released\\\", \\\"reason\\\" : \\\"sample\\\"}\', updated_by = 14,updated_at = \'2024-03-05 10:57:37\' \r\n                      , `updated_at`  = \'2024-03-05 10:57:37\'\r\n                where \r\n                    `id` = 8 and deleted_flag = 0'),
+(130, 1, '2024-03-05 11:01:59', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `role` = \'E\',`active` = \'0\' WHERE `u`.`id` = \'12\' AND `u`.`uname` = \'ALLIAH\''),
+(131, 1, '2024-03-05 11:01:59', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET `lname` = \'--\',`fname` = \'--\',`mname` = \'--\',`gender` = \'N\',`bday` = \'1234-01-01\' WHERE `u`.`id` = \'12\''),
+(132, 1, '2024-03-05 11:03:41', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'shwlf\\-1\', `created_by` = \'1\''),
+(133, 3, '2024-03-05 22:31:04', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\'\r\n            '),
+(134, 3, '2024-03-05 22:43:28', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\''),
+(135, 3, '2024-03-05 22:43:28', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\'\r\n            '),
+(136, 3, '2024-03-05 22:43:43', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\''),
+(137, 3, '2024-03-05 22:43:43', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\'\r\n            '),
+(138, 3, '2024-03-05 22:43:57', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\''),
+(139, 3, '2024-03-05 22:43:57', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\'\r\n            '),
+(140, 3, '2024-03-05 22:44:13', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\''),
+(141, 3, '2024-03-05 22:44:13', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\' , `u`.`pword` = PASSWORD(\'patrick\')  WHERE `u`.`id` = \'3\'\r\n            '),
+(142, 3, '2024-03-05 22:58:21', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\''),
+(143, 3, '2024-03-05 22:58:21', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\'\r\n            '),
+(144, 3, '2024-03-05 22:58:21', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\''),
+(145, 3, '2024-03-05 22:58:21', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-04\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\'\r\n            '),
+(146, 3, '2024-03-05 23:05:50', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\''),
+(147, 3, '2024-03-05 23:05:50', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\'\r\n            '),
+(148, 3, '2024-03-05 23:05:53', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\''),
+(149, 3, '2024-03-05 23:05:53', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOOO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\'\r\n            '),
+(150, 3, '2024-03-05 23:06:07', '(3) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOO88O\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\''),
+(151, 3, '2024-03-05 23:06:07', '(3) Updated their user information', '\r\n                UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLOO88O\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1998-02-05\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'3\'\r\n            '),
+(152, 20, '2024-03-06 00:01:57', '(20) Updated a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:01:57\', updated_by = \'20\', deleted_flag = 1 where id = \'1\''),
+(153, 20, '2024-03-06 00:07:08', '(20) Updated a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:07:08\', updated_by = \'20\', deleted_flag = 1 where id = \'1\''),
+(154, 20, '2024-03-06 00:07:28', '(20) Updated a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:07:28\', updated_by = \'{100}\', deleted_flag = 1 where id = \'1\''),
+(155, 20, '2024-03-06 00:08:47', '(20) Updated a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:08:47\', updated_by = \'20\', deleted_flag = 1 where id = \'1\''),
+(156, 20, '2024-03-06 00:09:04', '(20) Deleted a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:09:04\', updated_by = \'20\', deleted_flag = 1 where id = \'1\''),
+(157, 20, '2024-03-06 00:17:43', '(20) Deleted a Shelf.', 'update shelves set  updated_date = \'2024-03-06 00:17:43\', updated_by = \'20\', deleted_flag = 1 where id = \'1\'');
 
 -- --------------------------------------------------------
 
@@ -4601,11 +4806,19 @@ CREATE TABLE `x_file` (
   `name` varchar(50) DEFAULT NULL,
   `uploaded_date` datetime DEFAULT current_timestamp(),
   `uploaded_by` int(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `doc`
+--
+ALTER TABLE `doc`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `stud_rec_id` (`stud_rec_id`),
+  ADD KEY `shelf` (`shelf`);
 
 --
 -- Indexes for table `remarks`
@@ -4681,13 +4894,13 @@ ALTER TABLE `x_file`
 -- AUTO_INCREMENT for table `doc`
 --
 ALTER TABLE `doc`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1447;
 
 --
 -- AUTO_INCREMENT for table `remarks`
 --
 ALTER TABLE `remarks`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1435;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1446;
 
 --
 -- AUTO_INCREMENT for table `remark_categories`
@@ -4699,47 +4912,54 @@ ALTER TABLE `remark_categories`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `shelves`
 --
 ALTER TABLE `shelves`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `stud_rec`
 --
 ALTER TABLE `stud_rec`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1459;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1475;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `x_file`
 --
 ALTER TABLE `x_file`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `doc`
+--
+ALTER TABLE `doc`
+  ADD CONSTRAINT `doc_ibfk_1` FOREIGN KEY (`stud_rec_id`) REFERENCES `stud_rec` (`id`),
+  ADD CONSTRAINT `doc_ibfk_2` FOREIGN KEY (`shelf`) REFERENCES `shelves` (`id`);
 
 --
 -- Constraints for table `remarks`

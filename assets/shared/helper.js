@@ -131,33 +131,40 @@ export class Helper {
 
   static onChange(element, callback) {
     if (Helper.f(element)) Helper.f(element).addEventListener("change", callback);
-    else { console.warn(`${element} not found.`); }
+    else { console.warn(`${element} not found or did not have minimum requirements.`); }
   }
 
   static onSubmit(element, callback) {
-    if (Helper.f(element)) Helper.f(element).addEventListener("submit", callback);
-    else { console.warn(`${element} not found.`); }
+    if (Helper.f(element)) {
+      Helper.f(element).addEventListener("submit", callback);
+    }
+    else { console.warn(`${element} not found or did not have minimum requirements.`); }
   }
 
   static onClick(element, callback, mulitple = false) {
     if (Helper.f(element)) {
-      if (mulitple) Helper.fm(element, e => e.addEventListener("click", callback));
-      else Helper.f(element).addEventListener("click", callback);
+      if (mulitple) Helper.fm(element, e => { if (!e.onclick) e.onclick = callback });
+      else {
+        if (!Helper.f(element).onclick) Helper.f(element).onclick = callback;
+      }
     }
-    else { console.warn(`${element} not found.`); }
+    else { console.warn(`${element} not found or did not have minimum requirements.`); }
   }
 
   static onSubmit(element, callback) {
-    if (Helper.f(element)) Helper.f(element).addEventListener("submit", callback);
-    else console.warn(`${element} not found.`);
+    if (Helper.f(element) && !Helper.f(element).onsubmit) Helper.f(element).onsubmit = callback;
+    else console.warn(`${element} not found or did not have minimum requirements.`);
   }
 
   static clearClick(element, callback, mulitple = false) {
     if (Helper.f(element)) {
-      if (mulitple) Helper.fm(element, e => e.removeEventListener("click", callback));
-      else Helper.f(element).removeEventListener("click", callback);
+      if (mulitple) Helper.fm(element, e => { e['onclick'] = null; e.removeEventListener("click", callback) });
+      else {
+        Helper.f(element).onclick = null;
+        Helper.f(element).removeEventListener("click", callback);
+      }
     }
-    else { console.warn(`${element} not found.`); }
+    else { console.warn(`${element} not found or did not have minimum requirements.`); }
   }
 
   static isValidForm(form = new FormData(), required = ['']) {
@@ -185,11 +192,7 @@ export class Helper {
     invalids.forEach(v => {
       if (Helper.f(`.form-control[name="${v}"]`)) Helper.f(`.form-control[name="${v}"]`).style.border = "1px solid #DC3545";
       if (Helper.f(`.form-select[name="${v}"]`)) Helper.f(`.form-select[name="${v}"]`).style.border = "1px solid #DC3545";
-    })
-
-    // invalids.map(v => Helper.f(`.form-control[name="${v}"]`)).forEach(v => {
-    //   if (v) v.style.border = "1px solid #DC3545";
-    // });
+    });
     return invalids
   }
 
@@ -204,8 +207,11 @@ export class Helper {
     return data;
   }
 
-  static f(element) {
-    if (document.querySelector(element)) return document.querySelector(element);
+  static f(element, callBack) {
+    if (document.querySelector(element)) {
+      if (callBack) callBack(document.querySelector(element));
+      return document.querySelector(element);
+    }
     else return undefined;
   }
 
@@ -227,11 +233,12 @@ export class Helper {
     else return undefined
   }
 
-  static on(elementNode, event, callback, option = undefined) {
-    elementNode.addEventListener(event, callback, option);
+  static on(elementNode, event, callback) {
+    elementNode[`on${event}`] = callback;
   }
 
   static clearEvent(elementNode, event, callback, option = undefined) {
+    elementNode[`on${event}`] = null;
     elementNode.removeEventListener(event, callback, option);
   }
 

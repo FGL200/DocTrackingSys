@@ -20,7 +20,7 @@ class Page extends CI_Controller
     parent::__construct(); // inherit all the methods, attributes  and etc. from parent
 
     $this->load->model("Student_model", "stud");
-    $this->load->model("Shelves_model", "shelves");
+    $this->load->model("Shelf_model", "shelves");
 
     $this->m_role = $this->session->userdata('role');
     $this->m_hasUID = $this->session->has_userdata('uid');
@@ -32,10 +32,8 @@ class Page extends CI_Controller
     $fname = $this->session->userdata('fname');
     $lname = $this->session->userdata('lname');
     $mname = $this->session->userdata('mname');
-    $fullname = $lname . ((!empty($fname) || !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '');
+    $fullname = $lname . ((!empty($fname) && !empty($mname)) ? (', ' . $fname . ' ' . $mname) : '');
     $username = $this->session->userdata('uname');
-
-    // echo json_encode($this->session->userdata());
 
     $header['constants'] = [
       'page_url' => $page,
@@ -282,7 +280,9 @@ class Page extends CI_Controller
       return;
     }
 
-    $this->loadPage('record/record-entry');
+    $data['main'] = ['record_name' => $id];
+
+    $this->loadPage('record/record-entry', $data);
   }
 
 

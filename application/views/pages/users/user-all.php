@@ -12,7 +12,8 @@
   <section class="section">
     <div class="row">
       <div class="card card-body">
-        <table class="table table-hover" id="table_content"></table>
+        <div class="card-title">All Users</div>
+        <table class="table table-striped table-sm border" id="table_content"></table>
       </div>
     </div>
   </section>
