@@ -699,7 +699,6 @@ class Student extends CI_Controller{
      * @param Integer $stud_rec_id
      */
     private function upload_file($tmp, $name, $size) {
-        echo $size;
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', 'uploads/', $path);
 
