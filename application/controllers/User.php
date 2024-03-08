@@ -8,6 +8,7 @@ class User extends CI_Controller{
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
         $this->load->model("User_model", "user");
+        disable_db_debugging($this);
     }
 
     /**
@@ -15,20 +16,20 @@ class User extends CI_Controller{
      */
     public function update() {
         if($this->input->post("action") == "reset-password") {
-            $uid = $this->input->post("uid");
-            $uname = $this->input->post("uname");
+            try {
+                $uid = $this->input->post("uid");
 
-            $data = "`u`.`pword` = PASSWORD('default')";
-            $data .= " WHERE `u`.`id` = '$uid' AND `u`.`uname` = '$uname'";
-
-            //Add to user_logs || OKAY NA TO
-            // add_To_User_Logs($this, $uid, "($uid) Reset password of {$uname}", "
-            //     UPDATE `user` `u`
-            //     SET {$data}
-            // ");
-
-            echo json_encode(["response" => $this->user->update_user($data)]);
-            return;
+                $data = "`u`.`pword` = ASSWORD('default')";
+                $data .= " WHERE `u`.`id` = '$uid'";
+    
+                $result = $this->user->update_user($data);
+                if($this->db->error()['code'] && $this->db->error()['message']) throw new Exception($this->db->error()['message']);
+                echo to_JSON(["status" => $result]);
+                return;
+            } catch (Exception $e) {
+                echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
+            }
+            
         }
         else if($this->input->post("action") == "set-active") {
             $user = "";
