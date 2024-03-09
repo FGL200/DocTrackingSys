@@ -5,6 +5,12 @@ export class Modal {
   static async open(callback = undefined) {
     if (callback) await callback();
     Helper.f("#dds_modal_open").click();
+
+    Helper.clearEvent(Helper.f("#dds_modal_close"), "click");
+  }
+
+  static async onClose(callBack) {
+    Helper.on(Helper.f("#dds_modal_close"), "click", callBack);
   }
 
   static async close(callback = undefined) {
@@ -15,7 +21,7 @@ export class Modal {
     Helper.f("#dds_modal_header").classList.remove('d-none');
     Helper.f("#dds_modal_footer").classList.remove('d-none');
     Modal.setSize();
-    
+
     Helper.f("#dds_modal_close").click();
   }
 

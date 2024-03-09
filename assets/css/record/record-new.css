@@ -1,0 +1,5 @@
+.remark_item:hover {
+  background-color: #fde8e9;
+  cursor: pointer;
+  user-select: none;
+}

@@ -10,3 +10,8 @@
 .b-color-w {
   background-color: var(--color_white) !important;
 }
+
+img.rotate {
+  cursor: pointer;
+  transition: .3s ease-out;
+}
