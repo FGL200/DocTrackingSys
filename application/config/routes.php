@@ -51,7 +51,7 @@ $route['api/student/record/(:num)'] = 'Student/get_Student_Records/$1';
 $route['api/student/record/select']['post'] = 'Student/get_all_stud_rec_as_select';
 $route['api/student/build_qr']['post'] = 'Student/build_qr';
 $route['api/student/record/trash']['post'] = 'Student/trashBin';
-$route['api/student/record/move']['post'] = 'Student/moveRecord';
+$route['api/student/record/move/(:num)']['post'] = 'Student/moveRecord/$1';
 
 $route['api/student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['api/student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
