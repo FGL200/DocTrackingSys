@@ -78,8 +78,7 @@ async function Load_Categories() {
             Helper.Promt_Error('Enter valid name for category.');
             return;
           }
-
-          const resp = (await Helper.api(`file-request-category/${data.id}/update`, 'json', form_data));
+          const resp = (await Helper.api(`file-request-category/${data.id}/update`, 'json', Helper.createFormData({'uid' : const_uid}, form_data)));
           if (resp.status == '1') {
             CustomNotification.add('Success', 'Category updated.', 'success');
             Helper.Promt_Clear();
@@ -105,7 +104,7 @@ async function Load_Categories() {
         Modal.open();
         Modal.submit(async (e, form_data) => {
 
-          const resp = (await Helper.api(`file-request-category/${data.id}/delete`, 'json', form_data));
+          const resp = (await Helper.api(`file-request-category/${data.id}/delete`, 'json', Helper.createFormData({'uid' : const_uid}, form_data)));
           if (resp.status == '1') {
             CustomNotification.add('Success', 'Category deleted.', 'success');
             Helper.Promt_Clear();
