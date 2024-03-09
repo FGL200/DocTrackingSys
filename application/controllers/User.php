@@ -19,7 +19,7 @@ class User extends CI_Controller{
             try {
                 $uid = $this->input->post("uid");
 
-                $data = "`u`.`pword` = ASSWORD('default')";
+                $data = "`u`.`pword` = PASSWORD('default')";
                 $data .= " WHERE `u`.`id` = '$uid'";
     
                 $result = $this->user->update_user($data);
