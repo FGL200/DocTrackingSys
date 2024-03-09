@@ -24,25 +24,32 @@ class Request_model extends CI_Model {
         if(!$user) return null;
 
         $sql = "
-                select
-                    req.* 
-                from requests req
+                SELECT 
+                    r.id as ID,
+                    concat(r.lname, ', ', r.fname, ', ', r.mname) as Requestor,
+                    r.created_at as 'Requested Date',
+                    GROUP_CONCAT(frc.name) as Files,
+                    r.status as Status,
+                    r.due_date as 'Due Date'
+                FROM 
+                    requests r
+                INNER JOIN 
+                    file_request_categories frc ON find_in_set(frc.id, r.file)
                 ";
 
-        $condition = " where req.deleted_flag = 0 "; // het all the not deleted requests 
+        $condition = " where r.deleted_flag = 0 "; // het all the not deleted requests 
 
         if($user['role'] == "V") { // kapag hindi admin kukunin lang yung mga request na created ni Viewer
             $sql .= "
                     join 
                         user u
                     on 
-                        req.created_by = u.id
+                        r.created_by = u.id
                     ";
             $condition .= " AND u.id = {$user['uid']}";
         }
         $sql .= $condition;
-        $sql .= " order by req.priority, req.created_at DESC";
-       
+        $sql .= " GROUP BY r.id order by r.priority, r.created_at DESC";
         return $this->db->query($sql)->result();
     }
 

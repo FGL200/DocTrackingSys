@@ -15,6 +15,8 @@ Helper.importCSS('request/request_new');
     })
 
     Helper.onChange("select#file", (e) => {
+        $("#file-requests-holder > span").removeClass("d-none");
+
         const selectedOptionIndex = e.target.selectedIndex;
         const option = document.querySelectorAll("select#file > option")[selectedOptionIndex];
 
@@ -34,8 +36,12 @@ Helper.importCSS('request/request_new');
             }
         })
 
-        Helper.onClick("#file-requests-holder > *", (e) => {
+        Helper.onClick("#file-requests-holder > input", (e) => {
             $(e.target).remove();
+
+            if($("#file-requests-holder > input").length == 0) {
+                $("#file-requests-holder > span").addClass("d-none");
+            }
         }, true)
     })
 
@@ -60,13 +66,28 @@ Helper.importCSS('request/request_new');
             }
         })
 
+        body['file'] = JSON.parse(body['file']).toString();
 
-        if(Helper.formValidator(Helper.createFormData(body), ['fname', 'mname', 'lname', 'reason', 'due_date', 'file'], (val, key) => !val.trim()))
+        const conditionCB = (val, key) => {
+            if(key != 'due_date') 
+                return !val.trim();
+            else 
+                return !Helper.isFutureDate(val)
+        }
+
+        const invalids = Helper.formValidator(Helper.createFormData(body), ['fname', 'mname', 'lname', 'reason', 'due_date', 'file'], conditionCB);
+        if(invalids.length == 0)
              (async () => {
                     const resp = await Helper.api('request/create', 'json', Helper.createFormData(body))
                     const {status, message} = resp;
                     if(status == 1) {
                         CustomNotification.add('Success', 'New Request Added', 'success');
+                        
+                        Helper.fm("#new-request-form input, #new-request-form textarea", (input) => {
+                            input.value = "";
+                        });
+                        Helper.fm("#file-requests-holder input", (input) => input.remove());
+                        Helper.f("#new-request-form input[type='checkbox']").checked = false;
                     } else {
                         CustomNotification.add('Error 500', message, 'danger');
                     }

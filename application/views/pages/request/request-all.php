@@ -19,4 +19,4 @@
   </section>
 </main>
 
-<script type="module" src="<?= base_url() ?>assets/js/user/request-all.js"></script>
+<script type="module" src="<?= base_url() ?>assets/js/request/request-all.js"></script>
