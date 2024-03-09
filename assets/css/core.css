@@ -1,3 +1,9 @@
+:root {
+  --color_blue: #265798;
+  --color_yellow: #FFC100;
+  --color_white: #F8F9F9;
+  --color_black: #17202A;
+}
 .text-xsm {
   font-size: .65rem !important;
 }

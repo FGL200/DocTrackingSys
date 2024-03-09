@@ -1,0 +1,15 @@
+section .row >  * {
+    width: 25% !important;
+    flex-grow: 1;
+}
+
+.w-fit-content {
+    width: fit-content !important;
+}
+
+.form-check-input:checked {
+    background-color: rgba(17, 201, 0, 0.79);
+}
+div#file-requests-holder input {
+    cursor: pointer !important;
+}

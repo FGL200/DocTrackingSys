@@ -31,10 +31,10 @@ class Request extends CI_Controller {
             
             $affected_rows = $this->request_model->create($items);
             
-            $response["status"] = $affected_rows > 0 ? "success" : "error";
+            $response["status"] = 1 ;
     
         } catch (Exception $e) {
-            $response['status'] = "error";
+            $response['status'] = 0;
             $response['message'] = $e->getMessage();
         } finally {
             echo to_JSON($response);
