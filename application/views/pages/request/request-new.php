@@ -39,7 +39,7 @@
         <div id="file-requests" style="width: 100px;">
           <span>List of Request</span>
           <div id="file-requests-holder" class="border rounded p-1 d-flex justify-content-center align-items-start gap-2 flex-wrap" style="background-color: white; min-height : 100px;">
-  
+            <span style="min-width: 100%;" class="text-center d-none"><i>Click the item to remove.</i></span>
           </div>
         </div>
       </div>

@@ -7,8 +7,12 @@ section .row >  * {
     width: fit-content !important;
 }
 
+.form-check-input {
+    cursor: pointer;
+}
 .form-check-input:checked {
-    background-color: rgba(17, 201, 0, 0.79);
+    background-color: #58D68D ;
+    border: #2ECC71;
 }
 div#file-requests-holder input {
     cursor: pointer !important;
