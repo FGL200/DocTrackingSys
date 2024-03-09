@@ -8,7 +8,6 @@ import { Modal } from "../../shared/modal.js";
 
 async function Load_Users() {
   const resp = (await Helper.api('user/all', 'json', Helper.createFormData({ uid: const_uid }))).result;
-  console.log({ resp })
 
   const thead = `
     <thead>
@@ -52,7 +51,6 @@ function getRoleById(roleInitial) {
 
 async function openModal(selected_id) {
   const resp = (await Helper.api('user', 'json', Helper.createFormData({ uid: selected_id, rid: const_uid }))).result[0];
-  console.log({ selected_id })
   Modal.setTitle('Update User');
   Modal.setBody(Helper.replaceLayout(await Helper.template('profile/edit-profile'), {
     uid: selected_id,
@@ -90,30 +88,38 @@ async function openModal(selected_id) {
       };
       body[`profile-${v.name}`] = v.value;
     });
-    const resp = (await Helper.api('user/update', 'json', Helper.createFormData({ ...body }))).status;
-    if (resp == 1) {
-      CustomNotification.add("Success", "Successfully updated user.", "success");
-      Modal.close();
-    } else {
-      CustomNotification.add("Error", "Error Occurred. Try again later.", "danger");
-    }
+    const status = (await Helper.api('user/update', 'json', Helper.createFormData({ ...body }))).status;
+    ValidateStatus(status);
   });
 
-  Helper.onClick("#reset_password", (e) => {
+  Helper.onClick("#reset_password", async (e) => {
     e.preventDefault();
-    Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, action: 'reset-password' }))
+    const status = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, action: 'reset-password' }))).status;
+    ValidateStatus(status);
   });
 
   if (resp.active == '1') {
-    Helper.onClick("#deactive", (e) => {
+    Helper.onClick("#deactive", async (e) => {
       e.preventDefault();
-      Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '0', uname: resp.uname, action: 'set-active' }))
+      const status = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '0', uname: resp.uname, action: 'set-active' }))).status;
+      ValidateStatus(status);
     });
 
   } else {
-    Helper.onClick("#reactive", (e) => {
+    Helper.onClick("#reactive", async (e) => {
       e.preventDefault();
-      Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '1', uname: resp.uname, action: 'set-active' }))
+      const status = (await Helper.api('user/update', 'json', Helper.createFormData({ uid: selected_id, active: '1', uname: resp.uname, action: 'set-active' }))).status;
+      ValidateStatus(status);
     });
+  }
+}
+
+function ValidateStatus(status = 0) {
+  if (status == 1) {
+    CustomNotification.add("Success", "Successfully updated user.", "success");
+    Modal.close();
+    Load_Users();
+  } else {
+    CustomNotification.add("Error", "Error Occurred. Try again later.", "danger");
   }
 }

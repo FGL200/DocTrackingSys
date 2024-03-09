@@ -230,6 +230,21 @@ class Page extends CI_Controller
     $this->loadPage('request/request-archived');
   }
 
+  public function request_file_categofy_archived()
+  {
+
+    if (!$this->m_hasUID) {
+      redirect('');
+      return;
+    }
+    if ($this->m_role != 'A') {
+      redirect('');
+      return;
+    }
+
+    $this->loadPage('request/request-file-category-archived');
+  }
+
 
 
   // Manage Records

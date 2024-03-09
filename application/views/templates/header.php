@@ -220,6 +220,11 @@
             </a>
           </li>
           <li>
+            <a id="page-all_users" href="<?= base_url() ?>request/file-categories-archived">
+              <i class="bi bi-box-seam"></i><span>Archived Categories</span>
+            </a>
+          </li>
+          <li>
             <a id="page-all_users" href="<?= base_url() ?>request/archived">
               <i class="bi bi-box-seam"></i><span>Archived Requests</span>
             </a>

@@ -18,17 +18,13 @@
         <div class="card card-body">
           <div class="card-title">Actions</div>
           <div class="d-flex flex-column gap-2">
-            <div class="d-flex gap-2">
-              <button id="btn_merge" class="btn btn-primary w-50"><i class="bi bi-intersect"></i> Merge</button>
-              <button id="btn_move" class="btn btn-primary w-50"><i class="bi bi-arrows-move"></i> Move</button>
-            </div>
-            <div class="d-flex gap-2">
-              <button id="btn_archive" class="btn btn-danger w-50"><i class="bi bi-dash-circle"></i> Archive</button>
+            <button id="btn_merge" class="btn btn-primary w-100"><i class="bi bi-intersect"></i> Merge</button>
+            <button id="btn_move" class="btn btn-primary w-100"><i class="bi bi-arrows-move"></i> Move</button>
+            <button id="btn_archive" class="btn btn-danger w-100"><i class="bi bi-dash-circle"></i> Archive</button>
 
-              <!-- Togle between save and edit -->
-              <button id="btn_save" class="btn btn-success d-none w-50"><i class="bi bi-floppy"></i> Save</button>
-              <button id="btn_edit" class="btn btn-warning w-50"><i class="bi bi-pencil-square"></i> Edit</button>
-            </div>
+            <!-- Togle between save and edit -->
+            <button id="btn_save" class="btn btn-success d-none w-100"><i class="bi bi-floppy"></i> Save</button>
+            <button id="btn_edit" class="btn btn-warning w-100"><i class="bi bi-pencil-square"></i> Edit</button>
           </div>
         </div>
       </div>
@@ -37,7 +33,7 @@
         <div class="card card-body">
           <div class="card-title">Remarks</div>
           <form id="remark_form" class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="col-12">
               <div class="form-group mb-3">
                 <label>Remarks <small class="text-danger">*</small></label>
                 <div class="input-group mb-3">
@@ -48,8 +44,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <div id="remarks_holder" class="alert alert-secondary d-flex flex-wrap gap-2 m-0"></div>
+            <div class="col-12">
+              <div id="remarks_holder" class="alert alert-secondary d-flex flex-wrap gap-2 m-0">No Remarks</div>
             </div>
             <div class="col-12">
               <small class="error-msg text-danger"></small>
@@ -60,7 +56,7 @@
     </div>
 
     <form id="record_form" class="row needs-validation" novalidate>
-      <button>Save</button>
+      <!-- <button>Save</button> -->
 
       <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="card card-body">
@@ -117,11 +113,20 @@
 
             <div class="col-12 document_item">
               <div class="alert alert-secondary p-2">
-                <input type="file" class="d-none">
-                <span class="document_name">Name </span>
-                <input type="checkbox" name="">
-                <button class="btn btn-success" type="button"><i class="bi bi-plus"></i> <i class="bi bi-card-image"></i></button>
-                <button class="btn btn-primary" type="button"><i class="bi bi-eye-fill"></i></button>
+                <div class="d-flex justify-content-between">
+                  <input type="file" id="document_file" class="d-none" accept="image/png, image/jpeg" multiple>
+
+                  <section class="d-flex gap-2 align-items-center">
+                    <input type="checkbox" name="" id="regi">
+                    <label class="document_name" for="regi">Name </label>
+                  </section>
+
+                  <section class="d-flex gap-2 align-items-center">
+                    <label for="document_file" class="btn btn-success disabled add_image"><i class="bi bi-plus sym"></i> <i class="bi bi-card-image"></i></label>
+                    <button class="btn btn-primary view_image" type="button" disabled><i class="bi bi-eye-fill"></i></button>
+                  </section>
+
+                </div>
               </div>
             </div>
 

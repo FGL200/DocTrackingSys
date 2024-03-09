@@ -28,6 +28,7 @@ $route['shelf/entry/(:any)'] = 'Page/shelf_entry/$1';
 
 // Request
 $route['request/file-categories'] = 'Page/request_fileCateg';
+$route['request/file-categories-archived'] = 'Page/request_file_categofy_archived';
 $route['request/new'] = 'Page/request_new';
 $route['request/all'] = 'Page/request_all';
 $route['request/archived'] = 'Page/request_archived';

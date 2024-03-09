@@ -14,9 +14,66 @@ async function Load_Data() {
   let record = getStudentInformationObject(resp);
 
   Helper.formBindValues("#record_form", record.student)
-  
 }
 
+
+
+
+
+
+// **************************************
+// *          Handle Documents          *
+// **************************************
+
+Helper.fm(".document_item", di => {
+  Helper.find(di, 'input[type="checkbox"]', cb => {
+    Helper.on(cb, "change", () =>
+      Helper.find(di, ".alert", al => {
+        if (cb.checked) {
+          al.classList.remove('alert-secondary');
+          al.classList.add('alert-success');
+          Helper.find(di, '.add_image', btn => {
+            btn.classList.toggle('disabled');
+            ChangeFileButton(btn, 'success')
+          });
+        } else {
+          al.classList.remove('alert-success');
+          al.classList.add('alert-secondary');
+          Helper.find(di, '.add_image', btn => {
+            btn.classList.toggle('disabled');
+            ChangeFileButton(btn, 'danger')
+          });
+        }
+      })
+    );
+  });
+});
+
+function ChangeFileButton(buttonNode, type = 'success') {
+  if (type == 'success') {
+    buttonNode.classList.remove('btn-danger');
+    buttonNode.classList.add('btn-success');
+    Helper.find(buttonNode, 'i.sym', icon => {
+      icon.classList.remove('bi-dash')
+      icon.classList.add('bi-plus')
+    })
+  } else {
+    buttonNode.classList.remove('btn-success');
+    buttonNode.classList.add('btn-danger');
+    Helper.find(buttonNode, 'i.sym', icon => {
+      icon.classList.remove('bi-plus')
+      icon.classList.add('bi-dash')
+    })
+  }
+}
+
+
+
+
+
+// *************************************
+// *          Handle Remarkks          *
+// *************************************
 
 Helper.onSubmit('#remark_form', e => {
   Helper.preventDefault(e);
@@ -36,7 +93,7 @@ Helper.onSubmit('#remark_form', e => {
 
     // check if remark already exist
     Helper.fm(".remark_item", ri => exsisting = Helper.removeWhiteSpaces(ri.innerHTML.toLocaleLowerCase()) == Helper.removeWhiteSpaces(remark.toLocaleLowerCase()));
-    
+
     // append if not existing
     if (!exsisting) {
       rh.innerHTML += getRemarkItemComponent(remark);
@@ -47,15 +104,6 @@ Helper.onSubmit('#remark_form', e => {
   Helper.Promt_Clear();
   form.reset();
 });
-
-
-
-
-
-
-
-
-
 
 
 function Load_RemarksFunctionality() {
@@ -74,6 +122,14 @@ function getRemarkItemComponent(value) {
     </div>
   `;
 }
+
+
+
+
+
+// ****************************
+// *          Others          *
+// ****************************
 
 function getStudentInformationObject(raw_data) {
   return {
