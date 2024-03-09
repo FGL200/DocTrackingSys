@@ -7,3 +7,6 @@
 .text-xsm {
   font-size: .65rem !important;
 }
+.b-color-w {
+  background-color: var(--color_white) !important;
+}

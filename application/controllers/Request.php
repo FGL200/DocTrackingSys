@@ -125,10 +125,10 @@ class Request extends CI_Controller {
     
     
             $affected_rows = $this->request_model->update($items, $condition);
-            $response["status"] = !$this->db->error()['message'] ? "success" : "error"; 
+            $response["status"] = !$this->db->error()['message'] ? 1 : 0; 
             $response['message'] = $this->db->error()['message'];
         } catch (Error $e) {
-            $response['status'] = "error";
+            $response['status'] = 0;
             $response['message'] = $e->getMessage();
         } finally {
             echo to_JSON($response);

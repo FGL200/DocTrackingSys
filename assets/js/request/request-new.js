@@ -66,6 +66,8 @@ Helper.importCSS('request/request_new');
             }
         })
 
+        body['file'] = JSON.parse(body['file']).toString();
+
         const conditionCB = (val, key) => {
             if(key != 'due_date') 
                 return !val.trim();
