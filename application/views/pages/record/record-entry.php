@@ -5,7 +5,7 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
         <li class="breadcrumb-item"><a href="<?= base_url() ?>shelf/all">All Shelves</a></li>
-        <li class="breadcrumb-item"><a href="<?= base_url() ?>shelf/entry/"><span id="shelf_name">Shelf Name</span> </a></li>
+        <li class="breadcrumb-item"><a href="<?= base_url() ?>shelf/entry/" id="shelf_name">Shelf </a></li>
         <li class="breadcrumb-item active">Record #<?= $record_name ?></li>
       </ol>
     </nav>
@@ -31,7 +31,7 @@
 
       <div class="col-lg-8 col-md-8 col-sm-12">
         <div class="card card-body">
-          <div class="card-title">Remarks</div>
+          <div class="card-title">Remarks List</div>
           <form id="remark_form" class="row">
             <div class="col-12">
               <div class="form-group mb-3">
@@ -111,19 +111,19 @@
           <div class="card-title">Documents</div>
           <div class="row">
 
-            <div class="col-12 document_item">
+            <div class="col-12 document_item" id="regi">
               <div class="alert alert-secondary p-2">
                 <div class="d-flex justify-content-between">
-                  <input type="file" id="document_file" class="d-none" accept="image/png, image/jpeg" multiple>
+                  <input id="regi_file" type="file" class="d-none" accept="image/png, image/jpeg" multiple>
 
                   <section class="d-flex gap-2 align-items-center">
-                    <input type="checkbox" name="" id="regi">
-                    <label class="document_name" for="regi">Name </label>
+                    <input id="regi_cb" type="checkbox" name="">
+                    <label for="regi_cb" class="document_name">Registration Form </label>
                   </section>
 
                   <section class="d-flex gap-2 align-items-center">
-                    <label for="document_file" class="btn btn-success disabled add_image"><i class="bi bi-plus sym"></i> <i class="bi bi-card-image"></i></label>
-                    <button class="btn btn-primary view_image" type="button" disabled><i class="bi bi-eye-fill"></i></button>
+                    <label for="regi_file" class="btn btn-success disabled add_image"><i class="bi bi-plus sym"></i> <i class="bi bi-card-image"></i></label>
+                    <button class="btn btn-primary disabled view_image" type="button"><i class="bi bi-eye-fill"></i></button>
                   </section>
 
                 </div>
@@ -141,7 +141,7 @@
               <div class="collapse" id="other_documents">
                 <div class="row">
 
-                  <div class="col-12 document_item">
+                  <!-- <div class="col-12 document_item">
                     <div class="alert alert-secondary p-2">
                       <input type="file" class="d-none">
                       <span class="document_name">Name </span>
@@ -149,7 +149,7 @@
                       <button class="btn btn-success" type="button"><i class="bi bi-plus"></i> <i class="bi bi-card-image"></i></button>
                       <button class="btn btn-primary" type="button"><i class="bi bi-eye-fill"></i></button>
                     </div>
-                  </div>
+                  </div> -->
 
                 </div>
               </div>

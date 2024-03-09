@@ -236,7 +236,7 @@ export class Helper {
     const elems = [];
     if (elementNode.querySelector(targetElement)) {
       elementNode.querySelectorAll(targetElement).forEach(v => elems.push(v));
-      return elems.map(callback);
+      return callback ? elems.map(callback) : elems.map(v => v);
     }
     else return undefined
   }

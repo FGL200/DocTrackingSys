@@ -12,7 +12,14 @@ let data = {};
 async function Load_Data() {
   const resp = (await Helper.api(`student/record/${const_record_name}`, 'json')).result;
   let record = getStudentInformationObject(resp);
+  console.log({ resp, record })
 
+  // Bind Shelf Name
+  const shlef_name = Helper.f("#shelf_name");
+  shlef_name.innerHTML = `Shelf ${record.shelf.Name}`;
+  shlef_name.href = `${base_url}/shelf/entry/${record.shelf.Name}`;
+
+  // Bind Student Record Information 
   Helper.formBindValues("#record_form", record.student)
 }
 
@@ -26,44 +33,67 @@ async function Load_Data() {
 // **************************************
 
 Helper.fm(".document_item", di => {
-  Helper.find(di, 'input[type="checkbox"]', cb => {
-    Helper.on(cb, "change", () =>
-      Helper.find(di, ".alert", al => {
-        if (cb.checked) {
-          al.classList.remove('alert-secondary');
-          al.classList.add('alert-success');
-          Helper.find(di, '.add_image', btn => {
-            btn.classList.toggle('disabled');
-            ChangeFileButton(btn, 'success')
-          });
-        } else {
-          al.classList.remove('alert-success');
-          al.classList.add('alert-secondary');
-          Helper.find(di, '.add_image', btn => {
-            btn.classList.toggle('disabled');
-            ChangeFileButton(btn, 'danger')
-          });
-        }
-      })
-    );
+  const el_conatiner = Helper.find(di, '.alert')[0];                // element of input file
+  const el_input_file = Helper.find(di, 'input[type="file"]')[0];   // element of input file
+  const el_input_cb = Helper.find(di, 'input[type="checkbox"]')[0]; // element of checkbox
+  const el_btn_file = Helper.find(di, '.add_image')[0];             // element of button file ffor adding/remove file
+  const el_btn_view = Helper.find(di, '.view_image')[0];            // element of view image
+
+  // when check box is changed
+  Helper.on(el_input_cb, "change", () => {
+    if (el_input_cb.checked) {
+      setContiner(el_conatiner, 'success');
+      setDisabledClass(el_btn_file, false)
+    } else {
+      setContiner(el_conatiner, 'secondary');
+      setDisabledClass(el_btn_file, true)
+    }
   });
+
+  Helper.on(el_input_file, "change", () => {
+    const files = el_input_file.files;
+    if (files.length > 0) {
+      setDisabledClass(el_btn_view, false);
+    } else {
+      setDisabledClass(el_btn_view, true);
+    }
+  });
+
 });
 
-function ChangeFileButton(buttonNode, type = 'success') {
+function setContiner(node, type = 'success') {
   if (type == 'success') {
-    buttonNode.classList.remove('btn-danger');
-    buttonNode.classList.add('btn-success');
-    Helper.find(buttonNode, 'i.sym', icon => {
+    node.classList.remove('alert-secondary');
+    node.classList.add('alert-success');
+  } else {
+    node.classList.remove('alert-success');
+    node.classList.add('alert-secondary');
+  }
+}
+
+function setButtonFile(node, type = 'success') {
+  if (type == 'success') {
+    node.classList.remove('btn-danger');
+    node.classList.add('btn-success');
+    Helper.find(node, 'i.sym', icon => {
       icon.classList.remove('bi-dash')
       icon.classList.add('bi-plus')
-    })
+    });
   } else {
-    buttonNode.classList.remove('btn-success');
-    buttonNode.classList.add('btn-danger');
-    Helper.find(buttonNode, 'i.sym', icon => {
+    node.classList.remove('btn-success');
+    node.classList.add('btn-danger');
+    Helper.find(node, 'i.sym', icon => {
       icon.classList.remove('bi-plus')
       icon.classList.add('bi-dash')
-    })
+    });
+  }
+}
+
+function setDisabledClass(node, disabled = true) {
+  if (disabled) {
+    node.classList.add("disabled");
+  } else {
+    node.classList.remove("disabled");
   }
 }
 
@@ -148,12 +178,7 @@ function getStudentInformationObject(raw_data) {
       req_clearance_form: JSON.parse(raw_data.req_clearance_form ?? '{"val": "", "dir":""}'),
       req_credentials: JSON.parse(raw_data.req_credentials ?? '{"val": "", "dir":""}'),
     },
-    shelf: {
-      id: Number(raw_data.shelf ?? 0),
-      shelf_histories: JSON.parse(raw_data.shelf_histories ?? '{}'),
-      merged_shelves: JSON.parse(raw_data.merged_shelves ?? '{}'),
-      name: raw_data?.shelf_name ?? '',
-    },
+    shelf: JSON.parse(raw_data.shelf ?? '{}'),
     remarks: [
       ...JSON.parse(raw_data.value.includes('[') ? raw_data.value : '[]')
     ],
