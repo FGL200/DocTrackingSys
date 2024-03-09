@@ -90,6 +90,10 @@ class FileRequestCategory extends CI_Controller {
             echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
         }
     }
+
+    public function archives() {
+    echo to_JSON($this->filereq_model->archives());
+    }
 }
 
 ?>

@@ -34,8 +34,9 @@ class FileRequestCategory_model extends CI_Model {
         return $this->db->query($query);
     }
 
-    public function delete() {
-
+    public function archives() {
+        $query = "SELECT * FROM file_request_categories where deleted_flag = 1";
+        return $this->db->query($query)->result();
     }
 }
 

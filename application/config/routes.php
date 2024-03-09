@@ -137,6 +137,7 @@ $route['api/file-request-category/(:num)'] = 'FileRequestCategory/get/$1 ';
 $route['api/file-request-category/add']['post'] = 'FileRequestCategory/add';
 $route['api/file-request-category/(:num)/update']['post'] = 'FileRequestCategory/update/$1';
 $route['api/file-request-category/(:num)/delete']['post'] = 'FileRequestCategory/delete/$1';
+$route['api/file-request-category/archives'] = 'FileRequestCategory/archives';   
 
 // ------------------ /End API ------------------ 
 
