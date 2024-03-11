@@ -404,7 +404,7 @@ Helper.onClick("#btn_move", async e => {
     }
     Helper.Promt_Clear();
     const resp = (await Helper.api(`student/record/move/${global_record.id}`, 'json', form_data));
-    if(resp.status == '1') {
+    if (resp.status == '1') {
       CustomNotification.add("Success", "Sucessfully moved the record.", "success");
       await Load_Data();
       Modal.close();
@@ -446,7 +446,26 @@ Helper.onClick("#btn_save", async e => {
   Modal.setFooter(await Modal.button('Save', 'success'))
   Modal.open()
   Modal.submit(async (e, form_data) => {
+    const form_info = new FormData(Helper.f("#information_form"));
+    const form_doc = new FormData(Helper.f("#document_form"))
 
+    const doc = Helper.getDataFromFormData(form_doc);
+    const body = {
+      remarks: JSON.stringify(global_remarks),
+      stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
+    };
+
+    if (Helper.formValidator(form_info, ['stud_lname'], v => v == '').length > 0) {
+      Helper.Promt_Error("* Please fill required fields.")
+      return;
+    }
+
+    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body, ...doc })));
+    console.log({ resp })
+
+    Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
+    Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
+    Modal.open();
   })
 });
 
