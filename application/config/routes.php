@@ -128,7 +128,7 @@ $route['api/request/(:num)'] = 'Request/fetch/$1';          // fetch specific re
 $route['api/request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
 $route['api/request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
 $route['api/request/archives'] = 'Request/archives';        // requests in archives
-
+$route['api/request/search']['post'] = 'Request/search';
 
 // Filerequests Category
 $route['api/file-request-category/all'] = 'FileRequestCategory/get';

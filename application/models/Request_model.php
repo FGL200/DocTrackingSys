@@ -56,10 +56,11 @@ class Request_model extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
-    public function fetch($id) {
+    public function fetch(String $condition, String $join = "") {
         $sql = "
-                select * from requests
-                where id = {$id}
+                select * from requests r
+                {$join}
+                {$condition}
                 ";
         return $this->db->query($sql)->result();
     }
@@ -213,6 +214,7 @@ class Request_model extends CI_Model {
         // echo $query; return;
         return $this->db->query($query)->result();
     }
+
 }
 
 ?>
