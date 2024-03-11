@@ -1,4 +1,7 @@
 <?php
+
+use PhpParser\Node\Expr\Cast\String_;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Request_model extends CI_Model {
@@ -190,6 +193,25 @@ class Request_model extends CI_Model {
 
         $fetch = $this->db->query($query);
         return $fetch->result();
+    }
+
+
+    public function requestsReport(String $from, String $to, String $status) {
+
+        $query = "select 
+                    case 
+                        when locate('Pending', status) then 'Pending'
+                        when locate('Released', status) then 'Released' 
+                        when locate('Not Released', status) then 'Not Released'
+                    end as _status
+                  from 
+                    requests 
+                  where (created_at between '{$from}' and '{$to}') AND ({$status}) 
+                  group by _status
+                    ";
+
+        // echo $query; return;
+        return $this->db->query($query)->result();
     }
 }
 

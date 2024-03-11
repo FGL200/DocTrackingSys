@@ -44,8 +44,8 @@ $route['record/archived'] = 'Page/records_archived';
 
 // ------------------ Start API ------------------
 $route['api/student/record/insert/excel']['post'] = 'Student/addExcel';
-$route['api/student/record/insert']['post'] = 'Student/addRecord';
-$route['api/student/record/update']['post'] = 'Student/update_Student_Records';
+$route['api/student/record/add']['post'] = 'Student/addRecord';
+$route['api/student/record/(:num)/update']['post'] = 'Student/update_Student_Records/$1';
 $route['api/student/record/all']['post'] = 'Student/get_StudentRecords_With_Remarks';
 $route['api/student/record/(:num)'] = 'Student/get_Student_Records/$1';
 $route['api/student/record/select']['post'] = 'Student/get_all_stud_rec_as_select';
@@ -138,6 +138,9 @@ $route['api/file-request-category/add']['post'] = 'FileRequestCategory/add';
 $route['api/file-request-category/(:num)/update']['post'] = 'FileRequestCategory/update/$1';
 $route['api/file-request-category/(:num)/delete']['post'] = 'FileRequestCategory/delete/$1';
 $route['api/file-request-category/archives'] = 'FileRequestCategory/archives';   
+
+// Report 
+$route['api/report/requests']['post'] = 'GenerateReport/requests';
 
 // ------------------ /End API ------------------ 
 

@@ -27,7 +27,7 @@ class Request extends CI_Controller {
             }
             $current_user = $this->session->userdata('uid');
 
-            $items .= ", `status` = '{\"value\":\"Pending\"}', `created_by` = {$current_user}";
+            $items .= ", `status` = '{\"value\" : \"Pending\"}', `created_by` = {$current_user}";
             
             $affected_rows = $this->request_model->create($items);
             

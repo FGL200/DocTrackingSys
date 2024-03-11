@@ -73,169 +73,87 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
-        // $result = $this->db->query('INSERT INTO `stud_rec` (`stud_lname`,`stud_fname`,`stud_mname`,`stud_sfx`) VALUES ("DA","CARLO ","R.",""),("DAA","PERLA","S.",""),("DAA ","BARRY","M.",""),("DAACA","CHRIS JOHN ","M.",""),("DAACA","IAN SAM","M.",""),("DAAN","KRISTINA MAY ","C.",""),("DAAN","MARIANETTE J","P.",""),("DAANG","REMY JOY","E.",""),("DAANOY","ARNOLD","E.",""),("DAAPONG ","MELCHOR","J.",""),("DABALOS","ALLEN OLIVEVER","B.",""),("DABALOS","MARIA TERESSA","C.",""),("DABALOS","NICOLE","C.",""),("DABALUS","JOEFFREN","B.",""),("DABAN","PAUL JOHN","N.",""),("DABAN","PHILIP.","S.",""),("DABAN","PRIMO","E.",""),("DABANBAN","STEFFANIE JANE","A.",""),("DABANBAN","IVAN PHILLIP","C.",""),("DABAY","RICHARD","B.",""),("DABBAN","DIVINE GRACE","R.",""),("DABBAY","JOHN MICHAEL","R.",""),("DABELA","CELESTINO","N.",""),("DABELA","GLEN","T.",""),("DABELA","NERIE ","N.",""),("DABERTE","REGINALD","F.",""),("DABI","JOHN RAY","A.",""),("DABO","MARITES","G.",""),("DABO","SHERWIN","C.",""),("DABU ","BOGART","P.",""),("DABU ","CARLO ","L.","JR."),("DABU ","CARMELA ISABEL","G.",""),("DABU ","DARWIN ","A.",""),("DABU ","DENNIS ","H.",""),("DABU ","JAYMILL","D.",""),("DABU ","KAREEM","D.",""),("DABU ","KAYCEE","G.",""),("DABU ","KEVIN","D.",""),("DABU ","MICHELLE","D.",""),("DABU ","RAINIEL","M.",""),("DABU ","RENZO","M.",""),("DABU ","REY","B.",""),("DABUEL","JANREY","E.",""),("DABUET","EDGIE","P.",""),("DABUET ","MARIVIC","J.","")');
-        // var_dump($this->db->insert_id());die;
         if($this->session->userdata("role") != "E") {
             echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
             die;
         }
         header("Content-Type: application/json; charset=UTF-8");
         
-        // echo "<pre>";
-        // var_dump($this->input->post()); die;
-        $stud_id = trim($this->input->post("stud_id"));
-        $stud_fname = trim($this->input->post("stud_fname"));
-        $stud_lname = trim($this->input->post("stud_lname"));
-        $stud_mname = trim($this->input->post("stud_mname"));
-        $stud_sfx = trim($this->input->post("stud_sfx"));
-        $shelf = trim($this->input->post("shelf"));
-
-        /** Student Information checking */
-        $required_fields = array();
-
-        if(empty($stud_fname)) array_push($required_fields, "First Name");
-        if(empty($stud_lname)) array_push($required_fields, "Last Name");
+        try {
+            $this->db->trans_start();
     
-        $required_fields = implode(",", $required_fields);
+            $stud_rec = (array)json_decode($this->input->post('stud_rec'));
+            $stud_rec_data = "";
+            $stud_rec_id = 0;
+    
+            $stud_rec['shelf'] = $this->input->post('shelf');
 
-        if(!empty(trim($required_fields))) {
-            echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
-            exit;
-        }  
-        
-        $invalid_fields = array();
-        if(!empty($stud_id) && empty(trim($stud_id, "\\'`\""))) array_push($invalid_fields, "ID");
-        if(empty(trim($stud_fname, " \t\n\r\0\x0B/\\'`\""))) array_push($invalid_fields, "First Name");
-        if(empty(trim($stud_lname, " \t\n\r\0\x0B/\\'`\""))) array_push($invalid_fields, "Last Name");
-        if(!empty($stud_mname) && empty(trim($stud_mname, "\\'`\""))) array_push($invalid_fields, "Middle Name");
-        if(!empty($stud_sfx) && empty(trim($stud_sfx, "\\'`\""))) array_push($invalid_fields, "SFX");
+            $existedRecord = $this->stud->get_Student_By($stud_rec);
 
-        $invalid_fields = implode(",", $invalid_fields);
+            if($existedRecord) throw new Exception('Record already exist.');
 
-        if(!empty(trim($invalid_fields))) {
-            echo json_encode(array('status'=>'error', 'message'=>'Value must contain characters', 'columns'=>$invalid_fields));
-            exit;
-        }  
-        
-        insert_slashes($stud_id);
-        insert_slashes($stud_fname);
-        insert_slashes($stud_lname);
-        insert_slashes($stud_mname);
-        insert_slashes($stud_sfx);
+            unset($stud_rec['shelf']);
 
-        $student_info = ["stud_id"=>$stud_id, "stud_fname"=>$stud_fname,"stud_lname"=>$stud_lname, "stud_mname"=>$stud_mname, "stud_sfx"=>$stud_sfx, "shelf" => $shelf];
-        $student = $this->stud->get_Student_By($student_info);
-        if($student) {
-            echo json_encode(array('status'=>'error', 'message'=>'Record already exist'));
-            exit; 
-        }
-        
-        unset($student_info['shelf']); // remove shelf key in $student_info to 
-
-        /** END Student Information checking */
-        
-        $data = "";
-
-        /** Inserting data in `stud_rec` table */
-        foreach($student_info as $key => $val) {
-            if(!empty($val)){
-                if(!empty($data)) $data .= ",";
-                $data .= "`{$key}` = UPPER('{$val}')";
+            foreach($stud_rec as $key => $val) {
+                if(strlen($stud_rec_data) > 0) $stud_rec_data .= ",";
+                $stud_rec_data .= "`{$key}`= UPPER('".trim($val)."')";
             }
-        }
-
-        $created_by_uid = $this->session->userdata('uid') ?? '1' ; //  user id for encoding
-        
-        $data .=  ", `created_by_uid` = '{$created_by_uid}'";
-
-        $this->db->trans_begin();
-
-        $student_id = $this->stud->add_student($data);
-        /** -- End of inserting data in `stud_rec` table -- */
- 
-        $data = ""; // reset the data for the next query
-
-        $stud_docs = [];
-
-        // Get all keys that has `doc_val`
-        $doc_keys = array_filter($this->input->post(), function($key){
-            return str_contains($key, "doc_val_");
-        }, ARRAY_FILTER_USE_KEY);
-
-        // var_dump($doc_keys); die;
-        /** Inserting data in `doc` table  */
-
-        foreach($doc_keys as $key => $val) {
-            if(str_contains($key, "doc_val")) {
-                $doc = str_replace("doc_val_", "", $key);
-
-                $stud_docs[$doc] =  "`$doc` = '{\"val\" : \"1\", \"dir\" :\"";
-                
-                // echo  $doc . PHP_EOL;
-                // var_dump($_FILES['doc_scan_' . $doc]['name']) . PHP_EOL;
-                if(isset($_FILES['doc_scan_' . $doc])) {
-                    for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                        if(!empty($_FILES["doc_scan_".$doc]['name'][$i]) && !empty($_FILES["doc_scan_".$doc]['tmp_name'][$i])) {
-                            $stud_docs[$doc] .= trim($this->upload_file($_FILES["doc_scan_".$doc]['tmp_name'][$i], $_FILES["doc_scan_".$doc]['name'][$i], $_FILES["doc_scan_".$doc]['size'][$i]));
-                            // echo($_FILES["doc_scan_".$doc]['tmp_name'][$i]); continue;
-                            if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $stud_docs[$doc] .= ","; 
-                        }    
+    
+            $stud_rec_id = (int)$this->stud->add_student($stud_rec_data);
+    
+    
+            // get all checkbox inputs
+            $cb = array_filter($this->input->post(), function($key){
+                return str_contains($key, "-cb");
+            }, ARRAY_FILTER_USE_KEY);
+    
+            $stud_docs = [];
+            $stud_docs_data = '';
+    
+            foreach($cb as $key => $val) {
+                $nKey = str_replace('-cb', '', $key);
+                $fileKey = $nKey . '-file';
+    
+                $stud_docs[$nKey]['val'] = '1';
+                $stud_docs[$nKey]['dir'] = [];
+    
+                if(isset($_FILES[$fileKey])) {
+                    // var_dump($_FILES[$fileKey]);
+                    for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
+                        $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
+                        array_push($stud_docs[$nKey]['dir'], $fileDir);
                     }
                 }
-                
-                if(isset($stud_docs[$doc])) $stud_docs[$doc] .= "\"}'";
-            }    
-        }
-
-        
-        $data = count($stud_docs) > 0 ? implode(', ', array_values($stud_docs)) . "," : "";
-        
-        $shelfname = $this->input->post("shelf");
-        $shelfid = $this->shelf->getShelfId($shelfname);
-        
-        $data .= "`stud_rec_id` = '{$student_id}', `shelf` = '{$shelfid}'";
-        $this->stud->addStudentDoc($data);
     
+            }
+    
+            $stud_docs_keys = array_keys($stud_docs);
+            $count = 0;
+    
+            foreach($stud_docs as &$doc) {
+                $doc['dir'] = join(',', $doc['dir']);
+                if(strlen($stud_docs_data) > 0) $stud_docs_data .= ",";
+                $stud_docs_data .= "`".$stud_docs_keys[$count]."` = '".to_JSON($doc)."'";
+                $count++;
+            }
+    
+            $stud_docs_data .= ",`stud_rec_id` = '{$stud_rec_id}', shelf = '{$this->shelf->getShelfId($this->input->post('shelf'))}'";
+    
+            $this->stud->addStudentDoc($stud_docs_data);
+    
+            $remarks = $this->input->post('remarks');
+            $remarks_data = "`stud_rec_id` = '{$stud_rec_id}', `value` = '{$remarks}'";
+            $this->rm->insertRemarks($remarks_data);
+            
+            if($this->db->error()['message']) throw new Exception($this->db->error()['message']);
 
-        /** -- End of inserting data in `doc` table --  */
-
-        
-        /** Inserting remarks */
-        $data = "";
-        $remark_value = "`value` = '[";
-       
-        $remarks = [];
-        
-        if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
-        if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
-
-        foreach($remarks as &$r) {
-            $r = "\"$r\""; // Enclose string to " "
-        } 
-
-        $remark_value .= implode(',', $remarks);
-        $remark_value .= "]', ";
-
-        $data .= ($remark_value . "`stud_rec_id` = '{$student_id}'");
-        $this->rm->insertRemarks($data);
-        /** End of inserting remarks */
-
-        if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
-            echo json_encode(array(
-                "status" => "success"
-            ));
-        } else {
-            $this->db->trans_rollback();           
-             echo json_encode(array(
-                "status" => "error",
-                "message" => $this->db->error()
-            ));
+            echo to_JSON(['status' => 1]);
 
-            exit();
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
         }
-
-
     }
 
     /**
@@ -283,7 +201,7 @@ class Student extends CI_Controller{
     /**
      * Update Student record
      */
-    public function update_Student_Records() {
+    public function update_Student_Records($stud_rec_id) {
 
         if($this->session->userdata("role") != "E") {
             echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
@@ -291,151 +209,88 @@ class Student extends CI_Controller{
         }
         
         header("Content-Type: application/json; charset=UTF-8");
-        $stud_rec_id = intval($this->input->post("stud_rec_id"));
 
-        $stud_id = trim($this->input->post("stud_id"));
-        $stud_fname = trim($this->input->post("stud_fname"));
-        $stud_lname = trim($this->input->post("stud_lname"));
-        $stud_mname = trim($this->input->post("stud_mname"));
-        $stud_sfx = trim($this->input->post("stud_sfx"));
 
-        $required_fields = array();
-
-        if(empty($stud_fname)) array_push($required_fields, "First Name");
-        if(empty($stud_lname)) array_push($required_fields, "Last Name");
+        try {
+            $this->db->trans_start();
     
-        $required_fields = implode(",", $required_fields);
+            $stud_rec = (array)json_decode($this->input->post('stud_rec'));
+            $stud_rec_data = "";
 
-        if(!empty(trim($required_fields))) {
-            echo json_encode(array('status'=>'error', 'message'=>'Text Fields not complete', 'columns'=>$required_fields));
-            exit;
-        }  
-        
-        $invalid_fields = array();
-
-        if(!empty($stud_id) && (empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_id)))) array_push($invalid_fields, "ID");
-        if(empty(preg_replace("/[^A-Za-z0-9\"-\.,]/", "", $stud_fname))) array_push($invalid_fields, "First Name");
-        if(empty(preg_replace("/[^A-Za-z0-9\"-\.,]/", "", $stud_lname))) array_push($invalid_fields, "Last Name");
-        if(!empty($stud_mname) && empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_mname))) array_push($invalid_fields, "Middle Name");
-        if(!empty($stud_sfx) && empty(preg_replace("/[^A-Za-z0-9\"-\., ]/", "", $stud_sfx))) array_push($invalid_fields, "SFX");
-
-        $invalid_fields = implode(",", $invalid_fields);
-
-        if(!empty(trim($invalid_fields))) {
-            echo json_encode(array('status'=>'error', 'message'=>'Value must contain characters', 'columns'=>$invalid_fields));
-            exit;
-        }  
-        
-        insert_slashes($stud_id);
-        insert_slashes($stud_fname);
-        insert_slashes($stud_lname);
-        insert_slashes($stud_mname);
-        insert_slashes($stud_sfx);
-
-        /** Update the `stud_rec` table */
-        $stud_set = "";
-        $student_info = ["stud_id" => $stud_id, "stud_fname" => $stud_fname, "stud_lname" => $stud_lname, "stud_mname" => $stud_mname, "stud_sfx" => $stud_sfx];
-
-        foreach($student_info as $key => $val) {
-            if(!empty($val)) {
-                if(!empty($stud_set)) $stud_set .= ",";
-                if($key == "stud_id") $stud_set .= "`$key` = '$val'";
-                else $stud_set .= "`$key` = UPPER('$val')";
+            foreach($stud_rec as $key => $val) {
+                if(strlen($stud_rec_data) > 0) $stud_rec_data .= ",";
+                $stud_rec_data .= "`{$key}`= UPPER('".trim($val)."')";
             }
-        }
+            if($this->input->post('stud_rec'))
+                $this->stud->update_table('stud_rec', $stud_rec_data, "where id = '{$stud_rec_id}'");
 
-        $this->db->trans_begin();
-
-        $this->stud->update_table('stud_rec', $stud_set, "WHERE `id` = $stud_rec_id");
-        
-        /** End Update the `stud_rec` table */
-
-        $remark_value = "`value` = '[";
-       
-        $remarks = [];
-        
-        if($this->input->post('remarks')) $remarks += explode(',', $this->input->post('remarks'));
-        if($this->input->post('_remarksValue_other')) array_push($remarks, $this->input->post('_remarksValue_other'));
-
-        foreach($remarks as &$r) {
-            $r = "\"$r\""; // Enclose string to " "
-        } 
-
-        $remark_value .= implode(',', $remarks);
-        $remark_value .= "]'";
-
-        $this->stud->update_table('remarks', $remark_value, "WHERE `stud_rec_id` = $stud_rec_id");
-        
-        /** Update `doc` table  */
-        $doc_set = ""; // sql statement
-        $docs_set = []; // columns to be updated
-
-        // Get all keys that has `doc_val_`
-        $doc_keys = array_filter($this->input->post(), function($key){
-            return str_contains($key, "doc_val_");
-        }, ARRAY_FILTER_USE_KEY);
-
-        foreach($doc_keys as $key=>$val) {
-            if(str_contains($key, "doc_val")) {
-                $doc = str_contains($key, "doc_val") ? str_replace("doc_val_", "", $key) : str_replace("doc_scan_", "", $key);
-                
-                if(intval($val) == 0) {
-                    $docs_set[$doc] = "`$doc` = '{\"val\" : \"0\", \"dir\" : \"";   
-                } else {
-                    $docs_set[$doc] = "`$doc` = '{\"val\" : \"1\", \"dir\" : \"";
-                }
-                
-
-                if(isset($_FILES['doc_scan_' . $doc])) {
-                    for($i = 0; $i < count($_FILES['doc_scan_' . $doc]['name']); $i++) {
-                        if(!empty(trim($_FILES['doc_scan_' . $doc]['name'][$i]))) {
-                            $docs_set[$doc] .= trim($this->upload_file($_FILES['doc_scan_' . $doc]['tmp_name'][$i], $_FILES['doc_scan_' . $doc]['name'][$i], $_FILES['doc_scan_' . $doc]['size'][$i]));
-                        }
-                        if($i < count($_FILES['doc_scan_' . $doc]['name']) - 1) $docs_set[$doc] .= ","; 
+            // get all checkbox inputs
+            $cb = array_filter($_FILES, function($key){
+                return str_contains($key, "-file");
+            }, ARRAY_FILTER_USE_KEY);
+    
+            $stud_docs = [];
+            $stud_docs_data = '';
+    
+            foreach($cb as $key => $val) {
+                $nKey = str_replace('-file', '', $key);
+                $fileKey = $nKey . '-file';
+    
+                $stud_docs[$nKey]['val'] = $this->input->post($nKey . '-cb') ? '1' : '0';
+                $stud_docs[$nKey]['dir'] = [];
+    
+                if(isset($_FILES[$fileKey])) {
+                    // var_dump($_FILES[$fileKey]);
+                    for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
+                        $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
+                        array_push($stud_docs[$nKey]['dir'], $fileDir);
                     }
                 }
 
-                $docs_set[$doc] .= "\"}'";
+                $old_path = $this->get_doc_dir($stud_rec_id, $nKey);
 
-                $old_path = $this->get_doc_dir($stud_rec_id, $doc);
-                
-                if(!empty(trim($old_path))) { 
-                    // echo $old_path . PHP_EOL;
+                if(!empty(trim($old_path))) {
                     /** convert the old_path to array */
                     $dirs = explode(",", $old_path);
 
                     /** delete each dir */
                     foreach($dirs as $dir) $this->delete_Image($dir); 
                 }
+    
             }
-        }
-        // var_dump($docs_set);
-        // die;
-       if(count($docs_set) > 0) {
-            $doc_set =  implode(",", array_values($docs_set)) ;
-            $this->stud->update_table('doc', $doc_set, "WHERE `stud_rec_id` = $stud_rec_id");
-            /** End Update `doc` table  */
-        }
-        
-        $this->stud->update_table('stud_rec'," `updated_date` ='". date('Y-m-d H:i:s')."', `updated_by_uid` = '".$this->session->userdata('uid')."'", " WHERE `id` = $stud_rec_id");
-       
+    
+            $stud_docs_keys = array_keys($stud_docs);
+            $count = 0;
+    
+            foreach($stud_docs as &$doc) {
+                $doc['dir'] = join(',', $doc['dir']);
+                if(strlen($stud_docs_data) > 0) $stud_docs_data .= ",";
+                $stud_docs_data .= "`".$stud_docs_keys[$count]."` = '".to_JSON($doc)."'";
+                $count++;
+            }
+            
+            if(strlen($stud_docs_data) > 0)
+                $this->stud->update_table('doc',$stud_docs_data, "where stud_rec_id = '{$stud_rec_id}'");
+    
+            $remarks = $this->input->post('remarks');
+            $remarks_data = "`value` = '{$remarks}'";
 
-        
+            if($this->input->post('remarks'))
+                $this->stud->update_table('remarks',$remarks_data,"where stud_rec_id = '{$stud_rec_id}'");
+            
+            if($this->db->error()['message']) throw new Exception($this->db->error()['message']);
 
-        if($this->db->trans_status() === TRUE) {
             $this->db->trans_commit();
-            echo json_encode(array(
-                "status" => "success"
-            ));
-        } else {
-            $this->db->trans_rollback();
-            echo json_encode(array(
-                "status" => "error",
-                "message" => $this->db->error()
-            ));
+            echo to_JSON(['status' => 1]);
 
-            exit();
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
         }
+
+        exit;
+
+        /*****************************************************************/
 
 
     }
@@ -702,7 +557,7 @@ class Student extends CI_Controller{
         $path = str_replace('\\', '/', BASEPATH);
         $path = str_replace('system/', 'uploads/', $path);
 
-        $f = file_get_contents($tmp);
+        // $f = file_get_contents($tmp);
 
         if(!is_dir($path)) mkdir($path,DIR_WRITE_MODE, true);
 
