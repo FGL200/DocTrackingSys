@@ -194,7 +194,7 @@ class Request extends CI_Controller {
 
         if(!empty($status)) {
             if(strlen(trim($condition)) > 0) $condition .= " AND ";
-            $condition .= "locate('{$status}', r.status)";
+            $condition .= "locate('\"{$status}\"', r.status)";
         }
 
         if(!empty($cfrom) && !empty($cto)) {
