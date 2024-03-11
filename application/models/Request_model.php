@@ -201,9 +201,9 @@ class Request_model extends CI_Model {
 
         $query = "select 
                     case 
-                        when locate('Pending', status) then 'Pending'
-                        when locate('Released', status) then 'Released' 
-                        when locate('Not Released', status) then 'Not Released'
+                        when locate('\"Pending\"', status) then 'Pending'
+                        when locate('\"Released\"', status) then 'Released' 
+                        when locate('\"Not Released\"', status) then 'Not Released'
                     end as _status,
                     count(*) as total
                   from 
@@ -213,6 +213,21 @@ class Request_model extends CI_Model {
                     ";
 
         // echo $query; return;
+        return $this->db->query($query)->result();
+    }
+
+    public function per_requested_file($condition) {
+        $query ="SELECT 
+                frc.name as file,
+                count(*) as total
+            FROM 
+                `requests` r
+            JOIN 
+                file_request_categories frc
+            on find_in_set(frc.id, r.file) != 0
+            {$condition}
+            GROUP by frc.name";
+
         return $this->db->query($query)->result();
     }
 
