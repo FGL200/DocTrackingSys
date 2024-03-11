@@ -307,6 +307,9 @@ class Student extends CI_Controller{
         $columns = [];
         $remarksColumns = [];
 
+        $from = $this->input->post('from');
+        $to = $this->input->post('to');
+
         foreach($this->input->post() as $k=>$val) {
             $nKey = preg_replace('/-/', '_', $k);
             if(strstr($k, "student")) {
@@ -340,15 +343,14 @@ class Student extends CI_Controller{
         $shelfid = $this->shelf->getShelfId($this->input->post('shelf'));
         if(!$shelfid) {echo json_encode(['result'=>["status" => "error", 'message' => "Error in searching..."]]); die; }
 
-        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . $nRemarks . " AND `sh`.id = '{$shelfid}'";
+        $conditions = $nColumns . (!empty($nColumns) && !empty($nRemarks) ? ' AND ' : null) . ($nRemarks) . ((!empty($nColumns) ||!empty($nRemarks) ? ' AND ' : null) . " `sh`.id = '{$shelfid}'");
         
+        if(!empty($from) and !empty($to)) 
+            $conditions .= " AND  `sr`.created_date BETWEEN '{$from}' AND '{$to}'";
+
         $result = $this->stud->filter_student($conditions);
 
-        $student = $this->to_Id_Link_Student_Record($result['data']);
-        $student = $this->to_grouped_style($student);
-        $student = $this->count_remarks($student);
-
-        echo json_encode(['result'=>$student, 'sql' => $result['sql']]);
+        echo json_encode(['result'=>$result['data'], 'sql' => $result['sql']]);
     }
 
 
@@ -459,6 +461,26 @@ class Student extends CI_Controller{
         echo to_JSON($this->stud->get_Merged_Records($student, $shelf));
     }
 
+    public function moveRecord($stud_record_id) {
+        $shelf_id = trim($this->input->post("shelf"));
+        $stud_record_id = trim(intval($stud_record_id));
+
+        $doc_shelves_history = $this->stud->shelfHistory($stud_record_id)[0];
+        $current_shelf = "'$doc_shelves_history->shelf'";
+
+
+        $histories = trim(preg_replace('/[\[\]]/i', "", $doc_shelves_history->shelf_histories), " \n\r\t\v\0");
+        $histories .= ',' . $current_shelf;
+        $histories = "[" . $histories . "]";
+        $histories = preg_replace('/\'/i', "\"", $histories);
+
+
+        /** shelf movement */
+        if($this->stud->moveShelf($stud_record_id, $shelf_id, $histories)) {
+            echo json_encode(['status'=>1, 'message' => 'Record has been moved successfully!']);
+        }
+    }
+
     /** PRIVATE FUNCTIONS */
 
     private function to_grouped_style(Array $stud_records){
@@ -501,30 +523,6 @@ class Student extends CI_Controller{
             array_push($nRecord, $nRow);
         }
         return $nRecord;
-    }
-
-    public function moveRecord($stud_record_id) {
-        $shelf_id = trim($this->input->post("shelf"));
-        $stud_record_id = trim(intval($stud_record_id));
-
-        $doc_shelves_history = $this->stud->shelfHistory($stud_record_id)[0];
-        $current_shelf = "'$doc_shelves_history->shelf'";
-
-
-        $histories = trim(preg_replace('/[\[\]]/i', "", $doc_shelves_history->shelf_histories), " \n\r\t\v\0");
-        $histories .= ',' . $current_shelf;
-        $histories = "[" . $histories . "]";
-        $histories = preg_replace('/\'/i', "\"", $histories);
-
-
-        /** shelf movement */
-        if($this->stud->moveShelf($stud_record_id, $shelf_id, $histories)) {
-            echo json_encode(['status'=>'success', 'message' => 'Record has been moved successfully!']);
-        }
-
-    
-
-        // echo $shelf_id . " " . $record_id;
     }
 
 
