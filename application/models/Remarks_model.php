@@ -10,7 +10,6 @@ class Remarks_model extends CI_Model {
     public function insertRemarks($data) {
         $query = "INSERT INTO `remarks` SET {$data}";
         $uid = $this->session->userdata('uid');
-        add_To_User_Logs($this, $uid, "({$uid}) Added new Remarks to a record.", $query);
         $this->db->query($query);
     }
 }

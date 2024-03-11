@@ -27,7 +27,7 @@ class Request extends CI_Controller {
             }
             $current_user = $this->session->userdata('uid');
 
-            $items .= ", `status` = '{\"value\":\"Pending\"}', `created_by` = {$current_user}";
+            $items .= ", `status` = '{\"value\" : \"Pending\"}', `created_by` = {$current_user}";
             
             $affected_rows = $this->request_model->create($items);
             
@@ -50,25 +50,7 @@ class Request extends CI_Controller {
     
         $requests = $this->request_model->fetch_all($user);
         try {
-            // $this->db->trans_begin();
-
-            // foreach($requests as $req) {
-          
-            //     if($req->due_date) {
-            //         if(date('Y-m-d') > $req->due_date && str_contains($req->status, 'Pending')) {
-            //             echo "fdsfd";
-            //             $item = "`status` = '{\"value\" : \"Not Released\", \"reason\":\"di nakuha\"}'";
-            //             $condition = "`id` = {$req->id}";
-
-            //             $this->request_model->update($item, $condition);
-
-            //             if($this->db->error()['message']) throw new Exception('Error');
-            //         }
-            //     }
-            // }
-
-
-            // $this->db->trans_commit();
+           
 
             $requests = $this->request_model->fetch_all($user);
 
@@ -85,8 +67,7 @@ class Request extends CI_Controller {
      * @param $id request id
      */
     public function fetch(int $id) {
-        $request = $this->request_model->fetch($id);
-
+        $request = $this->request_model->fetch("where r.id = '{$id}'");
         echo to_JSON($request);
     }
 
@@ -184,6 +165,57 @@ class Request extends CI_Controller {
 
     public function archives() {
         echo to_JSON($this->request_model->archives());
+    }
+
+    public function search() {
+        $requestor_fname = $this->input->post('r_fname');
+        $requestor_mname = $this->input->post('r_mname');
+        $requestor_lname = $this->input->post('r_lname');
+
+        $status = $this->input->post('status');
+
+        $cfrom = $this->input->post('created_from');
+        $cto = $this->input->post('created_to');
+
+        $dfrom = $this->input->post('due_from');
+        $dto = $this->input->post('due_to');
+
+        $uid = $this->input->post('uid');
+
+        $condition = "";
+
+        if(!empty($requestor_fname) || !empty($requestor_lname) || !empty($requestor_mname)) {
+            $condition .= "(
+                r.fname = '{$requestor_fname}' or 
+                r.lname = '{$requestor_lname}' or 
+                r.mname = '{$requestor_mname}'
+            )";
+        }
+
+        if(!empty($status)) {
+            if(strlen(trim($condition)) > 0) $condition .= " AND ";
+            $condition .= "locate('\"{$status}\"', r.status)";
+        }
+
+        if(!empty($cfrom) && !empty($cto)) {
+            if(strlen(trim($condition)) > 0) $condition .= " AND ";
+            $condition .= "r.created_at between '{$cfrom}' and '{$cto}'";
+        }
+
+        if(!empty($dfrom) && !empty($dto)) {
+            if(strlen(trim($condition)) > 0) $condition .= " AND ";
+            $condition .= "r.due_date between '{$dfrom}' and '{$dto}'";
+        }
+
+        if(!user_Is_Admin($this, $uid)) {
+            if(strlen(trim($condition)) > 0) $condition .= " AND ";
+            $condition .= "r.created_by = '{$uid}'";
+        }
+
+        $condition = "WHERE " . $condition;
+
+        echo to_JSON($this->request_model->fetch($condition));
+
     }
 }
 

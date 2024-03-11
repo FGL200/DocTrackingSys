@@ -87,3 +87,17 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
     default: return '';break;
   }
 }
+
+function user_Is_Admin(&$controller, $uid) {
+    $query = "  SELECT 
+                    `role`
+                FROM `user`
+                WHERE `id` = '{$uid}'
+                LIMIT 1
+    ";
+    $fetch = $controller->db->query($query);
+    if($fetch->num_rows()){
+        return $fetch->result_array()[0]['role'] === 'A' ? true : false;
+    }
+    return false;
+} 

@@ -44,19 +44,18 @@ $route['record/archived'] = 'Page/records_archived';
 
 // ------------------ Start API ------------------
 $route['api/student/record/insert/excel']['post'] = 'Student/addExcel';
-$route['api/student/record/insert']['post'] = 'Student/addRecord';
-$route['api/student/record/update']['post'] = 'Student/update_Student_Records';
+$route['api/student/record/add']['post'] = 'Student/addRecord';
+$route['api/student/record/(:num)/update']['post'] = 'Student/update_Student_Records/$1';
 $route['api/student/record/all']['post'] = 'Student/get_StudentRecords_With_Remarks';
 $route['api/student/record/(:num)'] = 'Student/get_Student_Records/$1';
 $route['api/student/record/select']['post'] = 'Student/get_all_stud_rec_as_select';
-$route['api/student/build_qr']['post'] = 'Student/build_qr';
 $route['api/student/record/trash']['post'] = 'Student/trashBin';
 $route['api/student/record/move/(:num)']['post'] = 'Student/moveRecord/$1';
 
 $route['api/student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['api/student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
 $route['api/student/filter']['post'] = 'Student/filter_search';
-$route['api/student/record/delete/(:num)']['post'] = "Student/delete_Student/$1";
+$route['api/student/record/(:num)/delete']['post'] = "Student/delete_Student/$1";
 
 /**
  * METHOD : POST
@@ -129,7 +128,7 @@ $route['api/request/(:num)'] = 'Request/fetch/$1';          // fetch specific re
 $route['api/request/(:num)/update'] = 'Request/update/$1';  // update request by ID 
 $route['api/request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
 $route['api/request/archives'] = 'Request/archives';        // requests in archives
-
+$route['api/request/search']['post'] = 'Request/search';
 
 // Filerequests Category
 $route['api/file-request-category/all'] = 'FileRequestCategory/get';
@@ -138,6 +137,10 @@ $route['api/file-request-category/add']['post'] = 'FileRequestCategory/add';
 $route['api/file-request-category/(:num)/update']['post'] = 'FileRequestCategory/update/$1';
 $route['api/file-request-category/(:num)/delete']['post'] = 'FileRequestCategory/delete/$1';
 $route['api/file-request-category/archives'] = 'FileRequestCategory/archives';   
+
+// Report 
+$route['api/report/requests']['post'] = 'GenerateReport/requests';
+$route['api/report/file-requests']['post'] = 'GenerateReport/per_requested_file';
 
 // ------------------ /End API ------------------ 
 
