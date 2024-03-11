@@ -1,12 +1,20 @@
 import { Helper } from "../../shared/helper.js";
+import { Modal } from "../../shared/modal.js";
 
 (async () => {
   await Load_Records();
   Helper.setupFor(const_role);
 })();
 
-async function Load_Records() {
-  const resp = (await Helper.api('student/record/all', "json", Helper.createFormData({ shelf: const_shelf_name }))).result;
+Helper.onClick("#reload_shelf", () => { Load_Records() });
+
+async function Load_Records(search = null) {
+  let resp = [];
+  if (!search)
+    resp = (await Helper.api('student/record/all', "json", Helper.createFormData({ shelf: const_shelf_name }))).result;
+  else
+    resp = search;
+
   const thead = `
     <thead>
       <tr>
@@ -79,3 +87,38 @@ async function Load_Records() {
 }
 
 Helper.f("#table_content");
+
+Helper.onClick("#advance_search", async () => {
+  Modal.setSize('lg')
+  Modal.setTitle('Advance Search');
+  Modal.setBody(await Helper.template('shelf/advance-search'), () => {
+    Helper.onChange("#search_filter", function () {
+      const value = this.value;
+      this.value = "";
+      switch (value) {
+        case 'Student': Helper.f("#btn_student").click(); break;
+        case 'Transcriber': Helper.f("#btn_transcriber").click(); break;
+        case 'Remarks': Helper.f("#btn_remarks").click(); break;
+        default: break;
+      }
+    })
+  });
+  Modal.setFooter(await Modal.button('Search', 'primary'));
+  Modal.open();
+  Modal.submit(async (e, form_data) => {
+    if (Helper.ObjectToArray(Helper.getDataFromFormData(form_data)).filter(v => v.value != '').length == 0) {
+      await Load_Records();
+      Modal.close();
+      return;
+    }
+
+    const resp = (await Helper.api('student/filter', 'json', Helper.createFormData({ shelf: const_shelf_name }, form_data)));
+    await Load_Records(resp.result);
+    Modal.close();
+  });
+});
+
+Helper.onClick("#new_record", () => {
+  localStorage.setItem('selected_shelf', const_shelf_name);
+  location.href = `${base_url}record/new`;
+});

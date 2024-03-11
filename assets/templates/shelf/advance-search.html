@@ -1,0 +1,115 @@
+<div class="card card-body border shadow-sm">
+  <div class="card-title">Search Filter</div>
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="form-group mb-3">
+          <label for="">From</label>
+          <input name="created_from" type="date" class="form-control">
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="form-group mb-3">
+          <label for="">To</label>
+          <input name="created_to" type="date" class="form-control">
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group mb-3">
+          <label for="">Search By</label>
+          <select id="search_filter" class="form-select">
+            <option value="">Select Filter </option>
+            <option value="Student">Student </option>
+            <option value="Transcriber">Transcriber</option>
+            <option value="Remarks">Remarks </option>
+          </select>
+          <button id="btn_student" class="d-none" type="button" data-bs-toggle="collapse" data-bs-target="#filter-student" aria-expanded="false"
+            aria-controls="filter-student">1</button>
+          <button id="btn_transcriber" class="d-none" type="button" data-bs-toggle="collapse" data-bs-target="#filter-transcriber" aria-expanded="false"
+            aria-controls="filter-student">2</button>
+          <button id="btn_remarks" class="d-none" type="button" data-bs-toggle="collapse" data-bs-target="#filter-remarks" aria-expanded="false"
+            aria-controls="filter-student">3</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row justify-content-center">
+
+  <!-- Student -->
+  <div class="col-lg-4 col-md-6 col-sm-12 collapse" id="filter-student">
+    <div class="card card-body border shadow-sm">
+      <div class="card-title">Student</div>
+      <div class="form-group mb-3">
+        <label for="">Student Number</label>
+        <input type="text" class="form-control" name="filter-student-id">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Last Name</label>
+        <input type="text" class="form-control" name="filter-student-lname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">First Name</label>
+        <input type="text" class="form-control" name="filter-student-fname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Middle Name</label>
+        <input type="text" class="form-control" name="filter-student-mname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Suffix</label>
+        <input type="text" class="form-control" name="filter-student-sfx">
+      </div>
+    </div>
+  </div>
+  <!-- /Student -->
+
+  <!-- Transcriber -->
+  <div class="col-lg-4 col-md-6 col-sm-12 collapse" id="filter-transcriber">
+    <div class="card card-body border shadow-sm">
+      <div class="card-title">Transcriber</div>
+      <div class="form-group mb-3">
+        <label for="">ID</label>
+        <input type="text" class="form-control" name="filter-encoder-id">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Username</label>
+        <input type="text" class="form-control" name="filter-encoder-uname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">First Name</label>
+        <input type="text" class="form-control" name="filter-encoder-fname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Last Name</label>
+        <input type="text" class="form-control" name="filter-encoder-lname">
+      </div>
+      <div class="form-group mb-3">
+        <label for="">Middle Name</label>
+        <input type="text" class="form-control" name="filter-encoder-mname">
+      </div>
+    </div>
+  </div>
+  <!-- /Transcriber -->
+
+  <!-- Remarks -->
+  <div class="col-lg-4 col-md-6 col-sm-12 collapse" id="filter-remarks">
+    <div class="card card-body border shadow-sm">
+      <div class="card-title">Remarks</div>
+      <div class="form-group mb-3">
+        <label for="">Remarks</label>
+        <input type="text" class="form-control" name="filter-remarks-value">
+      </div>
+    </div>
+  </div>
+  <!-- /Remarks -->
+
+</div>

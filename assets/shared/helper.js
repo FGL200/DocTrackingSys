@@ -122,7 +122,7 @@ export class Helper {
 
   static async template(directory) {
     return await fetch(`${base_url}assets/templates/${directory}.html`).then(async r => r.text())
-      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later.", "danger"));
+      .catch((err) => CustomNotification.add(`Server Error(ref: ${String(err).length})`, "Error Occured. Try again later.", "danger"));
   }
 
   static async api(url = '', type = "text", form = undefined) {
@@ -132,7 +132,7 @@ export class Helper {
       if ((type).toLocaleLowerCase() === "json") return await response.json()
       return await response;
     })
-      .catch((err) => CustomNotification.add(`Server Error(${String(err).length})`, "Error Occured. Try again later.", "danger"));
+      .catch((err) => CustomNotification.add(`Server Error(ref: ${String(err).length})`, "Error Occured. Try again later.", "danger"));
   }
 
   static getDataBind(elementNode, data_name) {

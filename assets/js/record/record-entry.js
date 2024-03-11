@@ -304,7 +304,7 @@ async function Init_Remarks() {
 
 function Load_RemarksFunctionality() {
   Helper.fm(".remark_item", e => Helper.on(e, "click", () => {
-    if(const_role == 'A' || const_role == 'V') return;
+    if (const_role == 'A' || const_role == 'V') return;
 
     global_remarks = global_remarks.filter(v => Helper.removeWhiteSpaces(v).toLocaleLowerCase() != Helper.removeWhiteSpaces(e.innerHTML).toLocaleLowerCase());
 
@@ -360,12 +360,28 @@ function Clear_Remarks() {
 Helper.onClick("#btn_merge", async e => {
   e.preventDefault();
   Modal.setTitle('<i class="bi bi-intersect"></i> Merge record');
-  Modal.setBody(Helper.replaceLayout(await Helper.template('record/merge'), {}));
+  let options = '';
+  (await Helper.api('student/record/shelf', 'json', Helper.createFormData({
+    stud_fname: global_record.student.stud_fname,
+    stud_lname: global_record.student.stud_lname,
+    stud_mname: global_record.student.stud_mname,
+    current_shelf: global_record.shelf.id,
+  })))
+    .map(v => JSON.parse(v.shelf))
+    .forEach(v => options += `<option value="${v.ID}">${v.Name}</option>`);
+  Modal.setBody(Helper.replaceLayout(await Helper.template('record/merge'), { options }));
   Modal.setFooter(await Modal.button('Merge', 'primary'))
-  Modal.open()
+  Modal.onClose(() => { Helper.Promt_Clear() });
   Modal.submit(async (e, form_data) => {
-
-  })
+    if (Helper.formValidator(form_data, ['id'], v => v == '').length > 0) {
+      Helper.Promt_Error('* Select shelf for merging.')
+      return
+    }
+    Helper.Promt_Clear();
+    const resp = (await Helper.api(`student/record/${global_record.id}/merge`, 'json', form_data));
+    console.log({ resp })
+  });
+  Modal.open()
 });
 
 
@@ -375,11 +391,24 @@ Helper.onClick("#btn_merge", async e => {
 Helper.onClick("#btn_move", async e => {
   e.preventDefault();
   Modal.setTitle('<i class="bi bi-arrows-move"></i> Move record');
-  Modal.setBody(Helper.replaceLayout(await Helper.template('record/move'), {}));
+  let options = '';
+  const resp = (await Helper.api('shelf/all-info', 'json')).forEach(v => options += `<option value="${v.id}">${v.name}</option>`)
+  console.log({ resp })
+  Modal.setBody(Helper.replaceLayout(await Helper.template('record/move'), { options }));
   Modal.setFooter(await Modal.button('Move', 'primary'))
   Modal.open()
   Modal.submit(async (e, form_data) => {
-
+    if (Helper.formValidator(form_data, ['id'], v => v == '').length > 0) {
+      Helper.Promt_Error('* Select shelf for merging.')
+      return
+    }
+    Helper.Promt_Clear();
+    const resp = (await Helper.api(`student/record/move/${global_record.id}`, 'json', form_data));
+    if(resp.status == '1') {
+      CustomNotification.add("Success", "Sucessfully moved the record.", "success");
+      await Load_Data();
+      Modal.close();
+    }
   })
 });
 

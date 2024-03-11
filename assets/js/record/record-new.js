@@ -3,7 +3,8 @@ import { Helper } from "../../shared/helper.js";
 import { Modal } from "../../shared/modal.js";
 
 (async () => {
-  Helper.importCSS("record/record-new")
+  Helper.importCSS("record/record-new");
+  Init_Shelf();
 })();
 
 const document_names = [
@@ -250,7 +251,7 @@ Helper.onSubmit('#remark_form', e => {
   const remark = Helper.getDataFromFormData(form_data).remark;
 
   if (Helper.formValidator(form_data, ["remark"], v => v == '').length > 0) {
-    Helper.Promt_Error('Enter valid Remarks.')
+    // Helper.Promt_Error('Enter valid Remarks.')
     return;
   }
 
@@ -312,18 +313,73 @@ function addRemarks(remark) {
 // ***********************************
 Helper.onClick("#btn_save", async e => {
   e.preventDefault();
+
+  const form_info = new FormData(Helper.f("#information_form"));
+  const form_doc = new FormData(Helper.f("#document_form"))
+
+  const doc = Helper.getDataFromFormData(form_doc);
+  const body = {
+    remarks: JSON.stringify(global_remarks),
+    stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
+  };
+
+  if (Helper.formValidator(form_info, ['stud_lname'], v => v == '').length > 0) {
+    Helper.Promt_Error("* Please fill required fields.")
+    return;
+  }
+
+  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body, ...doc })));
+  console.log({ resp })
+
   Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
   Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
-  Modal.open(async () => {
-    const doc_form = Helper.getDataFromFormData(new FormData(Helper.f("#document_form")));
+  Modal.open();
+});
 
-    const body = {
-      remarks: JSON.stringify(global_remarks),
-      stud_rec: JSON.stringify(Helper.getDataFromFormData(new FormData(Helper.f("#information_form")))),
+
+
+
+// *******************************************
+// *          Handle Changing shelf          *
+// *******************************************
+Helper.onClick("#btn_change_shelf", async e => { changeShelf() });
+
+async function Init_Shelf() {
+  const selected_shelf = localStorage.getItem('selected_shelf');
+  if (!selected_shelf) {
+    changeShelf();
+  } else {
+    Helper.f("#shelf_name").href = `${base_url}shelf/entry/${selected_shelf}`;
+    Helper.f("#shelf_name").innerHTML = `Shelf ${selected_shelf}`;
+  }
+}
+
+async function changeShelf() {
+  const resp = (await Helper.api('shelf/all-info', "json", new FormData()));
+  console.log({ resp });
+
+  let options = '';
+  resp.forEach(v => options += `<option value="${v.name}">${v.name}</option>`)
+
+  Modal.setSize('sm')
+  Modal.hideCloseButton();
+  Modal.setTitle('Choose Shelf');
+  Modal.setBody(`
+  <select class="form-select" name="shelf">
+  <option value="">Select Shelf</option>
+  ${options}
+  </select>
+  `);
+  Modal.setFooter(await Modal.button('Select', 'success'));
+  Modal.open();
+  Modal.submit(async (e, form_data) => {
+    if (Helper.formValidator(form_data, ["shelf"], v => v == '').length > 0) {
+      return;
     }
 
-    const resp = (await Helper.api('record/new', 'json', Helper.createFormData({ ...body, ...doc_form})));
-    console.log({ resp })
-
+    const data = Helper.getDataFromFormData(form_data);
+    localStorage.setItem('selected_shelf', data.shelf)
+    Init_Shelf();
+    Modal.close();
   });
-});
+}
