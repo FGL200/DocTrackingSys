@@ -21,6 +21,7 @@ export class Modal {
     Helper.f("#dds_modal_header").classList.remove('d-none');
     Helper.f("#dds_modal_footer").classList.remove('d-none');
     Modal.setSize();
+    Modal.clearSubmit();
 
     Helper.f("#dds_modal_close").click();
   }
@@ -85,6 +86,10 @@ export class Modal {
 
   static get id() {
     return '#dds_modal_form';
+  }
+
+  static clearSubmit() {
+    Helper.clearEvent(Helper.f(Modal.id), "submit");
   }
 
 }

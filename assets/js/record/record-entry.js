@@ -13,6 +13,8 @@ let global_record = undefined;
 
 async function Load_Data() {
   const resp = (await Helper.api(`student/record/${const_record_name}`, 'json')).result;
+  if (!resp) location.href = `${base_url}shelf/all`;
+
   let record = getStudentInformationObject(resp);
   global_record = record;
   console.log({ resp, record })
@@ -35,9 +37,7 @@ async function Load_Data() {
   // **********************************
   // *          Bind Remarks          *
   // **********************************
-  record.remarks.forEach(v => addRemarks(v));
-  Load_RemarksFunctionality();
-
+  Init_Remarks();
 
 
   // **************************************
@@ -194,9 +194,25 @@ async function Load_Data() {
         setDisplayNoneClass(el_btn_file_rem, false);
       }
 
-      ``
+      // **********************************
+      // *          Vlidate Role          *
+      // **********************************
+      if (const_role == 'A' || const_role == 'V') {
+        Helper.removeElement(el_btn_file_add);
+        Helper.removeElement(el_btn_file_rem);
+        Helper.removeElement(el_input_cb);
+        Helper.removeElement(el_input_file);
+        if (record.documents[v.name].dir == '') Helper.removeElement(el_btn_view);
+        if (record.documents[v.name].val == '0') Helper.removeElement(parent);
+      }
+
+
     }); // end of getting every <div> corresponding to a document
   }); // end of iteration of documents
+
+  if (Helper.removeWhiteSpaces(Helper.f("#other_documents>.row").innerHTML) == '') {
+    Helper.f("#other_documents_holder").remove();
+  }
 }
 
 
@@ -259,6 +275,11 @@ function setDisplayNoneClass(node, displayNone = true) {
 // ************************************
 // *          Handle Remarks          *
 // ************************************
+Helper.onClick("#remarks_reload", () => {
+  Clear_Remarks();
+  Init_Remarks();
+});
+
 Helper.onSubmit('#remark_form', e => {
   Helper.preventDefault(e);
   const form = Helper.f("#remark_form");
@@ -270,15 +291,21 @@ Helper.onSubmit('#remark_form', e => {
     return;
   }
 
-  addRemarks(remark);
+  Add_Remarks(remark);
 
   Helper.Promt_Clear();
   form.reset();
 });
 
+async function Init_Remarks() {
+  global_record.remarks.forEach(v => Add_Remarks(v));
+  Load_RemarksFunctionality();
+}
 
 function Load_RemarksFunctionality() {
   Helper.fm(".remark_item", e => Helper.on(e, "click", () => {
+    if(const_role == 'A' || const_role == 'V') return;
+
     global_remarks = global_remarks.filter(v => Helper.removeWhiteSpaces(v).toLocaleLowerCase() != Helper.removeWhiteSpaces(e.innerHTML).toLocaleLowerCase());
 
 
@@ -298,7 +325,7 @@ function getRemarkItemComponent(value) {
   `;
 }
 
-function addRemarks(remark) {
+function Add_Remarks(remark) {
   remark = remark.toUpperCase();
 
   if (!global_remarks.some(e => e == remark)) global_remarks.push(remark);
@@ -318,6 +345,11 @@ function addRemarks(remark) {
       Load_RemarksFunctionality();
     }
   });
+}
+
+function Clear_Remarks() {
+  global_remarks = [];
+  Helper.f("#remarks_holder", rh => rh.innerHTML = "No Remarks");
 }
 
 
@@ -362,7 +394,15 @@ Helper.onClick("#btn_archive", async e => {
   Modal.setFooter(await Modal.button('Archive', 'danger'))
   Modal.open()
   Modal.submit(async (e, form_data) => {
-    const resp = (await Helper.api('student/record/delete', 'json', ))
+    const resp = (await Helper.api(`student/record/delete/${global_record.id}`, 'json', new FormData()));
+    console.log({ resp });
+    if (resp.status == "success") {
+      Modal.close();
+      CustomNotification.add("Success", "Record has been deleted", "success");
+      setTimeout(() => { location.href = `${base_url}shelf/entry/${global_record.shelf.Name}`; }, 1000);
+    } else {
+      CustomNotification.add("Error", "An error occurred. Try again later.", "danger");
+    }
   })
 });
 

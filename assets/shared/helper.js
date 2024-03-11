@@ -6,6 +6,10 @@ export class Helper {
   // *          SIMPLE          *
   // ****************************
 
+  static removeElement(elementNode) {
+    elementNode.remove();
+  }
+
   static removeWhiteSpaces(str) {
     return str.replace(/\s+/g, "");
   }
@@ -24,6 +28,7 @@ export class Helper {
       if (role != r) return;
       Helper.fm(`.remove-when-${r}`, e => e.remove());
       Helper.fm(`.disabled-when-${r}`, e => e.disabled = true);
+      Helper.fm(`.readonly-when-${r}`, e => e.readonly = true);
     });
   }
 
@@ -121,7 +126,7 @@ export class Helper {
   }
 
   static async api(url = '', type = "text", form = undefined) {
-    const args = (form) ? { method: 'post', body: form } : { method: 'get' };
+    const args = (form) ? { method: 'post', body: form, } : { method: 'get' };
     return await fetch(base_url + 'api/' + url, args ?? undefined).then(async response => {
       if ((type).toLocaleLowerCase() === "text") return await response.text();
       if ((type).toLocaleLowerCase() === "json") return await response.json()

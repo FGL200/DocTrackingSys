@@ -286,7 +286,6 @@ function addRemarks(remark) {
   remark = remark.toUpperCase();
 
   if (!global_remarks.some(e => e == remark)) global_remarks.push(remark);
-  console.log({ global_remarks })
 
   Helper.f("#remarks_holder", rh => {
     if (Helper.removeWhiteSpaces(rh.innerHTML) == 'NoRemarks') rh.innerHTML = "";
@@ -303,3 +302,28 @@ function addRemarks(remark) {
     }
   });
 }
+
+
+
+
+
+// ***********************************
+// *          Handle Saving          *
+// ***********************************
+Helper.onClick("#btn_save", async e => {
+  e.preventDefault();
+  Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
+  Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
+  Modal.open(async () => {
+    const doc_form = Helper.getDataFromFormData(new FormData(Helper.f("#document_form")));
+
+    const body = {
+      remarks: JSON.stringify(global_remarks),
+      stud_rec: JSON.stringify(Helper.getDataFromFormData(new FormData(Helper.f("#information_form")))),
+    }
+
+    const resp = (await Helper.api('record/new', 'json', Helper.createFormData({ ...body, ...doc_form})));
+    console.log({ resp })
+
+  });
+});
