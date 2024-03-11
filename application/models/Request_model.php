@@ -204,7 +204,8 @@ class Request_model extends CI_Model {
                         when locate('Pending', status) then 'Pending'
                         when locate('Released', status) then 'Released' 
                         when locate('Not Released', status) then 'Not Released'
-                    end as _status
+                    end as _status,
+                    count(*) as total
                   from 
                     requests 
                   where (created_at between '{$from}' and '{$to}') AND ({$status}) 
