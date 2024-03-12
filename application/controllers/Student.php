@@ -246,7 +246,7 @@ class Student extends CI_Controller{
                 $stud_docs[$nKey]['dir'] = [];
     
                 if(isset($_FILES[$fileKey])) {
-                    var_dump($_FILES[$fileKey]);
+                    // var_dump($_FILES[$fileKey]);
                     for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
                         $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
                         array_push($stud_docs[$nKey]['dir'], $fileDir);
