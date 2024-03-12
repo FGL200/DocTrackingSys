@@ -433,10 +433,11 @@ class Student_model extends CI_Model{
     }
 
     public function get_stud_rec_trashBin($uid) {
-        if(!$this->user_Is_Admin($uid)) return [[]];
+        // if(!$this->user_Is_Admin($uid)) return [[]]; 
 
         $query = "SELECT 
                 LPAD(sr.id, 6, '0') `Record ID`,
+                sh.name `Shelf`,
                 CASE 
                     WHEN COALESCE(sr.stud_id,'') = '' THEN '--'
                     ELSE sr.stud_id
@@ -472,6 +473,10 @@ class Student_model extends CI_Model{
                 ON u.`id` = sr.`created_by_uid`
             LEFT JOIN `user` u2
                 ON u2.`id` = sr.`updated_by_uid`
+            LEFT JOIN `doc` d
+                ON d.stud_rec_id = sr.id 
+            LEFT JOIN `shelves` sh
+                ON sh.id = d.shelf
             WHERE sr.deleted_flag = '1'
         ";
         $fetch = $this->db->query($query);
