@@ -56,7 +56,7 @@
                 </ul>
               </div>
               <div class="card-body">
-                <h5 class="card-title">Encoder's Iduuno the term <span>| 2024</span></h5>
+                <h5 class="card-title">Transcriber's monthly encoded <span id="transcriber_selected_year">| 2024</span></h5>
                 <div id="encodedChart"></div>
               </div>
 

@@ -46,7 +46,8 @@ let request_ChartData = [];
 
 })();
 
-async function Load_EncodenChart(year) {
+async function Load_EncodenChart(year= new Date().getFullYear()) {
+  Helper.f("#transcriber_selected_year").innerHTML = `| ${year}`;
   const resp = (await Helper.api('user/monthly/encodes', 'json', new FormData()))
   const total_encoded_raw = resp.reduce((acc, current) => {
     const { uname, date, total } = current;
@@ -63,7 +64,7 @@ async function Load_EncodenChart(year) {
 
 
 function Encoded_getData(raw_data = [], year = new Date().getFullYear()) {
-  const new_data = Array(12).fill(0);
+  const new_data = Array(year == new Date().getFullYear() ? (new Date().getMonth() + 1) : 12).fill(0);
 
   const raw = raw_data
     .map(v => ({ date: new Date(v.date), total: v.total }))
