@@ -56,6 +56,7 @@ $route['api/student/record/by/(:num)'] = 'Student/get_Student_Records_By/$1';
 $route['api/student/record/by/(:num)/last'] = 'Student/get_Last_Student_Records_By/$1';
 $route['api/student/filter']['post'] = 'Student/filter_search';
 $route['api/student/record/(:num)/delete']['post'] = "Student/delete_Student/$1";
+$route['api/student/record/(:num)/recover']['post'] = "Student/recover/$1";
 
 /**
  * METHOD : POST

@@ -301,6 +301,19 @@ class Student extends CI_Controller{
 
     }
 
+    public function recover($stud_rec_id) {
+        $currdate = date("Y-m-d H:i:s");
+        try {
+            $this->db->trans_start();
+            $this->stud->update_table('stud_rec', "deleted_flag = '0', updated_date = '{$currdate}', updated_by_uid = '{$this->input->post('uid')}'", "WHERE id = '{$stud_rec_id}'");
+            $this->db->trans_commit();
+            echo to_JSON(['status' => 1]);
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
+        }
+    }
+
     public function delete_Student($stud_rec_id) {
 
         $result = $this->stud->delete_student($stud_rec_id);
