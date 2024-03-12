@@ -130,6 +130,7 @@ $route['api/request/(:num)/update'] = 'Request/update/$1';  // update request by
 $route['api/request/(:num)/delete'] = 'Request/delete/$1';  // delete request by ID
 $route['api/request/archives'] = 'Request/archives';        // requests in archives
 $route['api/request/search']['post'] = 'Request/search';
+$route['api/request/(:num)/recover'] = 'Request/recover/$1';
 
 // Filerequests Category
 $route['api/file-request-category/all'] = 'FileRequestCategory/get';
