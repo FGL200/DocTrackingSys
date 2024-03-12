@@ -370,10 +370,8 @@ class Student extends CI_Controller{
         $uid = $this->input->post("uid");
     
         $result = $this->stud->get_stud_rec_trashBin($uid);
-        $nData = $this->to_Id_Link_Student_Record($result);
-        $nData = $this->count_remarks($nData);
-        $nData = $this->to_grouped_style($nData);
-        echo json_encode(['result' => $nData]);
+       
+        echo json_encode(['result' => $result]);
 
         // echo json_encode(["result"=> $this->stud->get_stud_rec_trashBin($uid)]); 
     }
