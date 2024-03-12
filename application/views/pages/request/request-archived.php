@@ -1,6 +1,6 @@
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Archvived Requests</h1>
+    <h1>Archived Requests</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
