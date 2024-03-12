@@ -31,6 +31,7 @@ class Page extends CI_Controller
       'role' => $this->session->userdata('role'),
       'username' => $username,
       'fullname' => empty($fullname) ? $username : $fullname,
+      'myname' => !empty($fname) ? $fname : (!empty($lname) ? $lname : $username),
       'uid' => $this->session->userdata('uid'),
     ];
 

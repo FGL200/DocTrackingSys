@@ -1,32 +1,82 @@
+import { Helper } from "../shared/helper.js";
+
+let encoded_ChartData = [];
+let request_ChartData = [];
+
 (async () => {
 
-  await LoadChart_RequestPie([
-    {
-      value: 500,
-      name: 'Not Released'
-    },
-    {
-      value: 1048,
-      name: 'Released'
-    }
-  ]);
+  Array(4)
+    .fill(0)
+    .map((v, i) => i)
+    .map(v => new Date().getFullYear() - v)
+    .sort((a, b) => a + b)
+    .forEach(v => Helper.f("#encoded_year_filter").innerHTML += `<li><a class="dropdown-item filter_encoded">${v}</a></li>`);
 
-  await LoadChart_EncoderTotalEncoded([
-    {
-      name: 'Cedric',
-      data: [1, 2, 3, 4, 5, 6, 7]
-    },
-    {
-      name: 'Cedric',
-      data: [1, 2, 2, 2, 2, 3, 4, 9, 2]
-    },
-  ]);
+  Helper.fm(".filter_encoded", e => Helper.on(e, "click", () => {
+    Load_EncodenChart(Number(Helper.removeWhiteSpaces(e.innerHTML)))
+  }));
 
+  await Load_EncodenChart();
+
+
+
+  await LoadChart_RequestPie();
+
+  // await LoadChart_RequestPie([
+  //   {
+  //     value: 500,
+  //     name: 'Not Released'
+  //   },
+  //   {
+  //     value: 1048,
+  //     name: 'Released'
+  //   }
+  // ]);
+
+  // await LoadChart_EncoderTotalEncoded([
+  //   {
+  //     name: 'Cedric',
+  //     data: [1, 2, 3, 4, 5, 6, 7]
+  //   },
+  //   {
+  //     name: 'Cedric',
+  //     data: [1, 2, 2, 2, 2, 3, 4, 9, 2]
+  //   },
+  // ]);
 
 })();
 
-async function LoadChart_RequestPie(passedData = []) {
-  echarts.init(document.querySelector("#trafficChart")).setOption({
+async function Load_EncodenChart(year) {
+  const resp = (await Helper.api('user/monthly/encodes', 'json', new FormData()))
+  const total_encoded_raw = resp.reduce((acc, current) => {
+    const { uname, date, total } = current;
+    acc[uname] = acc[uname] || [];
+    acc[uname].push({ date, total });
+    return acc;
+  }, {});
+  encoded_ChartData = Helper.ObjectToArray(total_encoded_raw)
+    .map(v => ({ name: v.name, data: Encoded_getData(v.value, year) }))
+    .filter(v => v.data.some(d => d > 0));
+
+  await LoadChart_EncoderTotalEncoded();
+}
+
+
+function Encoded_getData(raw_data = [], year = new Date().getFullYear()) {
+  const new_data = Array(12).fill(0);
+
+  const raw = raw_data
+    .map(v => ({ date: new Date(v.date), total: v.total }))
+    .filter(v => v.date.getFullYear() == year)
+    .map(v => ({ m: v.date.getMonth(), total: v.total }))
+    .forEach(v => new_data[v.m] = v.total);
+  return new_data;
+}
+
+async function LoadChart_RequestPie() {
+  const passedData = request_ChartData;
+  Helper.f("#requestPie").innerHTML = "";
+  echarts.init(document.querySelector("#requestPie")).setOption({
     tooltip: {
       trigger: 'item'
     },
@@ -34,34 +84,37 @@ async function LoadChart_RequestPie(passedData = []) {
       top: '5%',
       left: 'center'
     },
-    series: [{
-      name: 'File Request',
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      label: {
-        show: false,
-        position: 'center'
-      },
-      emphasis: {
+    series: [
+      {
+        name: 'File Request',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
         label: {
-          show: true,
-          fontSize: '18',
-          fontWeight: 'bold'
-        }
-      },
-      labelLine: {
-        show: false
-      },
-      data: passedData,
-    }]
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '18',
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: passedData,
+      }
+    ]
   });
 }
 
-async function LoadChart_EncoderTotalEncoded(passData = []) {
-
-  new ApexCharts(document.querySelector("#reportsChart"), {
-    series: passData,
+async function LoadChart_EncoderTotalEncoded() {
+  const passedData = encoded_ChartData;
+  Helper.f("#encodedChart").innerHTML = "";
+  new ApexCharts(Helper.f("#encodedChart"), {
+    series: passedData,
     chart: {
       height: 350,
       type: 'area',
@@ -96,11 +149,12 @@ async function LoadChart_EncoderTotalEncoded(passData = []) {
         "Mar",
         "Apr",
         "May",
-        "June",
-        "July",
+        "Jun",
+        "Jul",
         "Aug",
-        "Sept",
+        "Sep",
         "Oct",
+        "Nov",
         "Dec",
       ]
     },
