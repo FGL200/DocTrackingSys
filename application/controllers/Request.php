@@ -183,6 +183,7 @@ class Request extends CI_Controller {
         $uid = $this->input->post('uid');
 
         $condition = "";
+        $join = "";
 
         if(!empty($requestor_fname) || !empty($requestor_lname) || !empty($requestor_mname)) {
             $condition .= "(
@@ -210,6 +211,10 @@ class Request extends CI_Controller {
         if(!user_Is_Admin($this, $uid)) {
             if(strlen(trim($condition)) > 0) $condition .= " AND ";
             $condition .= "r.created_by = '{$uid}'";
+            $join .= "join 
+                        user u
+                    on 
+                        r.created_by = u.id";
         }
 
         $condition = "WHERE " . $condition;

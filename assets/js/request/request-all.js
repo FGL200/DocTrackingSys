@@ -141,7 +141,9 @@ Helper.onClick("#advance_search", async () => {
       return;
     }
 
-    const resp = (await Helper.api('request/search', 'json', form_data));
+    const req = Helper.getDataFromFormData(form_data)
+
+    let resp = (await Helper.api('request/search', 'json', Helper.createFormData({...req, uid : const_uid})));
     await Load_List(resp);
     Modal.close();
   });

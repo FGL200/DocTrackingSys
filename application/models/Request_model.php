@@ -58,9 +58,19 @@ class Request_model extends CI_Model {
 
     public function fetch(String $condition, String $join = "") {
         $sql = "
-                select * from requests r
+                select
+                    r.id as ID,
+                    concat(r.lname, ', ', r.fname, ', ', r.mname) as Requestor,
+                    r.created_at as 'Requested Date',
+                    GROUP_CONCAT(frc.name) as Files,
+                    r.status as Status,
+                    r.due_date as 'Due Date'
+                from requests r
+                INNER JOIN 
+                    file_request_categories frc ON find_in_set(frc.id, r.file)
                 {$join}
                 {$condition}
+                GROUP BY r.id
                 ";
         return $this->db->query($sql)->result();
     }
