@@ -71,6 +71,23 @@ class Request extends CI_Controller {
         echo to_JSON($request);
     }
 
+    public function recover($req_id) {
+        try {
+            extract($this->input->post());
+            $this->db->trans_start();
+            $this->request_model->update("deleted_flag = '0', updated_by = '{$uid}'", "id = '{$req_id}'");
+            $this->db->trans_commit();
+
+            if($this->db->error()['message']) throw new Exception($this->db->error()['message']);
+
+            echo to_JSON(['status' => 1]);
+
+        } catch (Exception $e){
+            $this->db->trans_rollback();
+            echo to_JSON(['status' => 0, 'message' => $e->getMessage()]);
+        }   
+    }
+
     public function update(int $id) {
         $response = ['status' => "", 'message' => ''];
         try {
