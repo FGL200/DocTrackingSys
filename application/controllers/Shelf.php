@@ -57,11 +57,14 @@ class Shelf extends CI_Controller {
     public function update($id) {
         extract($this->input->post());
         $curr_date = date('Y-m-d H:i:s');
-        $cuid = $this->session->userdata("uid");
 
-        addcslashes($name, " \t\n\r\0\x0B\-\`\"\'");
-
-        $items = " name = '{$name}', updated_date = '{$curr_date}', updated_by = '{$cuid}'";
+        $items = "updated_date = '{$curr_date}', updated_by = '{$uid}'";
+        if(isset($deleted_flag)) $items .= ", deleted_flag = '{$deleted_flag}'";
+        if(isset($name)) { 
+            addcslashes($name, " \t\n\r\0\x0B\-\`\"\'");
+            $items .= ", name = '{$name}'";
+        }
+        
         $condition = "id = '{$id}'";
        
         $response = ['status' => 0];
