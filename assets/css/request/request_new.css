@@ -1,11 +1,11 @@
-section .row >  * {
+/* section .row >  * {
     width: 25% !important;
     flex-grow: 1;
-}
+} */
 
-.w-fit-content {
+/* .w-fit-content {
     width: fit-content !important;
-}
+} */
 
 .form-check-input {
     cursor: pointer;

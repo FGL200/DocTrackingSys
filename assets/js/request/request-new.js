@@ -50,6 +50,11 @@ Helper.importCSS('request/request_new');
     const body = { 'file': '' };
     const inputs = document.querySelectorAll("form#new-request-form input, form#new-request-form textarea");
 
+    if (Helper.formValidator(new FormData(Helper.f('#new-request-form')), ["lname", "fname", "reason", "due_date"], v => v == '').length > 0) {
+      Helper.Promt_Error("* Please fillup required fields.")
+      return;
+    }
+
     inputs.forEach((input) => {
       let { name, value, type } = input;
       if (name && !input.classList.contains('file-req-item') && name != "file") {

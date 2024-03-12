@@ -25,7 +25,7 @@ async function Load_Table() {
       <td>${v.fullname}</td>
       <td>${v.Shelf}</td>
       <td style="width: 100px;">
-        <button class="btn btn-primary restore" data-binder-id="${Number(v['Record ID'])}">
+        <button class="btn btn-primary restore" data-binder-id="${Number(v['Record ID'])}" data-binder-fullname="${v.fullname}">
           <i class="bi bi-save"></i> Restore
         </button>
       </td>
@@ -36,12 +36,13 @@ async function Load_Table() {
     Helper.fm(".restore", v => Helper.on(v, "click", async function (e) {
       const data = {
         id: Helper.getDataBind(this, 'id'),
+        fullname: Helper.getDataBind(this, 'fullname'),
       };
 
-      const resp = (await Helper.api(`student/record/${data.id}/update`, 'json', Helper.createFormData({ uid: const_uid, deleted_flag: 0 })));
+      const resp = (await Helper.api(`student/record/${data.id}/recover`, 'json', Helper.createFormData({ uid: const_uid })));
       console.log({ resp })
       if (resp.status == 1) {
-        CustomNotification.add("Success", `Shelf ${data.name} is restored`, "success");
+        CustomNotification.add("Success", `Record of ${data.fullname} is restored.`, "success");
         await Load_Table();
       } else {
         CustomNotification.add("Error", "Error occurred. Try again later.", "danger");
