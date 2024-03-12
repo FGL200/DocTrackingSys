@@ -321,6 +321,8 @@ Helper.onClick("#btn_save", async e => {
   const body = {
     remarks: JSON.stringify(global_remarks),
     stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
+    shelf : localStorage.getItem('selected_shelf'),
+    uid : const_uid
   };
 
   if (Helper.formValidator(form_info, ['stud_lname'], v => v == '').length > 0) {

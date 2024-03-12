@@ -98,7 +98,9 @@ class Student extends CI_Controller{
                 if(strlen($stud_rec_data) > 0) $stud_rec_data .= ",";
                 $stud_rec_data .= "`{$key}`= UPPER('".trim($val)."')";
             }
-    
+            
+            $stud_rec_data .= ", created_by_uid = '{$this->input->post('uid')}'";
+            
             $stud_rec_id = (int)$this->stud->add_student($stud_rec_data);
     
     
@@ -118,7 +120,6 @@ class Student extends CI_Controller{
                 $stud_docs[$nKey]['dir'] = [];
     
                 if(isset($_FILES[$fileKey])) {
-                    // var_dump($_FILES[$fileKey]);
                     for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
                         $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
                         array_push($stud_docs[$nKey]['dir'], $fileDir);
@@ -126,7 +127,6 @@ class Student extends CI_Controller{
                 }
     
             }
-    
             $stud_docs_keys = array_keys($stud_docs);
             $count = 0;
     
@@ -136,8 +136,10 @@ class Student extends CI_Controller{
                 $stud_docs_data .= "`".$stud_docs_keys[$count]."` = '".to_JSON($doc)."'";
                 $count++;
             }
-    
-            $stud_docs_data .= ",`stud_rec_id` = '{$stud_rec_id}', shelf = '{$this->shelf->getShelfId($this->input->post('shelf'))}'";
+            
+            if(strlen($stud_docs_data) > 0) $stud_docs_data .= ",";
+            
+            $stud_docs_data .= "`stud_rec_id` = '{$stud_rec_id}', shelf = '{$this->shelf->getShelfId($this->input->post('shelf'))}'";
     
             $this->stud->addStudentDoc($stud_docs_data);
     
@@ -213,7 +215,8 @@ class Student extends CI_Controller{
 
         try {
             $this->db->trans_start();
-    
+            $currdate = date("Y-m-d H:i:s");
+
             $stud_rec = (array)json_decode($this->input->post('stud_rec'));
             $stud_rec_data = "";
 
@@ -221,6 +224,9 @@ class Student extends CI_Controller{
                 if(strlen($stud_rec_data) > 0) $stud_rec_data .= ",";
                 $stud_rec_data .= "`{$key}`= UPPER('".trim($val)."')";
             }
+
+            $stud_rec_data .= " , updated_by_uid='{$this->input->post('uid')}', updated_date='{$currdate}'";
+
             if($this->input->post('stud_rec'))
                 $this->stud->update_table('stud_rec', $stud_rec_data, "where id = '{$stud_rec_id}'");
 
@@ -240,7 +246,7 @@ class Student extends CI_Controller{
                 $stud_docs[$nKey]['dir'] = [];
     
                 if(isset($_FILES[$fileKey])) {
-                    // var_dump($_FILES[$fileKey]);
+                    var_dump($_FILES[$fileKey]);
                     for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
                         $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
                         array_push($stud_docs[$nKey]['dir'], $fileDir);
@@ -402,7 +408,7 @@ class Student extends CI_Controller{
     }
     public function student_record_merge($stud_rec_id) {
         
-        $to = $this->input->post('to'); // shlef id to be merged
+        $to = $this->input->post('id'); // shlef id to be merged
 
         $student = $this->stud->get_Student_all_Record($stud_rec_id); // record of the student to be merged
 
@@ -425,10 +431,12 @@ class Student extends CI_Controller{
             $rec_id = (int)$o['Record ID'];
             $merged_shelves = to_ARRAY($o['merged_shelves']);
 
-            array_push($merged_shelves, "{$student['shelf']}");
+            $student['shelf'] = to_ARRAY($student['shelf']);
+
+            array_push($merged_shelves, "{$student['shelf']->ID}");
+            
 
             $merged_shelves = to_JSON($merged_shelves);
-            
             $data = "merged_shelves = '"  . $merged_shelves . "'";
             $conditions = " where stud_rec_id =  " . $rec_id;
 

@@ -145,7 +145,7 @@ class Student_model extends CI_Model{
                     `d`.req_clearance_form,
                     `d`.req_credentials,
                     `d`.hd_or_cert_of_trans,
-                    concat("{\"ID\" : ", "\"", `d`.id, "\",\"Name\" : ", "\"", sh.name, "\"}") as shelf,
+                    concat("{\"ID\" : ", "\"", `sh`.id, "\",\"Name\" : ", "\"", sh.name, "\"}") as shelf,
                     `d`.shelf_histories,
                     `d`.merged_shelves,
                     `rm`.value
@@ -525,12 +525,16 @@ class Student_model extends CI_Model{
                 
                 where 
                     (   sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
-                    sr.stud_fname LIKE '%{$student['stud_fname']}%' OR 
-                    sr.stud_mname LIKE '%{$student['stud_mname']}%' ) AND 
+                    sr.stud_fname LIKE '%{$student['stud_fname']}%' ) AND 
                     sh.id != '{$current_shelf}' AND 
                     ( not locate('\"{$current_shelf}\"', d.merged_shelves) )
                 ";
-    
+
+
+                // OR 
+                // sr.stud_mname LIKE '%{$student['stud_mname']}%'
+        // echo $query;
+        // die;
         $fetch = $this->db->query($query);
 
         return $fetch->result();

@@ -365,7 +365,7 @@ Helper.onClick("#btn_merge", async e => {
     stud_fname: global_record.student.stud_fname,
     stud_lname: global_record.student.stud_lname,
     stud_mname: global_record.student.stud_mname,
-    current_shelf: global_record.shelf.id,
+    current_shelf: global_record.shelf.ID,
   })))
     .map(v => JSON.parse(v.shelf))
     .forEach(v => options += `<option value="${v.ID}">${v.Name}</option>`);
@@ -423,7 +423,7 @@ Helper.onClick("#btn_archive", async e => {
   Modal.setFooter(await Modal.button('Archive', 'danger'))
   Modal.open()
   Modal.submit(async (e, form_data) => {
-    const resp = (await Helper.api(`student/record/delete/${global_record.id}`, 'json', new FormData()));
+    const resp = (await Helper.api(`student/record/${global_record.id}/delete`, 'json', new FormData()));
     console.log({ resp });
     if (resp.status == "success") {
       Modal.close();
