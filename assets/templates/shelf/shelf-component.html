@@ -1,17 +1,22 @@
 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 shelf-item">
   <div class="card info-card sales-card">
-    <div class="filter remove-when-E remove-when-V">
+    <div class="filter">
       <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
         <li class="dropdown-header text-start">
           <h6>Settings</h6>
         </li>
         <li>
+          <a class="dropdown-item" href="{{base_url}}shelf/entry/{{name}}">
+            <i class="bi bi-dropbox"></i> Open
+          </a>
+        </li>
+        <li class="remove-when-E remove-when-V">
           <a class="dropdown-item shelf_rename" href="#" data-binder-id="{{id}}" data-binder-name="{{name}}">
             <i class="bi bi-pencil-square"></i> Rename
           </a>
         </li>
-        <li>
+        <li class="remove-when-E remove-when-V">
           <a class="dropdown-item shelf_hide" href="#" data-binder-id="{{id}}" data-binder-name="{{name}}">
             <i class="bi bi-dash-circle"></i> Remove
           </a>

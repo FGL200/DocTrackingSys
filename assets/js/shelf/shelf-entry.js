@@ -30,7 +30,7 @@ async function Load_Records(search = null) {
       ...v,
       id: v['Record ID'],
       Remarks: v.Remarks == '--' ? [] : String(v.Remarks).includes('[') ? JSON.parse(v.Remarks) : [v.Remarks],
-      fullname: `${v['Last Name']}, ${v['First Name']} ${v['Last Name']} ${v['Suffix'] == '--' ? '' : v['Suffix']}`,
+      fullname: `${v['Last Name']}, ${v['First Name']} ${v['Middle Name']} ${v['Suffix'] == '--' ? '' : v['Suffix']}`,
       number: v['Student ID'],
     }))
     .forEach((v, i) => tbody += `

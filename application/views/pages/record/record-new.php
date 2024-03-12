@@ -131,7 +131,7 @@
                 <div class="col-12" id="regi_form">
                   <div class="alert alert-secondary p-2">
                     <div class="d-flex justify-content-between">
-                      <input id="regi_form-file" name="regi_form-file[]" type="file" class="d-none" accept="image/png, image/jpeg">
+                      <input id="regi_form-file" name="regi_form-file[]" type="file" class="d-none" accept="image/png, image/jpeg" multiple>
                       <section class="d-flex gap-2 align-items-center">
                         <input id="regi_form-cb" name="regi_form-cb" type="checkbox">
                         <label for="regi_form-cb" class="user-select-none">Registration Form </label>

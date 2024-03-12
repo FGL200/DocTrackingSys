@@ -321,8 +321,8 @@ Helper.onClick("#btn_save", async e => {
   const body = {
     remarks: JSON.stringify(global_remarks),
     stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
-    shelf : localStorage.getItem('selected_shelf'),
-    uid : const_uid
+    shelf: localStorage.getItem('selected_shelf'),
+    uid: const_uid
   };
 
   if (Helper.formValidator(form_info, ['stud_lname'], v => v == '').length > 0) {
@@ -330,12 +330,18 @@ Helper.onClick("#btn_save", async e => {
     return;
   }
 
-  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body, ...doc })));
-  console.log({ resp })
-
   Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
-  Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
+  Modal.setBody('<div class="alert alert-secondary text-center">Saving...</div>');
   Modal.open();
+
+  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body, ...doc })));
+  if (resp.status == 1) {
+    Modal.setBody('<div class="alert alert-success text-center">New record added!</div>');
+    setTimeout(() => { Modal.close(); location.reload(); }, 1000);
+  } else {
+    Modal.setBody('<div class="alert alert-danger text-center">Error saving...</div>');
+  }
+  
 });
 
 

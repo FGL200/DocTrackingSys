@@ -9,7 +9,7 @@ Helper.onSubmit("#shelf_form", async function (e) {
     return;
   }
   
-  const resp = (await Helper.api('shelves/insert', "json", form_data));
+  const resp = (await Helper.api('shelf/insert', "json", form_data));
   if (resp.status == 'success') {
     this.reset();
     Helper.Promt_Clear();

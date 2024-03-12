@@ -124,7 +124,7 @@ async function Load_Data() {
         saved_images.forEach((v, i) => items += `
           <div class="carousel-item ${i == 0 ? 'active' : ''}" data-bs-interval="0">
             <div class="d-flex justify-content-center w-100">
-              <img src="${v}" class="d-block w-75 rotate" alt="...">
+              <img src="${base_url}${v}" class="d-block w-75 rotate" alt="...">
             </div>
           </div>
         `);
@@ -148,7 +148,7 @@ async function Load_Data() {
 
 
         // ***************************************
-        // *          Rotetion of image          *
+        // *          Rotation of image          *
         // ***************************************
         global_rotate = 0;
         Helper.fm("img.rotate", simg => Helper.on(simg, "click", () => {
@@ -329,7 +329,6 @@ function Add_Remarks(remark) {
   remark = remark.toUpperCase();
 
   if (!global_remarks.some(e => e == remark)) global_remarks.push(remark);
-  console.log({ global_remarks })
 
   Helper.f("#remarks_holder", rh => {
     if (Helper.removeWhiteSpaces(rh.innerHTML) == 'NoRemarks') rh.innerHTML = "";
@@ -379,7 +378,13 @@ Helper.onClick("#btn_merge", async e => {
     }
     Helper.Promt_Clear();
     const resp = (await Helper.api(`student/record/${global_record.id}/merge`, 'json', form_data));
-    console.log({ resp })
+    if (resp.status == 1) {
+      Modal.close();
+      CustomNotification.add("Success", "Record merged.", "success");
+      setTimeout(() => { location.reload() }, 1000);
+    } else {
+      CustomNotification.add("Error", "Error occurre. Try again.", "danger");
+    }
   });
   Modal.open()
 });
@@ -393,7 +398,6 @@ Helper.onClick("#btn_move", async e => {
   Modal.setTitle('<i class="bi bi-arrows-move"></i> Move record');
   let options = '';
   const resp = (await Helper.api('shelf/all-info', 'json')).forEach(v => options += `<option value="${v.id}">${v.name}</option>`)
-  console.log({ resp })
   Modal.setBody(Helper.replaceLayout(await Helper.template('record/move'), { options }));
   Modal.setFooter(await Modal.button('Move', 'primary'))
   Modal.open()
@@ -424,7 +428,6 @@ Helper.onClick("#btn_archive", async e => {
   Modal.open()
   Modal.submit(async (e, form_data) => {
     const resp = (await Helper.api(`student/record/${global_record.id}/delete`, 'json', new FormData()));
-    console.log({ resp });
     if (resp.status == "success") {
       Modal.close();
       CustomNotification.add("Success", "Record has been deleted", "success");
@@ -461,7 +464,6 @@ Helper.onClick("#btn_save", async e => {
     }
 
     const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body, ...doc })));
-    console.log({ resp })
 
     Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
     Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
