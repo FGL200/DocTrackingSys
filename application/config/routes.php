@@ -143,6 +143,7 @@ $route['api/file-request-category/archives'] = 'FileRequestCategory/archives';
 // Report 
 $route['api/report/requests']['post'] = 'GenerateReport/requests';
 $route['api/report/file-requests']['post'] = 'GenerateReport/per_requested_file';
+$route['api/report/remarks']['post'] = 'GenerateReport/per_remarks';
 
 // ------------------ /End API ------------------ 
 
