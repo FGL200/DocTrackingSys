@@ -40,15 +40,16 @@ async function Load_List(search = null) {
       switch (val) {
         case 'ID':
           const rawID = Helper.AsID(req[val], 4, '0', '#');
-          req[val] = `<a class='request-id' href='${Helper.getURL() + '#' + rawID}' data-binder-req-id='${rawID}'>${rawID}</a>`
-          req[val] += `<div class='d-flex flex-column d-none b-color-w rounded border request-actions' style='position:absolute;'>
+          req[val] = `<div><a data-bs-toggle="dropdown" class='request-id' href='${Helper.getURL() + '#' + rawID}' data-binder-req-id='${rawID}'>${rawID}</a>`
+          req[val] += `<ul class='dropdown-menu request-actions'>
                                 ${JSON.parse(req['Status'])['value'] == 'Pending'
-              ? `<button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Released' style='font-size : 1rem;'>Released</button>
-                                                            <button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Not Released' style='font-size : 1rem;'>Not Released</button>
+              ? `<li class='dropdown-item'><button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Released' style='font-size : 1rem;'>Released</button></li>
+                                                            <li class='dropdown-item'><button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Not Released' style='font-size : 1rem;'>Not Released</button></li>
                                                             `
-              : `<button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Archive' style='font-size : 1rem;'>Archive</button>`}
-                            </div>
+              : `<li class='dropdown-item'><button class='btn btn-req-action' data-binder-req-id='${rawID}' data-binder-req-status='Archive' style='font-size : 1rem;'>Archive</button></li>`}
+                            </ul>
                             `
+            req[val]  += '</div>'
           break
         case 'Status':
           req[val] = JSON.parse(req[val])['value'];
@@ -70,15 +71,6 @@ async function Load_List(search = null) {
   Helper.DataTable_Reset('#table_content');
   Helper.DataTable_Init('#table_content', thead + tbody);
 
-  Helper.fm('table tr', req => {
-    Helper.find(req, 'a', (a) => {
-      Helper.on(a, 'click', (e) => {
-        Helper.preventDefault(e);
-        $(".request-id + div").addClass('d-none');
-        $(e.target).next('div').toggleClass('d-none');
-      })
-    })
-  })
   Helper.fm('button.btn-req-action', (btn) => {
     Helper.on(btn, 'click', async (e) => {
       const target = e.target;
@@ -118,6 +110,7 @@ async function Load_List(search = null) {
 
         if (status == 1) {
           CustomNotification.add('Success', notif_message, 'success');
+          setTimeout(()=>window.location.reload(), 1000)
         } else {
           CustomNotification.add('Error', `Error in Request #${id}`, 'danger');
           console.warn(message)
