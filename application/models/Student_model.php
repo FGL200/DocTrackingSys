@@ -77,7 +77,8 @@ class Student_model extends CI_Model{
                     ON sh.`id` = d.`shelf`
                 LEFT JOIN `user` u2
                     ON u2.`id` = sr.`updated_by_uid`
-                WHERE sr.deleted_flag = '0' {$cond}
+                WHERE sr.is_merged != 1 AND sr.deleted_flag = '0' {$cond}
+
                 -- GROUP BY 
                 --     `Student ID`,
                 --     `Last Name`,
@@ -513,7 +514,7 @@ class Student_model extends CI_Model{
     public function get_same_records_shelf($student, $current_shelf) {
         // $shelf_id = $this->get_Shelf_ID($current_shelf); // $current_shelf => shelf name
 
-        $student['stud_mname'] = trim($student['stud_mname']) != "null" ? $student['stud_mname'] : '--';
+        // $student['stud_mname'] = trim($student['stud_mname']) != "null" ? $student['stud_mname'] : '--';
         $query = "
                 select 
                     CONCAT('{\"Name\" : \"',  sh.name, '\",\"ID\" : \"', sh.id, '\"}') as shelf
@@ -529,15 +530,18 @@ class Student_model extends CI_Model{
                     d.shelf = sh.id
                 
                 where 
-                    (   sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
-                    sr.stud_fname LIKE '%{$student['stud_fname']}%' ) AND 
+                    sr.stud_id LIKE '%{$student['stud_id']}%' AND 
                     sh.id != '{$current_shelf}' AND 
-                    ( not locate('\"{$current_shelf}\"', d.merged_shelves) )
+                    sr.is_merged != 1
                 ";
+
+                // sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
+                // sr.stud_fname LIKE '%{$student['stud_fname']}%'
 
 
                 // OR 
                 // sr.stud_mname LIKE '%{$student['stud_mname']}%'
+
         // echo $query;
         // die;
         $fetch = $this->db->query($query);
