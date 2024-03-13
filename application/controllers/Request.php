@@ -151,35 +151,6 @@ class Request extends CI_Controller {
         }
     }
 
-
-    public function get_Requests_Report() {
-        $curr_month = [];
-        $prev_month = [];
-        $curr_year = [];
-
-        foreach($this->request_model->get_Current_Month_Status() as $row) {
-            if(!isset($curr_month['month']))  $curr_month['month'] = $row->month;
-            if(!isset($curr_month['released']) && $row->value == "released") $curr_month['released'] = $row->total;
-            if(!isset($curr_month['not_released']) && $row->value == "not_released") $curr_month['not_released'] = $row->total;
-        }
-        
-        foreach($this->request_model->get_Prev_Month_Status() as $row) {
-            if(!isset($prev_month['month']))  $prev_month['month'] = $row->month;
-            if(!isset($prev_month['released']) && $row->value == "released") $prev_month['released'] = $row->total;
-            if(!isset($prev_month['not_released']) && $row->value == "not_released") $prev_month['not_released'] = $row->total;
-        }
-
-        foreach($this->request_model->get_Current_Year_Status() as $row) {
-            if(!isset($curr_year['released']) && $row->value == "released") $curr_year['released'] = $row->total;
-            if(!isset($curr_year['not_released']) && $row->value == "not_released") $curr_year['not_released'] = $row->total;
-        }
-        echo to_JSON([
-                      'curr_month' => $curr_month, 
-                      'prev_month' => $prev_month,
-                      'yearly' => $curr_year
-                    ]);
-    }
-
     public function archives() {
         echo to_JSON($this->request_model->archives());
     }
