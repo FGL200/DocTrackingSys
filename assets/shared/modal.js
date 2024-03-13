@@ -6,6 +6,7 @@ export class Modal {
     Helper.f("#dds_modal_open").click();
 
     Helper.clearEvent(Helper.f("#dds_modal_close"), "click");
+    Helper.onClick("#dds_modal_close", () => { Modal.close() });
     if (callback) await callback();
   }
 
@@ -19,9 +20,7 @@ export class Modal {
     Modal.setFooter('');
     Helper.f("#dds_modal_header").classList.remove('d-none');
     Helper.f("#dds_modal_footer").classList.remove('d-none');
-    Modal.setSize();
     Modal.clearSubmit();
-
     Helper.f("#dds_modal_close").click();
     if (callback) await callback();
   }

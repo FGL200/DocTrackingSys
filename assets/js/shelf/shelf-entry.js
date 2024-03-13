@@ -99,10 +99,17 @@ Helper.onClick("#advance_search", async () => {
         case 'Student': Helper.f("#btn_student").click(); break;
         case 'Transcriber': Helper.f("#btn_transcriber").click(); break;
         case 'Remarks': Helper.f("#btn_remarks").click(); break;
+        case 'By Me': Helper.f("#btn_byme").click(); break;
         default: break;
       }
-    })
+    });
+    Helper.onClick("#btn_byme", async () => {
+      const resp = (await Helper.api(`student/record/by/${const_uid}`, 'json'));
+      await Load_Records(resp.result)
+      Modal.close();
+    });
   });
+  Helper.setupFor(const_role);
   Modal.setFooter(await Modal.button('Search', 'primary'));
   Modal.open();
   Modal.submit(async (e, form_data) => {

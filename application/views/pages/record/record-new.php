@@ -4,7 +4,7 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?= base_url()?>shelf/all">All Shelves</a></li>
+        <li class="breadcrumb-item"><a href="<?= base_url() ?>shelf/all">All Shelves</a></li>
         <li class="breadcrumb-item"><a id="shelf_name" href="#">Shelf Name</a></li>
         <li class="breadcrumb-item active">New Record</li>
       </ol>
@@ -101,7 +101,8 @@
                   <div class="form-group mb-3">
                     <label>Remarks <small class="text-danger">*</small></label>
                     <div class="input-group mb-3">
-                      <input name="remark" type="text" class="form-control" aria-describedby="remark_value">
+                      <input name="remark" type="text" list="remarks_category" class="form-control" aria-describedby="remark_value">
+                      <datalist id="remarks_category"></datalist>
                       <button class="btn btn-outline-primary" type="submit" id="remark_value" name="remark_value">
                         <i class="bi bi-plus"></i> Add
                       </button>

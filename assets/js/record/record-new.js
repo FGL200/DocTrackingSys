@@ -4,7 +4,8 @@ import { Modal } from "../../shared/modal.js";
 
 (async () => {
   Helper.importCSS("record/record-new");
-  Init_Shelf();
+  await Init_Shelf();
+  await Load_RemarksCategory()
 })();
 
 const document_names = [
@@ -244,6 +245,13 @@ function setDisplayNoneClass(node, displayNone = true) {
 // ************************************
 // *          Handle Remarks          *
 // ************************************
+async function Load_RemarksCategory() {
+  const resp = (await Helper.api('categories', 'json'));
+  let datalist = '';
+  resp.forEach(v => datalist += `<option value="${v}" />`)
+  Helper.f("#remarks_category").innerHTML = datalist;
+}
+
 Helper.onSubmit('#remark_form', e => {
   Helper.preventDefault(e);
   const form = Helper.f("#remark_form");
@@ -341,7 +349,7 @@ Helper.onClick("#btn_save", async e => {
   } else {
     Modal.setBody('<div class="alert alert-danger text-center">Error saving...</div>');
   }
-  
+
 });
 
 
@@ -373,11 +381,12 @@ async function changeShelf() {
   Modal.hideCloseButton();
   Modal.setTitle('Choose Shelf');
   Modal.setBody(`
-  <select class="form-select" name="shelf">
-  <option value="">Select Shelf</option>
-  ${options}
+  <select class="form-select" name="shelf" id="selected_shelf_id">
+    <option value="">Select Shelf</option>
+    ${options}
   </select>
   `);
+  Helper.f("#selected_shelf_id").value = localStorage.getItem('selected_shelf')
   Modal.setFooter(await Modal.button('Select', 'success'));
   Modal.open();
   Modal.submit(async (e, form_data) => {

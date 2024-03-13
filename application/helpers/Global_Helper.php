@@ -83,7 +83,7 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
   switch ($roleID) {
     case 'A': return 'Admin'; break;
     case 'V': return 'Checker'; break;
-    case 'E': return 'Encoder'; break;
+    case 'E': return 'Transcriber'; break;
     default: return '';break;
   }
 }

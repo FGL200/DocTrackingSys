@@ -109,7 +109,8 @@
                   <div class="form-group mb-3">
                     <label>Remarks <small class="text-danger">*</small></label>
                     <div class="input-group mb-3">
-                      <input name="remark" type="text" class="form-control" aria-describedby="remark_value">
+                      <input name="remark" type="text" list="remarks_category" class="form-control" aria-describedby="remark_value">
+                      <datalist id="remarks_category"></datalist>
                       <button class="btn btn-outline-primary" type="submit" id="remark_value" name="remark_value">
                         <i class="bi bi-plus"></i> Add
                       </button>

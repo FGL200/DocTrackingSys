@@ -9,6 +9,7 @@ let global_record = undefined;
 (async () => {
   Helper.importCSS("record/record-entry")
   await Load_Data();
+  await Load_RemarksCategory();
 })();
 
 async function Load_Data() {
@@ -275,6 +276,13 @@ function setDisplayNoneClass(node, displayNone = true) {
 // ************************************
 // *          Handle Remarks          *
 // ************************************
+async function Load_RemarksCategory() {
+  const resp = (await Helper.api('categories', 'json'));
+  let datalist = '';
+  resp.forEach(v => datalist += `<option value="${v}" />`)
+  Helper.f("#remarks_category").innerHTML = datalist;
+}
+
 Helper.onClick("#remarks_reload", () => {
   Clear_Remarks();
   Init_Remarks();
