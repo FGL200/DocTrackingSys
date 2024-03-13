@@ -369,9 +369,10 @@ Helper.onClick("#btn_merge", async e => {
   Modal.setTitle('<i class="bi bi-intersect"></i> Merge record');
   let options = '';
   (await Helper.api('student/record/shelf', 'json', Helper.createFormData({
-    stud_fname: global_record.student.stud_fname,
-    stud_lname: global_record.student.stud_lname,
-    stud_mname: global_record.student.stud_mname,
+    // stud_fname: global_record.student.stud_fname,
+    // stud_lname: global_record.student.stud_lname,
+    // stud_mname: global_record.student.stud_mname,
+    stud_id: global_record.student.stud_id,
     current_shelf: global_record.shelf.ID,
   })))
     .map(v => JSON.parse(v.shelf))
@@ -471,7 +472,7 @@ Helper.onClick("#btn_save", async e => {
       return;
     }
 
-    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body, ...doc })));
+    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body}, form_doc))); // ayos na yung bug dito na isang file lang yung nasesend sa backend
 
     Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
     Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');

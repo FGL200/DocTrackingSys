@@ -125,7 +125,7 @@
         <!-- Documents -->
         <div class="row">
           <div class="col-12">
-            <form id="document_form" class="card card-body" enctype="multipart/form-data">
+            <form id="document_form" class="card card-body" method="post">
               <div class="card-title">Documents</div>
               <div class="row">
 

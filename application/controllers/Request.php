@@ -217,12 +217,12 @@ class Request extends CI_Controller {
 
         if(!empty($cfrom) && !empty($cto)) {
             if(strlen(trim($condition)) > 0) $condition .= " AND ";
-            $condition .= "r.created_at between '{$cfrom}' and '{$cto}'";
+            $condition .= "(r.created_at >= '{$cfrom}' and r.created_at <= '{$cto}')";
         }
 
         if(!empty($dfrom) && !empty($dto)) {
             if(strlen(trim($condition)) > 0) $condition .= " AND ";
-            $condition .= "r.due_date between '{$dfrom}' and '{$dto}'";
+            $condition .= "(r.due_date >= '{$dfrom}' and r.due_date <= '{$dto}')";
         }
 
         if(!user_Is_Admin($this, $uid)) {

@@ -12,6 +12,14 @@ class Remarks_model extends CI_Model {
         $uid = $this->session->userdata('uid');
         $this->db->query($query);
     }
+
+    public function getRemarks() {
+        $query = 'SELECT rm.value from remarks rm
+                join stud_rec sr
+                on sr.id = rm.stud_rec_id
+                where rm.value != "[]" AND  rm.value != "" AND sr.is_merged != 1';
+        return ($this->db->query($query)->result_array());
+    }
 }
 
 ?>

@@ -10,6 +10,8 @@ class GenerateReport extends CI_Controller {
         parent::__construct();
 
         $this->load->model('request_model', 'rm');
+        $this->load->model('remarks_model', 'rmm');
+        $this->load->model('remarkcategory_model', 'rcm');
     }
 
     public function requests() {
@@ -71,5 +73,43 @@ class GenerateReport extends CI_Controller {
 
         echo to_JSON($result);
         
+    }
+
+    public function per_remarks() {
+        $remarks_report = ['OTHER REMARKS' => 0];
+        $remarks_categories = $this->rcm->getCategories();
+
+        $remarks_categories = array_map(function($arr){
+            return ($arr['category']);
+        }, $remarks_categories);
+
+        foreach($remarks_categories as $rc) {
+            $remarks_report[$rc] = 0;
+        }
+
+        $remarks = $this->rmm->getRemarks();
+
+        foreach($remarks as $remark) {
+            $val = json_decode($remark['value']);
+            if($val) {
+                foreach($val as $v) {
+                    // echo $v . PHP_EOL;
+                    if(in_array($v, $remarks_categories)) {
+                        $remarks_report[$v] += 1;
+                    } else {
+                        $remarks_report['OTHER REMARKS'] += 1;
+                    }
+                }
+            } else{
+                if(in_array($val, $remarks_categories)) {
+                    $remarks_report[$val] += 1;
+                } else {
+                    $remarks_report['OTHER REMARKS'] += 1;
+                }
+            }
+            
+        }
+
+        echo to_JSON($remarks_report);
     }
 }
