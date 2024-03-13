@@ -1,4 +1,5 @@
 import { Helper } from "../shared/helper.js";
+import { Modal } from "../shared/modal.js";
 
 let encoded_ChartData = [];
 let request_ChartData = [];
@@ -12,41 +13,44 @@ let request_ChartData = [];
     .sort((a, b) => a + b)
     .forEach(v => Helper.f("#encoded_year_filter").innerHTML += `<li><a class="dropdown-item filter_encoded">${v}</a></li>`);
 
-  Helper.fm(".filter_encoded", e => Helper.on(e, "click", () => {
-    Load_EncodenChart(Number(Helper.removeWhiteSpaces(e.innerHTML)))
+  Helper.fm(".filter_encoded", e => Helper.on(e, "click", async () => {
+    await Load_EncodenChart(Number(Helper.removeWhiteSpaces(e.innerHTML)))
   }));
 
   await Load_EncodenChart();
 
 
+  Helper.fm(".filter_request", e => Helper.on(e, "click", async function () {
+    await Load_PieChart(Helper.removeWhiteSpaces(e.innerHTML));
+  }));
 
-  await LoadChart_RequestPie();
-
-  // await LoadChart_RequestPie([
-  //   {
-  //     value: 500,
-  //     name: 'Not Released'
-  //   },
-  //   {
-  //     value: 1048,
-  //     name: 'Released'
-  //   }
-  // ]);
-
-  // await LoadChart_EncoderTotalEncoded([
-  //   {
-  //     name: 'Cedric',
-  //     data: [1, 2, 3, 4, 5, 6, 7]
-  //   },
-  //   {
-  //     name: 'Cedric',
-  //     data: [1, 2, 2, 2, 2, 3, 4, 9, 2]
-  //   },
-  // ]);
-
+  await Load_PieChart();
 })();
 
-async function Load_EncodenChart(year= new Date().getFullYear()) {
+async function Load_PieChart(showBy = 'ThisMonth') {
+  const resp = (await Helper.api('report/requests-graph', 'json'));
+  console.log({ resp, showBy })
+  switch (showBy) {
+    case 'PrevMonth':
+      request_ChartData = [{ value: resp.curr_month.released ?? 0, name: 'Not Released', }, { value: resp.curr_month.not_released ?? 0, name: 'Released', }];
+      Helper.f("#request_selected_filter").innerHTML = "| Previous Month";
+      LoadChart_RequestPie();
+      break;
+    case 'ThisMonth':
+      request_ChartData = [{ value: resp.prev_month.released ?? 0, name: 'Not Released', }, { value: resp.prev_month.not_released ?? 0, name: 'Released', }];
+      Helper.f("#request_selected_filter").innerHTML = "| This Month";
+      LoadChart_RequestPie();
+      break;
+    case 'ThisYear':
+      request_ChartData = [{ value: resp.yearly.released ?? 0, name: 'Not Released', }, { value: resp.yearly.not_released ?? 0, name: 'Released', }];
+      Helper.f("#request_selected_filter").innerHTML = "| This Year";
+      LoadChart_RequestPie();
+      break;
+    default: break;
+  }
+}
+
+async function Load_EncodenChart(year = new Date().getFullYear()) {
   Helper.f("#transcriber_selected_year").innerHTML = `| ${year}`;
   const resp = (await Helper.api('user/monthly/encodes', 'json', new FormData()))
   const total_encoded_raw = resp.reduce((acc, current) => {
@@ -76,8 +80,7 @@ function Encoded_getData(raw_data = [], year = new Date().getFullYear()) {
 
 async function LoadChart_RequestPie() {
   const passedData = request_ChartData;
-  Helper.f("#requestPie").innerHTML = "";
-  echarts.init(document.querySelector("#requestPie")).setOption({
+  echarts.init(Helper.f("#requestPie")).setOption({
     tooltip: {
       trigger: 'item'
     },
@@ -166,3 +169,13 @@ async function LoadChart_EncoderTotalEncoded() {
     }
   }).render();
 }
+
+
+
+
+
+
+Helper.onClick("#generate_report", () => {
+  Modal.setTitle('Generate Report')
+  Modal.open();
+});

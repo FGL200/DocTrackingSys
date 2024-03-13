@@ -472,11 +472,15 @@ Helper.onClick("#btn_save", async e => {
       return;
     }
 
-    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body}, form_doc))); // ayos na yung bug dito na isang file lang yung nasesend sa backend
-
-    Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
-    Modal.setBody('<div class="alert alert-success text-center">Saving...</div>');
-    Modal.open();
+    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body }, form_doc)));
+    // ayos na yung bug dito na isang file lang yung nasesend sa backend
+    if (resp.status == 1) {
+      CustomNotification.add("Success", "Successfully updated!", "success");
+      Modal.close();
+      setTimeout(() => { location.reload() }, 1000);
+    } else {
+      CustomNotification.add("Error", "Error occurred. Try again later.", "danger");
+    }
   })
 });
 
