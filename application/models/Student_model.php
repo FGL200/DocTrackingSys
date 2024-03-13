@@ -352,7 +352,7 @@ class Student_model extends CI_Model{
         \r    ON `u2`.id = `sr`.updated_by_uid
         \rLEFT JOIN shelves `sh`
         \r    ON `sh`.id = `d`.shelf
-        \rWHERE $conditions AND `sr`.deleted_flag = '0'";
+        \rWHERE $conditions AND `sr`.deleted_flag = '0' AND sr.is_merged != 1";
 
         $result = $this->db->query($sql);
         return ["sql" => $sql, "data" => $result->result_array()];
@@ -385,7 +385,7 @@ class Student_model extends CI_Model{
                 WHERE (sr.stud_fname LIKE '%".$student_info['stud_fname']."%' AND 
                         sr.stud_lname LIKE '%".$student_info['stud_lname']."%' AND 
                         sh.name = '{$student_info['shelf']}' AND 
-                        sr.deleted_flag = '0')
+                        sr.deleted_flag = '0' and sr.is_merged != 1)
                 ";
         // echo $sql; return;
         $fetch = $this->db->query($sql);
