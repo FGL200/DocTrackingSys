@@ -333,8 +333,7 @@ Helper.onClick("#btn_save", async e => {
   Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
   Modal.setBody('<div class="alert alert-secondary text-center">Saving...</div>');
   Modal.open();
-
-  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body, ...doc })));
+  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body }, form_doc))); // ayos na yung bug dito na isang file lang yung nasesend sa backend
   if (resp.status == 1) {
     Modal.setBody('<div class="alert alert-success text-center">New record added!</div>');
     setTimeout(() => { Modal.close(); location.reload(); }, 1000);
