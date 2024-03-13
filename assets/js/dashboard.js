@@ -1,5 +1,6 @@
 import { Helper } from "../shared/helper.js";
 import { Modal } from "../shared/modal.js";
+import { SheetJS } from "../shared/sheet-js.js";
 
 let encoded_ChartData = [];
 let request_ChartData = [];
@@ -29,7 +30,6 @@ let request_ChartData = [];
 
 async function Load_PieChart(showBy = 'ThisMonth') {
   const resp = (await Helper.api('report/requests-graph', 'json'));
-  console.log({ resp, showBy })
   switch (showBy) {
     case 'PrevMonth':
       request_ChartData = [{ value: resp.curr_month.released ?? 0, name: 'Not Released', }, { value: resp.curr_month.not_released ?? 0, name: 'Released', }];
@@ -175,7 +175,142 @@ async function LoadChart_EncoderTotalEncoded() {
 
 
 
-Helper.onClick("#generate_report", () => {
+Helper.onClick("#generate_report", async () => {
+
+  Modal.unhideCloseButton();
   Modal.setTitle('Generate Report')
+  Modal.setBody(`
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label for="date_from">From <small class="text-danger">* </small></label>
+        <input id="date_from" name="_form" class="form-control" type="date" />
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group mb-3">
+        <label for="date_to">To <small class="text-danger">* </small></label>
+        <input id="date_to" name="_to" class="form-control" type="date" />
+      </div>
+    </div>
+    <div class="col-12 text-center">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button id="btn_report_remarks" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Remarks Report</button>
+        <button id="btn_report_request" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Requests Report</button>
+        <button id="btn_report_documents" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Documents Report</button>
+      </div>
+    </div>
+  </div>
+  `, () => {
+
+
+    Helper.onClick("#btn_report_remarks", async () => {
+      const date_data = Helper.getDataFromFormData(Modal.form);
+      const resp = (await Helper.api('report/remarks', 'json', new FormData()));
+      console.log({ resp })
+
+
+      // Modal.close();
+    });
+
+    Helper.onClick("#btn_report_request", async () => {
+
+      const date_data = Helper.getDataFromFormData(Modal.form);
+      Modal.close();
+      setTimeout(() => {
+        Modal.unhideCloseButton();
+        Modal.setTitle('Request Report');
+        Modal.setBody(`
+          <table class="table table-striped table-sm border">
+            <tr>
+              <th></th>
+              <th>Contents</th>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Released</td>
+            </tr>
+          </table>
+        `)
+        Modal.open();
+
+      }, 500);
+    });
+
+    Helper.onClick("#btn_report_documents", async () => {
+
+      const date_data = Helper.getDataFromFormData(Modal.form);
+      Modal.close();
+      setTimeout(() => {
+        Modal.unhideCloseButton();
+        Modal.setTitle('Documents Report');
+        Modal.setBody(`
+          <table class="table table-striped table-sm border">
+            <tr>
+              <th><input id="check_all_documents" type="checkbox"/></th>
+              <th>Contents</th>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Registration Form</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Junior Form 137</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Senior Form 137</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Form 138</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Birth Certificate</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Good Moral</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Application for Graduation</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Transcript of Records</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Certificate Of Completion</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Honorable Dismisal / Certificate of Transferee</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Request for Clearance</td>
+            <tr>
+              <td><input type="checkbox" name=""/></td>
+              <td>Request for Credentials Form</td>
+            </tr>
+          </table>
+        `)
+        Modal.open();
+      }, 500);
+    });
+
+  });
   Modal.open();
 });
+
+
+
+
+
+
+function makeTabke(id, headers = [], body = [[]]) {
+  let thead = '';
+  headers.forEach(v => thead += `<th>${v}</th>`);
+
+  let tbody = '';
+  body.forEach(raw => {
+    let data = '';
+    raw.forEach(v => data += `<td>${v}</td>`);
+    tbody += `<tr>${data}</tr>`
+  });
+  return `<table id="${id}"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+}

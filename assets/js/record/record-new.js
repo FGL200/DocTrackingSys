@@ -385,7 +385,7 @@ async function changeShelf() {
     ${options}
   </select>
   `);
-  Helper.f("#selected_shelf_id").value = localStorage.getItem('selected_shelf')
+  Helper.f("#selected_shelf_id").value = localStorage.getItem('selected_shelf') ?? '';
   Modal.setFooter(await Modal.button('Select', 'success'));
   Modal.open();
   Modal.submit(async (e, form_data) => {

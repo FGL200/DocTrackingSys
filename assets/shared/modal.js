@@ -74,11 +74,23 @@ export class Modal {
     Helper.f("#dds_modal_footer").classList.add('d-none');
     if (callback) await callback();
   }
+  
+  static async unhideFooter(callback = undefined) {
+    Helper.f("#dds_modal_footer").classList.remove('d-none');
+    if (callback) await callback();
+  }
+  
 
   static async hideCloseButton(callback = undefined) {
     Helper.f("#dds_modal_close").classList.add('d-none');
     if (callback) await callback();
   }
+  
+  static async unhideCloseButton(callback = undefined) {
+    Helper.f("#dds_modal_close").classList.remove('d-none');
+    if (callback) await callback();
+  }
+  
 
   static get form() {
     return new FormData(Helper.f("#dds_modal_form"));
