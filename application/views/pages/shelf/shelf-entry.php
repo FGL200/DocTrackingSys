@@ -21,7 +21,7 @@
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                   <button id="advance_search" class="btn btn-outline-primary"><i class="bi bi-search"></i> Advance Search</button>
                   <button id="reload_shelf" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i>Reload all records</button>
-                  <button id="new_record" class="btn btn-success remove-when-A remove-when-V"><i class="bi bi-plus"></i> New Record</button>
+                  <button id="new_record" class="btn btn-success remove-when-V"><i class="bi bi-plus"></i> New Record</button>
                 </div>
               </div>
             </div>

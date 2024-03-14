@@ -18,7 +18,7 @@
       <div class="col-lg-4 col-md-4 col-sm-12">
 
         <!-- Action Card -->
-        <div class="row remove-when-V remove-when-A">
+        <div class="row remove-when-V">
           <div class="col-12">
             <div class="card card-body">
               <div class="card-title">Actions</div>
@@ -99,13 +99,13 @@
               <div class="card-title d-flex align-center justify-content-between">
                 Remarks List
                 <span>
-                  <button id="remarks_reload" class="btn btn-primary btn-sm small remove-when-V remove-when-A">
+                  <button id="remarks_reload" class="btn btn-primary btn-sm small remove-when-V">
                     <i class="bi bi-arrow-clockwise"></i> Refresh remarks
                   </button>
                 </span>
               </div>
               <form id="remark_form" class="row">
-                <div class="col-12 remove-when-V remove-when-A">
+                <div class="col-12 remove-when-V">
                   <div class="form-group mb-3">
                     <label>Remarks <small class="text-danger">*</small></label>
                     <div class="input-group mb-3">

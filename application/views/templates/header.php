@@ -226,9 +226,9 @@
         </ul>
       </li><!-- End Users Nav -->
 
-      <li class="nav-heading remove-when-A remove-when-V">Encoder</li>
+      <li class="nav-heading remove-when-V">Encoder</li>
 
-      <li class="nav-item remove-when-A remove-when-V">
+      <li class="nav-item remove-when-V">
         <a id="link-student_records" class="nav-link collapsed" data-bs-target="#records-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-file-earmark-person"></i><span>Student Records</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -253,7 +253,7 @@
           <i class="bi bi-person-lines-fill"></i> <span>Requests</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="request-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li class="remove-when-A">
+          <li class="">
             <a id="page-add_user" href="<?= base_url() ?>request/new">
               <i class="bi bi-plus"></i><span>Add New Request</span>
             </a>
