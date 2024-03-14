@@ -184,7 +184,7 @@ Helper.onClick("#generate_report", async () => {
     <div class="col-sm-6">
       <div class="form-group mb-3">
         <label for="date_from">From <small class="text-danger">* </small></label>
-        <input id="date_from" name="_form" class="form-control" type="date" />
+        <input id="date_from" name="_from" class="form-control" type="date" />
       </div>
     </div>
     <div class="col-sm-6">
@@ -225,7 +225,7 @@ Helper.onClick("#generate_report", async () => {
     Helper.onClick("#btn_report_request", async () => {
 
       const date_data = Helper.getDataFromFormData(Modal.form);
-      if (Helper.formValidator(Modal.form, ["_form", "_to"], v => v == '').length > 0) {
+      if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
         Helper.Promt_Error("* Please fill out the required fields.")
         return;
       }
@@ -264,8 +264,20 @@ Helper.onClick("#generate_report", async () => {
             pending: data.pending ? 1 : 0,
             ['not-released']: data['not-released'] ? 1 : 0,
           }
+          Modal.close();
           const resp = (await Helper.api('report/requests', 'json', Helper.createFormData(body)));
-          console.log({ resp })
+
+          setTimeout(async () => {
+            Modal.setTitle('Generating file')
+            Modal.setBody(
+              `<div class="alert alert-light">Generating. Please wait.</div>`
+              + createTable("docs_table", ["Request Status", "Total"], Helper.ObjectToArray(resp).map(v => [v.value._status, v.value.total]), true)
+            );
+            Modal.open()
+            await SheetJS.save("#docs_table", "docs");
+            Modal.close();
+          }, 500);
+
         });
       }, 500);
     });
@@ -273,7 +285,7 @@ Helper.onClick("#generate_report", async () => {
     Helper.onClick("#btn_report_documents", async () => {
 
       const date_data = Helper.getDataFromFormData(Modal.form);
-      if (Helper.formValidator(Modal.form, ["_form", "_to"], v => v == '').length > 0) {
+      if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
         Helper.Promt_Error("* Please fill out the required fields.")
         return;
       }
