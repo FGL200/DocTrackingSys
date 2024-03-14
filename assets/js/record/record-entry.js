@@ -201,7 +201,7 @@ async function Load_Data() {
       // **********************************
       // *          Vlidate Role          *
       // **********************************
-      if (const_role == 'A' || const_role == 'V') {
+      if (const_role == 'V') {
         Helper.removeElement(el_btn_file_add);
         Helper.removeElement(el_btn_file_rem);
         Helper.removeElement(el_input_cb);

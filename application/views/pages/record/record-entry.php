@@ -44,7 +44,7 @@
                 <div class="col-12">
                   <div class="form-group mb-3 has-validation">
                     <label>Student number </label>
-                    <input type="text" name="stud_id" class="form-control disabled-when-V disabled-when-A">
+                    <input type="text" name="stud_id" class="form-control disabled-when-V">
                     <div class="invalid-feedback">* Please enter Student number.</div>
                   </div>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="col-12">
                   <div class="form-group has-validation mb-3">
                     <label>Last name <small class="text-danger">*</small></label>
-                    <input type="text" name="stud_lname" class="form-control disabled-when-V disabled-when-A">
+                    <input type="text" name="stud_lname" class="form-control disabled-when-V">
                     <div class="invalid-feedback">* Please enter Last name.</div>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
                 <div class="col-12">
                   <div class="form-group has-validation mb-3">
                     <label>First name </label>
-                    <input type="text" name="stud_fname" class="form-control disabled-when-V disabled-when-A">
+                    <input type="text" name="stud_fname" class="form-control disabled-when-V">
                     <div class="invalid-feedback">* Please enter First name.</div>
                   </div>
                 </div>
@@ -68,7 +68,7 @@
                 <div class="col-12">
                   <div class="form-group has-validation mb-3">
                     <label>Middle name </label>
-                    <input type="text" name="stud_mname" class="form-control disabled-when-V disabled-when-A">
+                    <input type="text" name="stud_mname" class="form-control disabled-when-V">
                     <div class="invalid-feedback">* Please enter Middle name.</div>
                   </div>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="col-12">
                   <div class="form-group has-validation mb-3">
                     <label>Suffix </label>
-                    <input type="text" name="stud_sfx" class="form-control disabled-when-V disabled-when-A">
+                    <input type="text" name="stud_sfx" class="form-control disabled-when-V">
                     <div class="invalid-feedback">* Please enter Suffix.</div>
                   </div>
                 </div>
