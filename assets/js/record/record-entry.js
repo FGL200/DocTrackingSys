@@ -5,6 +5,7 @@ import { Modal } from "../../shared/modal.js";
 let global_rotate = 0;
 let global_remarks = [];
 let global_record = undefined;
+let global_doc_form = new FormData();
 
 (async () => {
   Helper.importCSS("record/record-entry")
@@ -18,6 +19,7 @@ async function Load_Data() {
 
   let record = getStudentInformationObject(resp);
   global_record = record;
+
   console.log({ resp, record })
 
 
@@ -86,6 +88,7 @@ async function Load_Data() {
             file_reader.onload = (e) => {
               v.value.dir += `,${e.target.result}`;
               if (v.value.dir[0] == ',') v.value.dir.replace(',', '');
+              global_doc_form.append(el_input_file.name, img);
             }
             file_reader.readAsDataURL(img);
           }
@@ -461,7 +464,7 @@ Helper.onClick("#btn_save", async e => {
     const form_info = new FormData(Helper.f("#information_form"));
     const form_doc = new FormData(Helper.f("#document_form"))
 
-    const doc = Helper.getDataFromFormData(form_doc);
+    // const doc = Helper.getDataFromFormData(form_doc);
     const body = {
       remarks: JSON.stringify(global_remarks),
       stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
@@ -472,7 +475,17 @@ Helper.onClick("#btn_save", async e => {
       return;
     }
 
-    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body }, form_doc)));
+    Object.keys(global_record.documents)
+    .forEach((v, k) => {
+      if(!global_doc_form.has(`${v}-file[]`)) global_doc_form.append(`${v}-file`, global_record.documents[v].dir);
+    })
+
+    form_doc.forEach((v, k) => {
+      if(k.includes("-cb")) global_doc_form.append(`${k}`, v);
+    })
+
+    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body }, global_doc_form)));
+    global_doc_form = new FormData();
     // ayos na yung bug dito na isang file lang yung nasesend sa backend
     if (resp.status == 1) {
       CustomNotification.add("Success", "Successfully updated!", "success");

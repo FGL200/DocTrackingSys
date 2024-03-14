@@ -231,20 +231,33 @@ class Student extends CI_Controller{
                 $this->stud->update_table('stud_rec', $stud_rec_data, "where id = '{$stud_rec_id}'");
 
             // get all checkbox inputs
-            $cb = array_filter($_FILES, function($key){
+            $files = array_filter($_FILES, function($key){
                 return str_contains($key, "-file");
             }, ARRAY_FILTER_USE_KEY);
+
+            $postFiles = array_filter($_POST, function($key){
+                return str_contains($key, "-file");
+            }, ARRAY_FILTER_USE_KEY);
+
+            foreach($postFiles as $k => $v) {
+                $files[$k] = $v;
+            }
     
             $stud_docs = [];
             $stud_docs_data = '';
-    
-            foreach($cb as $key => $val) {
+
+            foreach($files as $key => $val) {
                 $nKey = str_replace('-file', '', $key);
                 $fileKey = $nKey . '-file';
     
                 $stud_docs[$nKey]['val'] = $this->input->post($nKey . '-cb') ? '1' : '0';
                 $stud_docs[$nKey]['dir'] = [];
     
+                if(isset($_POST[$fileKey])) {
+                    array_push($stud_docs[$nKey]['dir'], $val);
+                    continue;
+                }
+
                 if(isset($_FILES[$fileKey])) {
                     // var_dump($_FILES[$fileKey]);
                     for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
