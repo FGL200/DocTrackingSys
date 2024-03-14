@@ -19,7 +19,7 @@
               <div class="btn-group" role="group" aria-label="Basic outlined example">
                 <button id="advance_search" class="btn btn-outline-primary"><i class="bi bi-search"></i> Advance Search</button>
                 <button id="reload_content" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i>Reload all requests</button>
-                <a href="<?= base_url()?>request/new" id="new_record" class="btn btn-success remove-when-A remove-when-E"><i class="bi bi-plus"></i> New request</a>
+                <a href="<?= base_url()?>request/new" id="new_record" class="btn btn-success remove-when-E"><i class="bi bi-plus"></i> New request</a>
               </div>
             </span>
           </div>
