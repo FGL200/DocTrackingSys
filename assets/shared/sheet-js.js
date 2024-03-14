@@ -11,7 +11,7 @@ export class SheetJS {
     return new Promise((next, err) => {
       setTimeout(() => {
         SheetJS.__holder__ = XLSX.utils.table_to_book(Helper.f(tableID));
-        XLSX.writeFile(SheetJS.__holder__, `${filename}-${new Date().getTime()}`);
+        XLSX.writeFile(SheetJS.__holder__, `${filename}-${new Date().toLocaleDateString()}.xlsx`);
         next({ status: 1 });
         err({ status: 0 });
       }, 1500);
