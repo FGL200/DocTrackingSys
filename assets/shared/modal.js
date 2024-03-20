@@ -24,6 +24,7 @@ export class Modal {
     Modal.setTitle('');
     Modal.setBody('');
     Modal.setFooter('');
+    Modal.setSize();
     Helper.f("#dds_modal_header").classList.remove('d-none');
     Helper.f("#dds_modal_footer").classList.remove('d-none');
     Modal.clearSubmit();
@@ -46,7 +47,7 @@ export class Modal {
     if (callback) await callback();
   }
 
-  static async setSize(size = "lg", callback = undefined) {
+  static async setSize(size, callback = undefined) {
     Helper.f("#dds_modal_dialog").classList.remove("modal-sm");
     Helper.f("#dds_modal_dialog").classList.remove("modal-lg");
     Helper.f("#dds_modal_dialog").classList.remove("modal-xl");

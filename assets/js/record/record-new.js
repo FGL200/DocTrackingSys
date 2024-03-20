@@ -112,8 +112,15 @@ Helper.fm(".document_item", function (v) {
         Helper.onClick("#carousel_next", () => selected_image = selected_image == global_document[id].list.images.length - 1 ? 0 : selected_image + 1);
         const remove_btn = Helper.f("#remove_image");
         Helper.on(remove_btn, "click", () => {
+          console.log({
+            selected_image,
+            images: global_document[id].list.images,
+            files: global_document[id].list.files,
+          })
+
           global_document[id].list.files.splice(selected_image, 1);
           global_document[id].list.images.splice(selected_image, 1);
+          selected_image = 0;
           BindLoadedImageToCarousel();
         });
       });
@@ -215,10 +222,7 @@ Helper.fm(".document_item", function (v) {
       }, 1000);
     }
     BindLoadedImageToCarousel();
-
-    Modal.onClose(() => {
-      console.log("CLOSED!")
-    })
+    
     Modal.open();
     Modal.submit(() => { });
 

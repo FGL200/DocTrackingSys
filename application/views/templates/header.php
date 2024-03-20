@@ -154,12 +154,6 @@
         </a>
       </li><!-- End Student Records Page Nav -->
 
-      <li class="nav-item remove-when-V remove-when-E">
-        <a id="link-all_shelves" class="nav-link collapsed" href="<?= base_url() ?>record/archived">
-          <i class="bi bi-box-seam"></i><span><span>Archived Records</span>
-        </a>
-      </li><!-- End Student Records Page Nav -->
-
       <li class="nav-heading remove-when-E remove-when-V">Admin</li>
 
       <li class="nav-item remove-when-E remove-when-V">
