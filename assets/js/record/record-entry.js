@@ -193,9 +193,6 @@ async function Load_Data() {
           this.files = null;
           this.value = null;
 
-          global_document[id].list.images = [];
-          InitializedSavedImages();
-
           uploaded_files.forEach(file => {
             Helper.readFileAsImage(file, v => {
               global_document[id].list.images.push(v);
