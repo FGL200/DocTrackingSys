@@ -51,6 +51,7 @@
   <script src="<?= base_url() ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
   <script src="<?= base_url() ?>assets/vendor/chart.js/chart.umd.js" defer></script>
   <script src="<?= base_url() ?>assets/vendor/echarts/echarts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="<?= base_url() ?>assets/js/main.js" defer></script>

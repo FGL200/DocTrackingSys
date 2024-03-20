@@ -45,7 +45,7 @@ async function Load_Shelves() {
         return;
       }
       Helper.Promt_Clear();
-      const resp = (await Helper.api(`shelf/${data.id}/update`, "json", Helper.createFormData({ name: body.name })));
+      const resp = (await Helper.api(`shelf/${data.id}/update`, "json", Helper.createFormData({ name: body.name, uid: const_uid })));
       if (resp.status == 1) {
         CustomNotification.add("Success", "Shelf renamed.", "success");
         await Load_Shelves();
@@ -60,6 +60,7 @@ async function Load_Shelves() {
     const data = {
       id: Helper.getDataBind(this, 'id'),
       name: Helper.getDataBind(this, 'name'),
+      uid: const_uid
     };
     console.log({ data })
     Modal.setSize('sm');

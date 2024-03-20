@@ -6,6 +6,16 @@ export class Helper {
   // *          SIMPLE          *
   // ****************************
 
+  static async readFileAsImage(file, callBack) {
+    if (!file.type.match('image/*')) {
+      CustomNotification.add("Error", "Files uploaded conatains non-image.")
+      return;
+    }
+    const file_reader = new FileReader();
+    file_reader.onload = (e) => callBack(e.target.result);
+    file_reader.readAsDataURL(file);
+  }
+
   static removeElement(elementNode) {
     elementNode.remove();
   }

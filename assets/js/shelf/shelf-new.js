@@ -8,12 +8,13 @@ Helper.onSubmit("#shelf_form", async function (e) {
     Helper.Promt_Error('Enter valid name.')
     return;
   }
-  
-  const resp = (await Helper.api('shelf/insert', "json", form_data));
+
+  const resp = (await Helper.api('shelf/insert', "json", Helper.createFormData({ uid: const_uid }, form_data)));
   if (resp.status == 'success') {
     this.reset();
     Helper.Promt_Clear();
     CustomNotification.add('Success', 'New shelf added', "success");
+    setTimeout(() => { location.href = `${base_url}shelf/all`; }, 500);
   } else {
     Helper.Promt_Error('Server error. Try again later.');
     CustomNotification.add('Error', 'Server Error. Try again later', "danger");
