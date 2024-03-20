@@ -23,6 +23,7 @@ const document_names = [
   'req_credentials',
 ];
 
+let global_document = {};
 let global_rotate = 0;
 let global_remarks = [];
 const documents = {};
@@ -30,117 +31,98 @@ document_names.map(v => documents[v] = { val: 0, dir: '' });
 console.log({ documents })
 
 
+
 // **************************************
 // *          Handle Documents          *
 // **************************************
-Helper.ObjectToArray(documents).forEach(v => {
-  Helper.f(`#${v.name}`, parent => {
-    const el_conatiner = Helper.find(parent, '.alert')[0];                // element of input file
-    const el_input_file = Helper.find(parent, 'input[type="file"]')[0];   // element of input file
-    const el_input_cb = Helper.find(parent, 'input[type="checkbox"]')[0]; // element of checkbox
-    const el_btn_file_add = Helper.find(parent, '.add_image')[0];         // element of button file for adding file
-    const el_btn_file_rem = Helper.find(parent, '.remove_image')[0];      // element of button file for removing file
-    const el_btn_view = Helper.find(parent, '.view_image')[0];            // element of view image
+Helper.fm(".document_item", function (v) {
 
+  const parent = v;
+  const id = parent.id;
+  const container = Helper.find(parent, '.alert')[0];
+  const btn_viewIMGs = Helper.find(parent, '.view_image')[0];
+  const cb_Input = Helper.find(parent, `#${id}-cb`)[0];
+  const file_Input = Helper.find(parent, `input[type="file"]`)[0];
 
-    // **********************************************
-    // *          When checkbox is changed          *
-    // **********************************************
-    Helper.on(el_input_cb, "change", () => {
-      if (el_input_cb.checked) {
-        setContiner(el_conatiner, 'success');
-        setDisabledClass(el_btn_file_add, false)
-      } else {
-        setContiner(el_conatiner, 'secondary');
-        setDisabledClass(el_btn_file_add, true)
-      }
-    });
+  let selected_image = 0;
 
+  global_document[id] = { list: { images: [], files: [] } };
 
-    // *******************************************
-    // *          When image is uploaded         *
-    // *******************************************
-    Helper.on(el_input_file, "change", () => {
-      const files = el_input_file.files;
-      if (files.length > 0) {
-        setDisabledClass(el_btn_view, false);
+  // **********************************************
+  // *          When checkbox is changed          *
+  // **********************************************
+  Helper.on(cb_Input, "change", () => {
+    if (cb_Input.checked) {
+      setContiner(container, 'success');
+      setDisabledClass(btn_viewIMGs, false);
+      setDisabledClass(file_Input, false);
+    } else {
+      setContiner(container, 'secondary');
+      setDisabledClass(btn_viewIMGs, true);
+      setDisabledClass(file_Input, true);
+    }
+  });
 
-        for (const img of files) {
-          if (!img.type.match('image/*')) {
-            CustomNotification.add("Error", "Files uploaded conatains non-image.")
-            return;
-          }
+  // ************************************************
+  // *          When View Image is clicked          *
+  // ************************************************
+  Helper.on(btn_viewIMGs, "click", async (e) => {
+    // layout for carousel component
+    const carouselTemplate = `
+        <div id="document_images" class="carousel carousel-dark slide" data-bs-ride="carousel"> 
+          <div class="carousel-indicators">{{pagination}}</div>
+          <div class="carousel-inner">{{imageSource}}</div>
+          <button id="carousel_prev" class="carousel-control-prev reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button id="carousel_next" class="carousel-control-next reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      `;
 
-          const file_reader = new FileReader();
-          file_reader.onload = (e) => {
-            v.value.dir += `,${e.target.result}`;
-            if (v.value.dir[0] == ',') v.value.dir.replace(',', '');
-          }
-          file_reader.readAsDataURL(img);
-        }
-
-        setDisplayNoneClass(el_btn_file_add, true);
-        setDisplayNoneClass(el_btn_file_rem, false);
-
-      } else {
-        setDisabledClass(el_btn_view, true);
-      }
-    });
-
-
-    // ******************************************
-    // *          When view is clicked          *
-    // ******************************************
-    Helper.on(el_btn_view, "click", async () => {
-
-
-      // *****************************************
-      // *          Initialize Carousel          *
-      // *****************************************
-      const saved_images = []
-      const raw = (v.value.dir.split(','));
-      for (let i = 0; i < raw.length; i++) {
-        const v = raw[i];
-
-        if (v.includes('data:image/jpeg;base64')) {
-          saved_images.push(raw[i] + ',' + raw[i + 1]);
-          ++i;
-        } else {
-          if (v == '') continue;
-          saved_images.push(v);
-        }
-      }
-      let items = '';
-      saved_images.forEach((v, i) => items += `
-          <div class="carousel-item ${i == 0 ? 'active' : ''}" data-bs-interval="0">
-            <div class="d-flex justify-content-center w-100">
-              <img src="${v}" class="d-block w-75 rotate" alt="...">
+    // *************************************************************
+    // *          Function For binding images in carousel          *
+    // *************************************************************
+    function bindImagestToCarousel() {
+      let imageSource = '';
+      let pagination = '';
+      global_document[id].list.images.forEach((v, i) => {
+        pagination += `
+            <button type="button" data-bs-target="#document_images" data-bs-slide-to="${i}" data-binder-index="${i}" class="carousel_navigator ${i == 0 ? 'active' : ''}" aria-current="true" aria-label="Slide 1"></button>
+          `;
+        imageSource += `
+            <div class="carousel-item ${i == 0 ? 'active' : ''}" data-bs-interval="9999999999">
+              <div class="d-flex justify-content-center w-100">
+                <img src="${v}" class="d-block w-75 rotate" alt="...">
+              </div>
             </div>
-          </div>
-        `);
-      Modal.setTitle('View Image');
-      Modal.setBody(`
-          <div id="document_images" class="carousel carousel-dark slide" data-bs-ride="carousel"> 
-            <div class="carousel-inner">${items}</div>
-            <button class="carousel-control-prev reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        `);
-      // Modal.setFooter('<small class="w-100"><i class="bi bi-info-circle"></i> Click to rotate. Scroll to zoom in and out.</small>')
-      Modal.setFooter('<small class="w-100"><i class="bi bi-info-circle"></i> Click to rotate.</small>')
-      Modal.open();
+          `;
+      });
+      Modal.setBody(Helper.replaceLayout(carouselTemplate, { imageSource, pagination }), () => {
 
+        Helper.fm(".carousel_navigator", v => Helper.on(v, "click", () => selected_image = Helper.getDataBind(v, 'index')));
+
+        // ************************************
+        // *          Removing image          *
+        // ************************************
+        Helper.onClick("#carousel_prev", () => selected_image = selected_image == 0 ? global_document[id].list.images.length - 1 : selected_image - 1);
+        Helper.onClick("#carousel_next", () => selected_image = selected_image == global_document[id].list.images.length - 1 ? 0 : selected_image + 1);
+        const remove_btn = Helper.f("#remove_image");
+        Helper.on(remove_btn, "click", () => {
+          global_document[id].list.files.splice(selected_image, 1);
+          global_document[id].list.images.splice(selected_image, 1);
+          BindLoadedImageToCarousel();
+        });
+      });
 
       // ***************************************
-      // *          Rotetion of image          *
+      // *          Rotation of image          *
       // ***************************************
       global_rotate = 0;
+      Helper.fm("img.rotate", v => Helper.clearEvent(v, "click"));
       Helper.fm("img.rotate", simg => Helper.on(simg, "click", () => {
         Helper.fm('.reset-rotate', rr => Helper.on(rr, "click", () => {
           global_rotate = 0;
@@ -149,50 +131,112 @@ Helper.ObjectToArray(documents).forEach(v => {
         global_rotate += 90;
         if (global_rotate >= 360) global_rotate = 0;
         simg.style.transform = `rotate(${global_rotate}deg)`;
-      })); // emd of image rotate
+      })); // end of image rotate
 
+      if (global_document[id].list.images.length == 0) setDisplayNoneClass(Helper.f("#remove_image"), true)
+      else setDisplayNoneClass(Helper.f("#remove_image"), false);
 
-    }); // end of view is clicked
+    }// end of binding function
 
+    Modal.setTitle('View Image');
+    Modal.setFooter(`
+        <div class="row w-100">
+          <div class="col-sm-4">
+            <small class="w-100 mb-3"><i class="bi bi-info-circle"></i> Click image to rotate.</small>
+          </div>
+          <div class="col-sm-8 text-end">
+            <button class="btn btn-danger" id="remove_image">Remove</button>
+            <label for="${id}-file" id="add_image" class="btn btn-success"><i class="bi bi-plus"></i> New <i class="bi bi-card-image"></i></label>
+            <button class="btn btn-primary" id="save_uploaded_images">Save</button>
+          </div>
+        </div>
+      `, () => {
 
-    // **************************************************
-    // *          When remove image is clicked          *
-    // **************************************************
-    Helper.on(el_btn_file_rem, "click", async () => {
-      Modal.setTitle('Remove Images');
-      Modal.setBody('<div class="alert alert-danger">This document contains images. Are you sure you want to <b>Overwrite</b> it?</div>');
-      Modal.setFooter(await Modal.button('Overwrite', 'danger'))
-      Modal.open();
-      Modal.submit(() => {
-        v.value.dir = "";
-        setDisplayNoneClass(el_btn_file_add, false);
-        setDisplayNoneClass(el_btn_file_rem, true);
-        setDisabledClass(el_btn_view, true);
-        el_input_file.value = null;
-        Modal.close();
+      // ***************************************
+      // *          Adding new Images          *
+      // ***************************************
+      Helper.on(file_Input, "change", function () {
+        const uploaded_files = [];
+        for (const file of this.files) uploaded_files.push(file);
+        this.files = null;
+        this.value = null;
+
+        uploaded_files.forEach(file => {
+          Helper.readFileAsImage(file, v => {
+            global_document[id].list.images.push(v);
+            global_document[id].list.files.push(file);
+          });
+        });
+
+        selected_image = 0;
+        this.disabled = true;
+        Modal.setBody(`<div class="alert alert-light m-0">Uploading images...</div>`);
+        setTimeout(() => {
+          this.disabled = false;
+          bindImagestToCarousel();
+        }, 1000);
       });
+
+    });
+
+    // ********************************************
+    // *          Saving uploaded images          *
+    // ********************************************
+    const close_btn = Helper.f("#save_uploaded_images");
+    Helper.on(close_btn, "click", () => {
+      transferVirtualFilesToNodeFile(file_Input, global_document[id].list.files);
+      Modal.close();
     });
 
 
-    // **************************************
-    // *          Vlidate documets          *
-    // **************************************
-    if (v.value.val == 1) el_input_cb.click();
-    if (v.value.dir != "") {
-      setDisabledClass(el_btn_view, false);
-      setDisplayNoneClass(el_btn_file_add, true);
-      setDisplayNoneClass(el_btn_file_rem, false);
+    // ************************************************
+    // *          Binding images to carousel          *
+    // ************************************************
+    function BindLoadedImageToCarousel() {
+      Modal.setBody(`<div class="alert alert-light m-0">Loading Images...</div>`);
+
+      if (global_document[id].list.images.length == 0) setDisplayNoneClass(Helper.f("#remove_image"), true)
+      else setDisplayNoneClass(Helper.f("#remove_image"), false);
+
+      setDisabledClass(Helper.f("#remove_image"), true);
+      setDisabledClass(Helper.f("#add_image"), true);
+      setDisabledClass(Helper.f("#save_uploaded_images"), true);
+
+      setTimeout(() => {
+        setDisabledClass(Helper.f("#remove_image"), false);
+        setDisabledClass(Helper.f("#add_image"), false);
+        setDisabledClass(Helper.f("#save_uploaded_images"), false);
+
+        if (global_document[id].list.images.length > 0) {
+          bindImagestToCarousel();
+        } else {
+          Modal.setBody('<div class="alert alert-info m-0">No scanned document yet.</div>');
+        }
+      }, 1000);
     }
+    BindLoadedImageToCarousel();
 
-    ``
-  }); // end of getting every <div> corresponding to a document
-}); // end of iteration of documents
+    Modal.onClose(() => {
+      console.log("CLOSED!")
+    })
+    Modal.open();
+    Modal.submit(() => { });
 
+  }); // end of when image is clicked
+
+});
 
 
 // ****************************************
 // *          Ducoment Functions          *
 // ****************************************
+function transferVirtualFilesToNodeFile(nodeFile, vitualFiles = []) {
+  const dt = new DataTransfer();
+  vitualFiles.forEach(v => dt.items.add(v));
+  const newFileList = dt.files;
+  nodeFile.files = newFileList;
+}
+
 function setContiner(node, type = 'success') {
   if (type == 'success') {
     node.classList.remove('alert-secondary');
@@ -223,8 +267,10 @@ function setButtonFile(node, type = 'success') {
 
 function setDisabledClass(node, disabled = true) {
   if (disabled) {
+    node.disabled = true;
     node.classList.add("disabled");
   } else {
+    node.disabled = false;
     node.classList.remove("disabled");
   }
 }
@@ -322,6 +368,12 @@ function addRemarks(remark) {
 Helper.onClick("#btn_save", async e => {
   e.preventDefault();
 
+  // disable input file that has no items
+  Helper.fm(".document_item", parent => {
+    const file_input = Helper.find(parent, 'input[type="file"]')[0];
+    if (file_input.files.length == 0) file_input.disabled = true;
+  });
+
   const form_info = new FormData(Helper.f("#information_form"));
   const form_doc = new FormData(Helper.f("#document_form"))
 
@@ -341,7 +393,7 @@ Helper.onClick("#btn_save", async e => {
   Modal.setTitle('<i class="bi bi-floppy"></i> Saving Record');
   Modal.setBody('<div class="alert alert-secondary text-center">Saving...</div>');
   Modal.open();
-  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body }, form_doc))); // ayos na yung bug dito na isang file lang yung nasesend sa backend
+  const resp = (await Helper.api('student/record/add', 'json', Helper.createFormData({ ...body }, form_doc)));
   if (resp.status == 1) {
     Modal.setBody('<div class="alert alert-success text-center">New record added!</div>');
     setTimeout(() => { Modal.close(); location.reload(); }, 1000);

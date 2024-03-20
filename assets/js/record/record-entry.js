@@ -5,8 +5,7 @@ import { Modal } from "../../shared/modal.js";
 let global_rotate = 0;
 let global_remarks = [];
 let global_record = undefined;
-let global_doc_newImages = undefined;
-let global_doc_form = new FormData();
+let global_document = {};
 
 (async () => {
   Helper.importCSS("record/record-entry")
@@ -42,15 +41,22 @@ async function Load_Data() {
   Init_Remarks();
 
 
+
   // **************************************
   // *          Handle Documents          *
   // **************************************
   Helper.fm(".document_item", function (v) {
+
     const parent = v;
     const id = parent.id;
     const container = Helper.find(parent, '.alert')[0];
     const btn_viewIMGs = Helper.find(parent, '.view_image')[0];
     const cb_Input = Helper.find(parent, `#${id}-cb`)[0];
+    const file_Input = Helper.find(parent, `input[type="file"]`)[0];
+
+    let selected_image = 0;
+
+    global_document[id] = { list: { images: [], files: [] } };
 
     // **********************************************
     // *          When checkbox is changed          *
@@ -59,9 +65,11 @@ async function Load_Data() {
       if (cb_Input.checked) {
         setContiner(container, 'success');
         setDisabledClass(btn_viewIMGs, false);
+        setDisabledClass(file_Input, false);
       } else {
         setContiner(container, 'secondary');
         setDisabledClass(btn_viewIMGs, true);
+        setDisabledClass(file_Input, true);
       }
     });
     if (record.documents[id].val == 1) cb_Input.click();
@@ -70,21 +78,30 @@ async function Load_Data() {
     // *          Initialize Images          *
     // ***************************************
     const dir = record.documents[id].dir;
+    let dirLength = 0;
+    function InitializedSavedImages() {
+      if (dir != '') {
+        const directory = dir.split(',').map(v => `${base_url}${v}`);
+        directory.forEach(img => global_document[id].list.images.push(img));
+        dirLength = directory.length;
+      }
+    }
+    InitializedSavedImages();
 
     // ************************************************
     // *          When View Image is clicked          *
     // ************************************************
-    Helper.on(btn_viewIMGs, "click", (e) => {
+    Helper.on(btn_viewIMGs, "click", async (e) => {
       // layout for carousel component
       const carouselTemplate = `
         <div id="document_images" class="carousel carousel-dark slide" data-bs-ride="carousel"> 
           <div class="carousel-indicators">{{pagination}}</div>
           <div class="carousel-inner">{{imageSource}}</div>
-          <button class="carousel-control-prev reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="prev">
+          <button id="carousel_prev" class="carousel-control-prev reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="next">
+          <button id="carousel_next" class="carousel-control-next reset-rotate" type="button" data-bs-target="#document_images" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
@@ -97,9 +114,9 @@ async function Load_Data() {
       function bindImagestToCarousel() {
         let imageSource = '';
         let pagination = '';
-        imageList.forEach((v, i) => {
+        global_document[id].list.images.forEach((v, i) => {
           pagination += `
-            <button type="button" data-bs-target="#document_images" data-bs-slide-to="${i}" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#document_images" data-bs-slide-to="${i}" data-binder-index="${i}" class="carousel_navigator ${i == 0 ? 'active' : ''}" aria-current="true" aria-label="Slide 1"></button>
           `;
           imageSource += `
             <div class="carousel-item ${i == 0 ? 'active' : ''}" data-bs-interval="9999999999">
@@ -109,7 +126,29 @@ async function Load_Data() {
             </div>
           `;
         });
-        Modal.setBody(Helper.replaceLayout(carouselTemplate, { imageSource, pagination }));
+        Modal.setBody(Helper.replaceLayout(carouselTemplate, { imageSource, pagination }), () => {
+
+          Helper.fm(".carousel_navigator", v => Helper.on(v, "click", () => selected_image = Helper.getDataBind(v, 'index')));
+
+          // ************************************
+          // *          Removing image          *
+          // ************************************
+          Helper.onClick("#carousel_prev", () => selected_image = selected_image == 0 ? global_document[id].list.images.length - 1 : selected_image - 1);
+          Helper.onClick("#carousel_next", () => selected_image = selected_image == global_document[id].list.images.length - 1 ? 0 : selected_image + 1);
+          const remove_btn = Helper.f("#remove_image");
+          Helper.on(remove_btn, "click", () => {
+
+            if (selected_image < dirLength) {
+              CustomNotification.add("Error", "Image cannot be removed.", "danger");
+              return;
+            }
+
+            global_document[id].list.files.splice(selected_image, 1);
+            global_document[id].list.images.splice(selected_image, 1);
+            selected_image = 0;
+            BindLoadedImageToCarousel();
+          });
+        });
 
         // ***************************************
         // *          Rotation of image          *
@@ -126,48 +165,99 @@ async function Load_Data() {
           simg.style.transform = `rotate(${global_rotate}deg)`;
         })); // end of image rotate
 
-      }// end of binding function
+        if (global_document[id].list.images.length == 0) setDisplayNoneClass(Helper.f("#remove_image"), true)
+        else setDisplayNoneClass(Helper.f("#remove_image"), false);
 
-      const imageList = dir ? dir.split(',').map(v => `${base_url}${v}`) : [];
-      const file_Input = Helper.find(parent, `input[type="file"]`)[0];
-      for (const file of file_Input.files) Helper.readFileAsImage(file, v => imageList.push(v));
+      }// end of binding function
 
       Modal.setTitle('View Image');
       Modal.setFooter(`
         <div class="row w-100">
-          <div class="col-sm-8">
-            <small class="w-100"><i class="bi bi-info-circle"></i> Click to rotate.</small>
-          </div>
           <div class="col-sm-4">
-            <label for="${id}-file" id="add_image" class="btn btn-success w-100"><i class="bi bi-plus"></i> <i class="bi bi-card-image"></i></label>
+            <small class="w-100 mb-3"><i class="bi bi-info-circle"></i> Click image to rotate.</small>
+          </div>
+          <div class="col-sm-8 text-end">
+            <button class="btn btn-danger" id="remove_image">Remove</button>
+            <label for="${id}-file" id="add_image" class="btn btn-success"><i class="bi bi-plus"></i> New <i class="bi bi-card-image"></i></label>
+            <button class="btn btn-primary" id="save_uploaded_images">Save</button>
           </div>
         </div>
       `, () => {
-        Helper.on(file_Input, "change", function () {
-          for (const file of this.files) Helper.readFileAsImage(file, v => imageList.push(v));
 
+        // ***************************************
+        // *          Adding new Images          *
+        // ***************************************
+        Helper.on(file_Input, "change", function () {
+          const uploaded_files = [];
+          for (const file of this.files) uploaded_files.push(file);
+          this.files = null;
+          this.value = null;
+
+          global_document[id].list.images = [];
+          InitializedSavedImages();
+
+          uploaded_files.forEach(file => {
+            Helper.readFileAsImage(file, v => {
+              global_document[id].list.images.push(v);
+              global_document[id].list.files.push(file);
+            });
+          });
+
+          selected_image = 0;
           this.disabled = true;
           Modal.setBody(`<div class="alert alert-light m-0">Uploading images...</div>`);
           setTimeout(() => {
             this.disabled = false;
             bindImagestToCarousel();
-          }, 3000);
+          }, 1000);
         });
+
       });
 
-      Modal.setBody(`<div class="alert alert-light m-0">Loading Images...</div>`);
-      setDisabledClass(Helper.f("#add_image"), true);
-      setTimeout(() => {
-        setDisabledClass(Helper.f("#add_image"), false);
-        if (imageList.length > 0) {
-          bindImagestToCarousel();
-        } else {
-          Modal.setBody('<div class="alert alert-info m-0">No scanned document yet.</div>');
-        }
-      }, 1000);
-      Modal.open();
+      // ********************************************
+      // *          Saving uploaded images          *
+      // ********************************************
+      const close_btn = Helper.f("#save_uploaded_images");
+      Helper.on(close_btn, "click", () => {
+        transferVirtualFilesToNodeFile(file_Input, global_document[id].list.files);
+        Modal.close();
+      });
 
-    });
+
+      // ************************************************
+      // *          Binding images to carousel          *
+      // ************************************************
+      function BindLoadedImageToCarousel() {
+        Modal.setBody(`<div class="alert alert-light m-0">Loading Images...</div>`);
+
+        if (global_document[id].list.images.length == 0) setDisplayNoneClass(Helper.f("#remove_image"), true)
+        else setDisplayNoneClass(Helper.f("#remove_image"), false);
+
+        setDisabledClass(Helper.f("#remove_image"), true);
+        setDisabledClass(Helper.f("#add_image"), true);
+        setDisabledClass(Helper.f("#save_uploaded_images"), true);
+
+        setTimeout(() => {
+          setDisabledClass(Helper.f("#remove_image"), false);
+          setDisabledClass(Helper.f("#add_image"), false);
+          setDisabledClass(Helper.f("#save_uploaded_images"), false);
+
+          if (global_document[id].list.images.length > 0) {
+            bindImagestToCarousel();
+          } else {
+            Modal.setBody('<div class="alert alert-info m-0">No scanned document yet.</div>');
+          }
+        }, 1000);
+      }
+      BindLoadedImageToCarousel();
+
+      Modal.onClose(function () {
+        console.log("CLOSED!", this)
+      })
+      Modal.open();
+      Modal.submit(() => { });
+
+    }); // end of when image is clicked
 
   });
 
@@ -179,10 +269,16 @@ async function Load_Data() {
 
 
 
-
 // ****************************************
 // *          Ducoment Functions          *
 // ****************************************
+function transferVirtualFilesToNodeFile(nodeFile, vitualFiles = []) {
+  const dt = new DataTransfer();
+  vitualFiles.forEach(v => dt.items.add(v));
+  const newFileList = dt.files;
+  nodeFile.files = newFileList;
+}
+
 function setContiner(node, type = 'success') {
   if (type == 'success') {
     node.classList.remove('alert-secondary');
@@ -228,6 +324,7 @@ function setDisplayNoneClass(node, displayNone = true) {
     node.classList.remove("d-none");
   }
 }
+
 
 
 
@@ -420,10 +517,16 @@ Helper.onClick("#btn_save", async e => {
   Modal.setFooter(await Modal.button('Save', 'success'))
   Modal.open()
   Modal.submit(async (e, form_data) => {
+
+    // disable input file that has no items
+    Helper.fm(".document_item", parent => {
+      const file_input = Helper.find(parent, 'input[type="file"]')[0];
+      if (file_input.files.length == 0) file_input.disabled = true;
+    });
+
     const form_info = new FormData(Helper.f("#information_form"));
     const form_doc = new FormData(Helper.f("#document_form"))
 
-    // const doc = Helper.getDataFromFormData(form_doc);
     const body = {
       remarks: JSON.stringify(global_remarks),
       stud_rec: JSON.stringify(Helper.getDataFromFormData(form_info)),
@@ -434,18 +537,7 @@ Helper.onClick("#btn_save", async e => {
       return;
     }
 
-    Object.keys(global_record.documents)
-      .forEach((v, k) => {
-        if (!global_doc_form.has(`${v}-file[]`)) global_doc_form.append(`${v}-file`, global_record.documents[v].dir);
-      })
-
-    form_doc.forEach((v, k) => {
-      if (k.includes("-cb")) global_doc_form.append(`${k}`, v);
-    })
-
-    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body }, global_doc_form)));
-    global_doc_form = new FormData();
-    // ayos na yung bug dito na isang file lang yung nasesend sa backend
+    const resp = (await Helper.api(`student/record/${global_record.id}/update`, 'json', Helper.createFormData({ ...body }, form_doc)));
     if (resp.status == 1) {
       CustomNotification.add("Success", "Successfully updated!", "success");
       Modal.close();

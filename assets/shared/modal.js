@@ -3,6 +3,7 @@ import { Helper } from "./helper.js";
 export class Modal {
 
   static async open(callback = undefined) {
+    Modal.closed = false;
     Helper.f("#dds_modal_open").click();
 
     Helper.clearEvent(Helper.f("#dds_modal_close"), "click");
@@ -10,11 +11,16 @@ export class Modal {
     if (callback) await callback();
   }
 
-  static async onClose(callBack) {
-    Helper.on(Helper.f("#dds_modal_close"), "click", callBack);
+  static onClose(callBack) {
+    const close_btn = Helper.f("#dds_modal_close");
+    console.log({ close_btn })
+
+    const modal = Helper.f(Modal.id);
+    modal.addEventListener('hide.bs.modal', callBack);
   }
 
   static async close(callback = undefined) {
+    Modal.closed = true;
     Modal.setTitle('');
     Modal.setBody('');
     Modal.setFooter('');
@@ -61,8 +67,16 @@ export class Modal {
   }
 
   static async button(value, type, callback = undefined) {
-    if (callback) await callback();
-    return `<button class="btn btn-${type}" type="submit">${value}</button>`;
+
+    const button = document.createElement('button');
+    button.setAttribute('class', `btn btn-${type}`)
+    button.setAttribute('type', 'submit');
+    button.innerHTML = value;
+
+    const holder = document.createElement('div');
+    holder.appendChild(button);
+    if (callback) await callback(button);
+    return holder.innerHTML;
   }
 
   static async hideHeader(callback = undefined) {
@@ -74,23 +88,23 @@ export class Modal {
     Helper.f("#dds_modal_footer").classList.add('d-none');
     if (callback) await callback();
   }
-  
+
   static async unhideFooter(callback = undefined) {
     Helper.f("#dds_modal_footer").classList.remove('d-none');
     if (callback) await callback();
   }
-  
+
 
   static async hideCloseButton(callback = undefined) {
     Helper.f("#dds_modal_close").classList.add('d-none');
     if (callback) await callback();
   }
-  
+
   static async unhideCloseButton(callback = undefined) {
     Helper.f("#dds_modal_close").classList.remove('d-none');
     if (callback) await callback();
   }
-  
+
 
   static get form() {
     return new FormData(Helper.f("#dds_modal_form"));
@@ -103,5 +117,8 @@ export class Modal {
   static clearSubmit() {
     Helper.clearEvent(Helper.f(Modal.id), "submit");
   }
+
+
+  static closed = true;
 
 }
