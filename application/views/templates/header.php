@@ -51,6 +51,7 @@
   <script src="<?= base_url() ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
   <script src="<?= base_url() ?>assets/vendor/chart.js/chart.umd.js" defer></script>
   <script src="<?= base_url() ?>assets/vendor/echarts/echarts.min.js" defer></script>
+  <script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="<?= base_url() ?>assets/js/main.js" defer></script>
@@ -150,12 +151,6 @@
       <li class="nav-item">
         <a id="link-all_shelves" class="nav-link collapsed" href="<?= base_url() ?>shelf/all">
           <i class="bi bi-list-nested"></i><span>All Shelves</span>
-        </a>
-      </li><!-- End Student Records Page Nav -->
-
-      <li class="nav-item remove-when-V remove-when-E">
-        <a id="link-all_shelves" class="nav-link collapsed" href="<?= base_url() ?>record/archived">
-          <i class="bi bi-box-seam"></i><span><span>Archived Records</span>
         </a>
       </li><!-- End Student Records Page Nav -->
 

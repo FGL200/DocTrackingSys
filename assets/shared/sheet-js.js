@@ -2,6 +2,10 @@ import { Helper } from "./helper.js";
 
 export class SheetJS {
 
+  static init(){
+    SheetJS.__init__f();
+  }
+
   static save(tableID, filename = `sheet`) {
     if (!SheetJS.__initilized__) SheetJS.__init__f();
     if (SheetJS.__holder__) {

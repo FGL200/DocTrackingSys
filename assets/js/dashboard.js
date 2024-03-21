@@ -7,6 +7,10 @@ let request_ChartData = [];
 
 (async () => {
 
+  // Init Sheet JS
+  SheetJS.init();
+
+  // Make a filter array for encode
   Array(4)
     .fill(0)
     .map((v, i) => i)
@@ -14,17 +18,21 @@ let request_ChartData = [];
     .sort((a, b) => a + b)
     .forEach(v => Helper.f("#encoded_year_filter").innerHTML += `<li><a class="dropdown-item filter_encoded">${v}</a></li>`);
 
+  // filter encodes
   Helper.fm(".filter_encoded", e => Helper.on(e, "click", async () => {
     await Load_EncodenChart(Number(Helper.removeWhiteSpaces(e.innerHTML)))
   }));
 
+  // load filtered encodes
   await Load_EncodenChart();
 
 
+  // filter requests
   Helper.fm(".filter_request", e => Helper.on(e, "click", async function () {
     await Load_PieChart(Helper.removeWhiteSpaces(e.innerHTML));
   }));
 
+  // load filtered requests
   await Load_PieChart();
 })();
 
@@ -217,6 +225,7 @@ Helper.onClick("#generate_report", async () => {
           + createTable("remarks_table", ["Form", "Released Document"], Helper.ObjectToArray(resp).map(v => [v.name, v.value]), true)
         );
         Modal.open()
+        SheetJS.clear();
         await SheetJS.save("#remarks_table", "remarks");
         Modal.close();
       }, 500);
@@ -274,6 +283,7 @@ Helper.onClick("#generate_report", async () => {
               + createTable("docs_table", ["Request Status", "Total"], Helper.ObjectToArray(resp).map(v => [v.value._status, v.value.total]), true)
             );
             Modal.open()
+            SheetJS.clear();
             await SheetJS.save("#docs_table", "docs");
             Modal.close();
           }, 500);
@@ -331,6 +341,7 @@ Helper.onClick("#generate_report", async () => {
               + createTable("docs_table", ["File", "Total"], Helper.ObjectToArray(resp).map(v => [v.value.file, v.value.total]), true)
             );
             Modal.open()
+            SheetJS.clear();
             await SheetJS.save("#docs_table", "docs");
             Modal.close();
           }, 500);

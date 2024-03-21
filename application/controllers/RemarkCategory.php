@@ -6,7 +6,7 @@ class RemarkCategory extends CI_Controller{
     {
         parent::__construct(); // inherit all the methods, attributes  and etc. from parent
         
-        $this->load->model("RemarkCategory_model", "rcateg");
+        $this->load->model("Remarkcategory_model", "rcateg");
     }
 
     public function getCategories() {
