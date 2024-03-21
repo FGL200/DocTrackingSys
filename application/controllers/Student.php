@@ -73,7 +73,7 @@ class Student extends CI_Controller{
      * Add student record
      */
     public function  addRecord() {
-        if($this->session->userdata("role") != "E") {
+        if($this->session->userdata("role") == "V") {
             echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
             die;
         }
@@ -205,7 +205,7 @@ class Student extends CI_Controller{
      */
     public function update_Student_Records($stud_rec_id) {
 
-        if($this->session->userdata("role") != "E") {
+        if($this->session->userdata("role") == "V") {
             echo json_encode(["status" => "error", "message" => "Unauthorized access is not allowed!!"]);
             die;
         }
