@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Expr\Cast\String_;
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Request_model extends CI_Model {
@@ -19,26 +17,31 @@ class Request_model extends CI_Model {
         
         $this->db->query($sql);
         $cuid = $this->session->userdata('uid');
-        add_To_User_Logs($this, $cuid, "({$cuid}) Created a Request.", trim($sql));
-        return $this->db->affected_rows();
+        $last_id = $this->db->insert_id();
+        return $last_id;
     }
 
     public function fetch_all($user) {
         if(!$user) return null;
 
-        $sql = "
-                SELECT 
+        $sql = '
+                    SELECT 
                     r.id as ID,
-                    concat(r.lname, ', ', r.fname, ', ', r.mname) as Requestor,
-                    r.created_at as 'Requested Date',
-                    GROUP_CONCAT(frc.name) as Files,
-                    r.status as Status,
-                    r.due_date as 'Due Date'
+                    concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
+                    r.created_at as \'Requested Date\',
+                    concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
+                    r.due_date as \'Due Date\'
                 FROM 
                     requests r
-                INNER JOIN 
-                    file_request_categories frc ON find_in_set(frc.id, r.file)
-                ";
+                join 
+                    requested_files req_f
+                on 
+                    r.id = req_f.request_id
+                join 
+                    file_request_categories frc 
+                on 
+                    req_f.file_id = frc.id
+                ';
 
         $condition = " where r.deleted_flag = 0 "; // het all the not deleted requests 
 
@@ -52,26 +55,36 @@ class Request_model extends CI_Model {
             $condition .= " AND u.id = {$user['uid']}";
         }
         $sql .= $condition;
-        $sql .= " GROUP BY r.id order by r.priority, r.created_at DESC";
+        $sql .= " GROUP BY r.id ORDER BY r.priority, r.due_date ASC";
+
+        // echo $sql;
         return $this->db->query($sql)->result();
     }
 
     public function fetch(String $condition, String $join = "") {
-        $sql = "
+        $sql = '
                 select
                     r.id as ID,
-                    concat(r.lname, ', ', r.fname, ', ', r.mname) as Requestor,
-                    r.created_at as 'Requested Date',
-                    GROUP_CONCAT(frc.name) as Files,
-                    r.status as Status,
-                    r.due_date as 'Due Date'
-                from requests r
-                INNER JOIN 
-                    file_request_categories frc ON find_in_set(frc.id, r.file)
-                {$join}
-                {$condition}
+                    concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
+                    r.created_at as \'Requested Date\',
+                    concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"Frc_ID\" : \"", frc.id,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
+                    r.due_date as \'Due Date\',
+                    r.reason as Reason,
+                    r.priority as Priority
+                FROM 
+                    requests r
+                join 
+                    requested_files req_f
+                on 
+                    r.id = req_f.request_id
+                join 
+                    file_request_categories frc 
+                on 
+                    req_f.file_id = frc.id
+                '.$join.'
+                '.$condition.'
                 GROUP BY r.id
-                ";
+                ';
         return $this->db->query($sql)->result();
     }
 
@@ -187,20 +200,24 @@ class Request_model extends CI_Model {
     }
 
     public function archives() {
-        $query = "SELECT 
-                    id, 
-                    lname, 
-                    fname,
-                    mname,
-                    file,
-                    reason,
-                    status,
-                    due_date, 
-                    deleted_flag 
-                  FROM 
-                    requests 
+            $query = 'SELECT 
+                        r.id as ID,
+                        concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
+                        r.created_at as \'Requested Date\',
+                        concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
+                        r.due_date as \'Due Date\'
+                    FROM 
+                        requests r
+                    join 
+                        requested_files req_f
+                    on 
+                        r.id = req_f.request_id
+                    join 
+                        file_request_categories frc 
+                    on 
+                        req_f.file_id = frc.id
                   where 
-                    deleted_flag = 1";
+                    r.deleted_flag = 1';
 
         $fetch = $this->db->query($query);
         return $fetch->result();

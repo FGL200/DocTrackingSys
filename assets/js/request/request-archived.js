@@ -14,18 +14,16 @@ async function Load_Table() {
         <th class="text-center" style="width: 30px;">#</th>
         <th>Requestor's Name</th>
         <th>File</th>
-        <th>Status</th>
         <th style="width: 100px;">Action</th>
       </tr>
     </thead>
   `;
   let tbody = '';
-  resp.map(v => ({ ...v, fullname: `${v.lname}, ${v.fname} ${v.mname}`, status: JSON.parse(v.status) })).forEach((v, i) => tbody += `
+  resp.map(v => ({ ...v, fullname: v['Requestor'], file : JSON.parse(v['Requested File']).map(f => `<button class='btn ${f.Status.value == "Pending" ? 'btn-warning' : f.Status.value == "Released" ? "btn-success" : "btn-danger"}'>${f.Name}</button>`), /**status: JSON.parse(v.status)**/ })).forEach((v, i) => tbody += `
     <tr>
       <td class="text-center" style="width: 30px;">${i + 1}</td>
       <td>${v.fullname}</td>
       <td>${v.file}</td>
-      <td>${v.status.value}</td>
       <td style="width: 100px;">
         <button class="btn btn-primary restore" data-binder-id="${v.id}" data-binder-fullname="${v.fullname}">
           <i class="bi bi-save"></i> Restore
