@@ -230,51 +230,32 @@ class Student extends CI_Controller{
             if($this->input->post('stud_rec'))
                 $this->stud->update_table('stud_rec', $stud_rec_data, "where id = '{$stud_rec_id}'");
 
-            // get all checkbox inputs
-            $files = array_filter($_FILES, function($key){
-                return str_contains($key, "-file");
-            }, ARRAY_FILTER_USE_KEY);
+            
+            $file_names = ["regi_form", "good_moral", "j_f137", "s_f137", "f138", "birth_cert", "tor", "app_grad", "cert_of_complete", "req_clearance_form", "req_credentials", "hd_or_cert_of_trans"];
 
-            $postFiles = array_filter($_POST, function($key){
-                return str_contains($key, "-file");
-            }, ARRAY_FILTER_USE_KEY);
+            $stud_cur_docs = (array)$this->stud->student_docs($stud_rec_id)[0];
 
-            foreach($postFiles as $k => $v) {
-                $files[$k] = $v;
-            }
-    
             $stud_docs = [];
             $stud_docs_data = '';
 
-            foreach($files as $key => $val) {
-                $nKey = str_replace('-file', '', $key);
-                $fileKey = $nKey . '-file';
+            foreach($file_names as $key) {
+                $fileKey = $key . '-file';
+
+                $oldDir = (array)json_decode($stud_cur_docs[$key]);
     
-                $stud_docs[$nKey]['val'] = $this->input->post($nKey . '-cb') ? '1' : '0';
-                $stud_docs[$nKey]['dir'] = [];
-    
-                if(isset($_POST[$fileKey])) {
-                    array_push($stud_docs[$nKey]['dir'], $val);
-                    continue;
-                }
+                $stud_docs[$key]['val'] = $this->input->post($key . '-cb') ? '1' : '0';
+                $stud_docs[$key]['dir'] = array_filter(explode(",",$oldDir['dir']), function($dir) {
+                    return strlen($dir) > 0;
+                });
 
                 if(isset($_FILES[$fileKey])) {
                     // var_dump($_FILES[$fileKey]);
                     for($i = 0; $i < count($_FILES[$fileKey]['name']); $i++) {
                         $fileDir = $this->upload_file($_FILES[$fileKey]['tmp_name'][$i], $_FILES[$fileKey]['name'][$i], $_FILES[$fileKey]['size'][$i]);
-                        array_push($stud_docs[$nKey]['dir'], $fileDir);
+                        array_push($stud_docs[$key]['dir'], $fileDir);
                     }
                 }
 
-                $old_path = $this->get_doc_dir($stud_rec_id, $nKey);
-
-                if(!empty(trim($old_path))) {
-                    /** convert the old_path to array */
-                    $dirs = explode(",", $old_path);
-
-                    /** delete each dir */
-                    foreach($dirs as $dir) $this->delete_Image($dir); 
-                }
     
             }
     
@@ -552,69 +533,6 @@ class Student extends CI_Controller{
 
     /** PRIVATE FUNCTIONS */
 
-    private function to_grouped_style(Array $stud_records){
-        $nRecord = [];
-        foreach ($stud_records as $row){
-            $nRow = [];
-            $lname = "";
-            $fname = "";
-            $mname = "";
-            $sfx = "";      
-            $cdate = "";    // created date
-            $cby = "";      // created by
-            $udate = "";    // updated date
-            $uby = "";      // updated by
-            $remarks = "";
-            foreach($row as $key => $val){
-                if($key === 'Record ID') $nRow[$key] = $val;
-                if($key === "Last Name" && !empty($val) && $val !== "--") $lname = $val;
-                if($key === "First Name" && !empty($val) && $val !== "--") $fname = $val;
-                if($key === "Middle Name" && !empty($val) && $val !== "--") $mname = $val;
-                if($key === "Suffix" && !empty($val) && $val !== "--") $sfx = $val;
-                if($key === "cdate") {
-                    $tempDate = intval(date_diff(new DateTime(), new DateTime($val))->format("%a"));
-                    $cdate = ($tempDate == 0) ? "today" : (($tempDate == 1) ? "yesterday" : "{$tempDate} days ago") ;
-                }
-                if($key === "cby") $cby = $val;
-                if($key === "udate") {
-                    if($val == null) continue;
-                    $tempDate = intval(date_diff(new DateTime(), new DateTime($val))->format("%a"));
-                    $udate = ($tempDate == 0) ? "today" : (($tempDate == 1) ? "yesterday" : "{$tempDate} days ago") ;
-                }
-                if($key === "uby") $uby = $val;
-                if($key === "Remarks") $remarks = $val;
-            }
-            $nRow['Student'] = 
-                "<div class='fw-bold' style='white-space: nowrap;'>{$lname}, {$fname} {$mname} {$sfx}</div> 
-                 <div style='font-size: small; margin-left: 10px;'>Created by <i>{$cby}</i> {$cdate}"
-                 .(($uby == "") ? "" : ", updated by <i>{$uby}</i> {$udate}")." </div>";
-            $nRow["Remarks"] = $remarks;
-            array_push($nRecord, $nRow);
-        }
-        return $nRecord;
-    }
-
-
-    /**
-     * Change the `Record ID` column to a link in `stud_rec` table
-     * @param Array $array query result 
-     */
-    private function to_Id_Link_Student_Record(Array $array) {
-        if(count($array) === 0) return [];
-        $fixedData = [];
-        foreach ($array as $row){
-            $newRow = [];
-            foreach($row as $key => $val){
-                if($key == 'Record ID')
-                    $newRow[$key] = '<a class="stud_rec_id_link" href="'.base_url('record/'.$val).'" target="_blank">'.$val.'</a>';
-                else
-                    $newRow[$key] = $val;
-            }
-            array_push($fixedData, $newRow);
-        }
-        return $fixedData;
-    }
-
     /**
      * Upload student documents
      * @param Array $file
@@ -665,26 +583,6 @@ class Student extends CI_Controller{
     private function to_Hoverable(int $count, String $value) {
         return "<div class='stud_rec-status stud_rec-".($count===0?"success":"danger")."' title='{$value}' style='cursor: context-menu; text-align: center;'>"
                 .($count===0?"No Remarks":"{$count} Remarks")."</div>";
-    }
-
-    /**
-     * Count the remarks of the student 
-     * @param Array $data
-     */
-    private function count_remarks(Array $data) {
-        $fixed_data = [];
-        
-        foreach($data as $row) {
-            
-            if(empty($row['Remarks'])) $row['Remarks'] = $this->to_Hoverable(0, "No remarks");
-            else if($row['Remarks'] === '--') $row['Remarks'] = $this->to_Hoverable(0, "No remarks");
-            else if(str_contains($row['Remarks'], "[")) $row['Remarks'] = $this->to_Hoverable(count(json_decode($row['Remarks'])), $row['Remarks']); 
-            else $row['Remarks'] = $this->to_Hoverable(1, $row['Remarks']);
-
-            array_push($fixed_data, $row);
-        }
-
-        return $fixed_data;
     }
 
     // Minove ko sa Helper ung insert_slashes na function
