@@ -59,7 +59,8 @@ class Shelf_model extends CI_Model {
         LEFT JOIN remarks rm ON rm.stud_rec_id = sr.id
         WHERE 
                 (sr.deleted_flag != 1 OR 
-                sr.deleted_flag IS NULL) AND
+                sr.deleted_flag IS NULL OR
+                sr.is_merged != 1) AND
                 sh_.deleted_flag = 0
         GROUP BY sh_.id, sh_.name";
 

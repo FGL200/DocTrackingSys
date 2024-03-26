@@ -6,7 +6,8 @@ class Request extends CI_Controller {
     {
         parent::__construct();
 
-        $this->load->model('Request_model', 'request_model');   
+        $this->load->model('Request_model', 'request_model');
+        $this->load->model('Requestedfile_model', 'reqfile_model');   
 
         disable_db_debugging($this);
     }
@@ -16,26 +17,46 @@ class Request extends CI_Controller {
      */
     public function create() {
         $response = ['status' => ""];
+        $curr_date = date("Y-m-d H:i:s");
+
         try {
-            $items = "";
+            $this->db->trans_start();
+            $create_request_items = "";
+            
+            
             foreach($this->input->post() as $key => $val) {
-                if(strlen($items) > 0) $items .= ",";
-    
+                if($key == "file") continue;
+                
+                if(strlen($create_request_items) > 0) $create_request_items .= ",";
+                
                 insert_slashes($val);
-    
-                $items .= "`{$key}` = '$val'";
+                
+                $create_request_items .= "`{$key}` = '$val'";
             }
             $current_user = $this->session->userdata('uid');
-
-            $items .= ", `status` = '{\"value\" : \"Pending\"}', `created_by` = {$current_user}";
             
-            $affected_rows = $this->request_model->create($items);
+            $create_request_items .= ",`created_by` = {$current_user}, `created_at` = '{$curr_date}'";
+            
+            $new_req_id = $this->request_model->create($create_request_items);
+
+            if($this->db->error()['message']) throw new Exception($this->db->error()['message']);
+            
+            $requested_files = explode(",", $_POST['file']);
+            $status = to_JSON(['value' => 'Pending']);
+
+            foreach($requested_files as $file) {
+                $add_file_items = "`request_id` = '{$new_req_id}', `file_id` = '{$file}', `status` = '{$status}'";
+                $this->reqfile_model->add($add_file_items) ? "TRUE" : "FALSE";            
+            }
+
+            if($this->db->error()['message']) throw new Exception($this->db->error()['message']);
             
             $response["status"] = 1 ;
-    
+            $this->db->trans_commit();
         } catch (Exception $e) {
             $response['status'] = 0;
             $response['message'] = $e->getMessage();
+            $this->db->trans_rollback();
         } finally {
             echo to_JSON($response);
         }
@@ -92,19 +113,6 @@ class Request extends CI_Controller {
         $response = ['status' => "", 'message' => ''];
         try {
             $items = "";
-            
-            if($this->input->post('status') && !in_array($this->input->post('status'), ['Released', 'Not Released', 'Pending']))
-                throw new Error('Invalid status value.');
-
-            if(in_array($this->input->post('status'), ["Released", "Pending"]) &&  $this->input->post('reason')) 
-                throw new Error('Released and Pending request doesnt have reason.');
-
-            if($this->input->post('status') && $this->input->post('reason')) {
-                $_POST['status'] = "{\"value\" : \"{$this->input->post('status')}\", \"reason\" : \"{$this->input->post('reason')}\"}";
-                unset($_POST['reason']);
-            } else if($this->input->post('status') && !$this->input->post('reason')) {
-                $_POST['status'] = "{\"value\" : \"{$this->input->post('status')}\"}";
-            }
 
             foreach($this->input->post() as $key => $val) {
                 if(strlen($items) > 0) $items .= ",";
@@ -120,8 +128,7 @@ class Request extends CI_Controller {
                       ";
     
             $condition = "`id` = {$id} and deleted_flag = 0";
-    
-    
+        
             $affected_rows = $this->request_model->update($items, $condition);
             $response["status"] = !$this->db->error()['message'] ? 1 : 0; 
             $response['message'] = $this->db->error()['message'];

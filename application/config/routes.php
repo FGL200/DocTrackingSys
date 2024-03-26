@@ -146,6 +146,9 @@ $route['api/report/requests-graph'] = 'GenerateReport/requests_graph';
 $route['api/report/file-requests']['post'] = 'GenerateReport/per_requested_file';
 $route['api/report/remarks']['post'] = 'GenerateReport/per_remarks';
 
+// Requested File 
+$route['api/requested-file/update']['post'] = 'RequestedFile/updateFile';
+
 // ------------------ /End API ------------------ 
 
 

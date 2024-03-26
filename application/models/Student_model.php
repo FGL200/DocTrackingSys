@@ -594,6 +594,13 @@ class Student_model extends CI_Model{
 
     }
 
+    public function student_docs($stud_rec_id) {
+        $query = "SELECT * FROM doc where stud_rec_id = '{$stud_rec_id}'";
+        $result = $this->db->query($query);
+
+        return $result->result();
+    }
+
     // PRIVATE FUNCTIONS //
 
     private function user_Is_Admin($uid) {

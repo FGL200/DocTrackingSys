@@ -85,6 +85,13 @@
 
       </form>
 
+    </div>
+  </section>
+</main>
+
+<script type="module" src="<?= base_url() ?>assets/js/request/request-new.js"></script>
+
+
       <!-- <form id="new-request-form">
         <div class="row d-flex">
           <div class="input-group mb-3">
@@ -157,8 +164,3 @@
         </div>
 
       </form> -->
-    </div>
-  </section>
-</main>
-
-<script type="module" src="<?= base_url() ?>assets/js/request/request-new.js"></script>
