@@ -9,6 +9,11 @@ Helper.onSubmit("#shelf_form", async function (e) {
     return;
   }
 
+  if (Helper.formValidator(form_data, ['name'], v => v.includes(' ')).length > 0) {
+    Helper.Promt_Error('Name must not contain spaces.')
+    return;
+  }
+
   const resp = (await Helper.api('shelf/insert', "json", Helper.createFormData({ uid: const_uid }, form_data)));
   if (resp.status == 'success') {
     this.reset();
