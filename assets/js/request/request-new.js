@@ -80,7 +80,7 @@ Helper.importCSS('request/request_new');
         return !Helper.isFutureDate(val)
     }
 
-    const invalids = Helper.formValidator(Helper.createFormData(body), ['fname', 'mname', 'lname', 'reason', 'due_date', 'file'], conditionCB);
+    const invalids = Helper.formValidator(Helper.createFormData(body), ['fname', 'lname', 'reason', 'due_date', 'file'], conditionCB);
     if (invalids.length == 0)
       (async () => {
         const resp = await Helper.api('request/create', 'json', Helper.createFormData(body))
@@ -93,6 +93,7 @@ Helper.importCSS('request/request_new');
           });
           Helper.fm("#file-requests-holder input", (input) => input.remove());
           Helper.f("#new-request-form input[type='checkbox']").checked = false;
+          Helper.Promt_Clear();
         } else {
           CustomNotification.add('Error 500', message, 'danger');
         }
