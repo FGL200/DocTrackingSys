@@ -55,7 +55,7 @@ class Request_model extends CI_Model {
             $condition .= " AND u.id = {$user['uid']}";
         }
         $sql .= $condition;
-        $sql .= " GROUP BY r.id ORDER BY r.priority, r.due_date ASC";
+        $sql .= " GROUP BY r.id ORDER BY r.due_date, r.priority DESC";
 
         // echo $sql;
         return $this->db->query($sql)->result();

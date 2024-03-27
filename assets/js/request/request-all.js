@@ -105,7 +105,7 @@ async function Load_List(search = null) {
 	tbody += "</tbody>";
 
 	Helper.DataTable_Reset("#table_content");
-	Helper.DataTable_Init("#table_content", thead + tbody);
+	Helper.DataTable_Init("#table_content", thead + tbody, null, null, {ordering : false});
 
 	Helper.fm("li > button.archive-file", (btn) => {
 		Helper.on(btn, "click", async (e) => {

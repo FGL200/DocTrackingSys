@@ -83,10 +83,10 @@ export class Helper {
     $(tableID).html("");
   }
 
-  static DataTable_Init(tableID = '', body = '', bindCallBackBeforeInitOfDataTable = () => { }, bindCallBackAfterInitOfDataTable = () => { }) {
+  static DataTable_Init(tableID = '', body = '', bindCallBackBeforeInitOfDataTable = () => { }, bindCallBackAfterInitOfDataTable = () => { }, options = {}) {
     $(tableID).append(body);
     bindCallBackBeforeInitOfDataTable();
-    $(tableID).DataTable({ bAutoWidth: false, autoWidth: false });
+    $(tableID).DataTable({ bAutoWidth: false, autoWidth: false, ...options});
     bindCallBackAfterInitOfDataTable();
   }
 
