@@ -39,14 +39,14 @@ let request_ChartData = [];
 async function Load_PieChart(showBy = 'ThisMonth') {
   const resp = (await Helper.api('report/requests-graph', 'json'));
   switch (showBy) {
-    case 'PrevMonth':
+    case 'ThisMonth':
       request_ChartData = [{ value: resp.curr_month.released ?? 0, name: 'Not Released', }, { value: resp.curr_month.not_released ?? 0, name: 'Released', }];
-      Helper.f("#request_selected_filter").innerHTML = "| Previous Month";
+      Helper.f("#request_selected_filter").innerHTML = "| This Month";
       LoadChart_RequestPie();
       break;
-    case 'ThisMonth':
+    case 'PrevMonth':
       request_ChartData = [{ value: resp.prev_month.released ?? 0, name: 'Not Released', }, { value: resp.prev_month.not_released ?? 0, name: 'Released', }];
-      Helper.f("#request_selected_filter").innerHTML = "| This Month";
+      Helper.f("#request_selected_filter").innerHTML = "| Previous Month";
       LoadChart_RequestPie();
       break;
     case 'ThisYear':

@@ -88,7 +88,7 @@ class Request extends CI_Controller {
      * @param $id request id
      */
     public function fetch(int $id) {
-        $request = $this->request_model->fetch("where r.id = '{$id}'");
+        $request = $this->request_model->fetch("where r.id = '{$id}'", "", ",r.reason as Reason,r.priority as Priority");
         echo to_JSON($request);
     }
 
@@ -167,8 +167,6 @@ class Request extends CI_Controller {
         $requestor_mname = $this->input->post('r_mname');
         $requestor_lname = $this->input->post('r_lname');
 
-        $status = $this->input->post('status');
-
         $cfrom = $this->input->post('created_from');
         $cto = $this->input->post('created_to');
 
@@ -186,11 +184,6 @@ class Request extends CI_Controller {
                 r.lname = '{$requestor_lname}' or 
                 r.mname = '{$requestor_mname}'
             )";
-        }
-
-        if(!empty($status)) {
-            if(strlen(trim($condition)) > 0) $condition .= " AND ";
-            $condition .= "locate('\"{$status}\"', r.status)";
         }
 
         if(!empty($cfrom) && !empty($cto)) {

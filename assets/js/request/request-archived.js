@@ -25,7 +25,7 @@ async function Load_Table() {
       <td>${v.fullname}</td>
       <td>${v.file}</td>
       <td style="width: 100px;">
-        <button class="btn btn-primary restore" data-binder-id="${v.id}" data-binder-fullname="${v.fullname}">
+        <button class="btn btn-primary restore" data-binder-id="${v.ID}" data-binder-fullname="${v.fullname}">
           <i class="bi bi-save"></i> Restore
         </button>
       </td>

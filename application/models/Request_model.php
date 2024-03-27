@@ -29,15 +29,15 @@ class Request_model extends CI_Model {
                     r.id as ID,
                     concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
                     r.created_at as \'Requested Date\',
-                    concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
+                    IFNULL(concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]"), \'[]\') \'Requested File\',
                     r.due_date as \'Due Date\'
                 FROM 
                     requests r
-                join 
+                left join 
                     requested_files req_f
                 on 
                     r.id = req_f.request_id
-                join 
+                left join 
                     file_request_categories frc 
                 on 
                     req_f.file_id = frc.id
@@ -61,23 +61,22 @@ class Request_model extends CI_Model {
         return $this->db->query($sql)->result();
     }
 
-    public function fetch(String $condition, String $join = "") {
+    public function fetch(String $condition, String $join = "", String $otherCols = "") {
         $sql = '
                 select
                     r.id as ID,
                     concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
                     r.created_at as \'Requested Date\',
-                    concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"Frc_ID\" : \"", frc.id,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
-                    r.due_date as \'Due Date\',
-                    r.reason as Reason,
-                    r.priority as Priority
+                    IFNULL(concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"Frc_ID\" : \"", frc.id,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]"), \'[]\') \'Requested File\',
+                    r.due_date as \'Due Date\'
+                    '.$otherCols.'
                 FROM 
                     requests r
-                join 
+                left join 
                     requested_files req_f
                 on 
                     r.id = req_f.request_id
-                join 
+                left join 
                     file_request_categories frc 
                 on 
                     req_f.file_id = frc.id
@@ -122,15 +121,15 @@ class Request_model extends CI_Model {
                             'released'
                     end as value,
                     count(*) as total,
-                    MONTHNAME(updated_at) as month
-                from requests
+                    MONTHNAME(Date) as month
+                from requested_files
                 where 
                     (locate('Not Released', status) or 
                     locate('Released', status)) AND 
-                    (MONTH(updated_at) = MONTH('{$curr_date}') AND 
-                    YEAR(updated_at) = YEAR('{$curr_date}'))
+                    (MONTH(Date) = MONTH('{$curr_date}') AND 
+                    YEAR(Date) = YEAR('{$curr_date}'))
                 group by
-                    value, MONTH(updated_at), YEAR(updated_at)";
+                    value, MONTH(Date), YEAR(Date)";
         $fetch = $this->db->query($query);
 
         return $fetch->result();
@@ -153,18 +152,18 @@ class Request_model extends CI_Model {
                             'released'
                     end as value,
                     count(*) as total,
-                    MONTHNAME(updated_at) as month
+                    MONTHNAME(Date) as month
                 from 
-                    requests
+                    requested_files
                 where 
                     (locate('Not Released', status) or 
                     locate('Released', status)) AND 
-                    (MONTH(updated_at) = MONTH('{$curr_date}') - 1 AND 
-                            YEAR(updated_at) = YEAR('{$curr_date}'))
+                    (MONTH(Date) = MONTH('{$curr_date}') - 1 AND 
+                            YEAR(Date) = YEAR('{$curr_date}'))
                 group by
                     value, 
-                    MONTH(updated_at), 
-                    YEAR(updated_at)";
+                    MONTH(Date), 
+                    YEAR(Date)";
         $fetch = $this->db->query($query);
 
         return $fetch->result();
@@ -185,14 +184,14 @@ class Request_model extends CI_Model {
                         end as value,
                         count(*) as total
                 FROM 
-                    `requests` 
+                    `requested_files` 
                 WHERE 
                     (locate('Not Released', status) or 
                     locate('Released', status)) AND 
-                    YEAR(created_at) = YEAR('{$curr_date}')
+                    YEAR(Date) = YEAR('{$curr_date}')
                 group by
                     value, 
-                    YEAR(updated_at)";
+                    YEAR(Date)";
         
         $fetch = $this->db->query($query);
 
@@ -204,20 +203,21 @@ class Request_model extends CI_Model {
                         r.id as ID,
                         concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
                         r.created_at as \'Requested Date\',
-                        concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]") \'Requested File\',
+                        IFNULL(concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]"), \'[]\') \'Requested File\',
                         r.due_date as \'Due Date\'
                     FROM 
                         requests r
-                    join 
+                    left join 
                         requested_files req_f
                     on 
                         r.id = req_f.request_id
-                    join 
+                    left join 
                         file_request_categories frc 
                     on 
                         req_f.file_id = frc.id
                   where 
-                    r.deleted_flag = 1';
+                    r.deleted_flag = 1
+                group by r.id';
 
         $fetch = $this->db->query($query);
         return $fetch->result();
@@ -226,16 +226,23 @@ class Request_model extends CI_Model {
 
     public function requestsReport(String $from, String $to, String $status) {
 
-        $query = "select 
-                    case 
-                        when locate('\"Pending\"', status) then 'Pending'
+        /*
+            when locate('\"Pending\"', status) then 'Pending'
                         when locate('\"Released\"', status) then 'Released' 
                         when locate('\"Not Released\"', status) then 'Not Released'
                     end as _status,
+
+
+            CONDITION
+            
+            AND ({$status}
+         */
+        $query = "select 
+                    case 
                     count(*) as total
                   from 
                     requests 
-                  where (created_at between '{$from}' and '{$to}') AND ({$status}) 
+                  where (created_at between '{$from}' and '{$to}')) 
                   group by _status
                     ";
 
@@ -248,10 +255,10 @@ class Request_model extends CI_Model {
                 frc.name as file,
                 count(*) as total
             FROM 
-                `requests` r
+                `requested_files` rf
             JOIN 
                 file_request_categories frc
-            on find_in_set(frc.id, r.file) != 0
+            on find_in_set(frc.id, rf.file_id)
             {$condition}
             GROUP by frc.name";
 

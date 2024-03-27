@@ -59,35 +59,38 @@ async function Load_List(search = null) {
 				case "Requested File":
 					const newVal = JSON.parse(req[val]);
 					let div = "<div class='d-flex gap-3 dropdown'>";
-
+					console.log(newVal)
 					let td = "";
+					if(newVal.length > 0) 
+						newVal.forEach((v, k) => {
+							const statusColor =
+								v["Status"].value == "Pending"
+									? "btn-warning"
+									: v["Status"].value == "Released"
+									? "btn-success"
+									: "btn-danger";
+							const isDropdown = v["Status"].value == "Pending" ? true : false;
+							const title =
+								v["Status"].value == "Not Released" ? v["Status"].reason : "";
 
-					newVal.forEach((v, k) => {
-						const statusColor =
-							v["Status"].value == "Pending"
-								? "btn-warning"
-								: v["Status"].value == "Released"
-								? "btn-success"
-								: "btn-danger";
-						const isDropdown = v["Status"].value == "Pending" ? true : false;
-						const title =
-							v["Status"].value == "Not Released" ? v["Status"].reason : "";
-
-						td += `<button title='${title}' class='btn ${statusColor} py-1 px-2' ${
-							isDropdown ? 'data-bs-toggle="dropdown"' : ""
-						}>${v["Name"]}</button>`;
-						if (v["Status"].value == "Pending")
-							td += `
-                <ul class="dropdown-menu">
-                  <li><button class="dropdown-item req-file-action" data-binder-req-file='${JSON.stringify(
-										{ ID: v["ID"], Action: "Released" }
-									)}'>Released</button></li>
-                  <li><button class="dropdown-item req-file-action" data-binder-req-file='${JSON.stringify(
-										{ ID: v["ID"], Action: "Not Released" }
-									)}'>Not Released</button></li>
-                </ul>
-              `;
-					});
+							td += `<button title='${title}' class='btn ${statusColor} py-1 px-2' ${
+								isDropdown ? 'data-bs-toggle="dropdown"' : ""
+							}>${v["Name"]}</button>`;
+							if (v["Status"].value == "Pending")
+								td += `
+										<ul class="dropdown-menu">
+										<li><button class="dropdown-item req-file-action" data-binder-req-file='${JSON.stringify(
+																{ ID: v["ID"], Action: "Released" }
+															)}'>Released</button></li>
+										<li><button class="dropdown-item req-file-action" data-binder-req-file='${JSON.stringify(
+																{ ID: v["ID"], Action: "Not Released" }
+															)}'>Not Released</button></li>
+										</ul>
+									`;
+						});
+					else 
+						td += '<div></div>'
+						
 					div += td + "</div>";
 					req[val] = div;
 					break;
