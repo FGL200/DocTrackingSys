@@ -1,14 +1,5 @@
 import { CustomNotification } from "../shared/custom-notification.js";
 import { Helper } from "../shared/helper.js";
-import { Modal } from "../shared/modal.js";
-
-Helper.onClick("#terms_and_condition", async () => {
-  Modal.setTitle('Terms and Conditions')
-  Modal.setSize("lg")
-  Modal.setBody(await Helper.template('/terms_and_condition'));
-  Modal.hideFooter();
-  Modal.open();
-});
 
 Helper.onSubmit("#form_login", async (e) => {
   e.preventDefault();

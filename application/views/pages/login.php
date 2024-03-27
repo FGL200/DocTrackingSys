@@ -20,11 +20,12 @@
   <link href="<?= base_url() ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/css/login.css" rel="stylesheet">
-
+  
   <!-- Template Main CSS File -->
   <link href="<?= base_url() ?>assets/css/template-style.css" rel="stylesheet">
   <link href="<?= base_url() ?>assets/css/login.css" rel="stylesheet">
-
+  
+  <script src="<?= base_url() ?>assets/vendor/tinymce/tinymce.min.js"></script>
   <script>
     const base_url = '<?= base_url() ?>';
   </script>

@@ -44,6 +44,10 @@ async function Load_Shelves() {
         Helper.Promt_Error('* Required fields must be filled.')
         return;
       }
+      if (Helper.formValidator(form_data, ['name'], v => v.includes(' ')).length > 0) {
+        Helper.Promt_Error('Name must not contain spaces.')
+        return;
+      }
       Helper.Promt_Clear();
       const resp = (await Helper.api(`shelf/${data.id}/update`, "json", Helper.createFormData({ name: body.name, uid: const_uid })));
       if (resp.status == 1) {
