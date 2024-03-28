@@ -74,7 +74,8 @@ class GenerateReport extends CI_Controller {
 
         $condition = "WHERE " . $condition;
         $result = $this->rm->per_requested_file($condition);
-
+        $result['from'] = $_from;
+        $result['to'] = $_to;
         echo to_JSON($result);
         
     }
