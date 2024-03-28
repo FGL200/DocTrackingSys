@@ -61,7 +61,7 @@
 
     <div class="row">
 
-      <div class="col-lg-7 col-md-7 remove-when-V remove-when-E">
+      <div class="col-lg-7 col-md-7 remove-when-V remove-when-E remove-when-VE">
         <div class="card card-body">
           <div class="card-title">Report</div>
           <button id="generate_report" class="btn btn-primary w-100" type="button"><i class="bi bi-printer"></i> Generate Report</button>

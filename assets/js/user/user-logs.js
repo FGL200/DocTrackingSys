@@ -43,7 +43,8 @@ function toProperRole(roleCode) {
   const roles = {
     A: 'Admin',
     E: 'Transcriber',
-    V: 'Checker'
+    V: 'Checker',
+    VE: 'Transcriber & Checker',
   }
   return roles[roleCode] ?? 'No Role';
 }

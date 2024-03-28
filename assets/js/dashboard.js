@@ -201,6 +201,9 @@ Helper.onClick("#generate_report", async () => {
         <input id="date_to" name="_to" class="form-control" type="date" />
       </div>
     </div>
+    <div class="col-12">
+      <div class="alert alert-info">Dates are required for Request &  Documents Report.</div>
+    </div>
     <div class="col-12 text-center">
       <div class="btn-group mb-3" role="group" aria-label="Basic example">
         <button id="btn_report_remarks" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Remarks Report</button>
@@ -250,15 +253,15 @@ Helper.onClick("#generate_report", async () => {
               <th>Contents</th>
             </tr>
             <tr>
-              <td><input type="checkbox" name="released" id="request_released_cb"/></td>
+              <td><input type="checkbox" name="released" id="request_released_cb" checked/></td>
               <td><label for="request_released_cb">Released</label></td>
             </tr>
             <tr>
-              <td><input type="checkbox" name="not-released" id="not_request_released_cb"/></td>
+              <td><input type="checkbox" name="not-released" id="not_request_released_cb" checked/></td>
               <td><label for="not_request_released_cb">Not Released</label></td>
             </tr>
             <tr>
-              <td><input type="checkbox" name="pending" id="request_pending_cb"/></td>
+              <td><input type="checkbox" name="pending" id="request_pending_cb" checked/></td>
               <td><label for="request_pending_cb">Pending</label></td>
             </tr>
           </table>
@@ -309,7 +312,7 @@ Helper.onClick("#generate_report", async () => {
         let trs = '';
         categories.forEach(v => trs += `
           <tr>
-            <td><input type="checkbox" class="doc_cbs" name="${v.name}" id="doc_${v.id}_cb" /></td>
+            <td><input type="checkbox" class="doc_cbs" name="${v.name}" id="doc_${v.id}_cb" checked/></td>
             <td><label for="doc_${v.id}_cb"> ${v.name} </label></td>
           </tr>
         `);

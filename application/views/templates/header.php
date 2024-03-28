@@ -154,9 +154,9 @@
         </a>
       </li><!-- End Student Records Page Nav -->
 
-      <li class="nav-heading remove-when-E remove-when-V">Admin</li>
+      <li class="nav-heading remove-when-E remove-when-V remove-when-VE">Admin</li>
 
-      <li class="nav-item remove-when-E remove-when-V">
+      <li class="nav-item remove-when-E remove-when-V remove-when-VE">
         <a id="link-manage_users" class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-people"></i><span>Manage Users</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -180,7 +180,7 @@
       </li><!-- End Users Nav -->
 
 
-      <li class="nav-item remove-when-E remove-when-V">
+      <li class="nav-item remove-when-E remove-when-V remove-when-VE">
         <a id="link-manage_shelves" class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-bookshelf"></i><span>Manage Shelves</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -198,7 +198,7 @@
         </ul>
       </li><!-- End Shelves Nav -->
 
-      <li class="nav-item remove-when-E remove-when-V">
+      <li class="nav-item remove-when-E remove-when-V remove-when-VE">
         <a id="link-manage_requests" class="nav-link collapsed" data-bs-target="#manage-request-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-wallet2"></i><span>Manage Request</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -221,7 +221,7 @@
         </ul>
       </li><!-- End Users Nav -->
 
-      <li class="nav-heading remove-when-V">Encoder</li>
+      <li class="nav-heading remove-when-V">Transcriber</li>
 
       <li class="nav-item remove-when-V">
         <a id="link-student_records" class="nav-link collapsed" data-bs-target="#records-nav" data-bs-toggle="collapse" href="#">

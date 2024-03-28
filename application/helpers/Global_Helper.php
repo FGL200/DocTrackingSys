@@ -84,6 +84,7 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
     case 'A': return 'Admin'; break;
     case 'V': return 'Checker'; break;
     case 'E': return 'Transcriber'; break;
+    case 'VE': return 'Transcriber & Checker'; break;
     default: return '';break;
   }
 }
