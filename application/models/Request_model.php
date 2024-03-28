@@ -274,6 +274,7 @@ class Request_model extends CI_Model {
 
         $result = $this->db->query($query)->result();
         
+        $total = 0;
         $temp = array();
 
         foreach($result as $r) {
@@ -283,10 +284,10 @@ class Request_model extends CI_Model {
                 if($r->status == "Released") $temp[$r->file]["Released"]++;
                 else if($r->status == "Not Released") $temp[$r->file]["Not Released"]++;
                 else if($r->status == "Pending") $temp[$r->file]["Pending"]++;
-                
+                $total += 1;
             }
         }
-        return $temp;
+        return ["documents" => $temp, "total" => $total];
     }
 
 }
