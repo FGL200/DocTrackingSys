@@ -258,16 +258,34 @@ class Request_model extends CI_Model {
     public function per_requested_file($condition) {
         $query ="SELECT 
                 frc.name as file,
-                count(*) as total
+                case 
+                    when locate('\"Released\"', rf.status) then 'Released' 
+                    when locate('\"Not Released\"', rf.status) then 'Not Released'
+                    when locate('\"Pending\"', rf.status) then 'Pending'  
+                end 
+                as status
             FROM 
                 `requested_files` rf
             JOIN 
                 file_request_categories frc
             on find_in_set(frc.id, rf.file_id)
-            {$condition}
-            GROUP by frc.name";
+            {$condition}";
 
-        return $this->db->query($query)->result();
+        $result = $this->db->query($query)->result();
+        
+        $temp = array();
+
+        foreach($result as $r) {
+            if($r->status) {
+                if(!isset($temp[$r->file])) $temp[$r->file] = ["Released" => 0, "Not Released" => 0, "Pending" => 0];
+
+                if($r->status == "Released") $temp[$r->file]["Released"]++;
+                else if($r->status == "Not Released") $temp[$r->file]["Not Released"]++;
+                else if($r->status == "Pending") $temp[$r->file]["Pending"]++;
+                
+            }
+        }
+        return $temp;
     }
 
 }

@@ -385,6 +385,7 @@ class Student_model extends CI_Model{
                     d.shelf = sh.id
                 WHERE (sr.stud_fname LIKE '%".$student_info['stud_fname']."%' AND 
                         sr.stud_lname LIKE '%".$student_info['stud_lname']."%' AND 
+                        sr.stud_id LIKE '%".$student_info['stud_id']."%' AND 
                         sh.name = '{$student_info['shelf']}' AND 
                         sr.deleted_flag = '0' and sr.is_merged != 1)
                 ";
