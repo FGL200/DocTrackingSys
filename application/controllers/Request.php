@@ -211,7 +211,7 @@ class Request extends CI_Controller {
                     on 
                         r.created_by = u.id";
         }
-
+        $condition .= (!empty(trim($condition)) ? "AND" : "") . " r.deleted_flag = 0";
         $condition = "WHERE " . $condition;
 
         echo to_JSON($this->request_model->fetch($condition));

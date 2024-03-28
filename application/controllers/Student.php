@@ -10,7 +10,7 @@ class Student extends CI_Controller{
         $this->load->model("student_model", "stud");
         $this->load->model("remarks_model", "rm");
         $this->load->model("user_model", 'user');
-        $this->load->model("excel_model", 'excel');
+        // $this->load->model("excel_model", 'excel');
         $this->load->model("shelf_model", "shelf");
         /** File uploder helper */
         // $this->load->helper(array("form", "url"));
@@ -20,54 +20,54 @@ class Student extends CI_Controller{
      * Add student/s via excel
      */
 
-     public function addExcel() {
-        $students = json_decode($this->input->post("students")); 
-        $id = 0;
+    //  public function addExcel() {
+    //     $students = json_decode($this->input->post("students")); 
+    //     $id = 0;
         
-        $created_by_uid = $this->session->userdata('uid');
-        $shelfid = $this->shelf->getShelfId($this->input->post('shelf'));
+    //     $created_by_uid = $this->session->userdata('uid');
+    //     $shelfid = $this->shelf->getShelfId($this->input->post('shelf'));
 
-        $filename = $this->input->post("filename");
+    //     $filename = $this->input->post("filename");
         
-        if(!$this->excel->isFileExisted($filename)) {
-            $this->db->trans_begin();
+    //     if(!$this->excel->isFileExisted($filename)) {
+    //         $this->db->trans_begin();
 
-            $total_inserted = 0; // will store how many data has been added  to database from the uploaded excel
+    //         $total_inserted = 0; // will store how many data has been added  to database from the uploaded excel
 
-            $excel_query = "`name` = '{$filename}', `uploaded_by` = '{$created_by_uid}'";
-            $excel_id = $this->excel->addFile($excel_query);
+    //         $excel_query = "`name` = '{$filename}', `uploaded_by` = '{$created_by_uid}'";
+    //         $excel_id = $this->excel->addFile($excel_query);
             
     
-            if(!$excel_id) {echo json_encode(['status'=>'error', 'message' => $this->db->error()['message']]); die;}
+    //         if(!$excel_id) {echo json_encode(['status'=>'error', 'message' => $this->db->error()['message']]); die;}
     
-            for($i = 0; $i < count($students); $i++) {
+    //         for($i = 0; $i < count($students); $i++) {
                 
-                $studrec = " `x_file_id` = '{$excel_id}', `created_by_uid` = '{$created_by_uid}'," . $students[$i][0];
+    //             $studrec = " `x_file_id` = '{$excel_id}', `created_by_uid` = '{$created_by_uid}'," . $students[$i][0];
     
-                $id = $this->stud->add_student($studrec);
+    //             $id = $this->stud->add_student($studrec);
     
-                $student_id = "`stud_rec_id` = {$id}, ";
+    //             $student_id = "`stud_rec_id` = {$id}, ";
     
-                $doc = $student_id . $students[$i][1] . ", `shelf` = '{$shelfid}'";
+    //             $doc = $student_id . $students[$i][1] . ", `shelf` = '{$shelfid}'";
                 
-                $this->stud->addStudentDoc($doc);
+    //             $this->stud->addStudentDoc($doc);
                 
-                $remarks = " `value`='[]', `stud_rec_id` = '{$id}'";
-                $this->rm->insertRemarks($remarks);
+    //             $remarks = " `value`='[]', `stud_rec_id` = '{$id}'";
+    //             $this->rm->insertRemarks($remarks);
 
-                $total_inserted+=1;
-            }
+    //             $total_inserted+=1;
+    //         }
     
             
     
-            if($this->db->error()['code'] > 0)  echo json_encode(['status'=>'error', 'message'=>$this->db->error()['message']]);
-            else { echo json_encode(['status'=>'success', 'message'=> "<b>{$total_inserted}</b> records inserted successfully"]); $this->db->trans_commit();}
-        } else {
-            echo json_encode(['status'=>'error', 'message'=>'<b>File is already existed..</b> Please rename the file.']);
-        }
+    //         if($this->db->error()['code'] > 0)  echo json_encode(['status'=>'error', 'message'=>$this->db->error()['message']]);
+    //         else { echo json_encode(['status'=>'success', 'message'=> "<b>{$total_inserted}</b> records inserted successfully"]); $this->db->trans_commit();}
+    //     } else {
+    //         echo json_encode(['status'=>'error', 'message'=>'<b>File is already existed..</b> Please rename the file.']);
+    //     }
 
         
-     }
+    //  }
 
     /**
      * Add student record
