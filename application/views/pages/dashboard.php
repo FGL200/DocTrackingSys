@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12">
         <div class="card card-body pb-0">
-          <div class="card-title m-0"><i class="bi bi-person-circle"></i> Welcome, <?= $constants['myname'] ?>!</div>
+          <div class="card-title m-0"><i class="bi bi-person-circle"></i> Welcome, <?= strtoupper($constants['myname']) ?>!</div>
         </div>
       </div>
     </div>

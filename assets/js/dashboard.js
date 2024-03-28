@@ -61,6 +61,7 @@ async function Load_PieChart(showBy = 'ThisMonth') {
 async function Load_EncodenChart(year = new Date().getFullYear()) {
   Helper.f("#transcriber_selected_year").innerHTML = `| ${year}`;
   const resp = (await Helper.api('user/monthly/encodes', 'json', new FormData()))
+  console.log({ resp })
   const total_encoded_raw = resp.reduce((acc, current) => {
     const { uname, date, total } = current;
     acc[uname] = acc[uname] || [];
@@ -189,35 +190,20 @@ Helper.onClick("#generate_report", async () => {
   Modal.setTitle('Generate Report')
   Modal.setBody(`
   <div class="row">
-    <div class="col-sm-6">
-      <div class="form-group mb-3">
-        <label for="date_from">From <small class="text-danger">* </small></label>
-        <input id="date_from" name="_from" class="form-control" type="date" />
-      </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="form-group mb-3">
-        <label for="date_to">To <small class="text-danger">* </small></label>
-        <input id="date_to" name="_to" class="form-control" type="date" />
-      </div>
-    </div>
     <div class="col-12">
-      <div class="alert alert-info">Dates are required for Request &  Documents Report.</div>
+      <div class="alert alert-info">Select an option to generate report.</div>
     </div>
     <div class="col-12 text-center">
       <div class="btn-group mb-3" role="group" aria-label="Basic example">
         <button id="btn_report_remarks" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Remarks Report</button>
-        <button id="btn_report_request" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Requests Report</button>
-        <button id="btn_report_documents" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Documents Report</button>
+        <button id="btn_report_request" type="button" class="btn btn-outline-primary btn-sm" ><i class="bi bi-download"></i> Request Report</button>
       </div>
-    </div>
-    <div class="col-12">
-      <small class="error-msg text-danger"></small>
     </div>
   </div>
   `, () => {
 
 
+    // REMARKS  REPORT
     Helper.onClick("#btn_report_remarks", async () => {
       Modal.close();
       const resp = (await Helper.api('report/remarks', 'json', new FormData()));
@@ -225,7 +211,7 @@ Helper.onClick("#generate_report", async () => {
         Modal.setTitle('Generating file')
         Modal.setBody(
           `<div class="alert alert-light">Generating. Please wait.</div>`
-          + createTable("remarks_table", ["Form", "Released Document"], Helper.ObjectToArray(resp).map(v => [v.name, v.value]), true)
+          + createTable("remarks_table", ["Remarks", "Total"], Helper.ObjectToArray(resp).map(v => [v.name, v.value]), true)
         );
         Modal.open()
         SheetJS.clear();
@@ -234,79 +220,14 @@ Helper.onClick("#generate_report", async () => {
       }, 500);
     });
 
-    Helper.onClick("#btn_report_request", async () => {
 
-      const date_data = Helper.getDataFromFormData(Modal.form);
-      if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
-        Helper.Promt_Error("* Please fill out the required fields.")
-        return;
-      }
+    // DOCUMENTS REPORT
+    Helper.onClick("#btn_report_request", async () => {
 
       Modal.close();
       setTimeout(async () => {
         Modal.unhideCloseButton();
         Modal.setTitle('Request Report');
-        Modal.setBody(`
-          <table class="table table-striped table-sm border">
-            <tr>
-              <th></th>
-              <th>Contents</th>
-            </tr>
-            <tr>
-              <td><input type="checkbox" name="released" id="request_released_cb" checked/></td>
-              <td><label for="request_released_cb">Released</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" name="not-released" id="not_request_released_cb" checked/></td>
-              <td><label for="not_request_released_cb">Not Released</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" name="pending" id="request_pending_cb" checked/></td>
-              <td><label for="request_pending_cb">Pending</label></td>
-            </tr>
-          </table>
-        `);
-        Modal.setFooter(await Modal.button('Generate', 'primary'));
-        Modal.open();
-        Modal.submit(async (e, form_data) => {
-          const data = Helper.getDataFromFormData(form_data);
-          const body = {
-            ...date_data,
-            released: data.released ? 1 : 0,
-            pending: data.pending ? 1 : 0,
-            ['not-released']: data['not-released'] ? 1 : 0,
-          }
-          Modal.close();
-          const resp = (await Helper.api('report/requests', 'json', Helper.createFormData(body)));
-
-          setTimeout(async () => {
-            Modal.setTitle('Generating file')
-            Modal.setBody(
-              `<div class="alert alert-light">Generating. Please wait.</div>`
-              + createTable("docs_table", ["Request Status", "Total"], Helper.ObjectToArray(resp).map(v => [v.value._status, v.value.total]), true)
-            );
-            Modal.open()
-            SheetJS.clear();
-            await SheetJS.save("#docs_table", "docs");
-            Modal.close();
-          }, 500);
-
-        });
-      }, 500);
-    });
-
-    Helper.onClick("#btn_report_documents", async () => {
-
-      const date_data = Helper.getDataFromFormData(Modal.form);
-      if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
-        Helper.Promt_Error("* Please fill out the required fields.")
-        return;
-      }
-
-      Modal.close();
-      setTimeout(async () => {
-        Modal.unhideCloseButton();
-        Modal.setTitle('Documents Report');
         const categories = (await Helper.api('file-request-category/all', 'json'));
         console.log({ categories })
         let trs = '';
@@ -317,35 +238,89 @@ Helper.onClick("#generate_report", async () => {
           </tr>
         `);
         Modal.setBody(`
-          <table class="table table-striped table-sm border">
-            <tr>
-              <th><input id="check_all_documents" type="checkbox"/></th>
-              <th>Contents</th>
-            </tr>
-            ${trs}
-          </table>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group mb-3">
+                <label for="date_from">From <small class="text-danger">* </small></label>
+                <input name="_from" class="form-control" type="date" />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group mb-3">
+                <label for="date_to">To <small class="text-danger">* </small></label>
+                <input name="_to" class="form-control" type="date" />
+              </div>
+            </div>
+            <div class="col-12">
+              <table class="table table-striped table-sm border">
+                <tr>
+                  <th><input id="check_all_documents" type="checkbox"/></th>
+                  <th>Contents</th>
+                </tr>
+                ${trs}
+              </table>
+            </div>
+            <div class="col-lg-12">
+              <small class="error-msg text-danger"></small>
+            </div>
+          </div>
         `);
         Modal.setFooter(await Modal.button('Generate', 'primary'));
         Helper.f("#check_all_documents", cad => Helper.on(cad, "change", () => Helper.fm(".doc_cbs", cbs => cbs.checked = cad.checked)));
         Modal.open();
         Modal.submit(async (e, form_data) => {
+
+          if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
+            Helper.Promt_Error("* Please fill out the required fields.")
+            return;
+          }
+          Helper.Promt_Clear();
+          const data = Helper.getDataFromFormData(Modal.form);
+
           const body = {
-            ...date_data,
-            files: JSON.stringify(Helper.ObjectToArray(Helper.getDataFromFormData(form_data)).map(v => v.name)),
+            _from: data._from,
+            _to: data._to,
+            files: JSON.stringify(Helper.ObjectToArray(Helper.getDataFromFormData(form_data)).filter(v => !['_from', '_to'].includes(v.name)).map(v => v.name)),
           }
 
           Modal.close();
           const resp = (await Helper.api('report/file-requests', 'json', Helper.createFormData(body)));
 
           setTimeout(async () => {
+            const tbl_end = {
+              thead: '',
+              tbody:
+              `
+              <tr>
+                <td>Total</td>
+                <td colspan="2">${resp.total}l</td>
+              </tr>
+              <tr>
+                <td>From</td>
+                <td colspan="2">${resp.from}l</td>
+              </tr>
+              <tr>
+                <td>To</td>
+                <td colspan="2">${resp.to}l</td>
+              </tr>
+              `,
+            }
+
             Modal.setTitle('Generating file')
             Modal.setBody(
               `<div class="alert alert-light">Generating. Please wait.</div>`
-              + createTable("docs_table", ["File", "Total"], Helper.ObjectToArray(resp).map(v => [v.value.file, v.value.total]), true)
+              + createTable(
+                "docs_table",
+                ["Form", "Released", "Not Released"],
+                Helper.ObjectToArray(resp.documents).map(v => [v.value.file, v.value.total]),
+                false,
+                null,
+                tbl_end
+              )
             );
             Modal.open()
-            SheetJS.clear();
-            await SheetJS.save("#docs_table", "docs");
+            // SheetJS.clear();
+            // await SheetJS.save("#docs_table", "docs");
             Modal.close();
           }, 500);
 
@@ -362,7 +337,7 @@ Helper.onClick("#generate_report", async () => {
 
 
 
-function createTable(id, headers = [], body = [[]], hidden = false) {
+function createTable(id, headers = [], body = [[]], hidden = false, start = { thead, tbody }, end = { thead, tbody }) {
   let thead = '';
   headers.forEach(v => thead += `<th>${v}</th>`);
 
@@ -372,5 +347,10 @@ function createTable(id, headers = [], body = [[]], hidden = false) {
     raw.forEach(v => data += `<td>${v}</td>`);
     tbody += `<tr>${data}</tr>`
   });
-  return `<table id="${id}" class="table table-striped table-sm border ${hidden ? 'd-none' : ''}"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+  return `
+    <table id="${id}" class="table table-striped table-sm border ${hidden ? 'd-none' : ''}">
+      <thead>${start?.thead ?? ''}${thead}${end?.thead ?? ''}</thead>
+      <tbody>${start?.tbody ?? ''}${tbody}${end?.tbody ?? ''}</tbody>
+    </table>
+  `;
 }
