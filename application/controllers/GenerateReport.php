@@ -47,18 +47,12 @@ class GenerateReport extends CI_Controller {
     public function per_requested_file() {
         $_from = $this->input->post('_from');
         $_to = $this->input->post('_to');
-        $_status = $this->input->post('_status');
-
         if(!isset($_from) || empty($_from)) {
             echo to_JSON(['status' => 0, 'message' => '`_from` not found']);
             die;
         }
         if(!isset($_to) || empty($_to)) {
             echo to_JSON(['status' => 0, 'message' => '`_to` not found']);
-            die;
-        }
-        if(!isset($_status) || empty($_status)) {
-            echo to_JSON(['status' => 0, 'message' => '`_status` not found']);
             die;
         }
 
@@ -77,10 +71,6 @@ class GenerateReport extends CI_Controller {
             if(strlen($condition) > 0) $condition .= " AND ";
             $condition .= " rf.Date BETWEEN '{$_from}' and '{$_to}'";
         }
-
-        if(strlen($condition) > 0) $condition .= " AND ";
-        $condition .= " locate('\"{$_status}\"', rf.status) ";
-        
 
         $condition = "WHERE " . $condition;
         $result = $this->rm->per_requested_file($condition);
