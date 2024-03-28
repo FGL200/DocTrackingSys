@@ -211,7 +211,7 @@ Helper.onClick("#generate_report", async () => {
         Modal.setTitle('Generating file')
         Modal.setBody(
           `<div class="alert alert-light">Generating. Please wait.</div>`
-          + createTable("remarks_table", ["Remarks", "Total"], Helper.ObjectToArray(resp).map(v => [v.name, v.value]), true)
+          + createTable("remarks_table", ["Remarks", "Total"], Helper.ObjectToArray(resp).map(v => [v.name, v.value]), true, null, null)
         );
         Modal.open()
         SheetJS.clear();
@@ -254,7 +254,7 @@ Helper.onClick("#generate_report", async () => {
             <div class="col-12">
               <table class="table table-striped table-sm border">
                 <tr>
-                  <th><input id="check_all_documents" type="checkbox"/></th>
+                  <th><input id="check_all_documents" type="checkbox" checked/></th>
                   <th>Contents</th>
                 </tr>
                 ${trs}
@@ -269,13 +269,17 @@ Helper.onClick("#generate_report", async () => {
         Helper.f("#check_all_documents", cad => Helper.on(cad, "change", () => Helper.fm(".doc_cbs", cbs => cbs.checked = cad.checked)));
         Modal.open();
         Modal.submit(async (e, form_data) => {
+          const data = Helper.getDataFromFormData(Modal.form);
 
           if (Helper.formValidator(Modal.form, ["_from", "_to"], v => v == '').length > 0) {
             Helper.Promt_Error("* Please fill out the required fields.")
             return;
           }
+          if (new Date(data._from).getTime() > new Date(data._to).getTime()) {
+            Helper.Promt_Error("* Invalid dates.")
+            return;
+          }
           Helper.Promt_Clear();
-          const data = Helper.getDataFromFormData(Modal.form);
 
           const body = {
             _from: data._from,
@@ -309,7 +313,7 @@ Helper.onClick("#generate_report", async () => {
             Modal.setTitle('Generating file')
             Modal.setBody(
               `<div class="alert alert-light">Generating. Please wait.</div>`
-              + createTable( "docs_table", ["Form", "Released", "Not Released"], Helper.ObjectToArray(resp.documents).map(v => [v.name, v.value.Released, v.value['Not Released']]), true, null, tbl_end)
+              + createTable("docs_table", ["Form", "Released", "Not Released"], Helper.ObjectToArray(resp.documents).map(v => [v.name, v.value.Released, v.value['Not Released']]), true, null, tbl_end)
             );
             Modal.open()
             SheetJS.clear();
