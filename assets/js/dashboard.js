@@ -290,37 +290,30 @@ Helper.onClick("#generate_report", async () => {
             const tbl_end = {
               thead: '',
               tbody:
-              `
+                `
+              <tr><td colspan="3"> </td></tr>
               <tr>
-                <td>Total</td>
-                <td colspan="2">${resp.total}l</td>
+                <td>Total Request</td>
+                <td colspan="2">${resp.total}</td>
               </tr>
               <tr>
                 <td>From</td>
-                <td colspan="2">${resp.from}l</td>
+                <td colspan="2">${resp.from}</td>
               </tr>
               <tr>
                 <td>To</td>
-                <td colspan="2">${resp.to}l</td>
+                <td colspan="2">${resp.to}</td>
               </tr>
               `,
             }
-
             Modal.setTitle('Generating file')
             Modal.setBody(
               `<div class="alert alert-light">Generating. Please wait.</div>`
-              + createTable(
-                "docs_table",
-                ["Form", "Released", "Not Released"],
-                Helper.ObjectToArray(resp.documents).map(v => [v.value.file, v.value.total]),
-                false,
-                null,
-                tbl_end
-              )
+              + createTable( "docs_table", ["Form", "Released", "Not Released"], Helper.ObjectToArray(resp.documents).map(v => [v.name, v.value.Released, v.value['Not Released']]), true, null, tbl_end)
             );
             Modal.open()
-            // SheetJS.clear();
-            // await SheetJS.save("#docs_table", "docs");
+            SheetJS.clear();
+            await SheetJS.save("#docs_table", "docs");
             Modal.close();
           }, 500);
 
