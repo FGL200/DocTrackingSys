@@ -6,7 +6,10 @@ class Remarks_model extends CI_Model {
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function insertRemarks($data) {
         $query = "INSERT INTO `remarks` SET {$data}";
         $uid = $this->session->userdata('uid');

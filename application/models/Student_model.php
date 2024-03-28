@@ -298,6 +298,7 @@ class Student_model extends CI_Model{
     public function update_table($tblname, $data, $condition) {
         $sql = "UPDATE `{$tblname}` SET {$data} $condition";
         $result = $this->db->query($sql);
+        add_To_User_Logs($this, $this->session->userdata("uid"), "({$this->session->userdata('uid')}) Updated student record.", $sql);
         return $this->db->affected_rows() ? true : false;
     }
 
@@ -364,7 +365,7 @@ class Student_model extends CI_Model{
                 WHERE `sr`.id = ?";
         
         $this->db->query($sql, array($id));
-
+        add_To_User_Logs($this, $this->session->userdata("uid"), "({$this->session->userdata('uid')}) Moved student record to archive.", $sql);
         return $this->db->affected_rows() ? true : false;
     }
 
@@ -504,8 +505,9 @@ class Student_model extends CI_Model{
                         `d`.shelf_histories = '{$shelf_histories}'
                 WHERE `d`.stud_rec_id = '{$stud_rec_id}' 
         ";
-
-        return $this->db->query($sql);
+        $result = $this->db->query($sql);
+        add_To_User_Logs($this, $this->session->userdata("uid"), "({$this->session->userdata('uid')}) Moved a record.", $sql);
+        return $result;
     }
 
     /**
@@ -530,13 +532,14 @@ class Student_model extends CI_Model{
                     d.shelf = sh.id
                 
                 where 
-                    sr.stud_id LIKE '%{$student['stud_id']}%' AND 
+                    sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
+                    sr.stud_fname LIKE '%{$student['stud_fname']}%' AND
                     sh.id != '{$current_shelf}' AND 
-                    sr.is_merged != 1
+                    sr.is_merged != 1 AND 
+                    sr.deleted_flag != 1
                 ";
-
-                // sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
-                // sr.stud_fname LIKE '%{$student['stud_fname']}%'
+                
+                // sr.stud_id LIKE '%{$student['stud_id']}%' AND 
 
 
                 // OR 
@@ -599,37 +602,7 @@ class Student_model extends CI_Model{
         $result = $this->db->query($query);
 
         return $result->result();
-    }
-
-    // PRIVATE FUNCTIONS //
-
-    private function user_Is_Admin($uid) {
-        $query = "  SELECT 
-                        `role`
-                    FROM `user`
-                    WHERE `id` = '{$uid}'
-                    LIMIT 1
-        ";
-        $fetch = $this->db->query($query);
-        if($fetch->num_rows()){
-            return $fetch->result_array()[0]['role'] === 'A' ? true : false;
-        }
-        return false;
-    }   
-
-    private function get_Shelf_ID($name) {
-        $query = "
-                select 
-                    id
-                from 
-                    shelves 
-                where 
-                    name = '{$name}'
-                limit 1
-                ";
-        $fetch = $this->db->query($query);
-        return $fetch->result_array()[0]['id'];
-    }
+    } 
 }
 
 ?>

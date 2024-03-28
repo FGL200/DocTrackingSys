@@ -47,6 +47,20 @@ class GenerateReport extends CI_Controller {
     public function per_requested_file() {
         $_from = $this->input->post('_from');
         $_to = $this->input->post('_to');
+        $_status = $this->input->post('_status');
+
+        if(!isset($_from) || empty($_from)) {
+            echo to_JSON(['status' => 0, 'message' => '`_from` not found']);
+            die;
+        }
+        if(!isset($_to) || empty($_to)) {
+            echo to_JSON(['status' => 0, 'message' => '`_to` not found']);
+            die;
+        }
+        if(!isset($_status) || empty($_status)) {
+            echo to_JSON(['status' => 0, 'message' => '`_status` not found']);
+            die;
+        }
 
         $files = to_ARRAY($this->input->post('files'));
 
@@ -61,11 +75,11 @@ class GenerateReport extends CI_Controller {
         if(!empty($files)) $condition .= " frc.name in " . $files;
         if(!empty($_from) && !empty($_to)) {
             if(strlen($condition) > 0) $condition .= " AND ";
-            $condition .= " r.created_at BETWEEN '{$_from}' and '{$_to}'";
+            $condition .= " rf.Date BETWEEN '{$_from}' and '{$_to}'";
         }
 
         if(strlen($condition) > 0) $condition .= " AND ";
-        $condition .= " locate('\"Released\"', r.status) ";
+        $condition .= " locate('\"{$_status}\"', rf.status) ";
         
 
         $condition = "WHERE " . $condition;

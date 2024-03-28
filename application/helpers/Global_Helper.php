@@ -26,7 +26,7 @@ function add_To_User_Logs(& $controller, $uid = null, $title = null, $activity =
         `title`='{$title}', 
         `details`='{$activity}',
         `created_by`='{$uid}',
-        `created_date`=CURRENT_TIMESTAMP
+        `created_date`='".current_date()."'
     ";
     return $controller->db->query($query);
 }
@@ -101,3 +101,7 @@ function user_Is_Admin(&$controller, $uid) {
     }
     return false;
 } 
+
+function current_date(String $format = "Y-m-d H:i:s") {
+    return date($format);
+}

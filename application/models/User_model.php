@@ -7,7 +7,10 @@ class User_model extends CI_Model
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function insert_user($data)
     {        
         $uid = $this->session->userdata('uid');

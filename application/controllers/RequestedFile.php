@@ -28,7 +28,9 @@ class RequestedFile extends CI_Controller {
             }
     
             $condition = " ID = {$_POST['id']}";
-    
+            
+            $items .= ', Date = "'.current_date().'"';
+
             $this->reqfile_model->update($items, $condition);
             
             if($this->db->error()['message']) throw new Exception($this->db->error()['message']);

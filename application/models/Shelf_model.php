@@ -6,7 +6,10 @@ class Shelf_model extends CI_Model {
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function add($data) {
         $sql = "INSERT INTO `shelves` SET {$data}";
         $uid = $this->session->userdata('uid');
@@ -44,31 +47,48 @@ class Shelf_model extends CI_Model {
     }
 
     public function getShelvesAndInfo() {
-        $sql = "
-        SELECT 
-            sh_.id,
-            sh_.name,
+        /*
             COUNT(sr.id) AS total,
             COUNT(DISTINCT u.id) AS users,
             MAX(sr.created_date) AS last_date
+        */
+        $sql = "
+        SELECT 
+            sh_.id,
+            sh_.name
         FROM shelves sh_
-        LEFT JOIN doc d ON d.shelf = sh_.id
-        LEFT JOIN stud_rec sr ON sr.id = d.stud_rec_id
-        LEFT JOIN user u ON u.id = sr.created_by_uid
-        LEFT JOIN user u2 ON u2.id = sr.updated_by_uid
-        LEFT JOIN remarks rm ON rm.stud_rec_id = sr.id
         WHERE 
-                (sr.deleted_flag != 1 OR 
-                sr.deleted_flag IS NULL OR
-                sr.is_merged != 1) AND
                 sh_.deleted_flag = 0
         GROUP BY sh_.id, sh_.name";
 
-       
+        $shelves_infos = array();
 
-        $query = $this->db->query($sql);
+        $shelves = $this->db->query($sql)->result();
+        foreach($shelves as $sh) {            
+            $info_query = "select
+                                '{$sh->id}' as id,
+                                '{$sh->name}' as name,
+                                COUNT(sr.id) AS total,
+                                COUNT(DISTINCT u.id) AS users,
+                                MAX(sr.created_date) AS last_date
+                            from 
+                                stud_rec sr
+                            left join 
+                                doc d
+                            on sr.id = d.stud_rec_id
+                            left join 
+                                shelves sh
+                            on d.shelf = sh.id
+                            LEFT JOIN user u ON u.id = sr.created_by_uid
+                            LEFT JOIN user u2 ON u2.id = sr.updated_by_uid
+                            where sh.name = '{$sh->name}' and sr.deleted_flag = 0 and sr.is_merged = 0";
+            $info_result = $this->db->query($info_query)->result();
+            array_push($shelves_infos, ...$info_result);
+        }
+        
+
         $this->db->close();
-        return $query->result();
+        return $shelves_infos;
     }
 
     public function getAllNames() {

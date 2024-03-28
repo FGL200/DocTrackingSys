@@ -88,7 +88,7 @@ class Request extends CI_Controller {
      * @param $id request id
      */
     public function fetch(int $id) {
-        $request = $this->request_model->fetch("where r.id = '{$id}'");
+        $request = $this->request_model->fetch("where r.id = '{$id}'", "", ",r.reason as Reason,r.priority as Priority");
         echo to_JSON($request);
     }
 
@@ -167,8 +167,6 @@ class Request extends CI_Controller {
         $requestor_mname = $this->input->post('r_mname');
         $requestor_lname = $this->input->post('r_lname');
 
-        $status = $this->input->post('status');
-
         $cfrom = $this->input->post('created_from');
         $cto = $this->input->post('created_to');
 
@@ -180,17 +178,19 @@ class Request extends CI_Controller {
         $condition = "";
         $join = "";
 
-        if(!empty($requestor_fname) || !empty($requestor_lname) || !empty($requestor_mname)) {
-            $condition .= "(
-                r.fname = '{$requestor_fname}' or 
-                r.lname = '{$requestor_lname}' or 
-                r.mname = '{$requestor_mname}'
-            )";
+        if(!empty($requestor_fname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.fname = '{$requestor_fname}'";
         }
 
-        if(!empty($status)) {
-            if(strlen(trim($condition)) > 0) $condition .= " AND ";
-            $condition .= "locate('\"{$status}\"', r.status)";
+        if(!empty($requestor_lname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.lname = '{$requestor_lname}'";
+        }
+
+        if(!empty($requestor_mname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.mname = '{$requestor_mname}'";
         }
 
         if(!empty($cfrom) && !empty($cto)) {
@@ -211,7 +211,7 @@ class Request extends CI_Controller {
                     on 
                         r.created_by = u.id";
         }
-
+        $condition .= (!empty(trim($condition)) ? "AND" : "") . " r.deleted_flag = 0";
         $condition = "WHERE " . $condition;
 
         echo to_JSON($this->request_model->fetch($condition));

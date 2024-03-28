@@ -6,6 +6,10 @@ class RemarkCategory_model extends CI_Model {
     {
         parent::__construct();
     }
+    public function __destruct()
+    {
+        $this->db->close();
+    }
 
     public function getCategories(){
         $query = "SELECT UPPER(`category`) `category` FROM remark_categories ORDER BY `id` DESC";
