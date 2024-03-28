@@ -241,14 +241,15 @@ class Request_model extends CI_Model {
             CONDITION
             
             AND ({$status}
+
+            group by _status    
          */
         $query = "select 
-                    case 
                     count(*) as total
                   from 
                     requests 
-                  where (created_at between '{$from}' and '{$to}')) 
-                  group by _status
+                  where (created_at between '{$from}' and '{$to}')
+                  
                     ";
 
         // echo $query; return;
