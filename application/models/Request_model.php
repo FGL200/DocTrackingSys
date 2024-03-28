@@ -7,6 +7,10 @@ class Request_model extends CI_Model {
     {
         parent::__construct();
     }
+    public function __destruct()
+    {
+        $this->db->close();
+    }
 
     public function create(string $data){
         $sql = "
@@ -16,8 +20,8 @@ class Request_model extends CI_Model {
                 ";
         
         $this->db->query($sql);
-        $cuid = $this->session->userdata('uid');
         $last_id = $this->db->insert_id();
+        add_To_User_Logs($this, $this->session->userdata("uid"), "({$this->session->userdata("uid")}) Created new Request.", trim($sql));
         return $last_id;
     }
 

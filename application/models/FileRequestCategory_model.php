@@ -7,7 +7,10 @@ class FileRequestCategory_model extends CI_Model {
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function get(String $conditions = "") {
         $query = "select * from file_request_categories";
         if($conditions) $query .= " where {$conditions}";
@@ -36,6 +39,8 @@ class FileRequestCategory_model extends CI_Model {
 
     public function archives() {
         $query = "SELECT * FROM file_request_categories where deleted_flag = 1";
+        $uid = $this->session->userdata("uid");
+        add_To_User_Logs($this, $uid, "({$uid}) Added new File Category.", $query);
         return $this->db->query($query)->result();
     }
 }

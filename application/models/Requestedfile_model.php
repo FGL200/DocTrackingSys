@@ -8,7 +8,10 @@ class Requestedfile_model extends CI_Model {
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function add($data) {
         $query = "  
                     insert into 
@@ -16,7 +19,9 @@ class Requestedfile_model extends CI_Model {
                     set 
                     {$data}
         ";
-        return $this->db->query($query);
+        $result = $this->db->query($query);
+        
+        return ;
     }
 
     public function update($data, $condition) {

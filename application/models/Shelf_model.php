@@ -6,7 +6,10 @@ class Shelf_model extends CI_Model {
     {
         parent::__construct();
     }
-
+    public function __destruct()
+    {
+        $this->db->close();
+    }
     public function add($data) {
         $sql = "INSERT INTO `shelves` SET {$data}";
         $uid = $this->session->userdata('uid');
