@@ -30,7 +30,8 @@ class Request_model extends CI_Model {
                     concat(r.lname, \', \', r.fname, \', \', r.mname) as Requestor,
                     r.created_at as \'Requested Date\',
                     IFNULL(concat("[", group_concat(concat("{\"Name\" : \"", frc.name,"\", \"ID\" : \"", req_f.id,"\",\"Status\" : ",req_f.status,"}")), "]"), \'[]\') \'Requested File\',
-                    r.due_date as \'Due Date\'
+                    r.due_date as \'Due Date\',
+                    r.priority
                 FROM 
                     requests r
                 left join 
@@ -55,7 +56,7 @@ class Request_model extends CI_Model {
             $condition .= " AND u.id = {$user['uid']}";
         }
         $sql .= $condition;
-        $sql .= " GROUP BY r.id ORDER BY r.due_date, r.priority DESC";
+        $sql .= " GROUP BY r.id ORDER BY FIELD(r.priority, '1', '0'), r.due_date ASC";
 
         // echo $sql;
         return $this->db->query($sql)->result();
@@ -82,7 +83,7 @@ class Request_model extends CI_Model {
                     req_f.file_id = frc.id
                 '.$join.'
                 '.$condition.'
-                GROUP BY r.id
+                GROUP BY r.id ORDER BY FIELD(r.priority, "1", "0"), r.due_date ASC
                 ';
         return $this->db->query($sql)->result();
     }

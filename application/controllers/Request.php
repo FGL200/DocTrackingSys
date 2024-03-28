@@ -178,12 +178,19 @@ class Request extends CI_Controller {
         $condition = "";
         $join = "";
 
-        if(!empty($requestor_fname) || !empty($requestor_lname) || !empty($requestor_mname)) {
-            $condition .= "(
-                r.fname = '{$requestor_fname}' or 
-                r.lname = '{$requestor_lname}' or 
-                r.mname = '{$requestor_mname}'
-            )";
+        if(!empty($requestor_fname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.fname = '{$requestor_fname}'";
+        }
+
+        if(!empty($requestor_lname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.lname = '{$requestor_lname}'";
+        }
+
+        if(!empty($requestor_mname)) {
+            if(!empty(trim($condition))) $condition .= " AND ";
+            $condition .= "r.mname = '{$requestor_mname}'";
         }
 
         if(!empty($cfrom) && !empty($cto)) {

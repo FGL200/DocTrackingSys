@@ -387,11 +387,11 @@ class Student extends CI_Controller{
     public function get_same_records_shelf() {
         extract($this->input->post());
 
-        // $student = ['stud_fname' => $stud_fname,
-        //             'stud_mname' => $stud_mname, 
-        //             'stud_lname' => $stud_lname];
+        $student = ['stud_fname' => $stud_fname,
+                    'stud_mname' => $stud_mname, 
+                    'stud_lname' => $stud_lname];
 
-        $student = ['stud_id' => $stud_id];
+        // $student = ['stud_id' => $stud_id];
 
         echo to_JSON($this->stud->get_same_records_shelf($student, $current_shelf));
 
@@ -423,7 +423,6 @@ class Student extends CI_Controller{
             $conditions = "
                             sr.stud_fname LIKE '%{$student['stud_fname']}%' AND
                             sr.stud_lname LIKE '%{$student['stud_lname']}%' AND
-                            sr.stud_id LIKE '%{$student['stud_id']}%' AND
                             sr.id != {$stud_rec_id} AND 
                             `d`.shelf = {$to}
                         ";
@@ -551,38 +550,6 @@ class Student extends CI_Controller{
         $file_name = $datetime . '.' . basename($name);
 
         return optimize_image($tmp, $path, $file_name, $size) ? "uploads/" . $file_name : '';
-    }
-    
-    /**
-     * Get the doc dir of the student
-     * @param int $stud_id
-     * @param String $key 
-     */
-    private function get_doc_dir(int $stud_id, String $key) {
-        return json_decode($this->stud->stud_docs($stud_id)[0][$key])->dir;
-    }
-
-    /**
-     * Delete the uploaded file
-     * @param String $dir
-     */
-    private function delete_Image(String $dir) {
-        $path = str_replace('\\', '/', BASEPATH);
-        $path = str_replace('system/', $dir, $path);
-        
-        if(!empty($dir) && file_exists($path)) {
-            return unlink($path);
-        }
-    }
-
-    /**
-     * Change `Remarks` column to hoverable panel
-     * @param int $count number of remarks
-     * @param String $value remarks values
-     */
-    private function to_Hoverable(int $count, String $value) {
-        return "<div class='stud_rec-status stud_rec-".($count===0?"success":"danger")."' title='{$value}' style='cursor: context-menu; text-align: center;'>"
-                .($count===0?"No Remarks":"{$count} Remarks")."</div>";
     }
 
     // Minove ko sa Helper ung insert_slashes na function

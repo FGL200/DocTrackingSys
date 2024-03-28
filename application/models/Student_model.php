@@ -530,13 +530,14 @@ class Student_model extends CI_Model{
                     d.shelf = sh.id
                 
                 where 
-                    sr.stud_id LIKE '%{$student['stud_id']}%' AND 
+                    sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
+                    sr.stud_fname LIKE '%{$student['stud_fname']}%' AND
                     sh.id != '{$current_shelf}' AND 
-                    sr.is_merged != 1
+                    sr.is_merged != 1 AND 
+                    sr.deleted_flag != 1
                 ";
-
-                // sr.stud_lname LIKE '%{$student['stud_lname']}%' AND 
-                // sr.stud_fname LIKE '%{$student['stud_fname']}%'
+                
+                // sr.stud_id LIKE '%{$student['stud_id']}%' AND 
 
 
                 // OR 

@@ -425,10 +425,10 @@ Helper.onClick("#btn_merge", async e => {
   Modal.setTitle('<i class="bi bi-intersect"></i> Merge record');
   let options = '';
   (await Helper.api('student/record/shelf', 'json', Helper.createFormData({
-    // stud_fname: global_record.student.stud_fname,
-    // stud_lname: global_record.student.stud_lname,
-    // stud_mname: global_record.student.stud_mname,
-    stud_id: global_record.student.stud_id,
+    stud_fname: global_record.student.stud_fname,
+    stud_lname: global_record.student.stud_lname,
+    stud_mname: global_record.student.stud_mname,
+    // stud_id: global_record.student.stud_id,
     current_shelf: global_record.shelf.ID,
   })))
     .map(v => JSON.parse(v.shelf))

@@ -32,14 +32,16 @@ async function Load_List(search = null) {
 
 	let tbody = "<tbody>";
 	resp.forEach((req) => {
-		let tr = "<tr c>";
+		let tr = "<tr>";
+		const isPrio = req['priority'];
+		req = {"ID" : req["ID"], "Requestor" : req["Requestor"], "Requested Date" : req["Requested Date"], "Requested File" : req["Requested File"], "Due Date" : req["Due Date"]};
 
 		Object.keys(req).forEach((val, index) => {
 			let td = '<td class="relative">';
 			switch (val) {
 				case "ID":
 					const rawID = Helper.AsID(req[val], 4, "0", "#");
-					req[val] = `<div>
+					req[val] = `<div ${isPrio == "1" ? "class='alert alert-warning p-2'" : ""}>
                           <a data-bs-toggle="dropdown" class='request-id' href='${
 														Helper.getURL() + "#" + rawID
 													}' data-binder-req-id='${rawID}'>${rawID}</a>
@@ -59,7 +61,6 @@ async function Load_List(search = null) {
 				case "Requested File":
 					const newVal = JSON.parse(req[val]);
 					let div = "<div class='d-flex gap-3 dropdown'>";
-					console.log(newVal)
 					let td = "";
 					if(newVal.length > 0) 
 						newVal.forEach((v, k) => {
@@ -105,7 +106,7 @@ async function Load_List(search = null) {
 	tbody += "</tbody>";
 
 	Helper.DataTable_Reset("#table_content");
-	Helper.DataTable_Init("#table_content", thead + tbody, null, null, {ordering : false});
+	Helper.DataTable_Init("#table_content", thead + tbody, ()=>{}, ()=>{}, {ordering : false});
 
 	Helper.fm("li > button.archive-file", (btn) => {
 		Helper.on(btn, "click", async (e) => {
@@ -161,21 +162,21 @@ async function Load_List(search = null) {
                         <section class="section container-fluid">
                         
                           <div class="card-title">Request details</div>                    
-                            <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div>
                               <div class="form-group mb-3">
                                 <label for="lname">Last Name <small class="text-danger">*</small></label>
                                 <input id="lname" name="lname" type="text" class="form-control" value="${s_Req['Requestor'].split(',')[0]}">
                               </div>
                             </div>
                     
-                            <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div>
                               <div class="form-group mb-3">
                                 <label for="fname">First Name <small class="text-danger">*</small></label>
                                 <input id="fname" name="fname" type="text" class="form-control" value="${s_Req['Requestor'].split(',')[1]}">
                               </div>
                             </div>
                     
-                            <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div>
                               <div class="form-group mb-3">
                                 <label for="mname">Middle Name</label>
                                 <input id="mname" name="mname" type="text" class="form-control" value="${s_Req['Requestor'].split(',')[2] ?? ''}">
