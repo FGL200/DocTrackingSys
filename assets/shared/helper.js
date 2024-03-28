@@ -33,7 +33,7 @@ export class Helper {
   }
 
   static setupFor(role) {
-    const roles = ['V', 'E', 'A'];
+    const roles = ['V', 'E', 'A', 'VE'];
     roles.forEach(r => {
       if (role != r) return;
       Helper.fm(`.remove-when-${r}`, e => e.remove());

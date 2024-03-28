@@ -78,10 +78,12 @@ async function Load_Data() {
     // *          Initialize Images          *
     // ***************************************
     const dir = record.documents[id].dir;
+    console.log({ dir })
     let dirLength = 0;
     function InitializedSavedImages() {
       if (dir != '') {
-        const directory = dir.split(',').map(v => `${base_url}${v}`);
+        const directory = dir.split(',').filter(v => v != '').map(v => `${base_url}${v}`);
+        console.log({ directory })
         directory.forEach(img => global_document[id].list.images.push(img));
         dirLength = directory.length;
       }

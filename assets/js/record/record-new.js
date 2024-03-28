@@ -96,7 +96,7 @@ Helper.fm(".document_item", function (v) {
         imageSource += `
             <div class="carousel-item ${i == 0 ? 'active' : ''}" data-bs-interval="9999999999">
               <div class="d-flex justify-content-center w-100">
-                <img src="${v}" class="d-block w-75 rotate" alt="...">
+                <img src="${v}" class="d-block w-75 rotate" alt="..." style="user-select: none;">
               </div>
             </div>
           `;

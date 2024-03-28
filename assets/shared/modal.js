@@ -13,7 +13,6 @@ export class Modal {
 
   static onClose(callBack) {
     const close_btn = Helper.f("#dds_modal_close");
-    console.log({ close_btn })
 
     const modal = Helper.f(Modal.id);
     modal.addEventListener('hide.bs.modal', callBack);

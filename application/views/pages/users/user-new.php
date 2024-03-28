@@ -29,7 +29,8 @@
                 <select name="user-role" class="form-select">
                   <option value="">Select Gender</option>
                   <option value="V">Checker</option>
-                  <option value="E">Encoder</option>
+                  <option value="E">Transcriber</option>
+                  <option value="VE">Transcriber & Checker</option>
                   <option value="A">Admin</option>
                 </select>
               </div>

@@ -45,6 +45,7 @@ function getRoleById(roleInitial) {
     case 'A': return 'Admin'; break;
     case 'V': return 'Checker'; break;
     case 'E': return 'Transcriber'; break;
+    case 'VE': return 'Transcriber & Checker'; break;
     default: return ''; break;
   }
 }
