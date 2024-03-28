@@ -23,7 +23,7 @@
               </div>
               <div class="ps-3">
                 <div class="">
-                  <span class="h4 fw-bold">Add new Shelf</span>
+                  <span class="h5 fw-bold">Add new Shelf</span>
                 </div>
               </div>
             </div>
