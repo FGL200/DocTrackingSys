@@ -40,17 +40,17 @@ async function Load_PieChart(showBy = 'ThisMonth') {
   const resp = (await Helper.api('report/requests-graph', 'json'));
   switch (showBy) {
     case 'ThisMonth':
-      request_ChartData = [{ value: resp.curr_month.released ?? 0, name: 'Not Released', }, { value: resp.curr_month.not_released ?? 0, name: 'Released', }];
+      request_ChartData = [{ value: resp.curr_month.not_released ?? 0, name: 'Not Released', }, { value: resp.curr_month.released ?? 0, name: 'Released', }];
       Helper.f("#request_selected_filter").innerHTML = "| This Month";
       LoadChart_RequestPie();
       break;
     case 'PrevMonth':
-      request_ChartData = [{ value: resp.prev_month.released ?? 0, name: 'Not Released', }, { value: resp.prev_month.not_released ?? 0, name: 'Released', }];
+      request_ChartData = [{ value: resp.prev_month.not_released ?? 0, name: 'Not Released', }, { value: resp.prev_month.released ?? 0, name: 'Released', }];
       Helper.f("#request_selected_filter").innerHTML = "| Previous Month";
       LoadChart_RequestPie();
       break;
     case 'ThisYear':
-      request_ChartData = [{ value: resp.yearly.released ?? 0, name: 'Not Released', }, { value: resp.yearly.not_released ?? 0, name: 'Released', }];
+      request_ChartData = [{ value: resp.yearly.not_released ?? 0, name: 'Not Released', }, { value: resp.yearly.released ?? 0, name: 'Released', }];
       Helper.f("#request_selected_filter").innerHTML = "| This Year";
       LoadChart_RequestPie();
       break;
