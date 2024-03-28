@@ -313,7 +313,7 @@ Helper.onClick("#generate_report", async () => {
             Modal.setTitle('Generating file')
             Modal.setBody(
               `<div class="alert alert-light">Generating. Please wait.</div>`
-              + createTable("docs_table", ["Form", "Released", "Not Released"], Helper.ObjectToArray(resp.documents).map(v => [v.name, v.value.Released, v.value['Not Released']]), true, null, tbl_end)
+              + createTable("docs_table", ["Form", "Released", "Not Released", "Pending"], Helper.ObjectToArray(resp.documents).map(v => [v.name, v.value.Released, v.value['Not Released'], , v.value.Pending]), true, null, tbl_end)
             );
             Modal.open()
             SheetJS.clear();

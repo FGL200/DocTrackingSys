@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2024 at 09:31 AM
+-- Generation Time: Mar 28, 2024 at 12:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -3017,7 +3017,9 @@ INSERT INTO `remarks` (`id`, `stud_rec_id`, `value`, `category`) VALUES
 (1450, 1479, '[\"NO FORM 137\",\"NO ORIG BIRHT CERT\"]', NULL),
 (1451, 1480, '[]', NULL),
 (1452, 1481, '[]', NULL),
-(1453, 1482, '[\"NOT ORIG. - F138\",\"TRANSFERRED\"]', NULL);
+(1453, 1482, '[\"NOT ORIG. - F138\",\"TRANSFERRED\"]', NULL),
+(1454, 1488, '[\"INV. REMARKS - SENIOR F137\",\"NOT ORIG. - F138\"]', NULL),
+(1455, 1489, '[\"TRANSFERRED\"]', NULL);
 
 -- --------------------------------------------------------
 
@@ -3124,8 +3126,7 @@ CREATE TABLE `shelves` (
 --
 
 INSERT INTO `shelves` (`id`, `name`, `created_by`, `created_date`, `updated_by`, `updated_date`, `deleted_flag`) VALUES
-(1, '2020-2021', 1, '2024-02-26 16:58:59', 20, '2024-03-06 00:17:43', 0),
-(10, 'sample_1', 1, '2024-03-28 16:30:30', NULL, NULL, 0);
+(1, '2020-2021', 1, '2024-02-26 16:58:59', 20, '2024-03-06 00:17:43', 0);
 
 -- --------------------------------------------------------
 
@@ -4656,11 +4657,11 @@ CREATE TABLE `user_info` (
 --
 
 INSERT INTO `user_info` (`id`, `user_id`, `fname`, `mname`, `lname`, `bday`, `gender`, `updated_by`, `updated_date`) VALUES
-(1, 1, 'PATRIFK', 'JABONILLO', 'PENARANDA', '1994-03-29', 'M', NULL, NULL),
+(1, 1, 'PATRICK', 'JABONILLO', 'PENARANDA', '1994-03-29', 'M', NULL, NULL),
 (2, 2, '--', '--', '--', '1234-01-01', 'N', NULL, NULL),
 (3, 3, 'PATRICK', 'JABONILLOO88O', 'PENARANDA', '1998-02-05', 'M', NULL, NULL),
 (4, 4, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
-(5, 5, 'ASDFAS', 'DFASFD', 'FASDF', '2002-10-12', 'N', NULL, NULL),
+(5, 5, 'FREDERIC', 'GARGAR', 'LANDICHO', '2002-10-12', 'N', NULL, NULL),
 (6, 6, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
 (7, 7, '423', 'ERWR', 'RWERRRRFSDFDS', '2002-03-02', 'F', NULL, NULL),
 (8, 8, NULL, NULL, NULL, NULL, 'N', NULL, NULL),
@@ -4915,7 +4916,15 @@ INSERT INTO `user_logs` (`id`, `created_by`, `created_date`, `title`, `details`)
 (244, 1, '2024-03-28 16:16:37', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `active` = \'1\' WHERE `u`.`id` = \'12\' AND `u`.`uname` = \'ALLIAH\''),
 (245, 1, '2024-03-28 16:16:41', '(1) Update a user profile.', 'UPDATE `user` `u`\r\n                SET `active` = \'0\' WHERE `u`.`id` = \'12\' AND `u`.`uname` = \'ALLIAH\''),
 (246, 1, '2024-03-28 16:24:16', '(1) Created new Request.', 'insert into requests \r\n                set \r\n                `lname` = \'Landicho\',`fname` = \'Frederic\',`mname` = \'Gargar\',`reason` = \'For Board Exam\',`due_date` = \'2024-03-30\',`priority` = \'1\',`created_by` = 1, `created_at` = \'2024-03-28 16:24:16\''),
-(247, 1, '2024-03-28 16:30:30', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'sample_1\', `created_by` = \'1\'');
+(247, 1, '2024-03-28 16:30:30', '(1) Added new Shelf.', 'INSERT INTO `shelves` SET `name` = \'sample_1\', `created_by` = \'1\''),
+(248, 1, '2024-03-28 17:12:39', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1994-03-29\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'1\''),
+(249, 1, '2024-03-28 17:12:46', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1994-03-29\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'1\''),
+(250, 1, '2024-03-28 17:15:29', '(1) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'PATRICK\' , `ui`.`mname` = \'JABONILLO\' , `ui`.`lname` = \'PENARANDA\' , `ui`.`bday` = \'1994-03-29\' , `ui`.`gender` = \'M\'  WHERE `u`.`id` = \'1\''),
+(254, 5, '2024-03-28 17:17:27', '(5) Update a user information.', 'UPDATE user_info `ui`\r\n                INNER JOIN `user` `u`\r\n                    ON `u`.`id` = `ui`.`user_id`\r\n                SET  `ui`.`fname` = \'FREDERIC\' , `ui`.`mname` = \'GARGAR\' , `ui`.`lname` = \'LANDICHO\' , `ui`.`bday` = \'2002-10-12\' , `ui`.`gender` = \'N\'  WHERE `u`.`id` = \'5\''),
+(257, 5, '2024-03-28 17:27:02', '(5) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_id`= UPPER(\'2020-9999999\'),`stud_lname`= UPPER(\'Landicho\'),`stud_fname`= UPPER(\'\'),`stud_mname`= UPPER(\'\'),`stud_sfx`= UPPER(\'\'), created_by_uid = \'5\''),
+(258, 5, '2024-03-28 17:27:03', '(5) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\":\"1\",\"dir\":\"uploads\\/2024_03_28_17_27_02f2dccf861f.wallpaper5.jpeg\"}\',`j_f137` = \'{\"val\":\"1\",\"dir\":\"\"}\',`stud_rec_id` = \'1488\', shelf = \'10\''),
+(259, 24, '2024-03-28 17:30:04', '(24) Added new Student record.', 'INSERT INTO `stud_rec` SET `stud_id`= UPPER(\'2020-888888\'),`stud_lname`= UPPER(\'Landicho2\'),`stud_fname`= UPPER(\'\'),`stud_mname`= UPPER(\'\'),`stud_sfx`= UPPER(\'\'), created_by_uid = \'24\''),
+(260, 24, '2024-03-28 17:30:05', '(24) Added new Student document record.', 'INSERT INTO `doc` SET `regi_form` = \'{\"val\":\"1\",\"dir\":\"uploads\\/2024_03_28_17_30_049c27c2329b.wallpaper3.jpeg\"}\',`j_f137` = \'{\"val\":\"1\",\"dir\":\"\"}\',`s_f137` = \'{\"val\":\"1\",\"dir\":\"\"}\',`stud_rec_id` = \'1489\', shelf = \'10\'');
 
 -- --------------------------------------------------------
 
@@ -5028,7 +5037,7 @@ ALTER TABLE `x_file`
 -- AUTO_INCREMENT for table `doc`
 --
 ALTER TABLE `doc`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1455;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1457;
 
 --
 -- AUTO_INCREMENT for table `file_request_categories`
@@ -5040,7 +5049,7 @@ ALTER TABLE `file_request_categories`
 -- AUTO_INCREMENT for table `remarks`
 --
 ALTER TABLE `remarks`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1454;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1456;
 
 --
 -- AUTO_INCREMENT for table `remark_categories`
@@ -5070,7 +5079,7 @@ ALTER TABLE `shelves`
 -- AUTO_INCREMENT for table `stud_rec`
 --
 ALTER TABLE `stud_rec`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1483;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1490;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -5088,7 +5097,7 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=248;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
 -- AUTO_INCREMENT for table `x_file`
